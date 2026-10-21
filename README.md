@@ -4,6 +4,7 @@
 
 ## 使用与开发入口
 
+- **[PL、PS 与 ESP32 职责和接口分工](00_当前设计方案/PL_PS_ESP32职责与接口分工.md)**：目标由 PL 提取实时位移、PS 管理测量和分析、ESP32 管理 NFC/辅助 SD/语音/Wi-Fi；文内区分目标与当前实现。
 - **[完整云端资料导航](云端资料入口.md)** · [私密 GitHub 仓库](https://github.com/quanxian318/jianwei-visual-vibrometer)
 - **[双PCB团队开发资料：离线阅读入口](09_团队开发资料_20261020/README.html)**
 - [可直接发给队友的完整ZIP](09_团队开发资料_20261020.zip)

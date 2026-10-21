@@ -1,8 +1,8 @@
 {
   "date": "2026-10-21",
   "project": "见微视觉测振仪",
-  "files": 4141,
-  "total_bytes": 919052415,
+  "files": 4142,
+  "total_bytes": 919067562,
   "excluded": [
     ".git/",
     ".agents/",
@@ -1063,6 +1063,11 @@
       "path": "00_当前设计方案/PCB背面丝印_模块化SVG.zip",
       "bytes": 1054468,
       "sha256": "06731174269cab2a8e2b082e826058daa132dee4891033e721caa1b834eb3d13"
+    },
+    {
+      "path": "00_当前设计方案/PL_PS_ESP32职责与接口分工.md",
+      "bytes": 12304,
+      "sha256": "4eade4ed21ae5e628f9cb9cf90656fa60c4023f647f0929e30ce967e3734d7cb"
     },
     {
       "path": "00_当前设计方案/主板与前面板接口.csv",
@@ -4791,8 +4796,8 @@
     },
     {
       "path": "06_软件与FPGA/README.md",
-      "bytes": 11525,
-      "sha256": "6800a93f8f071d767e38a357df7fc08df5f98520430ed322049a34e30a3c3e63"
+      "bytes": 11899,
+      "sha256": "53aebbace538417f9b73b1d50a6a3b412a2346959d49ab4df5f5a7d3a4705fda"
     },
     {
       "path": "06_软件与FPGA/ax7010/linux/petalinux/recipes-apps/vibmon/files/vibmon.init",
@@ -5481,8 +5486,8 @@
     },
     {
       "path": "06_软件与FPGA/docs/FPGA视觉处理方案_20261021.md",
-      "bytes": 7418,
-      "sha256": "f4b7a27b6f3b642fc10ba779c5d7e7f4acc485ccf510840452ef3fc9a0c01a2c"
+      "bytes": 8037,
+      "sha256": "ab7b062e64af04a38268e10c48e2690bc30b1b4ff1e6424274e151e21c4ba8fa"
     },
     {
       "path": "06_软件与FPGA/docs/UI与触屏编码器说明_20261021.md",
@@ -6276,8 +6281,8 @@
     },
     {
       "path": "09_团队开发资料_20261020/06_通信协议与配置/PS_Nano协议V1.md",
-      "bytes": 7184,
-      "sha256": "5792bec826b28c24e769d16cd48ae6c56cd102c99e8b8a629d9e6046c33e2aba"
+      "bytes": 7259,
+      "sha256": "6cfd00d6e25c7d7a38a5846302ca602faead9751ac8dd307aca36b18f879f9e7"
     },
     {
       "path": "09_团队开发资料_20261020/06_通信协议与配置/board_pins.json",
@@ -7626,8 +7631,8 @@
     },
     {
       "path": "09_团队开发资料_20261020/开发交接与分工.md",
-      "bytes": 4789,
-      "sha256": "7118d6f57a4cd6c6f62155510acbcd301fbd87d681b710913ea20c17af85286f"
+      "bytes": 5552,
+      "sha256": "f9eafeead10fadacdc1a0ed87a66a9bc712b106d535f83197dbf2d3ac384eef5"
     },
     {
       "path": "10_构思与技术路线_20261021.zip",
@@ -20701,18 +20706,18 @@
     },
     {
       "path": "AGENTS.md",
-      "bytes": 19585,
-      "sha256": "17dfc746490f3b055d19291d0f0d83d5c4eae56e9cbb498b1c892a4ebd089636"
+      "bytes": 20211,
+      "sha256": "8ae64f3c0af1538fd48369d4a61e545d9828a0c001a4f070cfb1832a05786337"
     },
     {
       "path": "README.md",
-      "bytes": 7144,
-      "sha256": "83083b1f3f1aadbf84fc727b4b0795313e12b9f2789c3aae5fc02318bf2a11e6"
+      "bytes": 7394,
+      "sha256": "5f87947657646ffd7323b647b42360f09af4e8aef5bfcd395276980992390e86"
     },
     {
       "path": "云端资料入口.md",
-      "bytes": 2697,
-      "sha256": "12afa32603ec5b03a97f28db8e0c5b0e8d19d76983b381b792ace058b9a381ad"
+      "bytes": 2833,
+      "sha256": "d95cf503b0cf9dc47895197fdf658159ddbd90b4924a6b2b2637d882a54f8c99"
     },
     {
       "path": "文件清单.csv",
