@@ -10,6 +10,7 @@
 #include <thread>
 
 #include "measure/depth.h"
+#include "drv/stereo_pl.h"
 #include "measure/frame_source.h"
 #include "stereo/stereo_match.h"
 #include "stereo/stereo_rectify.h"
@@ -34,16 +35,18 @@ class TemporalDisparityFilter {
 
 struct StereoConfig {
   bool enabled = false;
-  // "pl": the PL stereo core algorithm (ax7010/pl/stereo, census 9x7 +
-  //       2-path SGM + LR check; parameters fixed to the RTL). Until the AXI
-  //       DMA wrapper and driver exist it runs as the bit-exact model on the
-  //       PS and is reported as "PL-model".
+  // "pl": the PL stereo core (ax7010/pl/stereo: stereo_axi + AXI DMA, census
+  //       9x7 + 2-path SGM + LR check, parameters fixed in the RTL). If the
+  //       UIO device is missing or fails, the bit-exact model runs on the PS
+  //       and the map is reported as "PL-model".
   // "ps": software SGM with the configurable SgmParams (e.g. 4/8 paths).
   std::string backend = "pl";
+  uint64_t plCoreBase = 0x44070000;  // stereo_0 in add_stereo.tcl
+  int plVerifyEvery = 0;             // >0: every N-th PL frame is recomputed on the PS and compared
   bool temporal = true;  // TemporalDisparityFilter on the published map
   std::string calibrationFile = "/etc/vibmon/stereo_calibration.json";
   int workWidth = 320, workHeight = 180;  // matching resolution (as the team's BM path)
-  double rateHz = 1;                      // depth updates per second (PS: ~1 s per pair on the A9, estimate)
+  double rateHz = 4;                      // depth updates per second (PL ~39 ms per pair; the PS model takes ~1 s)
   double maxSkewMs = 8;                   // reject pairs further apart (no hardware sync)
   SgmParams sgm;                          // defaults: center-symmetric census, 4 paths
   StereoConfig() {
@@ -63,11 +66,17 @@ class StereoService {
   struct Stats {
     bool calibrated = false;
     std::string calibrationId, error;
+    std::string backend;            // "PL", "PL-model" or "PS" of the last frame
+    std::string plError;            // why the PL device is not used / last PL failure
     uint64_t pairs = 0, skewRejected = 0, published = 0;
+    uint64_t plFrames = 0, plFailures = 0, plVerified = 0, plMismatchFrames = 0;
+    uint32_t plCycles = 0;          // core clocks of the last PL frame
     double lastSkewMs = 0, lastProcMs = 0, lastValid = 0;
   };
 
-  StereoService(const StereoConfig& cfg, std::unique_ptr<FrameSource> right, PublishFn publish);
+  // pl: opened PL stereo device (nullptr: use the model for backend "pl").
+  StereoService(const StereoConfig& cfg, std::unique_ptr<FrameSource> right, PublishFn publish,
+                std::unique_ptr<PlStereo> pl = nullptr);
   ~StereoService();
   bool start();
   void stop();
@@ -86,6 +95,7 @@ class StereoService {
 
   StereoConfig cfg_;
   std::unique_ptr<FrameSource> right_;
+  std::unique_ptr<PlStereo> pl_;
   PublishFn publish_;
   StereoCalibration calib_;
   RectifyMap mapL_, mapR_;

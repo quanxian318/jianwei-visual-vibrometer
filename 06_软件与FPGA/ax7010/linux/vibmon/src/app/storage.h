@@ -31,6 +31,14 @@ struct RecordMeta {
   bool distanceValid = false;
   int distanceMm = 0;
   std::string appVersion, nanoVersion, plVersion;
+  // Stereo depth at the ROI when the capture started (stereo.enabled only).
+  struct Stereo {
+    bool enabled = false;
+    std::string backend, calibrationId;
+    bool roiDepthValid = false;
+    double roiDepthMm = 0;
+    bool usedForScale = false;
+  } stereo;
 };
 
 // <records>/<measurement_id>/record.json (schema vision-vibration-record-1,

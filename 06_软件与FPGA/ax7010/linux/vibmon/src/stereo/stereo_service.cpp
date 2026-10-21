@@ -12,8 +12,10 @@ namespace {
 const char* kTag = "stereo";
 }
 
-StereoService::StereoService(const StereoConfig& cfg, std::unique_ptr<FrameSource> right, PublishFn publish)
-    : cfg_(cfg), right_(std::move(right)), publish_(std::move(publish)) {
+StereoService::StereoService(const StereoConfig& cfg, std::unique_ptr<FrameSource> right, PublishFn publish,
+                             std::unique_ptr<PlStereo> pl)
+    : cfg_(cfg), right_(std::move(right)), pl_(std::move(pl)), publish_(std::move(publish)) {
+  if (cfg_.backend == "pl" && !pl_) stats_.plError = "pl_device_missing: bit-exact model on the PS";
   std::string err;
   if (loadStereoCalibration(cfg_.calibrationFile, calib_, err)) {
     stats_.calibrated = true;
@@ -124,24 +126,44 @@ std::shared_ptr<DepthMap> StereoService::process(const GrayFrame& left, const Gr
   DisparityMap disp;
   std::string backend = "PS";
   if (cfg_.backend == "pl") {
-    // PL stereo core: census and raw matching with the RTL's fixed parameters,
-    // then the PS post-processing with the configured filters.
-    SgmParams pl = cfg_.sgm;
-    pl.maxDisp = 64;
-    pl.census = 9;
-    pl.paths = 2;
-    pl.p1 = 7;
-    pl.p2 = 86;
-    pl.adaptiveP2 = true;
-    pl.uniquenessPct = 5;
-    pl.lrCheck = true;
-    pl.lrTolerance = 1;
-    int bits = 0, border = 0;
-    const auto cl = censusTransform(l, pl.census, bits, border);
-    const auto cr = censusTransform(r, pl.census, bits, border);
-    disp = sgmRaw(cl, cr, l, bits, border, pl);  // == stereo_core.v output
-    stereoPostProcess(l, r, border, pl, disp);
-    backend = "PL-model";
+    // PL stereo core (census + 2-path SGM + LR check, fixed parameters), then
+    // the PS post-processing with the configured filters.
+    const SgmParams pl = plCoreParams(cfg_.sgm);
+    bool done = false;
+    if (pl_) {
+      std::string err;
+      if (pl_->match(l, r, disp, err)) {
+        done = true;
+        backend = "PL";
+        bool verify = false;
+        {
+          std::lock_guard<std::mutex> lock(mutex_);
+          stats_.plFrames++;
+          stats_.plCycles = pl_->lastCycles();
+          verify = cfg_.plVerifyEvery > 0 && stats_.plFrames % static_cast<uint64_t>(cfg_.plVerifyEvery) == 0;
+        }
+        if (verify) {
+          // On-board PS/PL consistency check against the bit-exact model.
+          const bool same = plCoreModel(l, r).q4 == disp.q4;
+          std::lock_guard<std::mutex> lock(mutex_);
+          stats_.plVerified++;
+          if (!same) {
+            stats_.plMismatchFrames++;
+            LOGW(kTag, "PL output differs from the model (frame %llu)", static_cast<unsigned long long>(stats_.plFrames));
+          }
+        }
+      } else {
+        std::lock_guard<std::mutex> lock(mutex_);
+        stats_.plFailures++;
+        stats_.plError = err;
+        LOGW(kTag, "PL stereo failed: %s; using the model for this frame", err.c_str());
+      }
+    }
+    if (!done) {
+      disp = plCoreModel(l, r);  // == stereo_core.v output
+      backend = "PL-model";
+    }
+    stereoPostProcess(l, r, 4 /* census 9x7 border */, pl, disp);
   } else {
     disp = matchSgm(l, r, cfg_.sgm);
   }
@@ -154,6 +176,10 @@ std::shared_ptr<DepthMap> StereoService::process(const GrayFrame& left, const Gr
   d->dispQ4 = disp.q4;
   d->filled = disp.filled;
   d->backend = backend;
+  {
+    std::lock_guard<std::mutex> lock(mutex_);
+    stats_.backend = backend;
+  }
   d->monoNs = left.timestampNs;
   d->pairSkewMs = std::llabs(left.timestampNs - right.timestampNs) * 1e-6;
   d->calibrationId = calib_.id;

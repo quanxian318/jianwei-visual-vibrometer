@@ -32,6 +32,26 @@
    每像素 67.2 时钟；320×180 约 3.87 M 时钟，100 MHz 下约 38.7 ms（约 26 fps），与 BM 实测的 25–26 fps 相当。
 5. **标定是最大的一环。** 垂直错位 0.75 px 就让所有方法的坏点率翻倍。队友的工程只做了"整体垂直偏移"近似。现在提供 PC 端棋盘格标定工具和板端校正映射：C++ 映射与 OpenCV `initUndistortRectifyMap` 逐像素一致，合成自检恢复焦距误差 0.002%、基线 60.004 mm（真值 60 mm）。
 
+## 接入总框架（2026/10/21 第二轮）
+
+双目已按载板控制的同一套路接进整机：块设计脚本固定地址与中断并生成设备树；Linux 用 UIO 按 AXI 基地址找设备；应用由配置启用服务。
+
+| 层 | 内容 | 位置 |
+|---|---|---|
+| PL 封装 | `stereo_axi`：AXI4-Lite 寄存器（ID、CONFIG、宽高、START、STATUS、IRQ_EN、CYCLES、FRAMES）；AXI4-Stream 输入（DMA MM2S，每像素 16 位 {左, 右}）与输出（DMA S2MM，每像素 16 位视差，帧末 tlast）；512 项输出 FIFO 与溢出标志；DONE 中断 | `ax7010/pl/stereo/rtl/stereo_axi.v` |
+| 块设计 | `add_stereo.tcl`：在 `carrier::add` 之后执行，加入 `stereo_0` 与 AXI DMA（简单模式，16 位流，23 位长度），内存侧接 PS S_AXI_HP2；寄存器 0x4407_0000（核）、0x4408_0000（DMA）；中断追加到 IRQ_F2P；写出 `generated/stereo_generated.dtsi`（保留 DDR 1 MiB @0x1F000000 ＋ UIO 节点：map0 核、map1 DMA、map2 缓冲）与 `stereo_map.json` | `ax7010/pl/bd/add_stereo.tcl` |
+| 设备树/内核 | 载板与双目两个 UIO 节点共用 compatible `vibmon,uio`，内核命令行改为 `uio_pdrv_genirq.of_id=vibmon,uio`（`add_carrier.tcl` 生成的节点同步加了该 compatible） | `petalinux/system-user.dtsi`、`06_软件与FPGA/README.md` |
+| PS 驱动 | `PlStereo`：校验 ID/版本和 CONFIG 与 `plCoreParams()` 一致；按 32 位字写入非缓存缓冲；按"核 START → S2MM → MM2S"的顺序编程；等待中断（无中断时轮询）；检查 DMA 错误和 FIFO 溢出 | `linux/vibmon/src/drv/stereo_pl.*`、`stereo_regs.h` |
+| 服务/应用 | `backend=pl` 时先探测 PL 设备：找到就用 PL，`DepthMap.backend="PL"`；单帧失败时回落到 PS 模型并计数；`pl_verify_every=N` 时每 N 帧在 PS 上用模型复算，比对 PL 输出（板上 PS/PL 一致性自检）。`status` 输出 backend、pl_frames、pl_failures、pl_verified、pl_mismatch_frames、pl_cycles；测量记录新增 `stereo` 段（后端、标定 id、ROI 深度、是否用于尺度）；视觉页标题显示"PL / PS 软件计算"和有效比例 | `src/stereo/stereo_service.*`、`src/app/*`、`src/ui/ui_vision.cpp` |
+
+**PS/PL 一致性证据链**
+- 寄存器表：`stereo_regs.h` 与 `stereo_axi.v` 的地址、ID、版本和固定算法参数由单元测试自动比对。
+- RTL 侧：`tb_stereo_axi` 按驱动的编程方式访问寄存器，输入输出两侧都加随机停顿，连续两帧逐位一致，并检查中断和 tlast。
+- PS 侧：`test_stereo_pl` 用仿真的封装层＋DMA 跑驱动，输出与模型逐位一致；同时覆盖 CONFIG 不符、FIFO 溢出、超时和尺寸非法几种出错情况。
+- 板上：`pl_verify_every` 定期复算比对。
+
+**资源**（yosys 粗估，含封装层，不含 AXI DMA IP）：约 2.2k 逻辑 LUT ＋ 1.3k 分布式 RAM LUT、1.8k FF、5.5 BRAM36、4 DSP。
+
 ## 队友 BM 效果差的原因
 
 - **没有立体校正**：只估一个整体垂直偏移，镜头畸变和两相机的相对旋转都没处理。
@@ -85,9 +105,9 @@ python3 06_软件与FPGA/pc_sim/stereo_benchmark.py <build>/stereo_eval <数据�
 
 ## 还没做的
 
-1. **PL 接入**：
-   - 为 `stereo_core` 做 AXI4-Stream ↔ AXI DMA（MM2S/S2MM）封装和块设计接入，写 Linux 驱动（UIO＋DMA 缓冲），替换 `PL-model`。
-   - Vivado 综合实现，核对时序与资源。
+1. **PL 上板**：
+   - 在厂家工程里执行 `carrier::add` 和 `stereo::add`，再综合实现，核对时序与资源（AXI DMA IP 约需 1.5–2k LUT，本次未估）。
+   - 导出 XSA、构建 PetaLinux，用 `pl_verify_every` 观察 `pl_mismatch_frames` 是否为 0。
    - 与采集、显示、`lk_accum`、视觉显示链一起排 BRAM 预算：基础视频工程约 22.5 个 BRAM36（队友工程总 39.5 减去 BM 的 17），本核 5.5，位移核按 32×32 模板约 4–5，显示链 160×90 约 22，合计接近 60 的上限。去掉 BM 后才放得下。
 2. **AN5642 实拍标定**：
    - 固定焦距和支架，拍 15–30 对棋盘格，跑 `stereo_calibrate.py`，生成 `/etc/vibmon/stereo_calibration.json`。

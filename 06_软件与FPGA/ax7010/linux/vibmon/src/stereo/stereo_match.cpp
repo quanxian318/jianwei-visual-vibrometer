@@ -180,6 +180,29 @@ int refineDisparityLk(const StereoImage& L, const StereoImage& R, int x, int y, 
   return 1;
 }
 
+SgmParams plCoreParams(const SgmParams& post) {
+  SgmParams p = post;
+  p.maxDisp = 64;
+  p.census = 9;
+  p.paths = 2;
+  p.p1 = 7;
+  p.p2 = 86;
+  p.adaptiveP2 = true;
+  p.uniquenessPct = 5;
+  p.subpixel = 1;
+  p.lrCheck = true;
+  p.lrTolerance = 1;
+  return p;
+}
+
+DisparityMap plCoreModel(const StereoImage& left, const StereoImage& right) {
+  const SgmParams p = plCoreParams();
+  int bits = 0, border = 0;
+  const auto cl = censusTransform(left, p.census, bits, border);
+  const auto cr = censusTransform(right, p.census, bits, border);
+  return sgmRaw(cl, cr, left, bits, border, p);
+}
+
 int DisparityMap::valid() const {
   int n = 0;
   for (size_t i = 0; i < q4.size(); ++i) n += measured(i);

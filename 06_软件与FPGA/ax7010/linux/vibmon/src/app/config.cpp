@@ -161,6 +161,8 @@ bool loadConfig(const std::string& path, AppConfig& c, std::string& err) {
   c.stereo.service.sgm.speckleSize = i32(st, "speckle_px", c.stereo.service.sgm.speckleSize);
   c.stereo.service.temporal = jBool(st, "temporal_filter", c.stereo.service.temporal);
   c.stereo.service.backend = jStr(st, "backend", c.stereo.service.backend) == "ps" ? "ps" : "pl";
+  c.stereo.service.plCoreBase = jAddr(st, "pl_core_base", c.stereo.service.plCoreBase);
+  c.stereo.service.plVerifyEvery = i32(st, "pl_verify_every", c.stereo.service.plVerifyEvery);
 
   const JsonValue& a = jObj(root, "alarm");
   c.alarm.warnPp = jNum(a, "warn_peak_to_peak", c.alarm.warnPp);

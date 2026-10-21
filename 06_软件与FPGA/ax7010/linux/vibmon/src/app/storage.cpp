@@ -230,6 +230,16 @@ bool saveRecord(const std::string& dir, const RecordMeta& m, const MeasureResult
   im.set("file", imu.empty() ? JsonValue() : JsonValue("imu.csv"));
   rec.set("camera_imu", im);
 
+  if (m.stereo.enabled) {
+    JsonValue st = JsonValue::makeObject();
+    st.set("backend", m.stereo.backend.empty() ? JsonValue() : JsonValue(m.stereo.backend));
+    st.set("calibration_id", m.stereo.calibrationId.empty() ? JsonValue() : JsonValue(m.stereo.calibrationId));
+    st.set("roi_depth_mm", numOrNull(m.stereo.roiDepthMm, m.stereo.roiDepthValid));
+    st.set("used_for_scale", m.stereo.usedForScale);
+    st.set("definition", "median measured stereo depth inside the ROI at capture start (hole-filled pixels excluded)");
+    rec.set("stereo", st);
+  }
+
   JsonValue env = JsonValue::makeObject();
   env.set("temperature_c", numOrNull(m.tempC, m.envValid));
   env.set("humidity_percent", numOrNull(m.rhPercent, m.envValid));

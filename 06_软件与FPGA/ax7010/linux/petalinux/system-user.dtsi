@@ -2,14 +2,20 @@
  * Carrier-board additions for project-spec/meta-user/recipes-bsp/device-tree/files/system-user.dtsi.
  * Merge into the vendor's existing system-user.dtsi (keep its own content).
  *
- * 1. carrier_ctrl as UIO: copy ax7010/pl/bd/generated/carrier_generated.dtsi
- *    (written by add_carrier.tcl with the real address and IRQ) next to this
- *    file, add it to SRC_URI in device-tree.bbappend and include it below.
- *    Append to the kernel command line:  uio_pdrv_genirq.of_id=vibmon,carrier-ctrl
+ * 1. carrier_ctrl and the stereo matcher as UIO: copy
+ *    ax7010/pl/bd/generated/carrier_generated.dtsi and stereo_generated.dtsi
+ *    (written by add_carrier.tcl / add_stereo.tcl with the real addresses and
+ *    IRQs) next to this file, add them to SRC_URI in device-tree.bbappend and
+ *    include them below. Both nodes carry the compatible "vibmon,uio", so one
+ *    binding serves both. Append to the kernel command line:
+ *        uio_pdrv_genirq.of_id=vibmon,uio
+ *    stereo_generated.dtsi also reserves the DMA window (1 MiB at 0x1F000000,
+ *    no-map); the stereo UIO node maps it uncached as map2.
  * 2. The AXI IIC / UART16550 / Quad SPI nodes come from the XSA (DTG); the
  *    labels below are the block-design instance names used by add_carrier.tcl.
  */
 /include/ "carrier_generated.dtsi"
+/include/ "stereo_generated.dtsi"
 
 /* Two spidev nodes: chip select 0 = LSM6DSV (mode 0), 1 = ADXL345 (mode 3).
  * vibmond sets the mode per device; spi-xilinx applies it while both

@@ -78,6 +78,14 @@ int refineDisparityLk(const StereoImage& left, const StereoImage& right, int x, 
 
 DisparityMap matchSgm(const StereoImage& left, const StereoImage& right, const SgmParams& p);
 
+// Fixed parameters of the PL stereo core (ax7010/pl/stereo, stereo_axi.v CONFIG
+// register): D 64, center-symmetric 9x7 census, 2 paths, P1 7, P2 86
+// (adaptive), uniqueness 5 %, LR tolerance 1. Post-processing fields keep
+// the defaults of SgmParams.
+SgmParams plCoreParams(const SgmParams& post = SgmParams());
+// What the PL core returns for a rectified pair (bit-exact model): census + sgmRaw.
+DisparityMap plCoreModel(const StereoImage& left, const StereoImage& right);
+
 // The two stages of matchSgm, split where the PL/PS boundary lies:
 //  - censusTransform: descriptors (PS today; returns bits and border width).
 //  - sgmRaw: cost, path aggregation, winner-take-all, uniqueness, sub-pixel
