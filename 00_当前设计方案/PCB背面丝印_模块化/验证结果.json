@@ -1,0 +1,127 @@
+{
+  "date": "2026-10-20",
+  "modules": 27,
+  "svgs_individual": 54,
+  "pins_checked": 188,
+  "endpoint_checks": "PASS",
+  "svg_structure_checks": "PASS",
+  "minimum_stroke_mm": 0.15,
+  "body_character_height_mm": 1.1,
+  "normal_and_mirror_geometry": "generated from identical polylines",
+  "eda_import_tested": false,
+  "pcb_coordinates_available": false,
+  "sources": {
+    "D:\\codex\\2026-10-13\\pcb-12v-5a-5-5-2\\work\\jlc_service\\export_main_20261019.json": "3373b1439683bbf8b24feb9360aff3ce9e9b4b73f5b7c9eb3fbe359dca3674b9",
+    "D:\\codex\\2026-10-13\\pcb-12v-5a-5-5-2\\work\\jlc_service\\export_front_20261019.json": "d5b26f36177c6916c218e5c8b07920762a316dd0fe464bce86e037a8a17f5653"
+  },
+  "module_dimensions_mm": {
+    "MAIN_J101_12V_IN.svg": [
+      16.42,
+      14.9
+    ],
+    "MAIN_J102_POWER_SW.svg": [
+      18.63,
+      14.8
+    ],
+    "MAIN_J201_AX_5V_OUT.svg": [
+      18.64,
+      16.85
+    ],
+    "MAIN_J501_LCD_5V_OUT.svg": [
+      19.85,
+      16.85
+    ],
+    "MAIN_J301_SIDE_LIGHT.svg": [
+      19.85,
+      14.8
+    ],
+    "MAIN_J304_AUX_LIGHT.svg": [
+      18.64,
+      14.8
+    ],
+    "MAIN_J302_ALARM_FAN.svg": [
+      18.64,
+      20.75
+    ],
+    "MAIN_J305_LIGHT_SW.svg": [
+      17.43,
+      14.8
+    ],
+    "MAIN_J306_LAMP_AUX.svg": [
+      17.43,
+      12.95
+    ],
+    "MAIN_J401_PRINTER.svg": [
+      18.38,
+      18.8
+    ],
+    "MAIN_J502_FRONT_PANEL.svg": [
+      21.07,
+      30.4
+    ],
+    "MAIN_J601_SPEAKER.svg": [
+      19.36,
+      14.8
+    ],
+    "MAIN_J602_PN532_SPI.svg": [
+      18.64,
+      24.65
+    ],
+    "MAIN_J701_TOF.svg": [
+      15.8,
+      20.75
+    ],
+    "MAIN_J702_IMU_SPI.svg": [
+      16.21,
+      24.65
+    ],
+    "MAIN_J703_ACC_SPI.svg": [
+      16.21,
+      24.65
+    ],
+    "MAIN_J704_SHT40.svg": [
+      15.8,
+      16.85
+    ],
+    "MAIN_J705_TACH.svg": [
+      15.8,
+      13.05
+    ],
+    "MAIN_J706_I2C2.svg": [
+      15.8,
+      16.85
+    ],
+    "MAIN_J605_NANO_UART.svg": [
+      18.64,
+      16.75
+    ],
+    "MAIN_J802_I2C0.svg": [
+      15.8,
+      16.85
+    ],
+    "MAIN_BT801_RTC_BATTERY.svg": [
+      22.28,
+      14.8
+    ],
+    "MAIN_J604_NANO_JP1.svg": [
+      19.36,
+      38.3
+    ],
+    "MAIN_J606_NANO_JP2.svg": [
+      19.36,
+      38.3
+    ],
+    "MAIN_J603_MICRO_SD.svg": [
+      17.43,
+      36.35
+    ],
+    "MAIN_J801_AX7010_J11.svg": [
+      31.35,
+      49.9
+    ],
+    "PANEL_J101_FROM_MAIN.svg": [
+      20.34,
+      30.4
+    ]
+  }
+}

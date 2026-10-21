@@ -1,0 +1,24 @@
+#-----------------------------------------------------------
+# Vivado v2025.2 (64-bit)
+# SW Build 6299465 on Fri Nov 14 19:35:11 GMT 2025
+# IP Build 6300035 on Fri Nov 14 10:48:45 MST 2025
+# SharedData Build 6298862 on Thu Nov 13 04:50:51 MST 2025
+# Start of session at: Fri Oct 16 21:10:58 2026
+# Process ID         : 24492
+# Current directory  : D:/AX7010_Sdoira_PL_V1/project/stereo_depth.runs/design_1_processing_system7_0_axi_periph_imp_xbar_0_synth_1
+# Command line       : vivado.exe -log design_1_processing_system7_0_axi_periph_imp_xbar_0.vds -product Vivado -mode batch -messageDb vivado.pb -notrace -source design_1_processing_system7_0_axi_periph_imp_xbar_0.tcl
+# Log file           : D:/AX7010_Sdoira_PL_V1/project/stereo_depth.runs/design_1_processing_system7_0_axi_periph_imp_xbar_0_synth_1/design_1_processing_system7_0_axi_periph_imp_xbar_0.vds
+# Journal file       : D:/AX7010_Sdoira_PL_V1/project/stereo_depth.runs/design_1_processing_system7_0_axi_periph_imp_xbar_0_synth_1\vivado.jou
+# Running On         : LAPTOP-T5AMSP3P
+# Platform           : Windows Server 2016 or Windows 10
+# Operating System   : 26200
+# Processor Detail   : 13th Gen Intel(R) Core(TM) i7-13620H
+# CPU Frequency      : 2918 MHz
+# CPU Physical cores : 10
+# CPU Logical cores  : 16
+# Host memory        : 16858 MB
+# Swap memory        : 24696 MB
+# Total Virtual      : 41554 MB
+# Available Virtual  : 19591 MB
+#-----------------------------------------------------------
+source design_1_processing_system7_0_axi_periph_imp_xbar_0.tcl -notrace

@@ -1,0 +1,25 @@
+{
+  "date": "2026/10/20",
+  "board_mm": [
+    60.0,
+    40.0
+  ],
+  "modules": 8,
+  "labelled_physical_pins": 43,
+  "all_board_pad_checks": 57,
+  "max_gerber_error_mm": 7.755684626330685e-15,
+  "led_chain_checks": "HL101 -> HL102 -> HL103 -> HL104 -> HL105 PASS",
+  "main_J502_cable_contract": "10 pins PASS; pin3 unused on front panel",
+  "bottom_mask_openings": 11,
+  "mask_checked_svg_segments": 909,
+  "letter_height_mm": 1,
+  "stroke_mm": 0.15,
+  "mask_clearance_mm": 0.2,
+  "title_font": "KaiTi Bold outlined",
+  "pcb_modified": false,
+  "eda_import_tested": false,
+  "source_sha256": {
+    "C:\\Users\\LENOVO\\Downloads\\ProPrj_FPGA_2026-10-14_17-44-11_2026-10-20.epro2": "e34fc86851bd2c397b36e9a5dc82800ad0b40ce632ba73107d09f2c8c64f8cbb",
+    "C:\\Users\\LENOVO\\Downloads\\Gerber_前面板PCB_2026-10-20.zip": "2bbb5e88a59d828ffc13bbc46529752e54d0f77f2af111620f08033b9c5df09c"
+  }
+}

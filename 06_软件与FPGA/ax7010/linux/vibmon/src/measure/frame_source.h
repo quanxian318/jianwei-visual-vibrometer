@@ -1,0 +1,57 @@
+#pragma once
+
+#include <cstdint>
+#include <memory>
+#include <string>
+#include <vector>
+
+namespace vm {
+
+struct GrayFrame {
+  int width = 0;
+  int height = 0;
+  std::vector<uint8_t> pixels;  // width * height, row major
+  int64_t timestampNs = 0;      // CLOCK_MONOTONIC capture time
+  bool timestampValid = true;  // false for dequeue-time fallback, unsuitable for metrology
+  uint32_t sequence = 0;        // driver sequence; gaps mean dropped frames
+  uint8_t at(int x, int y) const { return pixels[static_cast<size_t>(y) * width + x]; }
+};
+
+// Camera abstraction. The AN5642 path of the vendor base project is expected
+// to appear as a V4L2 capture device; any other vendor interface plugs in by
+// implementing this class.
+class FrameSource {
+ public:
+  virtual ~FrameSource() = default;
+  virtual bool start() = 0;
+  virtual void stop() = 0;
+  virtual bool next(GrayFrame& out, int timeoutMs) = 0;
+  virtual std::string describe() const = 0;
+  virtual double nominalFps() const = 0;
+};
+
+struct V4l2Config {
+  std::string device = "/dev/video0";
+  int width = 1280;
+  int height = 720;
+  std::string pixelFormat = "YUYV";  // YUYV, UYVY, GREY, NV12, NV16, RGB3, BGR3
+  int fps = 30;
+  int buffers = 4;
+};
+std::unique_ptr<FrameSource> makeV4l2Source(const V4l2Config& cfg);
+
+// Textured target moving by amplitudePx * sin(2 pi f t) along the chosen axis.
+struct SyntheticConfig {
+  int width = 640;
+  int height = 480;
+  double fps = 60;
+  double freqHz = 5;
+  double amplitudePx = 2;
+  char axis = 'y';
+  double noise = 2;        // gray-level standard deviation
+  bool realtime = true;    // false: no sleeping, timestamps advance by 1/fps
+  int dropEvery = 0;       // simulate a dropped frame every N frames (0 = never)
+};
+std::unique_ptr<FrameSource> makeSyntheticSource(const SyntheticConfig& cfg);
+
+}  // namespace vm

@@ -1,0 +1,19 @@
+PASS point: starts without crashing
+PASS capture accepted
+PASS record keeps the point selected at capture start
+PASS point: SIGTERM follows orderly exit
+PASS pixel: starts without crashing
+PASS startup has no normal vibration judgment
+PASS uncalibrated pixels do not use mm alarm thresholds
+PASS pixel: SIGTERM follows orderly exit
+PASS startup: starts without crashing
+PASS PFAIL low at boot is retained
+PASS startup: SIGTERM follows orderly exit
+PASS lighting: starts without crashing
+PASS automatic light is on during capture
+PASS record retains automatic light state after it is switched off
+PASS lighting: SIGTERM follows orderly exit
+PASS shutdown: starts without crashing
+PASS shutdown completes during capture
+PASS cancelled capture produces no late result
+PASS shutdown: SIGTERM follows orderly exit

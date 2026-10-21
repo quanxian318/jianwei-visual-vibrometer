@@ -1,0 +1,622 @@
+--- PDF PAGE 1 ---
+3 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+  
+DATA SHEET
+ARRAY CHIP RESISTORS
+YC/TC 164 (8Pin/4R; Pb Free)
+5%, 1%
+sizes 4 × 0603
+ 
+ 
+Product specification – Mar 01, 2005 V.2   Supersedes Date of Mar. 06, 2003 
+
+--- PDF PAGE 2 ---
+ 
+ 
+SERIESYC/TC 164 (Pb Free)
+Product specification
+ 
+ 
+ 2
+8
+www.yageo.com
+Mar 01, 2005  V.2 
+ 
+Chip Resistor Surface Mount 
+     
+  
+CTC CODE  
+YC164  –  X  X  X  XX  XXXX  L
+TC                (1)   (2)   (3)     (4)           (5)         (6)
+(1) TOLERANCE 
+F = ±1% 
+J = ±5% 
+ 
+(2) PACKAGING TYPE 
+R = Paper/PE taping reel 
+ 
+(3) TEMPERATURE COEFFICIENT 
+OF RESISTANCE 
+– = Base on spec 
+ 
+(4) TAPING REEL 
+07 = 7 inch dia. Reel 
+13 = 13 inch dia. Reel 
+ 
+(5) RESISTANCE VALUE 
+56R, 560R, 5K6, 56K, 1M 
+0R = Jumper 
+ 
+(6) RESISTOR TERMINATIONS 
+L = Lead free terminations (pure Tin)
+ 
+ 
+ORDERING EXAMPLE  
+The ordering code of a YC164 
+convex chip resistor array, value 
+1,000 X with ±5% tolerance, 
+supplied in 7-inch tape reel is: 
+YC164-JR-071KL. 
+(1) The resistors have a 12-digit 
+ordering code starting with 
+2350. 
+(2) The subsequent 4 or 5 digits 
+indicate the resistor 
+tolerance and packaging. 
+(3) The remaining 4 or 3 digits 
+represent the resistance value 
+with the last digit indicating 
+the multiplier as shown in the 
+table of “Last digit of 12NC”. 
+(4) “L” means lead-free 
+terminations. 
+O
+RDERING EXAMPLE  
+The ordering code of an ARV241 
+convex chip resistor array, value 
+1,000 X with ±5% tolerance, 
+supplied in tape of 5,000 units 
+per reel is: 235003510102L. 
+ 
+PPHHYYCCOOMMPP  OORRDDEERRIINNGG  CCOODDEE  
+12NC CODE  
+       2350 XXX  XX XXX  L  
+                        
+             (1)                                  (2)           (3)         (4) 
+PAPER / PE TAPE ON REEL (units) (2)TYPE/ 
+4×0603 
+START  
+IN (1) 
+TOL.  
+(%) 
+RESISTANCE 
+RANGE 
+ 5,000  20,000 
+ARV241 2350 ±5% 10 to 1 M Ω  035 10xxx  035 12xx x
+ARV242 2350 ±1% 10 to 1 M Ω  025 1xxxx  025 3xxx x
+ARC241 2350 ±5% 10 to 1 M Ω  034 10xxx  013 3xxx x
+ARC242 2350 ±1% 10 to 1 M Ω  024 1xxxx  013 3xxx x
+Jumper 2350 - 0 Ω ARV241/YC164 035 91001 -
+    ARC241/TC164 034 91001 -
+ 
+ 
+SCOPE  
+This specification describes YC164 (convex) and TC164 ( concave) series chip resistor arrays with lead-free 
+terminations made by thick film process. 
+ 
+ORDERING INFORMATION 
+Part number is identified by the series, size, tolerance, packing type, temperature coefficient, taping reel and 
+resistance value. 
+NOTE 
+1. The “L” at the end of the code is only for ordering. On th e reel label, the standard CTC or 12NC will be mentioned an additional stamp 
+“LFP”= lead free production. 
+2. Products with lead in terminations fulfil the sa me requirements as mentioned in this datasheet.  
+3. Products with lead in terminations will be phased out in the coming months (before July 1st, 2006) 
+Resistance decade (3) Last digit
+0.01 to 0.0976 X 0
+0.1 to 0.976 X 7
+1 to 9.76 X 8
+10 to 97.6 X 9
+100 to 976 X 1
+1 to 9.76 kX 2
+10 to 97.6 kX 3
+100 to 976 kX 4
+1 to 9.76 MX 5
+10 to 97.6 MX 6
+ 
+Example: 0.02 X = 0200 or 200
+ 0.3  X = 3007 or 307
+ 1  X = 1008 or 108
+ 33 k X = 3303 or 333
+ 10 M X = 1006 or 106
+ 
+ Last digit of 12NC
+--- PDF PAGE 3 ---
+ 
+ 
+SERIESYC/TC 164 (Pb Free)
+Product specification
+ 
+ 
+ 3
+8
+www.yageo.com
+Mar 01, 2005  V.2 
+ 
+Chip Resistor Surface Mount 
+protective coat. Finally, the eight external terminations (pure Tin) are added. See fig. 2. 
+CONSTRUCTION  
+The resistors are constructed out of 
+a high-grade ceramic body. Internal 
+metal electrodes are added at each 
+end and connected by a resistive 
+paste. The composition of the paste 
+is adjusted to give the approximate 
+required resistance and laser cutting 
+of this resistive layer that achieves 
+tolerance trims the value. The 
+resistive layer is covered with a 
+DIMENSIONS
+  
+ 
+TYPE YC164 TC164
+B (mm) 0.30 ±0.15 0.30 ±0.15
+H (mm) 0.65 ±0.05 ---
+P (mm) 0.80 ±0.05 0.80 ±0.05
+L (mm) 3.20 ±0.15 3.20 ±0.15
+H2 (mm) 0.50 ±0.15 0.60 ±0.15
+T (mm) 0.60 ±0.10 0.60 ±0.10
+W1 (mm) 0.30 ±0.15 0.30 ±0.15
+W2 (mm) 1.60 ±0.15 1.60 ±0.15
+protective coat 
+resistor layer
+inner electrode
+end termination
+ceramic substrate YNSC053  
+ 
+ 
+ 
+ 
+ 
+ 
+Fig. 2 Chip resistor construction
+Table 1  
+MARKING 
+YC164 
+ 
+E-24 series: 3 digits 
+First two digits for significant figu re and 3rd digit for number of zeros 
+For marking codes, please see EIA-marking code rules in data sheet “Chip resistors marking”. 
+Fig. 1 Value = 240 K Ω 
+ 
+2
+YNSC029 
+SCHEMATIC  
+YNSC055
+R1 R2 R3 R4
+12
+87
+3
+6
+4
+5
+R1
+R1 = R2 = R3 = R4
+TC164 YC164
+R2 R3 R4
+12
+87
+3
+6
+4
+5
+Fig. 4 Equivalent circuit diagram 
+ 
+For dimension see Fig. 2 and Table 1 
+a
+a
+P
+L
+concave 
+termination
+TC164 YC164
+B
+YNSC054
+H2H2
+H a
+a
+P
+L
+convex 
+termination
+B
+T
+W1
+W2
+ 
+ 
+ 
+ 
+Fig. 3 YC/TC164 series chip resistors dimension For dimension see Table 1
+--- PDF PAGE 4 ---
+ 
+ 
+SERIESYC/TC 164 (Pb Free)
+Product specification
+ 
+ 
+ 4
+8
+www.yageo.com
+Mar 01, 2005  V.2 
+ 
+Chip Resistor Surface Mount 
+ 
+  
+ELECTRICAL CHARACTERISTICS 
+ 
+CHARACTERISTICS YC/TC164  1/16 W
+Operating Temperature Range –55 °C to +155 °C
+Maximum Working Voltage 50 V
+Maximum Overload Voltage 100 V
+Dielectric Withstanding Voltage 100 V
+Number of Resistors 4
+5% (E24) 10 Ω to 1 MΩ
+1% (E24/E96) 10 Ω to 1 MΩResistance Range 
+Zero Ohm Jumper < 0.05 Ω
+Temperature Coefficient ±200 ppm/°C
+Jumper Criteria Rated Current 1.0 A
+ 
+FOOTPRINT AND SOLDERING 
+PROFILES 
+For recommended footprint and 
+soldering profiles, please see the 
+special data sheet “Chip resistors 
+mounting”. 
+ 
+ENVIRONMENTAL DATA
+ 
+For material declaration 
+information (IMDS-data) of the 
+products, please see the 
+separated info “Environmental 
+data" conformed to EU RoHS. 
+ 
+ 
+ 
+ 
+Table 2    
+MRA632
+70 100− 55 50
+Tamb (°C)
+(%Prated) 
+0
+0
+50
+100
+155
+Pmax
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Fig. 5 Maximum dissipation (P max) in percentage of rated power 
+as a function of the operating ambient temperature (T amb)
+FUNCTIONAL DESCRIPTION 
+PPOOWWEERR  RRAATTIINNGG  
+YC/TC164 rated power at 70°C is 1/16 W 
+RATED VOLTAGE  
+The DC or AC (rms) continuous working voltage 
+corresponding to the rated power is determined by 
+the following formula: 
+V = √(P X R) 
+Where 
+V = Continuous rated DC or 
+       AC (rms) working voltage (V) 
+P = Rated power (W) 
+R = Resistance value ( X)
+ 
+PACKING STYLE AND PACKAGING QUANTITY
+ 
+PRODUCT TYPE PACKING STYLE REEL DIMENSION QUANTITY PER REEL
+YC/TC164 Paper / PE Taping Reel (R) 7" (178 mm) 5,000 units
+  13" (330 mm) 20,000 units
+NOTE 
+1. For Paper/PE tape and reel specification/dimensions , please see the special data sheet “Packing” document. 
+Table 3 Packing style and packaging quantity 
+--- PDF PAGE 5 ---
+ 
+ 
+SERIESYC/TC 164 (Pb Free)
+Product specification
+ 
+ 
+ 5
+8
+www.yageo.com
+Mar 01, 2005  V.2 
+ 
+Chip Resistor Surface Mount 
+TESTS AND REQUIREMENTS 
+ 
+TEST TEST METHOD PROCEDURE REQUIREMENTS 
+At +25/–55 °C and +25/+125 °C Temperature 
+Coefficient of 
+Resistance 
+(T.C.R.)
+MIL-STD-202F-method 304;  
+JIS C 5202-4.8 
+ Formula: 
+ 
+ 
+T.C.R = -------------------------  × 106 (ppm/°C) 
+  
+Where   
+t1 = +25 °C or specified room temperature 
+t2 = –55 °C or +125 °C test temperature 
+R1 = resistance at reference temperature in ohms
+R2 = resistance at test temperature in ohms 
+Refer to table 2 
+Thermal Shock MIL-STD-202F-method 107G;  
+IEC 60115-1 4.19 
+At –65 (+0/–10) °C for 2 minutes and at +155 
+(+10/–0) °C for 2 minutes; 25 cycles 
+±(0.5% +0.05 Ω) for 1% tol. 
+±(1.0% +0.05 Ω) for 5% tol. 
+Low
+Temperature 
+Operation
+MIL-R-55342D-Para 4.7.4 At –65 (+0/–5) °C for 1 hour; RCWV applied for 
+45 (+5/–0) minutes 
+±(0.5% +0.05 Ω) for 1% tol . 
+±(1.0% +0.05 Ω) for 5% tol.  
+No visible damage 
+Short Time 
+Overload
+MIL-R-55342D-Para 4.7.5;  
+IEC 60115-1 4.13 
+2.5 × RCWV applied for 5 seconds at room 
+temperature 
+±(1.0% +0.05 Ω) for 1% tol. 
+±(2.0% +0.05 Ω) for 5% tol. 
+No visible damage 
+Insulation 
+Resistance
+MIL-STD-202F-method 302; 
+IEC 60115-1 4.6.1.1 
+RCOV for 1 minute 
+Type YC/TC164
+Voltage (DC) 100 V
+ 
+ 
+ 
+≥10 GΩ 
+Dielectric 
+Withstand 
+Voltage
+MIL-STD-202F-method 301; 
+IEC 60115-1 4.6.1.1 
+Maximum voltage (Vrms) applied for 1 minute 
+Type YC/TC164
+Voltage (AC) 100 Vrms 
+No breakdown or flashover 
+Resistance to
+Soldering
+ Heat
+MIL-STD-202F-method 210C; 
+IEC 60115-1 4.18 
+Unmounted chips; 260 ±5 °C for 10 ±1 seconds ±(0.5% +0.05 Ω) for 1% tol. 
+±(1.0% +0.05 Ω) for 5% tol. 
+No visible damage 
+Life MIL-STD-202F-method 108A; 
+IEC 60115-1 4.25.1 
+At 70 ±2 °C for 1,000 hours; RCWV applied for 
+1.5 hours on and 0.5 hour off 
+±(1% +0.05 Ω) for 1% tol. 
+±(3% +0.05 Ω) for 5% tol. 
+ 
+R2 – R1
+R1 (t2 – t1)
+Table 4   Test condition, procedure and requirements
+--- PDF PAGE 6 ---
+ 
+ 
+SERIESYC/TC 164 (Pb Free)
+Product specification
+ 
+ 
+ 6
+8
+www.yageo.com
+Mar 01, 2005  V.2 
+ 
+Chip Resistor Surface Mount 
+TEST TEST METHOD PROCEDURE REQUIREMENTS 
+Solderability MIL-STD-202F-method 208A; 
+IEC 60115-1 4.17 
+Solder bath at 245 ±3 °C  
+Dipping time: 2 ±0.5 seconds 
+Well tinned (≥95% covered) 
+No visible damage 
+ 
+Bending 
+Strength
+JIS C 5202.6.14; 
+IEC 60115-1 4.15 
+ 
+Resistors mounted on a 90 mm glass epoxy 
+resin PCB (FR4) 
+Bending: 1 mm 
+±(1.0% +0.05 Ω) for 1% tol. 
+±(1.0% +0.05 Ω) for 5% tol. 
+No visible damage 
+Resistance to 
+Solvent
+MIL-STD-202F-method 215; 
+IEC 60115-1 4.29 
+lsopropylalcohol (C3H7OH) or dichloromethane 
+(CH2Cl2) followed by brushing 
+No smeared 
+Noise JIS C 5202 5.9; 
+IEC 60115-1 4.12 
+Maximum voltage (Vrms) applied. Resistors range Value 
+R < 100 Ω 10 dB
+100 Ω ≤ R < 1 KΩ 20 dB
+1 KΩ ≤ R < 10 KΩ 30 dB
+10 KΩ ≤ R < 100 KΩ 40 dB
+100 KΩ ≤ R < 1 MΩ 46 dB
+1 MΩ ≤ R ≤ 22 MΩ 48 dB 
+Humidity 
+(steady state)
+JIS C 5202 7.5; 
+IEC 60115-8 4.24.8 
+1,000 hours; 40 ±2 °C; 93(+2/–3)% RH 
+RCWV applied for 1.5 hours on and 0.5 hour off
+ 
+±(0.5% +0.05 Ω) for 1% tol. 
+±(2.0% +0.05 Ω) for 5% tol. 
+Leaching EIA/IS 4.13B; 
+IEC 60115-8 4.18 
+Solder bath at 260 ±5 °C 
+Dipping time: 30 ±1 seconds 
+No visible damage 
+Intermittent 
+Overload
+JIS C 5202 5.8 
+ 
+At room temperature; 2.5 × RCWV applied for 
+1 second on and 25 seconds off; total 10,000 
+cycles 
+±(1.0% +0.05 Ω) for 1% tol. 
+±(2.0% +0.05 Ω) for 5% tol. 
+Resistance to 
+Vibration
+On request On request  
+Moisture
+Resistance 
+Heat
+MIL-STD-202F-method 106F; 
+IEC 60115-1 4.24.2 
+42 cycles; total 1,000 hours 
+Shown as Fig. 6 
+±(0.5% +0.05Ω) for 1% tol. 
+±(2.0% +0.05Ω) for 5% tol. 
+No visible damage 
+ 
+--- PDF PAGE 7 ---
+ 
+ 
+SERIESYC/TC 164 (Pb Free)
+Product specification
+ 
+ 
+ 7
+8
+www.yageo.com
+Mar 01, 2005  V.2 
+ 
+Chip Resistor Surface Mount 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+75
+initial drying
+24 hours
+90 −  98% RH
+80 −  98%
+RH
+temperature
+tolerance
+±2 °C (±3.6 °F)
+unless otherwise
+specified
+initial measurements
+as specified in 2.2
+0
+STEP1 STEP3STEP2
+prior to first
+cycle only
+STEP4
+one cycle 24 hours; repeat as specified in 2.5
+voltage applied as specified in 2.4
+circulation of conditioning air shall be at a
+minimum cubic rate per minute equivalent to
+10 times the volume of the chamber
+STEP6 STEP7
+HBK073
+STEP5
+51 0 1 5
+end of final cycle;
+measurements
+as specified in 2.7
+optional sub-cycle if specified
+(2.3); sub-cycle performed during
+any 5 of the first 9 cycles; humidity
+uncontrolled during sub-cycle
+20
+time [h]
+temperature
+[°C]
+25
+50
+25
+0
+90 −  98% RH 90 −  98% RH
++10 °C (+18 °F)
+− 2 °C (− 3.6 °F)
+80 −  98%
+RH
+rate of change of temperature is unspecified,
+however, specimens shall not be subjected to
+radiant heating from chamber conditioning processes
+ 
+Fig. 6   Moisture resistance test requirements 
+--- PDF PAGE 8 ---
+ 
+ 
+SERIESYC/TC 164 (Pb Free)
+Product specification
+ 
+ 
+ 8
+8
+www.yageo.com
+Mar 01, 2005  V.2 
+ 
+Chip Resistor Surface Mount 
+ REVISION HISTORY 
+REVISION DATE CHANGE NOTIFICATION DESCRIPTION 
+Version 2 Mar 01, 2005 - - New datasheet for 4 x 0603 thick film 1% and 5% with lead-free 
+terminations 
+- Replace the 4 x 0603 part of pdf file: 
+ARC241_242_ARV241_242_51_L_0.pdf 
+- Test method and procedure updated 
+Version 0 Dec 05, 2003 - - 
+ 
+ 

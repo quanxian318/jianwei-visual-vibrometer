@@ -1,0 +1,209 @@
+{
+  "snapshotTime": "2026-10-17 02:28:36 UTC+8",
+  "componentCount": 189,
+  "page06Count": 19,
+  "page06PinCount": 84,
+  "newComponents": 9,
+  "newPins": 30,
+  "checks": [
+    {
+      "name": "前180器件电气及型号数值不变",
+      "passed": true,
+      "basis": "复用上次第6页54端点及此前电路核查；不重跑未变电路"
+    },
+    {
+      "name": "新增仅预期9器件且无默认位号",
+      "passed": true,
+      "basis": "J603/C602/C603/R605–R610，无CARD1/C1/C2/R1–R6残留"
+    },
+    {
+      "name": "J603全部引脚网络",
+      "passed": true,
+      "basis": "卡座按针号核对；无极性两端件允许1/2互换"
+    },
+    {
+      "name": "J603MPN及C编号",
+      "passed": true,
+      "basis": "当前主载板BOM，不声明实时库存"
+    },
+    {
+      "name": "R605全部引脚网络",
+      "passed": true,
+      "basis": "卡座按针号核对；无极性两端件允许1/2互换"
+    },
+    {
+      "name": "R605MPN及C编号",
+      "passed": true,
+      "basis": "当前主载板BOM，不声明实时库存"
+    },
+    {
+      "name": "R60510kΩ值",
+      "passed": true,
+      "basis": "片选、未用DAT及检测上拉"
+    },
+    {
+      "name": "R606全部引脚网络",
+      "passed": true,
+      "basis": "卡座按针号核对；无极性两端件允许1/2互换"
+    },
+    {
+      "name": "R606MPN及C编号",
+      "passed": true,
+      "basis": "当前主载板BOM，不声明实时库存"
+    },
+    {
+      "name": "R60610kΩ值",
+      "passed": true,
+      "basis": "片选、未用DAT及检测上拉"
+    },
+    {
+      "name": "R607全部引脚网络",
+      "passed": true,
+      "basis": "卡座按针号核对；无极性两端件允许1/2互换"
+    },
+    {
+      "name": "R607MPN及C编号",
+      "passed": true,
+      "basis": "当前主载板BOM，不声明实时库存"
+    },
+    {
+      "name": "R60710kΩ值",
+      "passed": true,
+      "basis": "片选、未用DAT及检测上拉"
+    },
+    {
+      "name": "R608全部引脚网络",
+      "passed": true,
+      "basis": "卡座按针号核对；无极性两端件允许1/2互换"
+    },
+    {
+      "name": "R608MPN及C编号",
+      "passed": true,
+      "basis": "当前主载板BOM，不声明实时库存"
+    },
+    {
+      "name": "R60810kΩ值",
+      "passed": true,
+      "basis": "片选、未用DAT及检测上拉"
+    },
+    {
+      "name": "R609全部引脚网络",
+      "passed": true,
+      "basis": "卡座按针号核对；无极性两端件允许1/2互换"
+    },
+    {
+      "name": "R609MPN及C编号",
+      "passed": true,
+      "basis": "当前主载板BOM，不声明实时库存"
+    },
+    {
+      "name": "R60910kΩ值",
+      "passed": true,
+      "basis": "片选、未用DAT及检测上拉"
+    },
+    {
+      "name": "R610全部引脚网络",
+      "passed": true,
+      "basis": "卡座按针号核对；无极性两端件允许1/2互换"
+    },
+    {
+      "name": "R610MPN及C编号",
+      "passed": true,
+      "basis": "当前主载板BOM，不声明实时库存"
+    },
+    {
+      "name": "R61010kΩ值",
+      "passed": true,
+      "basis": "片选、未用DAT及检测上拉"
+    },
+    {
+      "name": "C602全部引脚网络",
+      "passed": true,
+      "basis": "卡座按针号核对；无极性两端件允许1/2互换"
+    },
+    {
+      "name": "C602MPN及C编号",
+      "passed": true,
+      "basis": "当前主载板BOM，不声明实时库存"
+    },
+    {
+      "name": "C602标称值和耐压",
+      "passed": true,
+      "basis": "C602=22uF/10V、C603=100nF/50V，3.3V域"
+    },
+    {
+      "name": "C603全部引脚网络",
+      "passed": true,
+      "basis": "卡座按针号核对；无极性两端件允许1/2互换"
+    },
+    {
+      "name": "C603MPN及C编号",
+      "passed": true,
+      "basis": "当前主载板BOM，不声明实时库存"
+    },
+    {
+      "name": "C603标称值和耐压",
+      "passed": true,
+      "basis": "C602=22uF/10V、C603=100nF/50V，3.3V域"
+    },
+    {
+      "name": "SD片选实际端点同网",
+      "passed": true,
+      "basis": "追踪实际全工程端点"
+    },
+    {
+      "name": "SD回传实际端点同网",
+      "passed": true,
+      "basis": "追踪实际全工程端点"
+    },
+    {
+      "name": "SD检测实际端点同网",
+      "passed": true,
+      "basis": "追踪实际全工程端点"
+    },
+    {
+      "name": "SPI输出实际端点同网",
+      "passed": true,
+      "basis": "追踪实际全工程端点"
+    },
+    {
+      "name": "SPI时钟实际端点同网",
+      "passed": true,
+      "basis": "追踪实际全工程端点"
+    },
+    {
+      "name": "PN片选实际端点同网",
+      "passed": true,
+      "basis": "追踪实际全工程端点"
+    },
+    {
+      "name": "SD片选和机械检测未误并",
+      "passed": true,
+      "basis": "CD/DAT3为SPI片选，SW_A为机械检测"
+    },
+    {
+      "name": "MISO经过U601及R603而无旁路",
+      "passed": true,
+      "basis": "SD_DAT0→U601→MISO_BUS→R603→NANO_MISO"
+    }
+  ],
+  "failed": [],
+  "page06Missing": [
+    "C604",
+    "C605",
+    "C606",
+    "C607",
+    "C608",
+    "J601",
+    "J602",
+    "R611",
+    "R612",
+    "R613",
+    "R614",
+    "R615",
+    "R616",
+    "R617",
+    "U602"
+  ],
+  "edaModified": false
+}

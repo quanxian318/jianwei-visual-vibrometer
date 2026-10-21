@@ -1,0 +1,187 @@
+﻿板件,连接器,针号,信号或状态,功能或方向,电源或逻辑域,规格,说明
+主载板,J101,1,12V输入中心正极,输入,12V,DC5525,三脚为符号焊脚编号；成品插头只有中心与套筒
+主载板,J101,2,GND套筒,回流,12V,DC5525,三脚为符号焊脚编号；成品插头只有中心与套筒
+主载板,J101,3,GND切换触点,按原厂图接地,12V,DC5525,三脚为符号焊脚编号；成品插头只有中心与套筒
+主载板,J102,1,F101之后正极,SW101输入,12V,5.08mm 2P,两针都属于正极回路，另一针不是GND
+主载板,J102,2,12V_PROTECTED,SW101输出,12V,5.08mm 2P,两针都属于正极回路，另一针不是GND
+主载板,J201,1,5V_AX,供AX7010,5V,USB-A,金属固定脚接地，配USB-A转DC5521线
+主载板,J201,2,不接,D-,5V,USB-A,金属固定脚接地，配USB-A转DC5521线
+主载板,J201,3,不接,D+,5V,USB-A,金属固定脚接地，配USB-A转DC5521线
+主载板,J201,4,GND,回流,5V,USB-A,金属固定脚接地，配USB-A转DC5521线
+主载板,J301,1,支路保险后+12V,照明灯正端（全部LED灯并联）,12V,5.08mm 2P,负端不能接恒定GND
+主载板,J301,2,LED负端,MOS PWM开关回流,12V,5.08mm 2P,负端不能接恒定GND
+主载板,J304,1,支路保险后+12V,激光散斑投影器正端,12V,5.08mm 2P,负端和外壳不能接恒定GND
+主载板,J304,2,投影器负端,MOS开关回流（固定100%，只开关）,12V,5.08mm 2P,负端和外壳不能接恒定GND
+主载板,J302,1,12V_ALM,经SW302/SW303分配正端,12V,5.08mm 6P,本连接器无恒定GND触点
+主载板,J302,2,ALM_R_N,红灯负端,12V,5.08mm 6P,本连接器无恒定GND触点
+主载板,J302,3,ALM_Y_N,黄灯负端,12V,5.08mm 6P,本连接器无恒定GND触点
+主载板,J302,4,ALM_G_N,绿灯负端,12V,5.08mm 6P,本连接器无恒定GND触点
+主载板,J302,5,BZ_N,蜂鸣器负端,12V,5.08mm 6P,本连接器无恒定GND触点
+主载板,J302,6,FAN_N,风扇负端,12V,5.08mm 6P,本连接器无恒定GND触点
+主载板,J305,1,LED_EN,SW301闭合拉低允许,5V逻辑,GH1.25-2P,3/4是机械焊脚；此接口不可接12V
+主载板,J305,2,GND,触点回流,5V逻辑,GH1.25-2P,3/4是机械焊脚；此接口不可接12V
+主载板,J306,1,5V_AUX,按钮灯辅助供电,5V,GH1.25-2P,3/4是机械焊脚，不是线端触点
+主载板,J306,2,GND,按钮灯回流,5V,GH1.25-2P,3/4是机械焊脚，不是线端触点
+主载板,J401,1,12V_PRN,打印机VIN,12V供电/3.3V发送，可接5V返回,PH2.0-5P,3/4按厂家主机视角定义；PH触点额定2A条件需满足
+主载板,J401,2,PRN_HOST_CTS,打印机输出，高忙低允许,12V供电/3.3V发送，可接5V返回,PH2.0-5P,3/4按厂家主机视角定义；PH触点额定2A条件需满足
+主载板,J401,3,PRN_HOST_TX,主机发送至打印机,12V供电/3.3V发送，可接5V返回,PH2.0-5P,3/4按厂家主机视角定义；PH触点额定2A条件需满足
+主载板,J401,4,PRN_HOST_RX,主机接收打印机数据,12V供电/3.3V发送，可接5V返回,PH2.0-5P,3/4按厂家主机视角定义；PH触点额定2A条件需满足
+主载板,J401,5,GND,供电及信号回流,12V供电/3.3V发送，可接5V返回,PH2.0-5P,3/4按厂家主机视角定义；PH触点额定2A条件需满足
+主载板,J501,1,5V_LCD经F501,Power Only供电,5V,USB-A,固定壳接地，非触摸USB数据口
+主载板,J501,2,不接,D-,5V,USB-A,固定壳接地，非触摸USB数据口
+主载板,J501,3,不接,D+,5V,USB-A,固定壳接地，非触摸USB数据口
+主载板,J501,4,GND,回流,5V,USB-A,固定壳接地，非触摸USB数据口
+主载板,J502,1,5V_AUX,LED供电,5V LED/3.3V触点,GH1.25-10P,到前面板J101逐针1对1；触点闭合接地
+主载板,J502,2,GND,地,5V LED/3.3V触点,GH1.25-10P,到前面板J101逐针1对1；触点闭合接地
+主载板,J502,3,AX_3V3,仅前面板测试点,5V LED/3.3V触点,GH1.25-10P,到前面板J101逐针1对1；触点闭合接地
+主载板,J502,4,GND,地,5V LED/3.3V触点,GH1.25-10P,到前面板J101逐针1对1；触点闭合接地
+主载板,J502,5,ENC_A_RAW,编码器A触点,5V LED/3.3V触点,GH1.25-10P,到前面板J101逐针1对1；触点闭合接地
+主载板,J502,6,ENC_B_RAW,编码器B触点,5V LED/3.3V触点,GH1.25-10P,到前面板J101逐针1对1；触点闭合接地
+主载板,J502,7,ENC_SW_RAW,编码器按压,5V LED/3.3V触点,GH1.25-10P,到前面板J101逐针1对1；触点闭合接地
+主载板,J502,8,KEY_K1_RAW,独立按键,5V LED/3.3V触点,GH1.25-10P,到前面板J101逐针1对1；触点闭合接地
+主载板,J502,9,WS_DATA_5V,LED串行数据,5V LED/3.3V触点,GH1.25-10P,到前面板J101逐针1对1；触点闭合接地
+主载板,J502,10,GND,地,5V LED/3.3V触点,GH1.25-10P,到前面板J101逐针1对1；触点闭合接地
+前面板,J101,1,5V_AUX,LED供电,5V LED/3.3V触点,GH1.25-10P,到主载板J502逐针1对1；3脚仅测试点
+前面板,J101,2,GND,地,5V LED/3.3V触点,GH1.25-10P,到主载板J502逐针1对1；3脚仅测试点
+前面板,J101,3,AX_3V3,仅前面板测试点,5V LED/3.3V触点,GH1.25-10P,到主载板J502逐针1对1；3脚仅测试点
+前面板,J101,4,GND,地,5V LED/3.3V触点,GH1.25-10P,到主载板J502逐针1对1；3脚仅测试点
+前面板,J101,5,ENC_A_RAW,编码器A触点,5V LED/3.3V触点,GH1.25-10P,到主载板J502逐针1对1；3脚仅测试点
+前面板,J101,6,ENC_B_RAW,编码器B触点,5V LED/3.3V触点,GH1.25-10P,到主载板J502逐针1对1；3脚仅测试点
+前面板,J101,7,ENC_SW_RAW,编码器按压,5V LED/3.3V触点,GH1.25-10P,到主载板J502逐针1对1；3脚仅测试点
+前面板,J101,8,KEY_K1_RAW,独立按键,5V LED/3.3V触点,GH1.25-10P,到主载板J502逐针1对1；3脚仅测试点
+前面板,J101,9,WS_DATA_5V,LED串行数据,5V LED/3.3V触点,GH1.25-10P,到主载板J502逐针1对1；3脚仅测试点
+前面板,J101,10,GND,地,5V LED/3.3V触点,GH1.25-10P,到主载板J502逐针1对1；3脚仅测试点
+主载板,J601,1,SPK_P,喇叭正端,BTL功放输出,GH1.25-2P,两端均非GND；8Ω/3W无源扬声器
+主载板,J601,2,SPK_N,喇叭负端,BTL功放输出,GH1.25-2P,两端均非GND；8Ω/3W无源扬声器
+主载板,J602,1,5V_AUX,模块VCC,5V供电/3.3V逻辑,GH1.25-8P（WAFER-GH1.25-8PWB / C3029383）,SPI模块3.3V信号；固定焊脚按库编号接GND
+主载板,J602,2,GND,地,5V供电/3.3V逻辑,GH1.25-8P（WAFER-GH1.25-8PWB / C3029383）,SPI模块3.3V信号；固定焊脚按库编号接GND
+主载板,J602,3,SPI_SCLK_BUS,SCK,5V供电/3.3V逻辑,GH1.25-8P（WAFER-GH1.25-8PWB / C3029383）,SPI模块3.3V信号；固定焊脚按库编号接GND
+主载板,J602,4,SPI_MOSI_BUS,MOSI,5V供电/3.3V逻辑,GH1.25-8P（WAFER-GH1.25-8PWB / C3029383）,SPI模块3.3V信号；固定焊脚按库编号接GND
+主载板,J602,5,PN_MISO,MISO经U601,5V供电/3.3V逻辑,GH1.25-8P（WAFER-GH1.25-8PWB / C3029383）,SPI模块3.3V信号；固定焊脚按库编号接GND
+主载板,J602,6,PN_CS,低选中,5V供电/3.3V逻辑,GH1.25-8P（WAFER-GH1.25-8PWB / C3029383）,SPI模块3.3V信号；固定焊脚按库编号接GND
+主载板,J602,7,PN_IRQ,IRQ,5V供电/3.3V逻辑,GH1.25-8P（WAFER-GH1.25-8PWB / C3029383）,SPI模块3.3V信号；固定焊脚按库编号接GND
+主载板,J602,8,RSTO,可选输出测试点,5V供电/3.3V逻辑,GH1.25-8P（WAFER-GH1.25-8PWB / C3029383）,SPI模块3.3V信号；固定焊脚按库编号接GND
+主载板,J603,1,SD_DAT2,DAT2上拉,3.3V,DM3AT-SF-PEJM5 MicroSD卡座,卡座内部针号，供开发核对；DAT3/CS与SW_A卡检测不是同一信号
+主载板,J603,2,SD_CS,DAT3/SPI片选,3.3V,DM3AT-SF-PEJM5 MicroSD卡座,卡座内部针号，供开发核对；DAT3/CS与SW_A卡检测不是同一信号
+主载板,J603,3,SPI_MOSI_BUS,CMD/SPI输入,3.3V,DM3AT-SF-PEJM5 MicroSD卡座,卡座内部针号，供开发核对；DAT3/CS与SW_A卡检测不是同一信号
+主载板,J603,4,3V3_D,VDD,3.3V,DM3AT-SF-PEJM5 MicroSD卡座,卡座内部针号，供开发核对；DAT3/CS与SW_A卡检测不是同一信号
+主载板,J603,5,SPI_SCLK_BUS,CLK,3.3V,DM3AT-SF-PEJM5 MicroSD卡座,卡座内部针号，供开发核对；DAT3/CS与SW_A卡检测不是同一信号
+主载板,J603,6,GND,VSS,3.3V,DM3AT-SF-PEJM5 MicroSD卡座,卡座内部针号，供开发核对；DAT3/CS与SW_A卡检测不是同一信号
+主载板,J603,7,SD_DAT0,SPI数据输出，经U601,3.3V,DM3AT-SF-PEJM5 MicroSD卡座,卡座内部针号，供开发核对；DAT3/CS与SW_A卡检测不是同一信号
+主载板,J603,8,SD_DAT1,DAT1上拉,3.3V,DM3AT-SF-PEJM5 MicroSD卡座,卡座内部针号，供开发核对；DAT3/CS与SW_A卡检测不是同一信号
+主载板,J603,9,GND,机械检测SW_B,3.3V,DM3AT-SF-PEJM5 MicroSD卡座,卡座内部针号，供开发核对；DAT3/CS与SW_A卡检测不是同一信号
+主载板,J603,10,GND,卡座外壳,3.3V,DM3AT-SF-PEJM5 MicroSD卡座,卡座内部针号，供开发核对；DAT3/CS与SW_A卡检测不是同一信号
+主载板,J603,11,SD_CD,机械检测SW_A，插卡低,3.3V,DM3AT-SF-PEJM5 MicroSD卡座,卡座内部针号，供开发核对；DAT3/CS与SW_A卡检测不是同一信号
+主载板,J603,12,GND,卡座外壳,3.3V,DM3AT-SF-PEJM5 MicroSD卡座,卡座内部针号，供开发核对；DAT3/CS与SW_A卡检测不是同一信号
+主载板,J603,13,GND,卡座外壳,3.3V,DM3AT-SF-PEJM5 MicroSD卡座,卡座内部针号，供开发核对；DAT3/CS与SW_A卡检测不是同一信号
+主载板,J603,14,GND,卡座外壳,3.3V,DM3AT-SF-PEJM5 MicroSD卡座,卡座内部针号，供开发核对；DAT3/CS与SW_A卡检测不是同一信号
+主载板,J605,1,GND,地,3.3V逻辑,2.54mm 1x3,USB-TTL RX接2、TX接3，不接其供电脚
+主载板,J605,2,NANO_TX,Nano D1发送,3.3V逻辑,2.54mm 1x3,USB-TTL RX接2、TX接3，不接其供电脚
+主载板,J605,3,NANO_RX,Nano D0接收,3.3V逻辑,2.54mm 1x3,USB-TTL RX接2、TX接3，不接其供电脚
+主载板,J604,1,NANO_SCLK,D13/SCK / GPIO48,VIN12V；其他信号3.3V,2.54mm 1x15,R604源端，SD/PN532共用SPI时钟
+主载板,J604,2,不接,3V3 / GPIO—,VIN12V；其他信号3.3V,2.54mm 1x15,不与载板3V3_D或AX_3V3相连
+主载板,J604,3,不接,B0/BOOT0 / GPIO46,VIN12V；其他信号3.3V,2.54mm 1x15,启动相关脚
+主载板,J604,4,NANO_A0_IRQ,A0 / GPIO1,VIN12V；其他信号3.3V,2.54mm 1x15,经R612接PN532 IRQ
+主载板,J604,5,SD_CD,A1 / GPIO2,VIN12V；其他信号3.3V,2.54mm 1x15,SD卡座插入检测
+主载板,J604,6,不接,A2 / GPIO3,VIN12V；其他信号3.3V,2.54mm 1x15,启动相关脚，不加外部偏置
+主载板,J604,7,PN_CS,A3 / GPIO4,VIN12V；其他信号3.3V,2.54mm 1x15,PN532片选及U601 /2OE
+主载板,J604,8,不接,A4 / GPIO11,VIN12V；其他信号3.3V,2.54mm 1x15,保留
+主载板,J604,9,不接,A5 / GPIO12,VIN12V；其他信号3.3V,2.54mm 1x15,保留
+主载板,J604,10,NANO_A6_PFAIL,A6 / GPIO13,VIN12V；其他信号3.3V,2.54mm 1x15,R105之后，读取PFAIL_N；是数字输入
+主载板,J604,11,AMP_EN,A7 / GPIO14,VIN12V；其他信号3.3V,2.54mm 1x15,经R617接MAX98357A SD_MODE
+主载板,J604,12,不接,VBUS / GPIO—,VIN12V；其他信号3.3V,2.54mm 1x15,USB 5V节点，不接12V或载板5V
+主载板,J604,13,不接,B1/BOOT1 / GPIO0,VIN12V；其他信号3.3V,2.54mm 1x15,启动相关脚
+主载板,J604,14,GND,GND / GPIO—,VIN12V；其他信号3.3V,2.54mm 1x15,载板共地
+主载板,J604,15,NANO_VIN,VIN / GPIO—,VIN12V；其他信号3.3V,2.54mm 1x15,12V_MAIN经F201供电
+主载板,J606,1,NANO_MISO,D12/MISO / GPIO47,VIN12V；其他信号3.3V,2.54mm 1x15,经R603接U601输出MISO_BUS
+主载板,J606,2,NANO_MOSI,D11/MOSI / GPIO38,VIN12V；其他信号3.3V,2.54mm 1x15,R602源端，SD/PN532共用MOSI
+主载板,J606,3,SD_CS,D10/CS / GPIO21,VIN12V；其他信号3.3V,2.54mm 1x15,SD片选及U601 /1OE
+主载板,J606,4,NANO_D9_DIN,D9 / GPIO18,VIN12V；其他信号3.3V,2.54mm 1x15,经R616到U602 DIN
+主载板,J606,5,NANO_D8_LRCLK,D8 / GPIO17,VIN12V；其他信号3.3V,2.54mm 1x15,经R615到U602 LRCLK
+主载板,J606,6,NANO_D7_BCLK,D7 / GPIO10,VIN12V；其他信号3.3V,2.54mm 1x15,经R614到U602 BCLK
+主载板,J606,7,NANO_D6_IRQ,D6 / GPIO9,VIN12V；其他信号3.3V,2.54mm 1x15,Nano→U401-6→FPGA事件输入
+主载板,J606,8,NANO_D5_CTS,D5 / GPIO8,VIN12V；其他信号3.3V,2.54mm 1x15,FPGA RTS→R407→Nano CTS
+主载板,J606,9,NANO_D4_RTS,D4 / GPIO7,VIN12V；其他信号3.3V,2.54mm 1x15,Nano RTS→U401-4→FPGA CTS
+主载板,J606,10,NANO_D3_RX,D3 / GPIO6,VIN12V；其他信号3.3V,2.54mm 1x15,FPGA TX→R406→Nano RX
+主载板,J606,11,NANO_D2_TX,D2 / GPIO5,VIN12V；其他信号3.3V,2.54mm 1x15,Nano TX→U401-2→FPGA RX
+主载板,J606,12,GND,GND / GPIO—,VIN12V；其他信号3.3V,2.54mm 1x15,载板共地
+主载板,J606,13,NANO_RST,RST / GPIO—,VIN12V；其他信号3.3V,2.54mm 1x15,Q601漏极，低电平复位
+主载板,J606,14,NANO_RX,D0/RX / GPIO44,VIN12V；其他信号3.3V,2.54mm 1x15,J605-3调试接收
+主载板,J606,15,NANO_TX,D1/TX / GPIO43,VIN12V；其他信号3.3V,2.54mm 1x15,J605-2调试发送
+主载板,J701,1,3V3_SENS,VIN,3.3V,GH1.25-6P,额外机械固定脚接地
+主载板,J701,2,GND,地,3.3V,GH1.25-6P,额外机械固定脚接地
+主载板,J701,3,I2C1_SCL,SCL,3.3V,GH1.25-6P,额外机械固定脚接地
+主载板,J701,4,I2C1_SDA,SDA,3.3V,GH1.25-6P,额外机械固定脚接地
+主载板,J701,5,TOF_INT,GPIO1,3.3V,GH1.25-6P,额外机械固定脚接地
+主载板,J701,6,XSHUT_OD,开漏拉低关断,3.3V,GH1.25-6P,额外机械固定脚接地
+主载板,J702,1,3V3_SENS,3V3,3.3V,GH1.25-8P（WAFER-GH1.25-8PWB / C3029383）,与相机刚性固定；固定焊脚按库编号接GND
+主载板,J702,2,GND,地,3.3V,GH1.25-8P（WAFER-GH1.25-8PWB / C3029383）,与相机刚性固定；固定焊脚按库编号接GND
+主载板,J702,3,SENS_SPI_SCLK,SCL/SPC,3.3V,GH1.25-8P（WAFER-GH1.25-8PWB / C3029383）,与相机刚性固定；固定焊脚按库编号接GND
+主载板,J702,4,SENS_SPI_MOSI,SDA/SDI,3.3V,GH1.25-8P（WAFER-GH1.25-8PWB / C3029383）,与相机刚性固定；固定焊脚按库编号接GND
+主载板,J702,5,SENS_SPI_MISO,SA0/SDO,3.3V,GH1.25-8P（WAFER-GH1.25-8PWB / C3029383）,与相机刚性固定；固定焊脚按库编号接GND
+主载板,J702,6,IMU_CS,低选中,3.3V,GH1.25-8P（WAFER-GH1.25-8PWB / C3029383）,与相机刚性固定；固定焊脚按库编号接GND
+主载板,J702,7,IMU_INT1_RAW,INT1,3.3V,GH1.25-8P（WAFER-GH1.25-8PWB / C3029383）,与相机刚性固定；固定焊脚按库编号接GND
+主载板,J702,8,IMU_INT2_RAW,INT2,3.3V,GH1.25-8P（WAFER-GH1.25-8PWB / C3029383）,与相机刚性固定；固定焊脚按库编号接GND
+主载板,J703,1,3V3_SENS,3V3,3.3V,GH1.25-8P（WAFER-GH1.25-8PWB / C3029383）,可选参考/扩展SPI；固定焊脚按库编号接GND
+主载板,J703,2,GND,地,3.3V,GH1.25-8P（WAFER-GH1.25-8PWB / C3029383）,可选参考/扩展SPI；固定焊脚按库编号接GND
+主载板,J703,3,SENS_SPI_SCLK,SCLK,3.3V,GH1.25-8P（WAFER-GH1.25-8PWB / C3029383）,可选参考/扩展SPI；固定焊脚按库编号接GND
+主载板,J703,4,SENS_SPI_MOSI,MOSI,3.3V,GH1.25-8P（WAFER-GH1.25-8PWB / C3029383）,可选参考/扩展SPI；固定焊脚按库编号接GND
+主载板,J703,5,SENS_SPI_MISO,MISO,3.3V,GH1.25-8P（WAFER-GH1.25-8PWB / C3029383）,可选参考/扩展SPI；固定焊脚按库编号接GND
+主载板,J703,6,ADXL_CS,低选中,3.3V,GH1.25-8P（WAFER-GH1.25-8PWB / C3029383）,可选参考/扩展SPI；固定焊脚按库编号接GND
+主载板,J703,7,ADXL_DRDY_RAW,DRDY,3.3V,GH1.25-8P（WAFER-GH1.25-8PWB / C3029383）,可选参考/扩展SPI；固定焊脚按库编号接GND
+主载板,J703,8,不接,NC,3.3V,GH1.25-8P（WAFER-GH1.25-8PWB / C3029383）,可选参考/扩展SPI；固定焊脚按库编号接GND
+主载板,J704,1,3V3_SENS,VIN,3.3V,GH1.25-4P,SHT40模块地址0x44
+主载板,J704,2,GND,地,3.3V,GH1.25-4P,SHT40模块地址0x44
+主载板,J704,3,I2C1_SCL,SCL,3.3V,GH1.25-4P,SHT40模块地址0x44
+主载板,J704,4,I2C1_SDA,SDA,3.3V,GH1.25-4P,SHT40模块地址0x44
+主载板,J705,1,5V_AUX,探头VCC,5V供电/最高5V信号,GH1.25-3P,信号0--3.3V或0--5V，按输出类型配置R702
+主载板,J705,2,GND,地,5V供电/最高5V信号,GH1.25-3P,信号0--3.3V或0--5V，按输出类型配置R702
+主载板,J705,3,SIG,数字脉冲输入,5V供电/最高5V信号,GH1.25-3P,信号0--3.3V或0--5V，按输出类型配置R702
+主载板,J706,1,3V3_SENS,VIN,3.3V,GH1.25-4P,预留扩展，最高400kHz按波形
+主载板,J706,2,GND,地,3.3V,GH1.25-4P,预留扩展，最高400kHz按波形
+主载板,J706,3,I2C2_SCL,SCL,3.3V,GH1.25-4P,预留扩展，最高400kHz按波形
+主载板,J706,4,I2C2_SDA,SDA,3.3V,GH1.25-4P,预留扩展，最高400kHz按波形
+主载板,J801,1,GND,AX7010 J11-1 / FPGA -,3.3V逻辑；2脚不接5V,2.54mm 2x20,1对1直通；HDL端口 
+主载板,J801,2,不接（AX7010的5V）,AX7010 J11-2 / FPGA -,3.3V逻辑；2脚不接5V,2.54mm 2x20,1对1直通；HDL端口 
+主载板,J801,3,LED1_PWM,AX7010 J11-3 / FPGA F17,3.3V逻辑；2脚不接5V,2.54mm 2x20,1对1直通；HDL端口 led1_pwm
+主载板,J801,4,LED2_PWM,AX7010 J11-4 / FPGA F16,3.3V逻辑；2脚不接5V,2.54mm 2x20,1对1直通；HDL端口 led2_pwm
+主载板,J801,5,FP_KEY,AX7010 J11-5 / FPGA F20,3.3V逻辑；2脚不接5V,2.54mm 2x20,1对1直通；HDL端口 k1
+主载板,J801,6,WS_DATA,AX7010 J11-6 / FPGA F19,3.3V逻辑；2脚不接5V,2.54mm 2x20,1对1直通；HDL端口 ws_data
+主载板,J801,7,TOF_INT,AX7010 J11-7 / FPGA G20,3.3V逻辑；2脚不接5V,2.54mm 2x20,1对1直通；HDL端口 tof_int
+主载板,J801,8,RTC_1HZ,AX7010 J11-8 / FPGA G19,3.3V逻辑；2脚不接5V,2.54mm 2x20,1对1直通；HDL端口 rtc_1hz
+主载板,J801,9,AX_PFAIL_N,AX7010 J11-9 / FPGA H18,3.3V逻辑；2脚不接5V,2.54mm 2x20,1对1直通；HDL端口 pfail_n
+主载板,J801,10,EXP_INT_N,AX7010 J11-10 / FPGA J18,3.3V逻辑；2脚不接5V,2.54mm 2x20,1对1直通；HDL端口 exp_int_n
+主载板,J801,11,I2C0_SCL,AX7010 J11-11 / FPGA L20,3.3V逻辑；2脚不接5V,2.54mm 2x20,1对1直通；HDL端口 i2c0_scl
+主载板,J801,12,I2C0_SDA,AX7010 J11-12 / FPGA L19,3.3V逻辑；2脚不接5V,2.54mm 2x20,1对1直通；HDL端口 i2c0_sda
+主载板,J801,13,I2C1_SCL,AX7010 J11-13 / FPGA M20,3.3V逻辑；2脚不接5V,2.54mm 2x20,1对1直通；HDL端口 i2c1_scl
+主载板,J801,14,I2C1_SDA,AX7010 J11-14 / FPGA M19,3.3V逻辑；2脚不接5V,2.54mm 2x20,1对1直通；HDL端口 i2c1_sda
+主载板,J801,15,TACH_IN,AX7010 J11-15 / FPGA K18,3.3V逻辑；2脚不接5V,2.54mm 2x20,1对1直通；HDL端口 tach_in
+主载板,J801,16,ENC_SW,AX7010 J11-16 / FPGA K17,3.3V逻辑；2脚不接5V,2.54mm 2x20,1对1直通；HDL端口 enc_sw
+主载板,J801,17,ENC_A,AX7010 J11-17 / FPGA J19,3.3V逻辑；2脚不接5V,2.54mm 2x20,1对1直通；HDL端口 enc_a
+主载板,J801,18,ENC_B,AX7010 J11-18 / FPGA K19,3.3V逻辑；2脚不接5V,2.54mm 2x20,1对1直通；HDL端口 enc_b
+主载板,J801,19,ESP_TXD,AX7010 J11-19 / FPGA H20,3.3V逻辑；2脚不接5V,2.54mm 2x20,1对1直通；HDL端口 esp_txd
+主载板,J801,20,ESP_RXD,AX7010 J11-20 / FPGA J20,3.3V逻辑；2脚不接5V,2.54mm 2x20,1对1直通；HDL端口 esp_rxd
+主载板,J801,21,ESP_RTS,AX7010 J11-21 / FPGA L17,3.3V逻辑；2脚不接5V,2.54mm 2x20,1对1直通；HDL端口 esp_rts
+主载板,J801,22,ESP_CTS,AX7010 J11-22 / FPGA L16,3.3V逻辑；2脚不接5V,2.54mm 2x20,1对1直通；HDL端口 esp_cts
+主载板,J801,23,ESP_IRQ,AX7010 J11-23 / FPGA M18,3.3V逻辑；2脚不接5V,2.54mm 2x20,1对1直通；HDL端口 esp_irq
+主载板,J801,24,PRN_TXD,AX7010 J11-24 / FPGA M17,3.3V逻辑；2脚不接5V,2.54mm 2x20,1对1直通；HDL端口 prn_txd
+主载板,J801,25,PRN_RXD,AX7010 J11-25 / FPGA D20,3.3V逻辑；2脚不接5V,2.54mm 2x20,1对1直通；HDL端口 prn_rxd
+主载板,J801,26,PRN_CTS,AX7010 J11-26 / FPGA D19,3.3V逻辑；2脚不接5V,2.54mm 2x20,1对1直通；HDL端口 prn_cts
+主载板,J801,27,ADXL_CS,AX7010 J11-27 / FPGA E19,3.3V逻辑；2脚不接5V,2.54mm 2x20,1对1直通；HDL端口 adxl_cs
+主载板,J801,28,ADXL_DRDY,AX7010 J11-28 / FPGA E18,3.3V逻辑；2脚不接5V,2.54mm 2x20,1对1直通；HDL端口 adxl_drdy
+主载板,J801,29,IMU_CS,AX7010 J11-29 / FPGA G18,3.3V逻辑；2脚不接5V,2.54mm 2x20,1对1直通；HDL端口 imu_cs
+主载板,J801,30,IMU_INT1,AX7010 J11-30 / FPGA G17,3.3V逻辑；2脚不接5V,2.54mm 2x20,1对1直通；HDL端口 imu_int1
+主载板,J801,31,IMU_INT2,AX7010 J11-31 / FPGA H17,3.3V逻辑；2脚不接5V,2.54mm 2x20,1对1直通；HDL端口 imu_int2
+主载板,J801,32,I2C2_SCL,AX7010 J11-32 / FPGA H16,3.3V逻辑；2脚不接5V,2.54mm 2x20,1对1直通；HDL端口 i2c2_scl
+主载板,J801,33,I2C2_SDA,AX7010 J11-33 / FPGA G15,3.3V逻辑；2脚不接5V,2.54mm 2x20,1对1直通；HDL端口 i2c2_sda
+主载板,J801,34,SPI_MISO,AX7010 J11-34 / FPGA H15,3.3V逻辑；2脚不接5V,2.54mm 2x20,1对1直通；HDL端口 spi_miso
+主载板,J801,35,SPI_SCLK,AX7010 J11-35 / FPGA J14,3.3V逻辑；2脚不接5V,2.54mm 2x20,1对1直通；HDL端口 spi_sclk
+主载板,J801,36,SPI_MOSI,AX7010 J11-36 / FPGA K14,3.3V逻辑；2脚不接5V,2.54mm 2x20,1对1直通；HDL端口 spi_mosi
+主载板,J801,37,GND,AX7010 J11-37 / FPGA -,3.3V逻辑；2脚不接5V,2.54mm 2x20,1对1直通；HDL端口 
+主载板,J801,38,GND,AX7010 J11-38 / FPGA -,3.3V逻辑；2脚不接5V,2.54mm 2x20,1对1直通；HDL端口 
+主载板,J801,39,AX_3V3_RAW,AX7010 J11-39 / FPGA -,3.3V逻辑；2脚不接5V,2.54mm 2x20,1对1直通；HDL端口 
+主载板,J801,40,AX_3V3_RAW,AX7010 J11-40 / FPGA -,3.3V逻辑；2脚不接5V,2.54mm 2x20,1对1直通；HDL端口 
+主载板,J802,1,AX_3V3,参考电压,3.3V,2.54mm 1x4,参考脚不外供电，不接调试器强供电
+主载板,J802,2,GND,地,3.3V,2.54mm 1x4,参考脚不外供电，不接调试器强供电
+主载板,J802,3,I2C0_SCL,板内SCL,3.3V,2.54mm 1x4,参考脚不外供电，不接调试器强供电
+主载板,J802,4,I2C0_SDA,板内SDA,3.3V,2.54mm 1x4,参考脚不外供电，不接调试器强供电

@@ -1,0 +1,35 @@
+{
+  "modules": 26,
+  "functional_pins": 178,
+  "checked_physical_pads": 204,
+  "maximum_gerber_position_error_mm": 1.551136925266137e-14,
+  "bottom_mask_openings": 117,
+  "text_height_mm": 1,
+  "stroke_mm": 0.15,
+  "text_mask_clearance_mm": 0.2,
+  "actual_body_layer": 48,
+  "scale": "1:1",
+  "bottom_view_transform": "X=100-EDA_X; Y=100-EDA_Y",
+  "labels": 230,
+  "pcb_modified": false,
+  "eda_import_tested": false,
+  "edge_reading_angles_degrees": {
+    "B": 0,
+    "L": 90,
+    "T": 180,
+    "R": 270
+  },
+  "edge_facing_labels": 230,
+  "source_sha256": {
+    "C:\\Users\\LENOVO\\Downloads\\Netlist_主载板PCB_2026-10-20.enet": "74ef87eb753e480db76eee6b91412537a69e355ee4f8ba6880ce30b388070fce",
+    "C:\\Users\\LENOVO\\Downloads\\Gerber_主载板PCB_2026-10-20.zip": "5897944bf87ab6a62c90a4c35faaad243bb82044c6ec0d1ecb77cb8c7c619dac",
+    "C:\\Users\\LENOVO\\Downloads\\ProPrj_FPGA_2026-10-14_17-44-11_2026-10-20.epro2": "e34fc86851bd2c397b36e9a5dc82800ad0b40ce632ba73107d09f2c8c64f8cbb"
+  },
+  "narrow_through_hole_caption_outside": [
+    "J604",
+    "J605",
+    "J606",
+    "J801",
+    "J802"
+  ]
+}

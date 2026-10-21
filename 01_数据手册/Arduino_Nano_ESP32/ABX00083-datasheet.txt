@@ -1,0 +1,814 @@
+
+--- PDF PAGE 1 ---
+                                                                                                                          Arduino® Nano ESP32
+
+
+
+
+
+                                                                                                                                            User Manual
+                                                                                                                                        SKU: ABX00083
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    Description
+
+    The Arduino® Nano ESP32 (with and without headers) is a Nano form factor board based on the ESP32-S3
+    (embedded in the NORA-W106-10B from u-blox®). This is the ﬁrst Ar                                                                                            duino board to be based fully on an ESP32, and
+    features Wi-Fi® as well as Bluetooth® LE.
+
+    The Nano ESP32 is compatible with the Arduino Cloud, and has support for MicroPython. It is an ideal board for
+    getting started with IoT development.
+
+    Target areas:
+
+    Maker, IoT, MicroPython
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+1 / 41                                                              Arduino® Nano ESP32                                                   Modiﬁed: 25/05/2026
+
+--- PDF PAGE 4 ---
+                                                                                                      Arduino® Nano ESP32
+
+
+
+
+
+       12.1 Analog ( JP1)                                                                                                       17
+
+       12.2 Digital ( JP2)                                                                                                      17
+
+   13 Mounting Holes And Board Outline                                                                                          18
+
+   14 Board Operation                                                                                                           18
+
+       14.1 Getting Started - IDE                                                                                               18
+
+       14.2 Getting Started - Arduino Cloud Editor                                                                              19
+
+       14.3 Getting Started - Arduino Cloud                                                                                     19
+
+       14.4 Online Resources                                                                                                    19
+
+       14.5 Board Recovery                                                                                                      19
+
+   15 Declaration of Conformity CE DoC (EU)                                                                                     19
+
+   16 Declaration of Conformity to EU RoHS & REACH 211 01/19/2021
+
+   17 Conﬂict Miner                                               als Declaration                                               21
+
+   18 FCC Caution                                                                                                               21
+
+   19 SRRC                                                                                                                      22
+
+   20 Company Information                                                                                                       22
+
+   21 Reference Documentation                                                                                                   23
+
+   22 Change Log                                                                                                                23
+
+   23 电路板简介
+
+       23.1 应⽤⽰例
+
+   24 ESP32 核⼼板
+
+   25 建议运⾏条件
+
+   26 ⽅框图
+
+   27 电路板拓扑结构
+
+       27.1 前视图
+
+   28 NORA-W106-10B（⽆线电模块 / MCU）
+
+       28.1 Xtensa® 双核 32 位 LX7 微处理器
+
+       28.2 Wi-Fi®                                                                                                              29
+
+       28.3 Bluetooth®                                                                                                          29
+
+       28.4 PSRAM                                                                                                               30
+
+       28.5 天线增益
+
+   29 系统
+
+       29.1 复位
+
+       29.2 定时器
+
+       29.3 中断引脚
+
+   30 串⾏通信协议
+
+       30.1 集成电路总线 (I2C)
+
+
+
+
+
+
+4 / 41                                                   Arduino® Nano ESP32                                       Modiﬁed: 25/05/2026
+
+--- PDF PAGE 5 ---
+                                                                                   Arduino® Nano ESP32
+
+
+
+
+
+      30.2 I2S总线 (I2S)
+
+      30.3 串⾏外设接⼝ (SPI)
+
+      30.4 通⽤异步接收器/发射器 (UART)
+
+      30.5 双线汽⻋接⼝ (TWAI®)
+
+  31 外部闪存
+
+  32 USB 连接器
+
+  33 电源选项
+
+      33.1 电源树
+
+      33.2 引脚电压
+
+      33.3 VIN 额定值
+
+      33.4 VBUS                                                                                          34
+
+      33.5 使⽤ 3.3 V 引脚
+
+      33.6 引脚电流
+
+  34 引脚布局
+
+      34.1 模拟引脚 (JP1)
+
+      34.2 数字引脚 (JP2)
+
+  35 安装孔和电路板外形图
+
+  36 电路板操作
+
+      36.1 ⼊⻔指南 - IDE
+
+      36.2 ⼊⻔指南 - Arduino Cloud Editor
+
+      36.3 ⼊⻔指南 - Arduino Cloud
+
+      36.4 在线资源
+
+      36.5 电路板恢复
+
+  37 符合性声明 CE DoC（欧盟）
+
+  38 声明符合欧盟 RoHS 和 REACH 211 01/19/2021
+
+  39 冲突矿产声明
+
+  40 FCC 警告
+
+  41 SRRC                                                                                                41
+
+  42 公司信息
+
+  43 参考资料
+
+  44 变更⽇志
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+5 / 41                                         Arduino® Nano ESP32                            Modiﬁed: 25/05/2026
+
+--- PDF PAGE 6 ---
+                                                                                                          Arduino® Nano ESP32
+
+
+
+
+
+   1 The Board
+
+   Nano ESP32 is a 3.3 V development board based on the NORA-W106-10B from u-blox®, a module that includes a
+   ESP32-S3 system on a chip (SoC). This module has support for Wi-Fi® and Bluetooth® Low Energy (LE), with
+   ampliﬁed communication thr                                      ough a built-in antenna. The CPU (32-bit Xtensa® LX7) supports clock frequencies at
+   up to 240 MHz.
+
+   1.1 Application Examples
+
+   Home automation: an ideal board for automating your home, and can be used for smart switches, automatic
+   lighting and motor control for e.g. motor controlled blinds.
+
+   IoT sensors: with several dedicated ADC channels, accessible I2C/SPI buses and a robust ESP32-S3 based radio
+   module, this board can easily be deployed to monitor sensor values.
+
+   Low power designs: create battery powered applications with low power consumption, utilising the built in low
+   power modes of the ESP32-S3 SoC.
+
+   2 ESP32 Core
+
+   The Nano ESP32 uses the Arduino Board Package for ESP32 boards, a derivation of Espressif's arduino-esp32 core.
+
+   Rating
+
+
+   3 Recommended Operating Conditions
+
+     Symbol            Description                                                         Min        Typ        Max         Unit
+     VIN               Input voltage from VIN pad                                          6          7.0        21          V
+     VUSB              Input voltage from USB connector                                    4.8        5.0        5.5         V
+     Tambient          Ambient Temperature                                                 -40        25         105         °C
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+6 / 41                                                     Arduino® Nano ESP32                                          Modiﬁed: 25/05/2026
+
+--- PDF PAGE 7 ---
+                                                                                    Arduino® Nano ESP32
+
+
+   Functional Overview
+
+
+   4 Block Diagram
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                           Arduino Nano ESP32 Block Diagram
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+7 / 41                                         Arduino® Nano ESP32                              Modiﬁed: 25/05/2026
+
+--- PDF PAGE 8 ---
+                                                                                                    Arduino® Nano ESP32
+
+
+
+
+   5 Board Topology
+
+   5.1 Front View
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                    Top View of Arduino Nano ESP32
+
+    Ref.         Description
+    M1           NORA-W106-10B (ESP32-S3 SoC)
+    J1           CX90B-16P USB-C® connector
+    JP1          1x15 analog header
+    JP2          1x15 digital header
+    U2           MP2322GQH step down converter
+    U3           GD25B128EWIGR 128 Mbit (16 MB) ext. ﬂash memory
+    DL1          RGB LED
+    DL2          LED SCK (serial clock)
+    DL3          LED Power (green)
+    D2           PMEG6020AELRX Schottky Diode
+    D3           PRTR5V0U2X,215 ESD Protection
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+8 / 41                                                  Arduino® Nano ESP32                                      Modiﬁed: 25/05/2026
+
+--- PDF PAGE 9 ---
+                                                                                                         Arduino® Nano ESP32
+
+
+
+
+   6 NORA-W106-10B (Radio Module / MCU)
+
+   The Nano ESP32 features the NORA-W106-10B stand alone radio module, embedding an ESP32-S3 series SoC as
+   well as an embedded antenna. The ESP32-S3 is based on an Xtensa® LX7 series microprocessor.
+
+   6.1 Xtensa® Dual-Core 32bit LX7 Microprocessor
+
+   The microprocessor for the ESP32-S3 SoC inside the NORA-W106 module is a dual-core 32-bit Xtensa® LX7. Each
+   core can run at up to 240 MHz and has 512 kB SRAM memory. The LX7 features:
+
+        32-bit customized instruction set
+        128-bit data bus
+        32-bit multiplier / divider
+
+   The LX7 has a 384 kB ROM (Read Only Memory), and 512 kB of SRAM (Static Random Access Memory). It also
+   features an 8 kB RTC FAST and RTC SLOW memory. These memories are designed for low-power operations, where
+   the SLOW memory can be accessed by the ULP (Ulta Low Power) coprocessor, retaining the data in deep sleep
+   mode.
+
+   6.2 Wi-Fi®
+
+   The NORA-W106-10B module supports the Wi-Fi® 4 IEEE 802.11 standards b/g/n, with an output power EIRP at up
+   to 10 dBm. The max range for this module is 500 meters.
+
+        802.11b: 11 Mbit/s
+        802.11g: 54 Mbit/s
+        802.11n: 72 Mbit/s max at HT-20 (20 MHz), 150 Mbit/s max at HT-40 (40 MHz)
+
+   6.3 Bluetooth®
+
+   The NORA-W106-10B module supports Bluetooth® LE v5.0 with an output power EIRP at up to 10 dBm and data
+   rates up to 2 Mbps. It has the option to scan and advertise simultaneously, as well as supporting multiple
+   connections in peripheral/central mode.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+9 / 41                                                     Arduino® Nano ESP32                                         Modiﬁed: 25/05/2026
+
+--- PDF PAGE 10 ---
+                                                                                                              Arduino® Nano ESP32
+
+
+
+
+   6.4 PSRAM
+
+   The NORA-W106-10B module includes 8 MB of embedded PSRAM. (Octal SPI)
+
+   6.5 Antenna Gain
+
+   The built-in antenna on the NORA-W106-10B module uses GFSK modulation technique, with the performance
+   ratings listed below:
+
+   Wi-Fi®:
+
+         Typical conducted output power: 17 dBm.
+         Typical radiated output power: 20 dBm EIRP.
+         Conducted sensitivity: -97 dBm.
+
+   Bluetooth® Low Energy:
+
+         Typical conducted output power: 7 dBm.
+         Typical radiated output power: 10 dBm EIRP.
+         Conducted sensitivity: -98 dBm.
+
+   This data is retrieved from the uBlox NORA-W10 data sheet (page 7, section 1.5) available here.
+
+   7 System
+
+   7.1 Resets
+
+   The ESP32-S3 has support for four levels of reset:
+
+         CPU: resets CPU0/CPU1 core
+         Core: resets the digital system, except for the RTC peripherals (ULP coprocessor, RTC memory).
+         System: resets the entire digital system, including the RTC peripherals.
+         Chip: resets the entire chip.
+
+   It is possible to conduct a software reset of this board, as well as obtaining the reset reason.
+
+   To do a hardware reset of the board, use the onboard reset button (PB1).
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+10 / 41                                                      Arduino® Nano ESP32                                            Modiﬁed: 25/05/2026
+
+--- PDF PAGE 11 ---
+                                                                                                                                               Arduino® Nano ESP32
+
+
+
+
+     7.2 Timers
+
+     The Nano ESP32 has the following timers:
+
+           52-bit system timer with 2x 52-bit counters (16 MHz) and 3x comparators.
+           4x general-purpose 54-bit timers
+           3x watchdog timers, two in main system (MWDT0/1), one in the RTC module (RWDT).
+
+     7.3 Interrupts
+
+     All GPIOs on the Nano ESP32 can be conﬁgur                                                                                                                                                                                                                                        ed to be used as interrupts, and is provided by an interrupt matrix.
+     Interrupt pins are conﬁgur                                     ed on an application level, using the following conﬁgur                                                        ations:
+
+           LOW
+           HIGH
+           CHANGE
+           FALLING
+           RISING
+
+
+     8 Serial Communication Protocols
+
+     The ESP32-S3 chip provides ﬂe                                      xibility for the various serial protocols it supports. For example, the I2C bus can be
+     assigned to almost any available GPIO.
+
+     8.1 Inter-Integrated Circuit (I2C)
+
+     Default pins:
+
+           A4 - SDA
+           A5 - SCL
+
+     The I2C bus is by default assigned to the A4/A5 (SDA/SCL) pins for retro compatibility. This pin assignment can
+     however be changed, due to the ﬂe                                                                                                                                                               xibility of the ESP32-S3 chip.
+
+     The SDA and SCL pins can be assigned to most GPIOs, however some of these pins may have other essential
+     functions that prevents I2C operations to run successfully.
+
+     Please note: many software libraries uses the standard pin assignment (A4/A5).
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+11 / 41                                                                         Arduino® Nano ESP32                                                                Modiﬁed: 25/05/2026
+
+--- PDF PAGE 12 ---
+                                                                                                         Arduino® Nano ESP32
+
+
+
+
+   8.2 Inter-IC Sound (I2S)
+
+   There two I2S controllers that are typically used for communication with audio devices. There are no speciﬁc pins
+   assigned for I2S, this can be used by any free GPIO.
+
+   Using standard or TDM mode, the following lines are used:
+
+        MCLK - master clock
+        BCLK - bit clock
+        WS - word select
+        DIN/DOUT - serial data
+
+   Using PDM mode:
+
+        CLK - PDM clock
+        DIN/DOUT serial data
+
+   Read more about the I2S protocol in Espressif's Peripheral API - InterIC Sounds (I2S)
+
+   8.3 Serial Peripheral Interface (SPI)
+
+        SCK - D13
+        CIPO - D12
+        COPI - D11
+        CS - D10
+
+   The SPI controller is by default assigned to the pins above.
+
+   8.4 Universal Asynchronous Receiver/Transmitter (UART)
+
+        D1 / TX
+        D0 / RX
+
+   The UART controller is by default assigned to the the pins above.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+12 / 41                                                    Arduino® Nano ESP32                                         Modiﬁed: 25/05/2026

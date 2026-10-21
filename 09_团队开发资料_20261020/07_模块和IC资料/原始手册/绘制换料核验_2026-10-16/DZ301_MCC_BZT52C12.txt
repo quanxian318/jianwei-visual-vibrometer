@@ -1,0 +1,207 @@
+--- PDF PAGE 1 ---
+MCCSEMI.COMRev.3-1-01012019 1/4
+500 mW 
+Zener Diode 
+2.4 to 75 Volts
+• Operating Junction Temperature Range:  -65°C to +150°C
+• Storage Temperature Range: -65°C to +150°C
+• Thermal Resistance : 250°C/W Junction to Ambient
+Maximum Ratings
+• Planar Die Construction
+• General Purpose Medium Current
+• Ideally Suited for Automated Assembly Processes
+• Halogen Free Available Upon Request By Adding Suffix "-HF"
+• Moisture Sensitivity Level 1
+• Epoxy Meets UL 94 V-0 Flammability Rating
+• Lead Free Finish/RoHS Compliant ("P" Suffix Designates RoHS 
+Compliant. See Ordering Information)
+Features
+BZT52C2V4 THRU BZT52C75
+SUGGESTED SOLDER PAD LAYOUT
+SOD-123
+A
+B
+EC
+J
+D
+H
+G
+0.91mm
+2.36mm
+1.22mm
+MIN MAX MIN MAX
+A 0.140 0.152 3.55 3.85
+B 0.100 0.112 2.55 2.85
+C 0.055 0.071 1.40 1.80
+D ---- 0.053 ---- 1.35
+E
+0.018 0.026 0.45 0.65
+G 0.006 ---- 0.15 ----
+H ---- 0.010 ---- 0.25
+J ---- 0.006 ---- 0.15
+DIMENSIONS
+DIM INCHES MM NOTE
+Cathode Mark
+Maximum Forward 
+Voltage VF 0.9V IF=10mA
+500mWPower Dissipation PD
+RatingParameter Conditions Symbol
+--- PDF PAGE 2 ---
+MCCSEMI.COMRev.3-1-01012019 2/4
+Electrical Characteristics @ 25°C Unless Otherwise Specified
+Note : 1. f=1KHz
+IZT ZZT @ IZT IZK ZZK @ IZK IR VR
+Min.(V) Nom(V) Max.(V) mA Ω mA Ω µA V Min Max.
+BZT52C2V4 2.28 2.4 2.56 5 100 1.0 600 50 1.0 -3.5 0 WX
+BZT52C2V7 2.5 2.7 2.9 5 100 1.0 600 20 1.0 -3.5 0 W1
+BZT52C3V0 2.8 3.0 3.2 5 95 1.0 600 10 1.0 -3.5 0 W2
+BZT52C3V3 3.1 3.3 3.5 5 95 1.0 600 5 1.0 -3.5 0 W3
+BZT52C3V6 3.4 3.6 3.8 5 90 1.0 600 5 1.0 -3.5 0 W4
+BZT52C3V9 3.7 3.9 4.1 5 90 1.0 600 3 1.0 -3.5 0 W5
+BZT52C4V3 4.0 4.3 4.6 5 90 1.0 600 3 1.0 -3.5 0 W6
+BZT52C4V7 4.4 4.7 5.0 5 80 1.0 500 3 2.0 -3.5 0.2 W7
+BZT52C5V1 4.8 5.1 5.4 5 60 1.0 480 2 2.0 -2.7 1.2 W8
+BZT52C5V6 5.2 5.6 6.0 5 40 1.0 400 1 2.0 -2.0 2.5 W9
+BZT52C6V2 5.8 6.2 6.6 5 10 1.0 150 3 4.0 0.4 3.7 WA
+BZT52C6V8 6.4 6.8 7.2 5 15 1.0 80 2 4.0 1.2 4.5 WB
+BZT52C7V5 7.0 7.5 7.9 5 15 1.0 80 1 5.0 2.5 5.3 WC
+BZT52C8V2 7.7 8.2 8.7 5 15 1.0 80 0.7 5.0 3.2 6.2 WD
+BZT52C9V1 8.5 9.1 9.6 5 15 1.0 100 0.5 6.0 3.8 7.0 WE
+BZT52C10 9.4 10 10.6 5 20 1.0 150 0.2 7.0 4.5 8.0 WF
+BZT52C11 10.4 11 11.6 5 20 1.0 150 0.1 8.0 5.4 9.0 WG
+BZT52C12 11.4 12 12.7 5 25 1. 0 150 0.1 8.0 6.0 10.0 WH
+BZT52C13 12.4 13 14.1 5 30 1. 0 170 0.1 8.0 7.0 11.0 WI
+BZT52C15 13.8 15 15.6 5 30 1. 0 200 0.1 10.5 9.2 13.0 WJ
+BZT52C16 15.3 16 17.1 5 40 1. 0 200 0.1 11.2 10.4 14.0 WK
+BZT52C18 16.8 18 19.1 5 45 1. 0 225 0.1 12.6 12.4 16.0 WL
+BZT52C20 18.8 20 21.2 5 55 1. 0 225 0.1 14.0 14.4 18.0 WM
+BZT52C22 20.8 22 23.3 5 55 1. 0 250 0.1 15.4 16.4 20.0 WN
+BZT52C24 22.8 24 25.6 5 70 1. 0 250 0.1 16.8 18.4 22.0 WO
+BZT52C27 25.1 27 28.9 2 80 0. 5 300 0.1 18.9 21.4 25.3 WP
+BZT52C30 28 30 32 2 80 0.5 300 0.1 21.0 24.4 29.4 WQ
+BZT52C33 31 33 35 2 80 0.5 325 0.1 23.1 27.4 33.4 WR
+BZT52C36 34 36 38 2 90 0.5 350 0.1 25.2 30.4 37.4 WS
+BZT52C39 37 39 41 2 130 0.5 350 0.1 27.3 33.4 41.2 WT
+BZT52C43 40 43 46 5 100 1.0 700 0.1 32.0 10.0 12.0 WU
+BZT52C47 44 47 50 5 100 1 750 0.1 35 10 12 WV
+BZT52C51 48 51 54 5 100 1 750 0.1 38 10 12 WW
+BZT52C56 53 56 59 2 200 1 1000 0.1 42 33.4 41.2 X1
+BZT52C62 59 62 65 2 150 1 1000 0.1 46 10 12 5X2
+BZT52C68 64.6 68 71.4 2 200 1 1000 0.1 51 10 12 5X3
+BZT52C75 71 75 79 2 250 1 1000 0.1 56 10 12 5X4
+Zener Voltage
+Maximum
+Zener
+ Impedance(1)
+Maximum
+Zener Impedance(1)
+VZ @ IZT
+MCC
+Part Number
+Marking
+Code
+Maximum
+Reverse Current
+IR(Max) @ VR
+Typical Temperature
+Coefficent @ IZTC
+mV/℃
+BZT52C2V4 THRU BZT52C75
+--- PDF PAGE 3 ---
+MCCSEMI.COMRev.3-1-01012019 3/4
+ Curve Characteristics
+BZT52C2V4 THRU BZT52C75
+0 25 125 150
+0
+100
+200
+300
+400
+500
+600
+Power Dissipation (mW)
+Fig. 1 - Power Derating Curve
+50 75 100 
+Ambient Temperature (°C)
+5
+15
+25
+35
+45
+0
+10
+20
+30
+40
+50
+0123 789
+C5V6
+C4V7
+C3V9
+C8V2
+C6V8
+C3V3
+C2V7
+456
+Zener Voltage (V)
+Zener Current (mA)
+Fig. 2 - Typical Zener Breakdown Characteristics
+10
+5
+15
+25
+0
+10
+20
+30
+0 0 1 03 4 0
+C36
+C22
+C18
+C15
+C33
+C27
+C12
+C10
+02
+Zener Voltage (V)
+Zener Current (mA)
+Fig. 3 - Typical Zener Breakdown Characteristics
+5
+0
+10
+0 0 1 0 2 3 0 0 7 0 8 9 0 1 0 0
+C47
+C43
+C51
+C39
+405060  
+Zener Current (mA)
+Fig. 4 - Typical Zener Breakdown Characteristics
+Zener Voltage (V)
+--- PDF PAGE 4 ---
+MCCSEMI.COMRev.3-1-01012019 4/4
+ Ordering Information
+***IMPORTANT NOTICE***
+Micro Commercial Components Corp. reserves the right to make changes without further notice to any product herein to 
+make corrections, modifications , enhancements , improvements , or other changes . Micro Commercial Components
+Corp . does not assume any liability arising out of the application or use of any product described herein; neither does it 
+convey any license under its patent rights ,nor the rights of others . The user of products in such applications shall assume all 
+risks of such use and will agree to hold Micro Commercial Components Corp  . and all the companies whose products are 
+represented on our website, harmless against all damages.
+***LIFE SUPPORT***
+MCC's products are not authorized for use as critical components in life support devices or systems without the express 
+written approval of Micro Commercial Components Corporation.
+***CUSTOMER AWARENESS***
+Counterfeiting of semiconductor parts is a growing problem in the industry. Micro Commercial Components (MCC) is taking
+strong measures to protect ourselves and our customers from the proliferation of counterfeit parts. MCC strongly encourages
+customers to purchase MCC parts either directly from MCC or from Authorized MCC Distributors who are listed by country on
+our web page cited below. Products customers buy either from MCC directly or from Authorized MCC Distributors are genuine
+parts, have full traceability, meet MCC's quality standards for handling and storage. MCC will not provide any warranty
+coverage or other assistance for parts bought from Unauthorized  Sources. MCC is committed to combat this global
+problem and encourage our customers to do their part in stopping this practice by buying direct or from authorized
+distributors.
+Device Packing
+Part Number-TP Tape&Reel:3Kpcs/Reel 
+Note : Adding "-HF" Suffix For Halogen Free, eg. Part Number-TP-HF
+BZT52C2V4 THRU BZT52C75

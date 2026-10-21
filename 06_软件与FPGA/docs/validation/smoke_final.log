@@ -1,0 +1,88 @@
+{
+  "ok": true
+}
+{
+  "ok": true,
+  "data": {
+    "init_done": true,
+    "carrier_ok": false,
+    "tca_ok": false,
+    "ina_ok": false,
+    "rtc_ok": false,
+    "power": {
+      "bus_v": 0.0,
+      "current_a": 0.0,
+      "power_w": 0.0,
+      "warn": false,
+      "deny_heavy_loads": false,
+      "over_current_latched": false,
+      "pfail": false
+    },
+    "light": {
+      "allowed_by_sw301": false,
+      "on": false,
+      "percent": [100.0,100.0]
+    },
+    "time": {
+      "valid": false,
+      "source": "none",
+      "utc": "2026-10-20T18:17:39.451Z"
+    },
+    "nano": {
+      "online": false,
+      "wifi": "UNKNOWN",
+      "ssid": "",
+      "ip": "",
+      "sd_mounted": false,
+      "nfc_ready": false,
+      "requests": 5,
+      "retries": 9,
+      "timeouts": 4,
+      "events": 0,
+      "event_gaps": 0,
+      "crc_errors": 0
+    },
+    "point": {
+      "uid": "",
+      "id": "",
+      "name": ""
+    },
+    "sensors": {
+      "imu_ok": false,
+      "adxl345_ok": false,
+      "tof": "",
+      "distance_mm": null,
+      "temperature_c": null,
+      "humidity_percent": null,
+      "tach_hz": null
+    },
+    "measurement": {
+      "state": "preview",
+      "elapsed_s": 4.016666506,
+      "camera_ok": true,
+      "roi_center_x": 0.5,
+      "roi_center_y": 0.5,
+      "last": {
+        "measurement_id": "smoke-M9699",
+        "valid": true,
+        "reason": "",
+        "unit": "mm",
+        "dominant_hz": 4.999691390685706,
+        "peak_to_peak": 0.20733743743569086,
+        "rms": 0.07226380378659353,
+        "level": "预警",
+        "saved": true
+      }
+    },
+    "alarm_level": "预警",
+    "alarm_muted": false,
+    "printer": "idle",
+    "printer_error": "",
+    "message": "主频 5.00 Hz, 峰峰值 0.2073 mm, 预警",
+    "shutdown_prepared": false
+  }
+}
+{
+  "ok": true
+}
+smoke test passed (smoke-M9699)

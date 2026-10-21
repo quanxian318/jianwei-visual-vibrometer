@@ -1,0 +1,166 @@
+#pragma once
+
+#include <cstdint>
+#include <map>
+#include <string>
+
+#include "measure/frame_source.h"
+#include "measure/session.h"
+
+namespace vm {
+
+struct PointInfo {
+  std::string id;
+  std::string name;
+};
+
+// /etc/vibmon/vibmon.json (template: config/vibmon.json). Every key is
+// optional; missing keys keep these defaults.
+struct AppConfig {
+  std::string deviceId = "vibmon-01";
+  int tzOffsetMin = 480;
+
+  // AXI base addresses fixed by ax7010/pl/bd/add_carrier.tcl; device nodes
+  // are located through the device tree. Explicit paths override discovery.
+  uint64_t carrierBase = 0x44000000, i2cMgmtBase = 0x44010000, i2cSensBase = 0x44020000;
+  uint64_t uartNanoBase = 0x44040000, uartPrnBase = 0x44050000, spiSensBase = 0x44060000;
+  std::string carrierDev, i2cMgmtDev, i2cSensDev, uartNanoDev, uartPrnDev, spiImuDev, spiAdxlDev;
+
+  struct Nano {
+    uint32_t baud = 115200;
+    bool flowControl = true;
+    int timeoutMs = 300;
+    int statusPeriodMs = 2000;
+    int offlineResetMs = 15000;
+    int resetPulseMs = 100;
+  } nano;
+
+  struct Panel {
+    int brightness = 32;  // 0..255 applied to every LED colour
+    int countsPerDetent = 2;
+    bool reverse = false;
+    int debounceMs = 15;
+    int longPressMs = 3000;
+    int encFilterUs = 200;
+    int watchdogMs = 3000;
+  } panel;
+
+  // LED1 (J301): all LED lamps, PWM dimmed.
+  struct Light {
+    uint32_t pwmHz = 20000;
+    double percent = 100;
+    bool autoOnMeasure = true;
+  } light;
+
+  // LED2 (J304): 12 V 650 nm cross-line projector, switched only (100 % duty). The
+  // projected pattern is fixed in the projector's frame and does not follow an
+  // in-plane surface motion, so it is switched off while displacement is tracked.
+  struct Laser {
+    bool offDuringMeasure = true;
+  } laser;
+
+  struct Power {
+    double warnA = 4.2;
+    double denyA = 4.5;
+    double alertA = 4.5;
+  } power;
+
+  struct Imu {
+    bool enabled = true;
+    uint32_t spiHz = 1000000;
+    int odrHz = 240;
+    int accelG = 2;
+    int gyroDps = 250;
+  } imu;
+
+  struct Adxl {
+    bool enabled = false;  // enable only after the GY-291 shared-bus qualification
+    uint32_t spiHz = 1000000;
+    int rateCode = 0x0B;   // 200 Hz
+    int rangeG = 2;
+  } adxl;
+
+  struct Tof {
+    bool enabled = true;
+    int timingBudgetMs = 50;
+    int periodMs = 100;
+    bool longRange = true;
+  } tof;
+
+  struct Sht {
+    bool enabled = true;
+    int periodMs = 1000;
+  } sht;
+
+  struct Printer {
+    bool enabled = true;
+    uint32_t baud = 9600;          // EM5820H factory default per vendor page; confirm with the self-test slip
+    bool ctsFlow = true;
+    int powerOnWaitMs = 2000;
+    int readyTimeoutMs = 5000;
+    int busyTimeoutMs = 10000;
+    int minOffMs = 3000;
+    std::string statusQuery = "none";  // none | dle_eot | gs_r
+    int msPerRow = 2;              // print-time estimate per raster row
+    int finishMarginMs = 1500;
+    int stripRows = 24;
+    int widthDots = 384;
+    int feedLines = 4;
+  } printer;
+
+  struct Camera {
+    std::string source = "v4l2";  // v4l2 | synthetic
+    V4l2Config v4l2;
+    SyntheticConfig synthetic;
+  } camera;
+
+  MeasureConfig measure;
+  double roiCenterX = 0.5, roiCenterY = 0.5;
+
+  struct Alarm {
+    double warnPp = 2.0;   // peak-to-peak thresholds in mm; pixels remain unclassified
+    double alarmPp = 5.0;
+    bool buzzer = true;
+  } alarm;
+
+  struct Voice {
+    bool enabled = true;
+    int volume = 40;
+  } voice;
+
+  struct Fan {
+    std::string mode = "auto";  // on | off | auto
+    double onTempC = 40;
+    double offTempC = 36;
+    bool pauseDuringMeasure = true;
+  } fan;
+
+  // Display image processing (vision page): pyramid down-sampling, temporal
+  // band-pass, motion magnification and band energy. Never used for metrology.
+  // levels = 0: halve the camera frame until it is at most 200 pixels wide.
+  VisionConfig vision;
+
+  std::string recordsDir = "/home/root/vibmon/records";
+  std::string calibrationFile = "/etc/vibmon/calibration.json";
+  // Operator settings changed on the screen; loaded over this file at start.
+  std::string settingsFile = "/home/root/vibmon/settings.json";
+
+  struct Ui {
+    bool enabled = true;
+    std::string fbdev = "/dev/fb0";
+    std::string touchDev = "auto";
+    bool swapXY = false, invertX = false, invertY = false;
+  } ui;
+
+  std::string controlSocket = "/run/vibmon.sock";
+  bool poweroffOnShutdown = true;
+  std::map<std::string, PointInfo> points;  // NFC UID (upper-case hex) -> measuring point
+};
+
+// Keys present in the file override cfg; absent keys keep their values, so
+// the settings file can be applied on top of vibmon.json.
+bool loadConfig(const std::string& path, AppConfig& cfg, std::string& err);
+// Calibration file: {"id": "...", "mm_per_px": 0.0123, "axis": "y"}.
+bool loadCalibration(const std::string& path, MeasureConfig& m, std::string& err);
+
+}  // namespace vm

@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="960" viewBox="0 0 1600 960">
+<rect width="1600" height="960" fill="white"/>
+<defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#3c6685"/></marker></defs>
+<text x="800" y="53.56" font-size="34" fill="#19364d" text-anchor="middle" font-family="Microsoft YaHei, sans-serif">见微 · FPGA核心测量与运动放大架构</text>
+<rect x="270" y="95" width="865" height="685" rx="20" fill="#f2f7fe" stroke="#326ca6" stroke-width="3"/>
+<text x="703" y="144.52" font-size="28" fill="#19364d" text-anchor="middle" font-family="Microsoft YaHei, sans-serif">AX7010 PL · FPGA</text>
+<rect x="25" y="285" width="195" height="210" rx="16" fill="#f4f7fa" stroke="#7c95a7" stroke-width="3"/>
+<text x="122.5" y="358.56" font-size="24" fill="#19364d" text-anchor="middle" font-family="Microsoft YaHei, sans-serif">AN5642</text>
+<text x="122.5" y="398.16" font-size="24" fill="#19364d" text-anchor="middle" font-family="Microsoft YaHei, sans-serif">双路原始视频</text>
+<text x="122.5" y="437.76000000000005" font-size="24" fill="#19364d" text-anchor="middle" font-family="Microsoft YaHei, sans-serif">J10 / DVP</text>
+<text x="700" y="213.16" font-size="24" fill="#19364d" text-anchor="middle" font-family="Microsoft YaHei, sans-serif">定量测量支路：原始图像 → 数值结果</text>
+<rect x="300" y="245" width="230" height="175" rx="16" fill="#dcecff" stroke="#7c95a7" stroke-width="3"/>
+<text x="415.0" y="301.06" font-size="24" fill="#19364d" text-anchor="middle" font-family="Microsoft YaHei, sans-serif">视频接收 / 灰度</text>
+<text x="415.0" y="340.66" font-size="24" fill="#19364d" text-anchor="middle" font-family="Microsoft YaHei, sans-serif">ROI与模板缓存</text>
+<text x="415.0" y="380.26000000000005" font-size="24" fill="#19364d" text-anchor="middle" font-family="Microsoft YaHei, sans-serif">事件时间戳</text>
+<rect x="590" y="245" width="230" height="175" rx="16" fill="#dcecff" stroke="#7c95a7" stroke-width="3"/>
+<text x="705.0" y="301.06" font-size="24" fill="#19364d" text-anchor="middle" font-family="Microsoft YaHei, sans-serif">亚像素位移核</text>
+<text x="705.0" y="340.66" font-size="24" fill="#19364d" text-anchor="middle" font-family="Microsoft YaHei, sans-serif">插值 / 乘加累积</text>
+<text x="705.0" y="380.26000000000005" font-size="24" fill="#19364d" text-anchor="middle" font-family="Microsoft YaHei, sans-serif">有限迭代</text>
+<rect x="880" y="245" width="230" height="175" rx="16" fill="#dcecff" stroke="#7c95a7" stroke-width="3"/>
+<text x="995.0" y="301.06" font-size="24" fill="#19364d" text-anchor="middle" font-family="Microsoft YaHei, sans-serif">质量与时域统计</text>
+<text x="995.0" y="340.66" font-size="24" fill="#19364d" text-anchor="middle" font-family="Microsoft YaHei, sans-serif">位移 / 残差</text>
+<text x="995.0" y="380.26000000000005" font-size="24" fill="#19364d" text-anchor="middle" font-family="Microsoft YaHei, sans-serif">FIFO / DMA</text>
+<path d="M220,350 L250,350 L250,332 L300,332" fill="none" stroke="#3c6685" stroke-width="4" marker-end="url(#arrow)"/>
+<path d="M530,332 L590,332" fill="none" stroke="#3c6685" stroke-width="4" marker-end="url(#arrow)"/>
+<path d="M820,332 L880,332" fill="none" stroke="#3c6685" stroke-width="4" marker-end="url(#arrow)"/>
+<text x="700" y="498.16" font-size="24" fill="#19364d" text-anchor="middle" font-family="Microsoft YaHei, sans-serif">运动放大支路：显示处理，不用于毫米计量</text>
+<rect x="300" y="530" width="230" height="175" rx="16" fill="#e1f3ec" stroke="#5f9a82" stroke-width="3"/>
+<text x="415.0" y="586.06" font-size="24" fill="#19364d" text-anchor="middle" font-family="Microsoft YaHei, sans-serif">空间低通 / 降采样</text>
+<text x="415.0" y="625.66" font-size="24" fill="#19364d" text-anchor="middle" font-family="Microsoft YaHei, sans-serif">少层金字塔</text>
+<text x="415.0" y="665.26" font-size="24" fill="#19364d" text-anchor="middle" font-family="Microsoft YaHei, sans-serif">选定显示ROI</text>
+<rect x="590" y="530" width="230" height="175" rx="16" fill="#e1f3ec" stroke="#5f9a82" stroke-width="3"/>
+<text x="705.0" y="586.06" font-size="24" fill="#19364d" text-anchor="middle" font-family="Microsoft YaHei, sans-serif">逐像素时间带通</text>
+<text x="705.0" y="625.66" font-size="24" fill="#19364d" text-anchor="middle" font-family="Microsoft YaHei, sans-serif">状态缓存 / 增益</text>
+<text x="705.0" y="665.26" font-size="24" fill="#19364d" text-anchor="middle" font-family="Microsoft YaHei, sans-serif">预热与限幅</text>
+<rect x="880" y="530" width="230" height="175" rx="16" fill="#e1f3ec" stroke="#5f9a82" stroke-width="3"/>
+<text x="995.0" y="586.06" font-size="24" fill="#19364d" text-anchor="middle" font-family="Microsoft YaHei, sans-serif">上采样与重建</text>
+<text x="995.0" y="625.66" font-size="24" fill="#19364d" text-anchor="middle" font-family="Microsoft YaHei, sans-serif">原图 / 放大 / 并排</text>
+<text x="995.0" y="665.26" font-size="24" fill="#19364d" text-anchor="middle" font-family="Microsoft YaHei, sans-serif">显示缓存</text>
+<path d="M220,430 L250,430 L250,617 L300,617" fill="none" stroke="#3c6685" stroke-width="4" marker-end="url(#arrow)"/>
+<path d="M530,617 L590,617" fill="none" stroke="#3c6685" stroke-width="4" marker-end="url(#arrow)"/>
+<path d="M820,617 L880,617" fill="none" stroke="#3c6685" stroke-width="4" marker-end="url(#arrow)"/>
+<rect x="1190" y="200" width="380" height="325" rx="16" fill="#f7f1e4" stroke="#b69a65" stroke-width="3"/>
+<text x="1380.0" y="291.46000000000004" font-size="24" fill="#19364d" text-anchor="middle" font-family="Microsoft YaHei, sans-serif">PS / ARM Linux</text>
+<text x="1380.0" y="331.06" font-size="24" fill="#19364d" text-anchor="middle" font-family="Microsoft YaHei, sans-serif">标定、ROI与系数配置</text>
+<text x="1380.0" y="370.66" font-size="24" fill="#19364d" text-anchor="middle" font-family="Microsoft YaHei, sans-serif">融合、频谱与质量判决</text>
+<text x="1380.0" y="410.26000000000005" font-size="24" fill="#19364d" text-anchor="middle" font-family="Microsoft YaHei, sans-serif">界面、保存与打印</text>
+<text x="1380.0" y="449.86" font-size="24" fill="#19364d" text-anchor="middle" font-family="Microsoft YaHei, sans-serif">PS网口 / USB / 启动SD</text>
+<path d="M1110,332 L1190,332" fill="none" stroke="#3c6685" stroke-width="4" marker-end="url(#arrow)"/>
+<text x="1158" y="305.14" font-size="21" fill="#19364d" text-anchor="middle" font-family="Microsoft YaHei, sans-serif">结果</text>
+<rect x="1190" y="570" width="380" height="135" rx="16" fill="#f4f7fa" stroke="#7c95a7" stroke-width="3"/>
+<text x="1380.0" y="625.86" font-size="24" fill="#19364d" text-anchor="middle" font-family="Microsoft YaHei, sans-serif">HDMI显示 / USB触摸</text>
+<text x="1380.0" y="665.4599999999999" font-size="24" fill="#19364d" text-anchor="middle" font-family="Microsoft YaHei, sans-serif">放大画面、波形与结果</text>
+<path d="M1110,617 L1190,617" fill="none" stroke="#3c6685" stroke-width="4" marker-end="url(#arrow)"/>
+<path d="M1380,525 L1380,570" fill="none" stroke="#3c6685" stroke-width="4" marker-end="url(#arrow)"/>
+<text x="700" y="754.14" font-size="21" fill="#19364d" text-anchor="middle" font-family="Microsoft YaHei, sans-serif">配置在帧边界生效；原始位移与显示增益独立保存</text>
+<rect x="300" y="825" width="810" height="95" rx="16" fill="#f4f7fa" stroke="#7c95a7" stroke-width="3"/>
+<text x="705.0" y="880.66" font-size="24" fill="#19364d" text-anchor="middle" font-family="Microsoft YaHei, sans-serif">PL外设：SPI / I2C / UART / PWM / 按键 / WS2812</text>
+<rect x="1190" y="790" width="380" height="105" rx="16" fill="#f4f7fa" stroke="#7c95a7" stroke-width="3"/>
+<text x="1380.0" y="814.99" font-size="21" fill="#19364d" text-anchor="middle" font-family="Microsoft YaHei, sans-serif">Nano ESP32</text>
+<text x="1380.0" y="849.64" font-size="21" fill="#19364d" text-anchor="middle" font-family="Microsoft YaHei, sans-serif">NFC / SD语音 / Wi-Fi</text>
+<text x="1380.0" y="884.29" font-size="21" fill="#19364d" text-anchor="middle" font-family="Microsoft YaHei, sans-serif">UART经PL连接PS</text>
+<path d="M1570,450 L1585,450 L1585,842 L1570,842" fill="none" stroke="#3c6685" stroke-width="4" marker-end="url(#arrow)"/>
+<text x="800" y="949.14" font-size="21" fill="#19364d" text-anchor="middle" font-family="Microsoft YaHei, sans-serif">建议架构；统一事件时基不等于曝光同步，性能以实测与综合报告为准</text>
+</svg>

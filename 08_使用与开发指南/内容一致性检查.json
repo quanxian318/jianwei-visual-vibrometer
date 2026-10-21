@@ -1,0 +1,545 @@
+{
+  "checks": 107,
+  "passed": 107,
+  "failed": [],
+  "HTMLTables": 22,
+  "HTMLHeadings": 50,
+  "renderValidation": "静态HTML结构、目录/文件链接与表格列数检查；不声称已逐页浏览器截图或PDF渲染",
+  "details": [
+    {
+      "check": "HTML标签结构完整",
+      "passed": true,
+      "detail": "[]"
+    },
+    {
+      "check": "HTML标题全部生成",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "目录锚点唯一",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "阅读版目录及本地链接全部可解析",
+      "passed": true,
+      "detail": "[]"
+    },
+    {
+      "check": "Markdown表格列数一致",
+      "passed": true,
+      "detail": "[]"
+    },
+    {
+      "check": "不夹带绘图进度",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "不包含未替换模板占位符",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "无外部渲染依赖",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "186条接口数据无跨板混号",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "GH10针1",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "GH10针2",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "GH10针3",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "GH10针4",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "GH10针5",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "GH10针6",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "GH10针7",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "GH10针8",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "GH10针9",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "GH10针10",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J604-1 Nano针序",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J604-2 Nano针序",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J604-3 Nano针序",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J604-4 Nano针序",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J604-5 Nano针序",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J604-6 Nano针序",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J604-7 Nano针序",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J604-8 Nano针序",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J604-9 Nano针序",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J604-10 Nano针序",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J604-11 Nano针序",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J604-12 Nano针序",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J604-13 Nano针序",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J604-14 Nano针序",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J604-15 Nano针序",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J606-1 Nano针序",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J606-2 Nano针序",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J606-3 Nano针序",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J606-4 Nano针序",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J606-5 Nano针序",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J606-6 Nano针序",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J606-7 Nano针序",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J606-8 Nano针序",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J606-9 Nano针序",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J606-10 Nano针序",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J606-11 Nano针序",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J606-12 Nano针序",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J606-13 Nano针序",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J606-14 Nano针序",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J606-15 Nano针序",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J801-1官方针序",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J801-2官方针序",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J801-3官方针序",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J801-4官方针序",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J801-5官方针序",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J801-6官方针序",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J801-7官方针序",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J801-8官方针序",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J801-9官方针序",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J801-10官方针序",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J801-11官方针序",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J801-12官方针序",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J801-13官方针序",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J801-14官方针序",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J801-15官方针序",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J801-16官方针序",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J801-17官方针序",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J801-18官方针序",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J801-19官方针序",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J801-20官方针序",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J801-21官方针序",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J801-22官方针序",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J801-23官方针序",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J801-24官方针序",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J801-25官方针序",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J801-26官方针序",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J801-27官方针序",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J801-28官方针序",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J801-29官方针序",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J801-30官方针序",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J801-31官方针序",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J801-32官方针序",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J801-33官方针序",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J801-34官方针序",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J801-35官方针序",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J801-36官方针序",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J801-37官方针序",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J801-38官方针序",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J801-39官方针序",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J801-40官方针序",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J305-1关键接口",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J306-1关键接口",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J306-2关键接口",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J401-1关键接口",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J401-3关键接口",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J401-4关键接口",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J401-5关键接口",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J601-1关键接口",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J601-2关键接口",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J605-2关键接口",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J605-3关键接口",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J704-1关键接口",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "TCA端口0方向掩码",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "TCA端口1方向掩码",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "I2S时钟计算",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "WS2812周期计算",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "配置模板45项",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "验收模板26项",
+      "passed": true,
+      "detail": ""
+    }
+  ]
+}

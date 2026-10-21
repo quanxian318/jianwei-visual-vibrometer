@@ -1,0 +1,473 @@
+
+--- PDF PAGE 1 ---
+                                                                                                       WS2812B-V6
+                                                                                                Intelligent        control       LED
+                                                                                                  integrated         light    source
+Features    and   Benefits
+    The  control  circuit and  the LED   share  the only  power  source.
+    Control   circuit and  RGB    chips  are  integrated  in a package    of 5050   components,    to form   a complete    addressable
+     pixel.
+    Built-in   signal  reshaping    circuit, after  wave    reshaping   to  the  next   driver,  ensure   wave-form     distortion  not
+     accumulate.
+    Built-in  electric reset circuit and power   lost reset circuit.
+    Each   pixel  of the  three  primary   color  can  achieve  256   brightness   display,  completed    16777216    color  full color
+     display,
+    Port  scanning  frequency   is of 2KHz.
+    Data  receiving  and  decoding   can  be completed    through  a signal  line.
+    When    the refresh rate is 30fps,  cascade  quantity  are not less than  1024  pixels.
+    Data  transmission   speed  up  to 800Kbps.
+    The  color  of the light ishighly  consistent,  cost-effective..
+●   Reverse    power   connection    will not cause   damage.
+    No  external   electronic  components      (including   capacitors)   are required.
+    Supports    bidirectional   signal  input;  DI  and  DO   can  be interchanged     at will.
+    Static  power   consumption     is below   1μA;    3.3 V  power   supply   issupported.
+
+Applications
+    Consumer    electronics.
+    LED   decorative   lighting,
+    Computer    and  peripheral  equipment,   game   equipment,    various  electrical equipment   field.
+
+
+
+General    description
+     WS2812B-V6       is a  intelligent control  LED    light source  that  the control  circuit  and  RGB    chip  are integrated  in  a
+package  of  5050  components.It    internal include  intelligent digital port  data latch and  signal  reshaping  amplification   drive
+circuit.Also  include  a precision  internal  oscillator and  a voltage  programmable      constant  current  control  part, effectively
+ensuring  the pixel point  light color height  consistent.
+ The  data  transfer  protocol  use  single  Return-to-zero    code  communication      mode.   After  the  pixel power-on    reset, the
+DIN  port  receive data  from  controller,  the firstpixel collect  initial24bit  data then  sent to the internal data  latch, the other
+data which   reshaping  by  the internal  signal reshaping   amplification   circuit sent to the next  cascade   pixel through   the DO
+port. After  transmission    for each   pixel, the  signal  to  reduce  24bit.  pixel  adopt   auto  reshaping   transmit   technology,
+making   the pixel cascade   number   is not limited  the signal transmission,   only  depend   on the speed  of  signal transmission.
+    RESET    time>280μs     ,it won't  cause  wrong   reset while  interruption,  itsupports   the lower  frequency   and  inexpensive
+MCU.
+    Refresh  Frequency    updates  to 2KHz,    Low   Frame   Frequency   and  No  Flicker  appear  in HD   Video   Camera,   itimprove
+excellent display  effect.
+    LED   with  low  driving  voltage, environmental    protection   and energy   saving,  high brightness,  scattering  angle  is large,
+good  consistency,   low  power,  long  life and  other advantages.   The   control chip  integrated  in LED    above  becoming    more
+simple  circuit,small  volume,   convenient   installation.
+                                                                   1/ 8
+http://www.world-semi.com
+
+--- PDF PAGE 2 ---
+                                                                                     WS2812B-V6
+                                                                                Intelligent    control    LED
+                                                                                 integrated      light  source
+Mechanical    Dimensions     (Unit:mm)
+
+
+
+
+
+
+
+
+
+
+
+
+Recommended       PAD    Size  (Unit:mm)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+PIN  Configuration
+
+
+
+
+
+
+
+
+
+
+
+
+PIN  Function
+   NO.         Symbol               PIN            Function   description
+     1          VDD           POWER   SUPPLY       Power  supply
+     2          DOUT            DATA    OUT        Control  data signal output, input and output  signalscan  be
+                                                   swapped  atwill,with no fixeddirection.
+     3           VSS             GROUND            Ground,data  & power grounding
+     4           DIN              DATA   IN        Control  data  signal input,inputand  output  signals can  be
+                                                   swapped  atwill,with no fixeddirection.
+                                                       2 /8
+http://www.world-semi.com
+
+--- PDF PAGE 3 ---
+                                                                                  WS2812B-V6
+                                                                             Intelligent    control   LED
+                                                                              integrated     light  source
+
+Absolute  Maximum     Ratings（TA=25℃,VSS=0V）
+
+             Parameter                    Symbol                   Ratings                      Unit
+         Power supply voltage               VDD                   +3.3~+5.3                       V
+         LogicalInputVoltage                 VI               -0.3V～VDD+0.7V                      V
+         Working Temperature                Topt                   -40~+85                       ℃
+  StorageTemperature (Bulk material)        Tstg                  -40～+105                       ℃
+   Storage Temperature (Whole reel)         Tstg                   -40～+70                       ℃
+
+
+Electrical Characteristics（TA=25℃,       VDD=5V,   VSS=0V）
+
+      Parameter          Symbol        Min       Tpy        Max         Unit            Conditions
+      Inputcurrent           II        ——        ——           ±1         µA             VI=VDD/VSS
+   High Voltage Input       VIH      0.55VDD     ——      VDD+0.7V         V              DIN，SET
+   Low  Voltage Input       VIL        -0.3V     ——          0.7V         V              DIN，SET
+
+
+
+Switching  Characteristics（TA=25℃,       VDD=5V,    VSS=0V）
+
+       Parameter           Symbol      Min      Tpy     Max      Unit                Condition
+  Transmissiondelay time      tPLZ     ——       ——       300      ns     CL=15pF,  DIN→DOUT,RL=10KΩ
+         Falltime             tTHZ     ——       ——       120      µs     CL=300pF,  OUTR/OUTG/OUTB
+      Input capacity          CI       ——       ——       15       pF                    ——
+
+
+
+
+LED  Characteristics（TA=25℃，VDD=5V，VSS=0V）
+
+                                                  Quiescent Current≤1μA                      Condition
+   Parameter     Symbol      Color                                                            DC=5V
+                                         Mini        Typ         Max          Unit       Working   current
+                              Red         300        310          500
+   Luminous         IV       Green        600        780         1000         mcd              12mA
+    Intensity                 Blue        200        215          300
+
+                              Red         620        621          630
+  Wavelength        λd       Green        515        520          525          nm              12mA
+
+                              Blue        465        471          475
+
+
+                                                     3/8
+http://www.world-semi.com
+
+--- PDF PAGE 4 ---
+                                                                                       WS2812B-V6
+                                                                                  Intelligent     control    LED
+                                                                                   integrated      light   source
+Data  Transfer   Time
+
+          T0H                     0 code, highvoltage time                           220ns~380ns
+          T1H                     1 code, highvoltage time                            580ns~1µs
+          T0L                     0 code, low voltage time                            580ns~1µs
+          T1L                     1 code, low voltage time                            580ns~1µs
+          RES                   Frame  unit,low voltage time                            >280µs
+
+          TDATA                          Data cycle                                    ≥1.25µs
+
+Sequence   Chart                                             Cascade   Method
+                                                             D1            D2            D3             D4
+                                                                  DIN  DO        DIN  DO       DIN  DO
+                                                                   PIX1           PIX2          PIX3
+
+
+
+
+
+
+Data  Transmission    Method
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Note:The  dataof D1 is send by MCU,  and D2,  D3, D4 through pixel internalreshapingamplification totransmit.
+
+
+Composition    of 24bit  Data
+
+G7   G6   G5   G4   G3   G2   G1   G0   R7   R6   R5   R4   R3    R2   R1   R0   B7   B6   B5   B4   B3   B2   B1   B0
+Note:Data  transmitinorder of GRB,  high bitdataat first.
+
+
+
+
+
+
+                                                        4 /8
+http://www.world-semi.com
+
+--- PDF PAGE 5 ---
+                                                                                     WS2812B-V6
+                                                                                Intelligent     control    LED
+                                                                                  integrated     light   source
+Typical  Application   Circuit
+
+
+
+
+
+
+
+
+
+
+
+
+Packing  Standard
+
+
+
+                                                                                         Carrier  tape
+
+
+
+
+
+
+   Packing:1K/Reel:167*12mm
+           4.5K/Reel:327*12mm
+
+
+
+
+                                                  Anti-staticbag
+
+
+
+
+           ProductLabel
+
+
+
+
+                                                                               Thefoam protectivelayer
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                         Guard  against damp/  Keep dry
+
+
+
+
+
+
+
+
+                                                       5 /8
+http://www.world-semi.com
+
+--- PDF PAGE 6 ---
+                                                                                                WS2812B-V6
+                                                                                           Intelligent      control      LED
+                                                                                            integrated        light   source
+                             WorldSemi         Top    SMD      LED     Using     Instructions
+
+
+1.   Summary
+
+ To make   the best use of WORLDSEMI’s       LED,   please refer to the below  precautions, they are of same  usage  method   as
+other electronic components.
+
+2.   Cautions
+
+2.1. Dust &  Cleaning
+
+The surface  ofthe LED   is encapsulated  with modified   epoxy  resin because  itplays a very good  role in protecting the
+opticalperformance   and  aging  resistance.The  modified  epoxy  resin is easy to stick with dust and  must be  kept clean.
+When  there’s a certain amount   of dust on the surface of the LED,   itwon’t  affectbrightness, but  dust proof should  be
+taken care of. Promoting  the use of unsealed  package   inpreference  to others and  the assembled  LEDs   should  be placed
+ina clean container.  Avoid  using the organic  solvents to clean the dust on the LED   surface  and it’snecessary  to confirm
+whether  the cleaning fluid will dissolve the LED.Do    not clean the LEDs   by the ultrasonic. Some   parameters  affecting the
+LED  performance   must  be evaluated  ifhave  no  alternativebut to the ultrasonic cleaning  method,  such  as ultrasonic
+power, baking  time  and assembly   conditions, etc.
+
+2.2. Moisture-proof   packaging
+
+TOP  SMD    LEDs  are moisture  sensitive components.   LEDs   are packaged   in aluminum   foilbag  to prevent the LED   from
+absorbing  moisture  during transport and  storage. desiccant is placed in the bags to absorb  moisture.  Ifthe LED   absorbs
+moisture, then itevaporates  and  expands  when   in reflow process, which   may  break the colloid from  the bracket and
+damage  the optical performance   of LED.   For thisreason,  moisture-proof  packaging   isto prevent  the from absorbing
+moisture during  transport and  storage. But usually the protection  time can  only maintain  1 ~ 2 months.  During  SMT,
+please referto the definition of material moisture-proof   Grade  (MSL)   stipulated by IPC/JEDECJ-STD-020        forMSL
+control.  The  moisture  resistance rating of WORLDSEMI’s        LED  is: LEVEL    5a.
+
+       Tabel   I- IPC/JEDEC      J-STD-020   Moisture/Reflow     Sensitivity  Classification
+
+            MSL    Level                                                    Workshop    Life
+                                                  Time                                  Conditions
+            LEVEL1                                Unlimited                             ≤30℃/85%RH
+            LEVEL2                                1 Year                                ≤30℃/60%RH
+            LEVEL2a                               4 Weeks                               ≤30℃/60%RH
+            LEVEL3                                168  Hours                            ≤30℃/60%RH
+            LEVEL4                                72 Hours                              ≤30℃160%RH
+            LEVEL5                                48 Hours                              ≤30℃/60%RH
+            LEVEL5a                               24 Hours                              ≤30℃/60%RH
+            LEVEL6                                Take-out         and         Use      ≤30℃/60%RH
+                                                  immediately
+
+                                                               6/8
+http://www.world-semi.com
+
+--- PDF PAGE 7 ---
+                                                                                                       WS2812B-V6
+                                                                                                Intelligent        control       LED
+                                                                                                  integrated         light    source
+2.3   SMT    Instruction:
+
+2.3.1 Itis recommended      that opening  the  Vacuum    plastic bag  before  SMT,   and  put the whole   reel into the oven  for
+dehumidification    and drying  (Bake   at 70 ~ 75℃≧24H);
+
+2.3.2 From   the led taken  out of the oven   tothe  completion   of high  temperature   welding   (including  multiple  reflow
+welding,  tin immersion,   wave   soldering,  heating  maintenance    and  other high  temperature   operations/operations),    the
+time period  shall be  controlled  within  24Hours   (Under   condition  of T<30℃,     RH<60%);
+
+2.3.3 After  the LED   paste is printed  on the PCBA,    SMT    process  should  be  completed   as soon  as possible,  itis
+recommended     not  toexceed   1H;
+
+2.3.4 Bulk  material  LED,   such  as production   surplus, machine    material, maintenance    material,  can  not be used  directly  if
+exposed  to the  airfor a long  time. It isrecommended      to be dehumidified    and  dried before  being  used.
+
+Whole   reel baking:  70 ~  75℃*    ≧24H     or bulk led baking:   120℃*4H.
+
+3.   SMT    Reflow  Soldering
+
+        Refer  to the parameters   listed below,  the experimental    results prove  that the TOP   SMD    LED   meets  the JEDEC
+     J-STD-020C     standards.  As  a general  guideline,  itis recommended     to follow  the  SMT   reflow  temperature   curve
+     recommended      by the solder  paste manufacturer.
+
+
+
+           Curve   Description                  Lead-free
+
+       30℃  ~150℃  preheatingslope           1～4  Reflow℃/s
+
+            30℃ ~ 150℃  preheatingtime       60～120 s
+
+     150℃ to200℃  constanttemperatureslope   0～3  ℃/s
+
+     150℃  ~200℃  constanttemperaturetime    60～120 s
+
+       LIQUID  REGION  temperature(TL)       217℃
+
+             PeakTemperature(Tp)             245℃
+
+             ReflowslopeTime(tp)             0～3   ℃/s
+
+             Reflowsolderingtime             45-90  s
+
+                 CoolingRate                 -4～0   ℃/s
+
+     Room TemperaturetoPeak HoldingTime      <6min
+
+
+
+Remarks:   1. All the above   temperatures   refer to the temperatures    measured   on  the surface  of the package   body
+
+
+
+
+
+
+
+
+
+                                                                   7/ 8
+http://www.world-semi.com
+
+--- PDF PAGE 8 ---
+                                                                                                        WS2812B-V6
+                                                                                                  Intelligent        control      LED
+                                                                                                   integrated         light    source
+4.   Assembly     Precautions
+
+ 1.  Clip  the  LED   from  its   2.  Neither directly touch  the   3.  Not  to be  double  stacked,  it  4.  Can  not  be  stored in  or
+ side.                            gel surface  with the  hand  or   may  damage  itsinternalcircuit.      applied  in the acidic sites of
+                                  sharp   instrument,   it   may                                          PH<7.
+                                  damage  itsinternalcircuit.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Modify   Record
+ Version   №        Status  Bar           Modify    Content   Summary                Date               Reviser            Approved
+    V1.0                 N            New                                         20250929            He  Wenbin         Yin  Huaping
+    V1.1                 M            Parameters  modified                        20251021         Chen   Yongzhao       Yin  Huaping
+
+
+
+
+
+Remarks:    Initialversion:V1.0；Version    number  plus "0.1"after each revision;
+
+            Statusbar: N--New,  A--Add,  M--Modify,  D--Delete.
+1.Version number  plus "0.1" ifforadd  & modify  parameters, eg.V1.0→    V1.1
+2.Major  revisionor many  parameters modified, version number  plus “1.0”,eg. V1.0→   V2.0
+3.No  version number  isattached toPart Number
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                   8 / 8
+http://www.world-semi.com

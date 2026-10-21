@@ -1,0 +1,332 @@
+{
+  "checked_at": "2026-10-15 15:09:48",
+  "sources": [
+    {
+      "name": "TPS5430",
+      "url": "https://www.ti.com/lit/ds/symlink/tps5430.pdf",
+      "status": "ok",
+      "pages": 41,
+      "sha256": "88c98e6e51851285fbbfc17837d002b29af7cd3fe30442fa7e4612c5179985da",
+      "local_path": "D:\\codex\\见微_AX7010视觉测振仪\\01_数据手册\\厂家核验_2026-10-15\\TPS5430.pdf"
+    },
+    {
+      "name": "TLV1117LV",
+      "url": "https://www.ti.com/lit/ds/symlink/tlv1117lv.pdf",
+      "status": "ok",
+      "pages": 25,
+      "sha256": "84091b2a9521014cf80b72dca4cf6edf4dba2773d4aaec0d5716dbd1ff412bb8",
+      "local_path": "D:\\codex\\见微_AX7010视觉测振仪\\01_数据手册\\厂家核验_2026-10-15\\TLV1117LV.pdf"
+    },
+    {
+      "name": "TPS7A20",
+      "url": "https://www.ti.com/lit/ds/symlink/tps7a20.pdf",
+      "status": "ok",
+      "pages": 63,
+      "sha256": "b6c487d79ebed6dd43bf220b07fc5b3ecb9ee55d87e6daa2312acda6546046c0",
+      "local_path": "D:\\codex\\见微_AX7010视觉测振仪\\01_数据手册\\厂家核验_2026-10-15\\TPS7A20.pdf"
+    },
+    {
+      "name": "INA226",
+      "url": "https://www.ti.com/lit/ds/symlink/ina226.pdf",
+      "status": "ok",
+      "pages": 41,
+      "sha256": "c9b67f886d4a5241a5e070723f7b61867409eeb27eed768b9cdd9cb17e03ca2d",
+      "local_path": "D:\\codex\\见微_AX7010视觉测振仪\\01_数据手册\\厂家核验_2026-10-15\\INA226.pdf"
+    },
+    {
+      "name": "TLV3011B",
+      "url": "https://www.ti.com/lit/ds/symlink/tlv3011b.pdf",
+      "status": "ok",
+      "pages": 43,
+      "sha256": "02993c016420887ee4f1ab2fa640e7596c9c1324a73f4f72bee3b32adec38df3",
+      "local_path": "D:\\codex\\见微_AX7010视觉测振仪\\01_数据手册\\厂家核验_2026-10-15\\TLV3011B.pdf"
+    },
+    {
+      "name": "TCA9555",
+      "url": "https://www.ti.com/lit/ds/symlink/tca9555.pdf",
+      "status": "ok",
+      "pages": 49,
+      "sha256": "9706a3ccbf0bc915387949ab82bc0020a1a5bfdd67d8f51c4605a8d4b16bb231",
+      "local_path": "D:\\codex\\见微_AX7010视觉测振仪\\01_数据手册\\厂家核验_2026-10-15\\TCA9555.pdf"
+    },
+    {
+      "name": "UCC27517",
+      "url": "https://www.ti.com/lit/ds/symlink/ucc27517.pdf",
+      "status": "ok",
+      "pages": 37,
+      "sha256": "6b7b8c088746010dfbce36367a03de3e971a91bd6fb705adad0c6258d44bf90c",
+      "local_path": "D:\\codex\\见微_AX7010视觉测振仪\\01_数据手册\\厂家核验_2026-10-15\\UCC27517.pdf"
+    },
+    {
+      "name": "SN74LVC1G125",
+      "url": "https://www.ti.com/lit/ds/symlink/sn74lvc1g125.pdf",
+      "status": "ok",
+      "pages": 52,
+      "sha256": "1098d46e4565695e9823a08309bc581e2c9ead26b19e99a43a011a38642b27ca",
+      "local_path": "D:\\codex\\见微_AX7010视觉测振仪\\01_数据手册\\厂家核验_2026-10-15\\SN74LVC1G125.pdf"
+    },
+    {
+      "name": "SN74LVC2G125",
+      "url": "https://www.ti.com/lit/ds/symlink/sn74lvc2g125.pdf",
+      "status": "ok",
+      "pages": 30,
+      "sha256": "15dab14095892f561bc7407dde6c7fb2fb75d92c6bdafc34e949e5dca1fed340",
+      "local_path": "D:\\codex\\见微_AX7010视觉测振仪\\01_数据手册\\厂家核验_2026-10-15\\SN74LVC2G125.pdf"
+    },
+    {
+      "name": "SN74LVC2G17",
+      "url": "https://www.ti.com/lit/ds/symlink/sn74lvc2g17.pdf",
+      "status": "ok",
+      "pages": 36,
+      "sha256": "624dbe55679d2fed4123b0d7708cd0d295efcc78de395e71a0caf5cd13cbc216",
+      "local_path": "D:\\codex\\见微_AX7010视觉测振仪\\01_数据手册\\厂家核验_2026-10-15\\SN74LVC2G17.pdf"
+    },
+    {
+      "name": "SN74AHCT1G125",
+      "url": "https://www.ti.com/lit/ds/symlink/sn74ahct1g125.pdf",
+      "status": "ok",
+      "pages": 26,
+      "sha256": "386389b623620d89a260b11d272af5625e387e0b24d0981cb4f7d66a4e1bc9fa",
+      "local_path": "D:\\codex\\见微_AX7010视觉测振仪\\01_数据手册\\厂家核验_2026-10-15\\SN74AHCT1G125.pdf"
+    },
+    {
+      "name": "AO4407A",
+      "url": "https://www.aosmd.com/sites/default/files/res/datasheets/AO4407A.pdf",
+      "status": "ok",
+      "pages": 5,
+      "sha256": "ef4b3686383ca7264dad41bd466b750785a08c709d886a61d68ad39d21538bf8",
+      "local_path": "D:\\codex\\见微_AX7010视觉测振仪\\01_数据手册\\厂家核验_2026-10-15\\AO4407A.pdf"
+    },
+    {
+      "name": "AOD4184A",
+      "url": "https://www.aosmd.com/sites/default/files/res/datasheets/AOD4184A.pdf",
+      "status": "ok",
+      "pages": 6,
+      "sha256": "eaeea889973f959d03caaf07ac3000604e2122dd92f4ef3efd8b25c5f4ef8abd",
+      "local_path": "D:\\codex\\见微_AX7010视觉测振仪\\01_数据手册\\厂家核验_2026-10-15\\AOD4184A.pdf"
+    },
+    {
+      "name": "AO3400A",
+      "url": "https://www.aosmd.com/sites/default/files/res/datasheets/AO3400A.pdf",
+      "status": "ok",
+      "pages": 5,
+      "sha256": "9c60d0b6c1ddc7609a4b788a91181468d8ffe6c3e9ba425c3d8ffc5ba88c5033",
+      "local_path": "D:\\codex\\见微_AX7010视觉测振仪\\01_数据手册\\厂家核验_2026-10-15\\AO3400A.pdf"
+    },
+    {
+      "name": "MAX98357A",
+      "url": "https://www.analog.com/media/en/technical-documentation/data-sheets/MAX98357A-MAX98357B.pdf",
+      "status": "ok",
+      "pages": 38,
+      "sha256": "dea228ad619901d34c2f5f106243bdb9b9e95e38989d4d66fd6c6c489bfa6f1c",
+      "local_path": "D:\\codex\\见微_AX7010视觉测振仪\\01_数据手册\\厂家核验_2026-10-15\\MAX98357A.pdf"
+    },
+    {
+      "name": "DS3231",
+      "url": "https://www.analog.com/media/en/technical-documentation/data-sheets/DS3231.pdf",
+      "status": "ok",
+      "pages": 20,
+      "sha256": "dc81cd89bee82d0c57b654d6315e03dec913fb8fe753cc80b2a3f1cca71cbb34",
+      "local_path": "D:\\codex\\见微_AX7010视觉测振仪\\01_数据手册\\厂家核验_2026-10-15\\DS3231.pdf"
+    },
+    {
+      "name": "LSM6DSV",
+      "url": "https://www.st.com/resource/en/datasheet/lsm6dsv.pdf",
+      "status": "ok",
+      "pages": 189,
+      "sha256": "b698bb20b0defb6c5c05c32afbdcb451c171d02311a884e6e49b0d97667fafb7",
+      "local_path": "D:\\codex\\见微_AX7010视觉测振仪\\01_数据手册\\厂家核验_2026-10-15\\LSM6DSV.pdf"
+    },
+    {
+      "name": "VL53L1X",
+      "url": "https://www.st.com/resource/en/datasheet/vl53l1x.pdf",
+      "status": "ok",
+      "pages": 36,
+      "sha256": "b7f4174afaff82a82b5af68746e2df6f946a0de6733608e376b320a8cee6034a",
+      "local_path": "D:\\codex\\见微_AX7010视觉测振仪\\01_数据手册\\厂家核验_2026-10-15\\VL53L1X.pdf"
+    },
+    {
+      "name": "VL53L0X",
+      "url": "https://www.st.com/resource/en/datasheet/vl53l0x.pdf",
+      "status": "ok",
+      "pages": 38,
+      "sha256": "f0ae51414474d311bc24c60cd77bfff968ea5c2b3765b2fb2a390b3078dd49be",
+      "local_path": "D:\\codex\\见微_AX7010视觉测振仪\\01_数据手册\\厂家核验_2026-10-15\\VL53L0X.pdf"
+    },
+    {
+      "name": "ESP32-S3",
+      "url": "https://www.espressif.com/sites/default/files/documentation/esp32-s3_datasheet_en.pdf",
+      "status": "ok",
+      "pages": 87,
+      "sha256": "2d5a7cb7fd559d8d972bd88db32669c0196d23f22d7afaafb0f63d099b589a3f",
+      "local_path": "D:\\codex\\见微_AX7010视觉测振仪\\01_数据手册\\厂家核验_2026-10-15\\ESP32-S3.pdf"
+    },
+    {
+      "name": "SLVA716A",
+      "url": "https://www.ti.com/lit/an/slva716/slva716.pdf",
+      "status": "ok",
+      "pages": 24,
+      "sha256": "9fcc41c272372cd20f9f9acfd24a2cd6a24da2288ff84d0d7f6a36df10f23b56",
+      "local_path": "D:\\codex\\见微_AX7010视觉测振仪\\01_数据手册\\厂家核验_2026-10-15\\SLVA716A.pdf"
+    },
+    {
+      "name": "MF-MSMF",
+      "url": "https://www.bourns.com/docs/product-datasheets/mf-msmf.pdf",
+      "status": "ok",
+      "pages": 16,
+      "sha256": "50d80228581842471d563e28ba0f1b67ab095ee95dfac4079f4a49f7f7bbf3c8",
+      "local_path": "D:\\codex\\见微_AX7010视觉测振仪\\01_数据手册\\厂家核验_2026-10-15\\MF-MSMF.pdf"
+    },
+    {
+      "name": "SRP1038A",
+      "url": "https://www.bourns.com/docs/product-datasheets/srp1038a.pdf",
+      "status": "ok",
+      "pages": 5,
+      "sha256": "92c761c358a1e5a3915a936f6f0795096bb6b965617bb5c408bd8be30ad285af",
+      "local_path": "D:\\codex\\见微_AX7010视觉测振仪\\01_数据手册\\厂家核验_2026-10-15\\SRP1038A.pdf"
+    },
+    {
+      "name": "JST-GH",
+      "url": "https://www.jst-mfg.com/product/pdf/eng/eGH.pdf",
+      "status": "ok",
+      "pages": 6,
+      "sha256": "b1dcb317b6b9a4fbbedd2dbf42c64c95306a252d23de8933b85fcf161240b722",
+      "local_path": "D:\\codex\\见微_AX7010视觉测振仪\\01_数据手册\\厂家核验_2026-10-15\\JST-GH.pdf"
+    },
+    {
+      "name": "JST-PH",
+      "url": "https://www.jst-mfg.com/product/pdf/eng/ePH.pdf",
+      "status": "ok",
+      "pages": 5,
+      "sha256": "447624f4f2f7d37c58c1eaa7ee314ad757fe7aff48f6186491ef6f69fbc00b96",
+      "local_path": "D:\\codex\\见微_AX7010视觉测振仪\\01_数据手册\\厂家核验_2026-10-15\\JST-PH.pdf"
+    },
+    {
+      "name": "PJ-002BH",
+      "url": "https://www.sameskydevices.com/product/resource/pj-002bh.pdf",
+      "status": "ok",
+      "pages": 3,
+      "sha256": "c8209585d8079f4ee58c4b471074eddfeb2f3390721136d267730675c9d3342c",
+      "local_path": "D:\\codex\\见微_AX7010视觉测振仪\\01_数据手册\\厂家核验_2026-10-15\\PJ-002BH.pdf"
+    },
+    {
+      "name": "NKK-JW",
+      "url": "https://www.nkkswitches.com/pdf/JW.pdf",
+      "status": "error",
+      "error": "HTTP Error 403: Forbidden"
+    },
+    {
+      "name": "SMBJ",
+      "url": "https://www.littelfuse.com/assetdocs/littelfuse-tvs-diode-smbj-datasheet?assetguid=066446d7-d742-4332-a50a-01ac92845c7d",
+      "status": "error",
+      "error": "HTTP Error 403: Forbidden"
+    },
+    {
+      "name": "PN532",
+      "url": "https://raw.githubusercontent.com/Xinyuan-LilyGO/T-Embed-CC1101/master/hardware/PN532_C1.pdf",
+      "status": "ok",
+      "pages": 222,
+      "local_path": "D:\\codex\\见微_AX7010视觉测振仪\\01_数据手册\\厂家核验_2026-10-15\\PN532.pdf",
+      "sha256": "46c4f04c44a36dfded8088e62cbcfe8cd3f785c460bb14f161ce0160ef84822d"
+    },
+    {
+      "name": "SD-SPI",
+      "url": "https://www.sdcard.org/downloads/pls/pdf/?p=Part1_Physical_Layer_Simplified_Specification_Ver9.10.jpg&f=Part1_Physical_Layer_Simplified_Specification_Ver9.10.pdf&e=EN_SS9_1",
+      "status": "error",
+      "error": "HTTP Error 403: Forbidden"
+    },
+    {
+      "name": "2N7002-CJ",
+      "url": "https://www.jscj-elec.com/uploads/20250424/0489ad6f192877ecd9e7a5d7fc98ba15.pdf",
+      "status": "ok",
+      "pages": 5,
+      "sha256": "c53270ba438df0820caf00d2a22e36bc1b75e0accbeeb519b7696d05b94004f8",
+      "local_path": "D:\\codex\\见微_AX7010视觉测振仪\\01_数据手册\\厂家核验_2026-10-15\\2N7002-CJ.pdf"
+    },
+    {
+      "name": "SHT4x",
+      "url": "https://sensirion.com/resource/datasheet/sht4x",
+      "status": "ok",
+      "pages": 25,
+      "sha256": "8db4a43f17149b76811cfb504caaeca4ef844ddc710cb9b45905c51c7ddfe3c2",
+      "local_path": "D:\\codex\\见微_AX7010视觉测振仪\\01_数据手册\\厂家核验_2026-10-15\\SHT4x.pdf"
+    },
+    {
+      "name": "DS187",
+      "url": "https://assets.testequity.com/te1/Documents/pdf/digilent/ds187-XC7Z010-XC7Z020-Data-Sheet.pdf",
+      "status": "ok",
+      "pages": 73,
+      "sha256": "61e245380c01d2b9cc1350d529265d185e04c1c0379b0fdb3adcba76585c8dac",
+      "local_path": "D:\\codex\\见微_AX7010视觉测振仪\\01_数据手册\\厂家核验_2026-10-15\\DS187.pdf"
+    },
+    {
+      "name": "PN532-module-V3",
+      "url": "https://www.elechouse.com/elechouse/images/product/PN532_module_V3/PN532_%20Manual_V3.pdf",
+      "status": "ok",
+      "pages": 13,
+      "sha256": "3800d5935532d664015514c0199d2ce4313b3feccf563759642b424048a0cf07",
+      "local_path": "D:\\codex\\见微_AX7010视觉测振仪\\01_数据手册\\厂家核验_2026-10-15\\PN532-module-V3.pdf"
+    },
+    {
+      "name": "WS2812B-V6",
+      "url": "https://atta.szlcsc.com/upload/public/pdf/source/20251201/45CD695EA06F90F53A3AC4760AC4DC7D.pdf",
+      "status": "ok",
+      "pages": 8,
+      "sha256": "f6ee89835465bc6eabd52c039017abde30e2e04a062e465c12d7ada4c7b30a65",
+      "local_path": "D:\\codex\\见微_AX7010视觉测振仪\\01_数据手册\\厂家核验_2026-10-15\\WS2812B-V6.pdf"
+    },
+    {
+      "name": "BAT54",
+      "url": "https://assets.nexperia.com/documents/data-sheet/BAT54_SER.pdf?1=",
+      "status": "error",
+      "error": "HTTP Error 403: Forbidden"
+    },
+    {
+      "name": "EC11E15244B2",
+      "url": "https://tech.alpsalpine.com/prod/e/pdf/encoder/incremental/ec11/ec11.pdf",
+      "status": "error",
+      "error": "HTTP Error 403: Forbidden"
+    },
+    {
+      "name": "SCT1032",
+      "url": "https://www.setfuse.cn/SdwlUploads/Sy/Mini%20Fuses_SMFL_SCT1032_CHN_SETsafe%20%26%20SETfuse.pdf",
+      "status": "ok",
+      "pages": 6,
+      "sha256": "c83778ec7f1b0ba6c02b231630c53c8ae4e7fa95dfa07b8f2ec77629a4ea634d",
+      "local_path": "D:\\codex\\见微_AX7010视觉测振仪\\01_数据手册\\厂家核验_2026-10-15\\SCT1032.pdf"
+    },
+    {
+      "name": "MPA106D",
+      "url": "https://www.te.com/commerce/DocumentDelivery/DDEController?Action=srchrtrv&DocFormat=pdf&DocLang=English&DocNm=2-1437567-9&DocType=Customer+Drawing&PartCntxt=2-1437567-8",
+      "status": "error",
+      "error": "ValueError: PDF download failed"
+    },
+    {
+      "name": "MAX98357A-TQFN-EVK",
+      "url": "https://www.analog.com/media/en/technical-documentation/data-sheets/MAX98357DEVTQFN-MAX98357EVSYSTQFN.pdf",
+      "status": "ok",
+      "pages": 9,
+      "sha256": "77dbd3bafe0ce1488c6e6c17ac824a500e9deaa36c848e4a2380781a74000d1b",
+      "local_path": "D:\\codex\\见微_AX7010视觉测振仪\\01_数据手册\\厂家核验_2026-10-15\\MAX98357A-TQFN-EVK.pdf"
+    },
+    {
+      "name": "ADXL355",
+      "url": "https://www.analog.com/media/en/technical-documentation/data-sheets/adxl354_adxl355.pdf",
+      "status": "ok",
+      "pages": 45,
+      "local_path": "D:\\codex\\见微_AX7010视觉测振仪\\01_数据手册\\厂家核验_2026-10-15\\ADXL355.pdf",
+      "sha256": "d54235c1db7ffea74ee9c4a361294204eb8927c20657484aefb935eafb29e56c"
+    },
+    {
+      "name": "74LVC244A",
+      "url": "https://docs.rs-online.com/61c3/0900766b816ae41e.pdf",
+      "status": "ok",
+      "pages": 16,
+      "local_path": "D:\\codex\\见微_AX7010视觉测振仪\\01_数据手册\\厂家核验_2026-10-15\\74LVC244A.pdf",
+      "sha256": "abea8549745ed160cbe8256e596d9a382a9c53e025862ed307ba340fd1a9bfc9",
+      "revision": "Rev.9, 2018-08-13",
+      "note": "Nexperia original PDF on RS mirror; older reference copy. Current official Rev.14 link retained in index; do not treat this as current-version electrical verification."
+    }
+  ],
+  "supplement_checked_at": "2026-10-15 16:08:17"
+}

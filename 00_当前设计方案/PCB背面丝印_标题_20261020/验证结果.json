@@ -1,0 +1,34 @@
+{
+  "size_mm": [
+    40,
+    10
+  ],
+  "printed_strings": [
+    "视觉测振仪主载板",
+    "2026/10/20"
+  ],
+  "font": "楷体",
+  "font_style": "Bold",
+  "vector_paths": 2,
+  "font_dependencies": 0,
+  "background": "transparent",
+  "decorations": 0,
+  "placements": [
+    {
+      "text": "视觉测振仪主载板",
+      "x_mm": 4.334253329781566,
+      "y_mm": 1.0,
+      "width_mm": 31.331493340436868,
+      "height_mm": 3.6
+    },
+    {
+      "text": "2026/10/20",
+      "x_mm": 14.308570778917911,
+      "y_mm": 6.3,
+      "width_mm": 11.38285844216418,
+      "height_mm": 1.8
+    }
+  ],
+  "svg_readback": "PASS",
+  "eda_import_tested": false
+}

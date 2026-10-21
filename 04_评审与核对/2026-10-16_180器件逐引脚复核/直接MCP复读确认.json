@@ -1,0 +1,10 @@
+{
+  "tool": "mcp__jlceda__schematic_review",
+  "readConfirmedAt": "2026-10-16T15:21:06.364Z",
+  "ok": true,
+  "drcCheckPassed": true,
+  "components": 180,
+  "canonicalUTF16Length": 15899,
+  "canonicalFNV1a64": "5930d0df9aa96728",
+  "note": "非密码学电气内容指纹；对比位号、MPN、值、全部脚号/脚名/网络；完整原始快照另存。"
+}

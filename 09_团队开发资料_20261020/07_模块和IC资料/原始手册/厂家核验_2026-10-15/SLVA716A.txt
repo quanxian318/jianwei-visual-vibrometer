@@ -1,0 +1,1688 @@
+
+--- PDF PAGE 1 ---
+                                                                                                                               Application Report
+                                                                                                    SLVA716A–December 2015–Revised May 2019
+                 Integrated Load Switches Versus Discrete MOSFETs
+
+
+AlekKakneviciusandArthurHuang.................................................................  DriversandLoadSwitches
+
+                                                                              ABSTRACT
+         The most common approach to load switching solutions is to use a Power MOSFET surrounded by
+         discrete  resistors  and  capacitors;  however,  in  most  cases  using  a  fully  integrated  load  switch  has
+         significant advantages. While both discrete and integrated load switching solutions perform the same
+         basic function (turn on and turn off), distinctions exist, such as the transient behavior and total solution
+         size. This application report highlights many drawbacks and limitations of a discrete switching solution and
+         discusses how they can be overcome with an integrated load switch.
+
+
+
+                                                                                 Contents
+         1          Summary of Load Switching................................................................................................  2
+         2          PMOS Discrete Circuit #1..................................................................................................   3
+                   2.1       Performance.........................................................................................................   3
+                   2.2       Adding a Resistor to Slow the Output Rise Time...............................................................  5
+                   2.3       Vth Voltage Disadvantage..........................................................................................  6
+                   2.4       Active Low Disadvantage..........................................................................................  6
+         3          PMOS Discrete Circuit #2..................................................................................................   6
+                   3.1       Performance.........................................................................................................   7
+                   3.2       VIN Leakage Disadvantage.......................................................................................  9
+                   3.3       Adding a Resistor to Slow the Output Rise Time...............................................................  9
+         4          PMOS Discrete Circuit #3.................................................................................................  10
+                   4.1       Performance.......................................................................................................   11
+                   4.2       Disadvantage when Applying VIN ...............................................................................  12
+         5          PMOS Discrete Circuit #4 ................................................................................................  14
+         6          NMOS Discrete Circuits...................................................................................................  15
+         7          Load Switches..............................................................................................................   16
+                   7.1       Performance.......................................................................................................   17
+                   7.2       Size Advantage....................................................................................................   19
+                   7.3       Feature Advantages..............................................................................................  19
+         8          Conclusion..................................................................................................................   21
+         9          References..................................................................................................................   22
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+SLVA716A–December 2015–Revised May 2019                                                      Integrated Load Switches Versus Discrete MOSFETs                      1
+Submit Documentation Feedback
+                                                     Copyright © 2015–2019, Texas Instruments Incorporated
+
+--- PDF PAGE 2 ---
+Summary of Load Switching                                                                                                                                                  www.ti.com
+1       Summary of Load Switching
+        A typical system involves a power supply and multiple loads which require various load currents.  In most
+        cases, the system must independently control which loads are on, when they are turned on, and how
+        quickly they turn on.  As previously mentioned, this power switching, as Figure 1 shows, can be
+        implemented using a discrete MOSFET circuit or an integrated load switch.
+
+
+
+
+
+
+
+
+
+
+
+
+                                                       Figure 1. Power Switching
+
+        A discrete MOSFET circuit contains several components to control the turnon and turnoff of a discrete
+        power MOSFET. These circuits can be enabled or disabled by using a GPIO signal from a
+        microcontroller.  Figure 2 shows several of these circuits.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                  Figure 2. PMOS Discrete Circuits
+
+        Load switches can also be used to open and close the connection between the power rail and the
+        corresponding load.  These integrated devices have several benefits and features while they are enabled,
+        disabled, or even switching between the two states. Figure 3 shows a load switch circuit.
+
+
+
+
+
+
+
+                                                     Figure 3. Load Switch Circuit
+
+        The following sections use switching waveforms to show and compare the discrete circuits and integrated
+        load switches when used for power switching.
+
+
+
+
+
+
+
+
+
+
+
+2       Integrated Load Switches Versus Discrete MOSFETs                                       SLVA716A–December 2015–Revised May 2019
+                                                                                                                Submit Documentation Feedback
+                                               Copyright © 2015–2019, Texas Instruments Incorporated
+
+--- PDF PAGE 3 ---
+www.ti.com                                                                                                                                           PMOS Discrete Circuit #1
+2       PMOS Discrete Circuit #1
+        The simplest discrete circuit that can be used for power switching is a PMOS transistor whose gate is
+        driven by a GPIO.
+
+
+
+
+
+
+
+
+
+
+                                                 Figure 4. PMOS Discrete Circuit #1
+
+        The benefit of this solution is simplicity.  Only one component is required and the operation is
+        simple—when the GPIO is high, the PMOS is turned off, and when the GPIO is pulled low, the PMOS is
+        turned on.
+
+2.1    Performance
+        The performance of the PMOS solution is evaluated by looking at the way the PMOS transistor is able to
+        switch on with a load attached.  For the purpose of this application report, a resistive load of 1Ω and
+        capacitive load of 4.7 µF are used. Figure 5 shows this type of circuit.
+
+
+
+
+
+
+
+
+
+
+
+
+
+                       Figure 5. PMOS Discrete Circuit #1 with a Resistive and Capacitive Load
+
+        The input capacitance was chosen to be 10 times higher than the output capacitance to show a solution
+        with strong compensation for transient currents seen during start up. Figure 6 shows the typical turn on
+        behavior of this circuit.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+SLVA716A–December 2015–Revised May 2019                                            Integrated Load Switches Versus Discrete MOSFETs                3
+Submit Documentation Feedback
+                                                Copyright © 2015–2019, Texas Instruments Incorporated
+
+--- PDF PAGE 4 ---
+PMOS Discrete Circuit #1                                                                                                                                                      www.ti.com
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                   Figure 6. Turn on Behavior for PMOS Discrete Circuit #1
+
+         When the GPIO signal (ON) is brought low, the PMOS transistor is turned on and its load is connected to
+         the power supply (VIN).  Because the PMOS has no controlled turn on, the voltage on the power supply
+         decreases heavily due to the sudden demand for current.  As the current ramps up to its final value, the
+         voltage on VIN stabilizes. Figure 7 shows the stabilizing behavior of the PMOS Discrete circuit.
+         The resistive load is removed and the capacitive load is left on the output when observing the magnitude
+         of the inrush current.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                     Figure 7. Inrush Current for PMOS Discrete Circuit #1
+
+         With only a small capacitance of 4.7 µF, the uncontrolled turnon manages to generate over 2 A of inrush
+         current.  As the output capacitance increases, the inrush current also increases at the same rate.  Use
+         Equation 1 to calculate inrush current.
+
+
+
+
+
+
+4        Integrated Load Switches Versus Discrete MOSFETs                                         SLVA716A–December 2015–Revised May 2019
+                                                                                                                   Submit Documentation Feedback
+                                                Copyright © 2015–2019, Texas Instruments Incorporated
+
+--- PDF PAGE 5 ---
+www.ti.com                                                                                                                                           PMOS Discrete Circuit #1
+
+
+
+                where
+                      •    IINRUSH = amount of inrush current caused by a capacitance
+                      •    CLOAD = total capacitance
+                      •    dV = change in voltage during ramp up
+                      •    dt = rise time (during voltage ramp up)                                                                                                      (1)
+         This current can lead to input voltage decreases, power supply failure, or PCB trace damage.  If the input
+         voltage at the load switch becomes lower than expected, such as in the case of the MOSFET startup, then
+         other modules or subsystems on the same power rail may reset because of a low input voltage and which
+         transitions the system into an undesired state.  For more information on the negative effects of inrush
+         current, see the Managing Inrush Current Application Note.
+
+2.2    Adding a Resistor to Slow the Output Rise Time
+         A resistor is added to the gate of the PMOS to help slow down the rise time of the output voltage (and
+         reduce the inrush current). This additional resistor limits the amount of current that charges or discharges
+         the gate and turns the PMOS off or on.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                     Figure 8. PMOS Discrete Circuit #1 with a 20-kΩ Resistor on the PMOS Gate
+
+         Figure 9 shows the effect of a 20-kΩ resistor on the gate of the PMOS.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      Figure 9. Turnon Behavior of PMOS Discrete Circuit #1 with a 20-kΩ Resistor on the PMOS Gate
+
+
+SLVA716A–December 2015–Revised May 2019                                              Integrated Load Switches Versus Discrete MOSFETs                 5
+Submit Documentation Feedback
+                                                 Copyright © 2015–2019, Texas Instruments Incorporated
+
+--- PDF PAGE 6 ---
+PMOS Discrete Circuit #1                                                                                                                                                      www.ti.com
+        With the 20-kΩ resistor added, the rise time increases. The power supply is now able to manage the
+        inrush current without any significant voltage drop. While this resistance may work for the 4.7-μF load, a
+        higher output capacitance requires a higher rise time and therefore more resistance on the gate.
+        While adding resistance to the gate of the PMOS helps in increasing the rise time of the output, it also
+        increases the fall time when the PMOS is turned off. This can be a disadvantage for systems which need
+        the output load discharged quickly for faster system operation.
+
+2.3    Vth Voltage Disadvantage
+        Aside from the decreasing voltage on the input power rail, this circuit has a few additional disadvantages.
+        One disadvantage is the restriction on the input voltage range of the circuit. This is limited by the Vth turn
+        on threshold of the MOSFET.  The maximum input voltage which can be applied to the MOSFET is the
+        VOH voltage of the GPIO added to the Vth voltage of the MOSFET.  If the voltage is any higher than this,
+        then the PMOS stays on even when the GPIO toggles high.
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   Figure 10. VIN and GPIO Voltage Requirements for PMOS Discrete Circuit #1
+
+        The minimum input voltage that can be applied to the PMOS is determined by the desired MOSFET
+        performance. In general, a higher VGS voltage yields a lower on-resistance across the PMOS and causes
+        less of a voltage drop from VIN to VOUT. While this is desired, it is difficult to implement in this circuit with
+        a low VIN voltage because the GPIO cannot be pulled any lower than 0 V and the VGS voltage is the value
+        of VIN. Additionally, many times the GPIO voltage is higher than 0 V because of GPIO variance and the
+        inability to pull the pin all the way down to 0 V, resulting in a higher on-resistance and more voltage drop
+        across the PMOS.
+
+2.4    Active Low Disadvantage
+        Another disadvantage is that the GPIO signal from the microprocessor must always be present to prevent
+        the PMOS from turning on. This means that the microprocessor cannot be powered off or put to sleep to
+        save power for the rest of the system.  Also, if the input of the MOSFET comes up before the
+        microprocessor has had a chance to power up and pull its GPIO control high, then the MOSFET circuit
+        allows power to pass through, even if this behavior is not desired. If the discrete circuit is being controlled
+        by a power good signal instead, then this signal must be active low.
+
+3       PMOS Discrete Circuit #2
+        The next circuit that is investigated involves an additional resistor and NMOS transistor.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+6       Integrated Load Switches Versus Discrete MOSFETs                                      SLVA716A–December 2015–Revised May 2019
+                                                                                                              Submit Documentation Feedback
+                                              Copyright © 2015–2019, Texas Instruments Incorporated
+
+--- PDF PAGE 7 ---
+www.ti.com                                                                                                                                           PMOS Discrete Circuit #2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                 Figure 11. PMOS Discrete Circuit #2
+
+        With this circuit, the GPIO pulls the gate of the NMOS high and connects the gate of the PMOS transistor
+        to ground.  This turns on the PMOS and allows power to flow from VIN to VOUT.  When the GPIO signal
+        pulls the gate of the NMOS low, VIN pulls the gate of the PMOS high and prevents power from flowing
+        through the MOSFET. Rather than using an NMOS transistor to drive the PMOS, an NPN BJT can also be
+        used.
+
+3.1    Performance
+        Once again, performance is evaluated by observing the switching characteristics of the circuit.  Figure 12
+        shows how this circuit is evaluated with the same input and output conditions as the first discrete solution.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                      Figure 12. PMOS Discrete Circuit #2 with a Resistive and Capacitive Load
+
+
+
+
+
+
+
+
+
+
+
+
+SLVA716A–December 2015–Revised May 2019                                             Integrated Load Switches Versus Discrete MOSFETs               7
+Submit Documentation Feedback
+                                                Copyright © 2015–2019, Texas Instruments Incorporated
+
+--- PDF PAGE 8 ---
+PMOS Discrete Circuit #2                                                                                                                                                      www.ti.com
+        Figure 13 shows the turn on performance of this circuit.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                  Figure 13. Turn on Behavior for PMOS Discrete Circuit #2
+
+        Although the voltage on VIN drops in the same way as the first circuit, this drop does not last as long and
+        is less severe.  The inrush current can be observed in Figure 14.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                    Figure 14. Inrush Current for PMOS Discrete Circuit #2
+
+        Once again, over 2 A of inrush current is measured on turn on.
+        Overall, this circuit solves several problems that the first circuit had.  Because an NMOS transistor is being
+        driven, the logic is active high and does not require a constant GPIO voltage to prevent power from
+        passing through to the load. The maximum bound on the VIN voltage is also removed since the gate of
+        the PMOS is coupled to VIN when the PMOS is turned off instead of the GPIO voltage.  This circuit also
+        improves the on-resistance performance of the PMOS because the variance in the GPIO signal voltage no
+        longer affects the gate of the PMOS. However, for low values of VIN, the VGS of the circuit would still be
+        small during turn on and would lead to a large on-resistance and voltage drop across the PMOS.
+
+
+
+
+8       Integrated Load Switches Versus Discrete MOSFETs                                         SLVA716A–December 2015–Revised May 2019
+                                                                                                                  Submit Documentation Feedback
+                                                Copyright © 2015–2019, Texas Instruments Incorporated
+
+--- PDF PAGE 9 ---
+www.ti.com                                                                                                                                           PMOS Discrete Circuit #2
+3.2    VIN Leakage Disadvantage
+        One disadvantage with this circuit is a VIN leakage path that is present when the PMOS is turned on.
+        Because the NMOS is enabled, current is able to flow from VIN, through the resistance from source to
+        gate, and down to ground.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                   Figure 15. PMOS Discrete Circuit #2 VIN Leakage Path
+
+        Leakage is an issue for power conscious designs because it reduces the efficiency of the switch solution
+        and adds additional power dissipation to the rest of the system.
+
+3.3    Adding a Resistor to Slow the Output Rise Time
+        Once again, a 20-kΩ resistor is added to the gate of the PMOS to slow down the charge of the gate and
+        increase the rise time of the output. Figure 16 shows the 20-kΩ resistor when applied to the PMOS
+        discrete circuit.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                 Figure 16. PMOS Discrete Circuit #2 with a 20-kΩ Resistance on the PMOS Gate
+
+
+
+
+
+
+
+
+SLVA716A–December 2015–Revised May 2019                                           Integrated Load Switches Versus Discrete MOSFETs               9
+Submit Documentation Feedback
+                                               Copyright © 2015–2019, Texas Instruments Incorporated
+
+--- PDF PAGE 10 ---
+PMOS Discrete Circuit #3                                                                                                                                                      www.ti.com
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   Figure 17. Turn on Behavior of PMOS Discrete Circuit #2 with a 20-kΩ Resistance on the PMOS Gate
+
+        With the 20-kΩ resistance added, the rise time is increased and the power supply is able to manage the
+        inrush current without any significant voltage dip. Again, a higher output capacitance require more
+        resistance on the gate to slow the rise time of the output. As with circuit #1, the slower rise time also leads
+        to a slower fall time which may not be desirable for the system.
+
+4       PMOS Discrete Circuit #3
+        Despite all of the improvements the second discrete circuit made over the first, the power supply still
+        suffers from a decrease in voltage when there is no resistance present on the gate of the PMOS.  The
+        decrease is because of the quick turn on of the PMOS transistor and the inrush current which is generated
+        by the load capacitance.  An additional capacitor can be added to help control the turnon.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                 Figure 18. PMOS Discrete Circuit #3
+
+        The additional capacitor slows the discharge of the PMOS gate and provides a controlled rise time on
+        VOUT that limits the inrush current and helps prevent changes in the input voltage during switching.
+        Again, a BJT can be used in place of the NMOS transistor.
+
+
+10      Integrated Load Switches Versus Discrete MOSFETs                                        SLVA716A–December 2015–Revised May 2019
+                                                                                                                 Submit Documentation Feedback
+                                                Copyright © 2015–2019, Texas Instruments Incorporated
+
+--- PDF PAGE 11 ---
+www.ti.com                                                                                                                                           PMOS Discrete Circuit #3
+4.1    Performance
+        For evaluation, the following input and output conditions were used.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                      Figure 19. PMOS Discrete Circuit #3 with a Resistive and Capacitive Load
+
+        Figure 20 shows the turn on behavior of the discrete solution.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                 Figure 20. Turn on Behavior for PMOS Discrete Circuit #3
+
+        In contrast to the first and second circuits, the PMOS discrete circuit does not suffer from a VIN voltage
+        dip and can control the amount of inrush current generated by the load.  The downside here is the
+        negative voltage and current decrease seen at the output.
+        When VIN is applied to the circuit and ON is low, the capacitor between the gate and drain of the PMOS
+        becomes charged to the value of VIN.  When ON goes high and the circuit is turned on, the gate of the
+        PMOS is pulled down from VIN to ground. Because the voltage across the capacitor cannot change
+        instantaneously, the voltage on the output of the PMOS is also pulled down, which results in a negative
+        voltage on VOUT. Once the gate of the PMOS has been discharged, the output voltage is able to ramp up
+        to the value of VIN.
+
+
+
+SLVA716A–December 2015–Revised May 2019                                            Integrated Load Switches Versus Discrete MOSFETs             11
+Submit Documentation Feedback
+                                               Copyright © 2015–2019, Texas Instruments Incorporated
+
+--- PDF PAGE 12 ---
+PMOS Discrete Circuit #3                                                                                                                                                      www.ti.com
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                          Figure 21. Negative Voltage and Current on PMOS Discrete Circuit #3
+
+        A smaller capacitance leads to smaller negative currents and voltages, but it also decreases the ability of
+        the circuit to handle inrush current by reducing its rise time. The negative voltage can not only damage the
+        devices downstream of the load switch, but could also lead to latch up and ESD issues for the
+        components in the system.
+        As with circuit #2, this circuit also has a discharge path from VIN to ground that causes current to leak
+        from VIN when the PMOS is turned on.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                    Figure 22. PMOS Discrete Circuit #3 VIN Leakage Path
+
+
+4.2    Disadvantage when Applying VIN
+        Another unique disadvantage to this circuit is the behavior when VIN is first applied to the circuit. Before
+        VIN is present, the gate of the PMOS is a high impedance node.
+
+
+
+
+
+
+
+
+
+12      Integrated Load Switches Versus Discrete MOSFETs                                          SLVA716A–December 2015–Revised May 2019
+                                                                                                                   Submit Documentation Feedback
+                                                Copyright © 2015–2019, Texas Instruments Incorporated
+
+--- PDF PAGE 13 ---
+www.ti.com                                                                                                                                           PMOS Discrete Circuit #3
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+           Figure 23. VIN Voltage Step Causes VOUT Voltage Before PMOS Gate Can Charge to VIN
+
+        The moment VIN is applied, a negative VGS immediately appears across the PMOS causing it to turn on
+        even when the GPIO control signal is low. As the bulk gate capacitance slowly charges up to VIN, the
+        switch eventually turns off. Once the gate is charged, the GPIO control signal can be used normally to turn
+        the switch on and off with inrush current control. However, when VIN is first applied, the PMOS turn on
+        without inrush current control and without regards to the GPIO control signal. Figure 24 shows a
+        screenshot of this behavior.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                           Figure 24. VIN Voltage Step Behavior for PMOS Discrete Circuit #3
+
+        As VIN goes high, the gate voltage cannot keep up due to the delay caused by the gate capacitance and
+        capacitor between the gate and drain.  Therefore, the PMOS is able to turn on briefly before the gate can
+        reach a voltage high enough to turn the PMOS off.  This causes a significant amount of inrush current and
+        output voltage which can potentially turn on undesired loads and cause stress on the power supply. This
+        event is especially prevalent in systems with a replaceable battery since putting in a new battery can
+        cause VIN to go from 0 V to the battery voltage very quickly.
+
+
+
+
+SLVA716A–December 2015–Revised May 2019                                           Integrated Load Switches Versus Discrete MOSFETs             13
+Submit Documentation Feedback
+                                               Copyright © 2015–2019, Texas Instruments Incorporated
+
+--- PDF PAGE 14 ---
+PMOS Discrete Circuit #4                                                                                                                                                      www.ti.com
+5       PMOS Discrete Circuit #4
+        Another discrete method to manage the inrush current is by moving the capacitor on the input side. By
+        connecting a capacitor from the source to the gate of the PMOS, this creates an RC delay which reduces
+        the inrush current and slows the switching speed of the PMOS. A resistor from the gate of the PMOS to
+        the bottom FET is also included to slow down the output rise time, similar to the second discrete circuit in
+        Section 3.3.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                 Figure 25. PMOS Discrete Circuit #4
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                   Figure 26. Turn on Behavior of PMOS Discete Circuit #4
+
+        One disadvantage to this discrete implementation is the nonlinearity of the inrush current. Since the ramp
+        rate is dependent on the RC delay on the gate, the switch starts to turn on slowly and exponentially
+        increase until the FET becomes fully on. This nonlinear dv/dt of VOUT causes a nonlinear inrush current
+        spike.
+
+
+
+
+
+14      Integrated Load Switches Versus Discrete MOSFETs                                          SLVA716A–December 2015–Revised May 2019
+                                                                                                                   Submit Documentation Feedback
+                                                Copyright © 2015–2019, Texas Instruments Incorporated
+
+--- PDF PAGE 15 ---
+www.ti.com                                                                                                                                              NMOS Discrete Circuits
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                   Figure 27. Inrush Current for PMOS Discrete Circuit #4
+
+        As shown in Figure 27, the inrush current spikes when starting into a capacitive load.
+
+6       NMOS Discrete Circuits
+        A discrete power switching solution can also be put together by using an NMOS as the main pass FET.
+        With an NMOS, the voltage on the gate needs to be higher than the input voltage to turn it on. This means
+        that lower voltages can be switched without requiring a large voltage on the gate. For example, an NMOS
+        transistor with a VGS turn on requirement of 1 V could have a 3.3 V GPIO controlling the gate and switch
+        low voltage rails such as 1.8 V, 1.2 V, or even 0.8 V.
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                        Figure 28. NMOS VGS Requirements for Turn On
+
+        While these voltages can be switched, a higher gate voltage may be desired for a higher VGS voltage and
+        lower on-resistance. To switch a high voltage rail (5 V or above), an even higher voltage rail needs to be
+        available in the system to switch the gate of the NMOS. If one is not available, a discrete charge pump
+        can be used to drive the voltage up to an appropriate level for that transistor.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+SLVA716A–December 2015–Revised May 2019                                            Integrated Load Switches Versus Discrete MOSFETs              15
+Submit Documentation Feedback
+                                                Copyright © 2015–2019, Texas Instruments Incorporated
+
+--- PDF PAGE 16 ---
+Load Switches                                                                                                                                                                         www.ti.com
+
+
+
+
+
+
+
+
+
+
+
+
+                                               Figure 29. NMOS Charge Pump Circuit
+
+        With a charge pump, a high VGS for the NMOS can be achieved, and this drives the on-resistance of the
+        circuit lower. However, this comes at the cost of a larger solution size, increased BOM count, and higher
+        cost when compared to the PMOS solution.
+
+7       Load Switches
+        After evaluating several discrete circuits for load switching, a comparison can be made to the integrated
+        load switch solution.
+
+
+
+
+
+
+
+                                                    Figure 30. Load Switch Circuit
+
+        One advantage for using a load switch is the reduced complexity. To incorporate all of the advantages of
+        the above circuits, only one device needs to be used. A load switch is able to provide a lower input
+        voltage range, can uses low voltage GPIO signals, and uses a controlled rise time to manage the inrush
+        current.
+        Another advantage to using an integrated load switch is the linear soft start (SS) capability. In comparison
+        to a discrete solution, the linear soft start minimizes the inrush current and provides a simple and precise
+        way to measure the inrush current. In systems that have maximum inrush current and maximum turn-on
+        time restrictions, discrete solutions may have a difficult time to meet these requirements. Adding a large
+        RC time constant might reduce inrush current but drastically increase rise time, while a smaller RC
+        constant would decrease the rise time at the expense of an increased inrush current. A linear control
+        scheme provided by integrated load switches offers the possibility to satisfy both of these requirements.
+
+                                   Table 1. TPS22919 Load Switch vs Discrete FET Comparison
+
+                                                                        TPS22919                              PMOS #4 DISCRETE SOLUTION
+                      BOM Count                                              1                                                 5
+                     Solution Size                                        4.1mm2                                          17.08 mm2
+                       Rise Time                                       Linear, ~1ms                                       RC Based
+                  Thermal Shutdown                                           ✓
+                Short Circuit Protection                                     ✓
+            Quick Output Discharge (QOD)                                     ✓                                  Requires external components
+
+
+
+
+
+
+
+
+
+
+
+16      Integrated Load Switches Versus Discrete MOSFETs                                        SLVA716A–December 2015–Revised May 2019
+                                                                                                                 Submit Documentation Feedback
+                                               Copyright © 2015–2019, Texas Instruments Incorporated
+
+--- PDF PAGE 17 ---
+www.ti.com                                                                                                                                                            Load Switches
+7.1    Performance
+         Figure 31 shows the TPS22919 load switch configured at 5 V with a 1 A, 100 µF load.
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                            Figure 31. TPS22919 with Downstream Load
+
+         The screenshot in Figure 32 was taken using the configuration from Figure 31. The controlled rise time
+         ensures a lower inrush current and no voltage dip on the input without any external components needing
+         to be used.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                     Figure 32. Turn on of TPS22919
+
+         Figure 33 demonstrates the inrush current control on the TPS22919. As the output rises, the TPS22919
+         limits the inrush current generated from the 100 µF output capacitor to about 300 mA.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+SLVA716A–December 2015–Revised May 2019                                              Integrated Load Switches Versus Discrete MOSFETs               17
+Submit Documentation Feedback
+                                                 Copyright © 2015–2019, Texas Instruments Incorporated
+
+--- PDF PAGE 18 ---
+Load Switches                                                                                                                                                                         www.ti.com
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                             Figure 33. Inrush Current Control on TPS22919
+
+         In comparison, when observing the VOUT ramp behavior of PMOS circuit #4 with the same output load,
+         the current spikes to roughly 1.8 A during turn on.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                     Figure 34. TPS22919 vs Discrete FET
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+18       Integrated Load Switches Versus Discrete MOSFETs                                                  SLVA716A–December 2015–Revised May 2019
+                                                                                                                              Submit Documentation Feedback
+                                                     Copyright © 2015–2019, Texas Instruments Incorporated
+
+--- PDF PAGE 19 ---
+www.ti.com                                                                                                                                                            Load Switches
+        In Figure 35, when starting at 1.8 V into a 100 µF capacitive load, the discrete solution causes a nonlinear
+        450 mA inrush current spike, while the TPS22919 limits the current to 200 mA, reducing the spike by 77%.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                               Figure 35. TPS22919 vs Discrete FET Inrush Current Control
+
+
+7.2    Size Advantage
+        Another advantage of using a load switch solution is the reduced number of components and solution
+        size. Figure 36 compares the solution size of both switching solutions. In this example, the discrete FET
+        solution, shown as PMOS Discrete #4, consists of six components with a total solution size of 17 mm2. In
+        comparison, the TPS22919 load switch consists of the single IC, with a 76% reduction in solution size.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            Figure 36. Size Comparison between the TPS22919 and an Equivalent Discrete Solution
+
+
+7.3    Feature Advantages
+        There are several features which are integrated into load switches that are not found in any of the above
+        discrete circuits. To add reverse current blocking to a discrete solution, an additional MOSFET is needed
+        to create a back to back configuration. The TPS22916 and TPS22953 are two examples of load switches
+        with integrated reverse current blocking.
+
+
+
+
+
+
+SLVA716A–December 2015–Revised May 2019                                           Integrated Load Switches Versus Discrete MOSFETs              19
+Submit Documentation Feedback
+                                               Copyright © 2015–2019, Texas Instruments Incorporated
+
+--- PDF PAGE 20 ---
+Load Switches                                                                                                                                                                         www.ti.com
+        Quick output discharge is a load switch feature which discharges VOUT through an internal path to ground
+        when the switch is disabled. This provides a known state on the output and ensures that all loads have
+        been discharged and are turned off. To add this feature discretely, an external FET needs to be included
+        on the output to discharge VOUT when the body FET is disabled. The TPS22919 has this feature
+        integrated into the device.
+        The TPS22919 also contains additional features not found on the discrete solution. One feature is thermal
+        protection. During operation, the junction temperature can rise due to many factors, including a high
+        current load, large inrush current during startup, or during a fault condition. Thermal protection turns off
+        the switch to protect itself by reducing the power dissipation, also potentially avoiding damage to upstream
+        and downstream components. In comparison, a discrete FET cannot protect itself if it exceeds its thermal
+        junction temperature. In this case, the FET could potentially break, causing a short and damaging the
+        downstream load or peripheral.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                                            Figure 38. Discrete FET Thermal Image
+       Figure 37. TPS22919 Thermal Image After Thermal Cycling
+
+        The TPS22919 also contains transient protection features. In the case of a Power Into Short or a Hot
+        Short event, the TPS22919 protects itself while the discrete FET becomes damaged. In Figure 39, the
+        discrete FET passes more than 10 A downstream before getting damaged in a Power Into Short event.
+        For more information regarding a comparison between the TPS22919 and discrete FETs, refer to TI's
+        Power Switching Reference Design for TVs.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          Figure 39. Discrete FET: Power into Short (Damages                      Figure 40. TPS22919: Power into Short (Limits to 500 mA)
+                                Discrete FET)
+
+
+
+
+
+
+
+
+20      Integrated Load Switches Versus Discrete MOSFETs                                        SLVA716A–December 2015–Revised May 2019
+                                                                                                                 Submit Documentation Feedback
+                                                Copyright © 2015–2019, Texas Instruments Incorporated
+
+--- PDF PAGE 21 ---
+www.ti.com                                                                                                                                                                  Conclusion
+8       Conclusion
+         While a discrete MOSFET solution can be used for power switching, it can also cause a high amount of
+         inrush current, a negative voltage on the output, or an undesired output voltage on system startup.  A load
+         switch provides a controlled rise time (and therefore less inrush current), a smaller solution size, a wider
+         range on VIN, and several additional features which can benefit the desired application.  Table 2
+         summarizes all of the circuits evaluated and shows their turnon behavior.
+
+                                                     Table 2. Load Switch Comparison Table
+
+                          CIRCUIT                                           TURN ON BEHAVIOR                                          SUMMARY
+                                                                                                                            Advantages
+                                                                                                                            - Simple
+                                                                                                                            Disadvantages
+                                                                                                                            - No inrush current control
+                                                                                                                            - VGS concerns
+                                                                                                                            - Active Low
+
+
+
+
+
+
+
+
+
+                                                                                                                            Advantages
+                                                                                                                            - Expands VIN range
+                                                                                                                            Disadvantages
+                                                                                                                            - No inrush current control
+                                                                                                                            - VGS concerns
+                                                                                                                            - Leakage path through the
+                                                                                                                            source to gate resistor
+
+
+
+
+
+
+
+
+                                                                                                                            Advantages
+                                                                                                                            - Inrush current control
+                                                                                                                            Disadvantages
+                                                                                                                            - Negative voltage on VOUT
+                                                                                                                            - VOUT voltage on VIN
+                                                                                                                            startup
+                                                                                                                            - VGS concerns
+                                                                                                                            - Leakage path through the
+                                                                                                                            source to gate resistor
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+SLVA716A–December 2015–Revised May 2019                                                      Integrated Load Switches Versus Discrete MOSFETs              21
+Submit Documentation Feedback
+                                                   Copyright © 2015–2019, Texas Instruments Incorporated
+
+--- PDF PAGE 22 ---
+References                                                                                                                                                                              www.ti.com
+
+                                               Table 2. Load Switch Comparison Table (continued)
+                           CIRCUIT                                              TURN ON BEHAVIOR                                             SUMMARY
+
+                                                                                                                                     Advantages
+                                                                                                                                     - Inrush current control
+                                                                                                                                     Disadvantages
+                                                                                                                                     - Nonlinear inrush current
+                                                                                                                                     control
+                                                                                                                                     -Longer Slew Rate
+
+
+
+
+
+
+
+
+
+                                                                                                                                   Advantages
+                                                                                                                                   - Inrush current control
+                                                                                                                                   - Wide VIN range
+                                                                                                                                   - Small solution, low BOM
+                                                                                                                                   count
+                                                                                                                                   - Quick Output Discharge
+                                                                                                                                   (optional)
+                                                                                                                                   - Thermal Shutdown
+                                                                                                                                   (optional)
+                                                                                                                                   - Reverse Current Blocking
+                                                                                                                                   (optional)
+                                                                                                                                   - Short-Circuit Protection
+                                                                                                                                   (optional)
+
+
+9       References
+         1.  Basics of Load Switches Application Note
+         2.  Load Switch Thermal Considerations User's Guide
+         3.  Power Switching Reference Design for TVs
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+22       Integrated Load Switches Versus Discrete MOSFETs                                                   SLVA716A–December 2015–Revised May 2019
+                                                                                                                               Submit Documentation Feedback
+                                                     Copyright © 2015–2019, Texas Instruments Incorporated
+
+--- PDF PAGE 23 ---
+www.ti.com                                                                                                                                                          Revision History
+
+                                                                          Revision History
+NOTE: Page numbers for previous revisions may differ from page numbers in the current version.
+
+Changes from Original (December 2018) to A Revision ................................................................................................  Page
+
+•    Added PMOS Discrete Circuit #4 section.............................................................................................  14
+•    Added paragraph and table to section 6..............................................................................................  16
+•    Changed caption on figure 31..........................................................................................................   17
+•    Replaced "Turn on of TPS22919" image.............................................................................................   17
+•    Added figure 34..........................................................................................................................   18
+•    Added figure 34..........................................................................................................................   18
+•    Added figure 35..........................................................................................................................   19
+•    Added paragraph in section 7.2........................................................................................................   19
+•    Added paragraphs in section 7.3......................................................................................................  19
+•    Added figure 37..........................................................................................................................   20
+•    Added figure 38..........................................................................................................................   20
+•    Replaced paragraphs in section 7.3...................................................................................................  20
+•    Added image 39..........................................................................................................................   20
+•    Added image 40. ........................................................................................................................   20
+•    Changed content in Comparison Table...............................................................................................  21
+•    Changed references.....................................................................................................................   22
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+SLVA716A–December 2015–Revised May 2019                                                                                                             Revision History             23
+Submit Documentation Feedback
+                                                          Copyright © 2015–2019, Texas Instruments Incorporated
+
+--- PDF PAGE 24 ---
+                                                       IMPORTANT NOTICE AND DISCLAIMER
+
+TI PROVIDES TECHNICAL AND RELIABILITY DATA (INCLUDING DATASHEETS), DESIGN RESOURCES (INCLUDING REFERENCE
+DESIGNS), APPLICATION OR OTHER DESIGN ADVICE, WEB TOOLS, SAFETY INFORMATION, AND OTHER RESOURCES “AS IS”
+AND WITH ALL FAULTS, AND DISCLAIMS ALL WARRANTIES, EXPRESS AND IMPLIED, INCLUDING WITHOUT LIMITATION ANY
+IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE OR NON-INFRINGEMENT OF THIRD
+PARTY INTELLECTUAL PROPERTY RIGHTS.
+These resources are intended for skilled developers designing with TI products. You are solely responsible for (1) selecting the appropriate
+TI products for your application, (2) designing, validating and testing your application, and (3) ensuring your application meets applicable
+standards, and any other safety, security, or other requirements. These resources are subject to change without notice. TI grants you
+permission to use these resources only for development of an application that uses the TI products described in the resource. Other
+reproduction and display of these resources is prohibited. No license is granted to any other TI intellectual property right or to any third
+party intellectual property right. TI disclaims responsibility for, and you will fully indemnify TI and its representatives against, any claims,
+damages, costs, losses, and liabilities arising out of your use of these resources.
+TI’s products are provided subject to TI’s Terms of Sale (www.ti.com/legal/termsofsale.html) or other applicable terms available either on
+ti.com or provided in conjunction with such TI products. TI’s provision of these resources does not expand or otherwise alter TI’s applicable
+warranties or warranty disclaimers for TI products.
+
+
+                                 Mailing Address: Texas Instruments, Post Office Box 655303, Dallas, Texas 75265
+                                                   Copyright © 2019, Texas Instruments Incorporated

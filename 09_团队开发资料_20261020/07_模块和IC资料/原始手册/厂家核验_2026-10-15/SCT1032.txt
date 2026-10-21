@@ -1,0 +1,445 @@
+
+--- PDF PAGE 1 ---
+ 管状熔断体                                              SCT1032系列 Series, 慢断 Time-Lag, 陶瓷管 Ceramic Tube
+Cartridge Fuse-links (CFL)
+                                                    尺寸 Dimensions (mm)
+
+
+
+
+
+
+
+
+
+
+
+                                                                L             L1              w                H
+
+
+                                                            10.3± 0.3      2.0 ± 0.2       3.3 ± 0.2        3.3 ± 0.2
+
+
+关键特性 Key Features                                             型号说明 Product Number System
+
+
+●  慢断 Time-Lag                                                 SCT1032T6.3A250V
+
+●  SMD 保险丝 Fuse
+
+●  执行标准：IEC 60127-7、UL248-14
+                                                                                               额定电压 Rated Voltage
+   Designed to IEC 60127-7, UL248-14
+
+●  无铅 Lead-free (Pb-free)                                                                      额定电流 Rated Current
+
+●  环保型产品 RoHS & REACH Compliant
+                                                                                               慢断 Time-Lag
+应用 Applications                                                                                产品系列 Product Series
+
+
+
+●  电源 Power Supply
+                                                               安规认证 Agency Approvals
+●  家电 Household Appliance
+
+●  防雷器 SPD
+●  通用照明 General Lighting                                             安规认证                   认证号                电流范围
+                                                                Agency Approvals    Agency File Number      Ampere Range
+●  智能家居 Smart Home
+
+●  办公设备 Office Equipment
+
+●  电动工具 Electric Tool                                                                      E345932           0.1 A ~ 15 A
+
+●  家庭娱乐设备 Home Entertainment Equipment
+
+●  医疗设备 Medical Equipment                                                               待定 Pending           0.1 A ~ 15 A
+
+
+                                                                                      CQC22012330354          0.1 A ~ 5 A
+结构图 Structure                                                                         CQC22012331636         6.3 A ~ 15 A
+
+
+
+
+
+
+
+
+
+
+                               熔体 Element
+
+                              管体 Tube
+                              端盖 Cap
+
+
+
+
+
+
+
+
+
+
+
+                                                                                                      厦门赛尔特电子有限公司版权所有
++86-592-571-5838   www.SETfuse.com   www.SETsafe.com   E-mail : sales@SETfuse.com All Rights Reserved by Xiamen SET Electronics Co., Ltd. 2021-2023 V2.2
+
+                                                             1
+
+--- PDF PAGE 2 ---
+ 管状熔断体                                                 SCT1032系列 Series, 慢断 Time-Lag, 陶瓷管 Ceramic Tube
+Cartridge Fuse-links (CFL)
+                                                      术语 Glossary
+
+
+          项目                                                                 描述
+          Item                                                           Description
+
+                           一种装置，当通过该装置的电流超过规定值，并持续足够的时间，该装置中一个或多个经特殊设计、特
+                           殊配比的部件熔断，断开其所接入的电路，从而切断电流。
+         熔断器               A device, by the fusing of one or more of its specially designed and proportioned components, opens
+          Fuse             the circuit in which it is inserted by breaking the current when this exceeds a given value for a
+                           sufficient time.
+                                                                                                                   —(IEC 60127)
+
+
+                           熔断器的额定电流是根据其可控制测试条件的截流能力确定的。每个熔断器上都应标上额定电流，它可
+        额定电流               以是数字、字母、或色码。
+                           The rated current of a fuse identifies its current-carrying capacity based on a controllable set of test
+    Rated Current          conditions. Each fuse is marked with its rated current, this rating can be identified with a numeric,
+                           alpha, or color code mark.
+                                                                                                                     —(IEC 60127)
+
+                           熔断器可以使用的最大安全开断电压，超过额定电压将影响断开过载和短路电路的能力。
+        额定电压               A Max. open circuit voltage in which a fuse can be used, yet safely interrupt an overcurrent.
+    Rated Voltage          Exceeding the voltage rating of a fuse impairs its ability to clear an overload or short circuit safely.
+                                                                                                                     —(IEC 60127)
+
+                           在电流平方对给定时间间隔的积分，被称为I2t。它是熔断所需的热能。熔断I2t可以是熔化I2t，飞弧I2t，
+
+     标称熔化热能                或二者之和。
+                           The melting, arcing, or clearing integral of a fuse, termed I2t, is the thermal energy required to melt,
+   Ampere Squared          arc, or clear a specific current. It can be expressed as melting I2t, arcing I2t or the sum of them,
+      Seconds I2t
+                           clearing I2t.
+
+                                                                                                                     —(IEC 60127)
+
+
+                           电流超过额定负荷的2到5倍，且保持正常的电流路径。
+          过载               Can be classified as an overcurrent which exceeds the normal full load current of a circuit by 2 to 5
+       Overload            times its magnitude and stays within the normal current path.
+                                                                                                                         —(UL 248)
+
+
+                           在一个电路中，超过正常负载电流的电流称为过电流。过电流包括过载电流和短路电流。
+         过电流               A condition which exists in an electrical circuit when the normal load current is exceeded. Overcurrent
+      Overcurrent          take on two separate characteristics-overloads and short circuits.
+                                                                                                                         —(UL 248)
+
+
+                           将短路是电流不流过正常电路而引起的过电流，它大大超出了正常满载电流数十、数百甚至数千倍。
+          短路               An overcurrent that leaves the normal current path and greatly exceeds the normal full load current of
+     Short Circuit         the circuit by a factor of tens, hundreds, or thousands times.
+                                                                                                                         —(UL 248)
+
+
+                           在规定的使用和性能条件下，熔断器在规定电压下能分断的预期电流值（对交流为有效值）。
+        分断能力               Value   (r.m.s. for AC)  of prospective current that a fuse-link is capable of breaking at a stated
+ Breaking Capacity of      voltage under prescribed conditions of use and behaviour.
+      a Fuse-link                                                                                                    —(IEC 60127)
+
+
+
+
+
+                                                                                                             厦门赛尔特电子有限公司版权所有
++86-592-571-5838   www.SETfuse.com   www.SETsafe.com   E-mail : sales@SETfuse.com All Rights Reserved by Xiamen SET Electronics Co., Ltd. 2021-2023 V2.2
+
+                                                                 2
+
+--- PDF PAGE 3 ---
+ 管状熔断体                                                 SCT1032系列 Series, 慢断 Time-Lag, 陶瓷管 Ceramic Tube
+Cartridge Fuse-links (CFL)
+
+技术参数 Specifications
+
+                                                                 熔化热能值                     安规认证                         环境
+                 额定电流                                                                 Agency Approvals             Environmental
+    系列                Rated Current     额定分断能力                     Typical
+   Series                         Rated Breaking Capacity        Melting I²t a
+                                                                                                                   RoHs    REACH
+                    (A)                                            (A²sec)        TUV        CQC        cURus
+
+ SCT1032            0.1                                             0.018          ○           ⚫          ⚫          ⚫         ⚫
+
+ SCT1032          0.125                                              0.03          ○           ⚫          ⚫          ⚫         ⚫
+
+ SCT1032           0.16                                              0.04          ○           ⚫          ⚫          ⚫         ⚫
+
+ SCT1032            0.2                                              0.1           ○           ⚫          ⚫          ⚫         ⚫
+
+ SCT1032           0.25                                              0.15          ○           ⚫          ⚫          ⚫         ⚫
+                                100 A@350 VAC / 300 VAC /
+ SCT1032          0.315             250 VAC / 125 VAC                0.48          ○           ⚫          ⚫          ⚫         ⚫
+
+ SCT1032            0.4              1000 A@125 VAC                  0.8           ○           ⚫          ⚫          ⚫         ⚫
+ SCT1032            0.5               30 A@250 VDC                   2.0           ○           ⚫          ⚫          ⚫         ⚫
+ SCT1032           0.63        1000 A@125 VDC / 75 VDC /             3.2           ○           ⚫          ⚫          ⚫         ⚫
+                                 63 VDC / 48 VDC / 32 VDC
+ SCT1032            0.8                                              4.5           ○           ⚫          ⚫          ⚫         ⚫
+
+ SCT1032             1                                               5.5           ○           ⚫          ⚫          ⚫         ⚫
+
+ SCT1032           1.25                                              10.2          ○           ⚫          ⚫          ⚫         ⚫
+
+ SCT1032            1.6                                              14            ○           ⚫          ⚫          ⚫         ⚫
+
+ SCT1032             2                                               23            ○           ⚫          ⚫          ⚫         ⚫
+
+ SCT1032            2.5                                              52            ○           ⚫          ⚫          ⚫         ⚫
+
+ SCT1032             3                                               72                                   ⚫          ⚫         ⚫
+
+ SCT1032           3.15                                              75            ○           ⚫          ⚫          ⚫         ⚫
+
+ SCT1032             4                                               118           ○           ⚫          ⚫          ⚫         ⚫
+
+ SCT1032             5          100 A@350 VAC / 300 VAC /            197           ○           ⚫          ⚫          ⚫         ⚫
+ SCT1032            6.3             250 VAC / 125 VAC                210           ○           ⚫          ⚫          ⚫         ⚫
+                                     1000 A@125 VAC
+ SCT1032             7         1000 A@125 VDC / 75 VDC /             290                                  ⚫          ⚫         ⚫
+
+ SCT1032             8           63 VDC / 48 VDC / 32 VDC            400           ○           ⚫          ⚫          ⚫         ⚫
+
+ SCT1032            10                                               445           ○           ⚫          ⚫          ⚫         ⚫
+
+ SCT1032            12                                               550                                  ⚫          ⚫         ⚫
+
+ SCT1032           12.5                                              555           ○           ⚫          ⚫          ⚫         ⚫
+
+ SCT1032            15                                               740           ○           ⚫          ⚫          ⚫         ⚫
+a：I2t是在10倍额定电流测试下得到的。I2t value is measured at 10 I                     .     ○：待定 Pending
+                                                                     N
+熔断特性 Pre-arcing Time/Current Characteristic
+
+      额定电流                         1.0 IN                          2.0IN                                   10IN
+
+  Rated Current                 最小 Min.                         最大 Max.                     最小 Min.                最大 Max.
+
+    0.1 A ~ 15 A                    4 h                             60 s                      10 ms                  100 ms
+
+
+
+
+                                                                                                            厦门赛尔特电子有限公司版权所有
++86-592-571-5838   www.SETfuse.com   www.SETsafe.com   E-mail : sales@SETfuse.com All Rights Reserved by Xiamen SET Electronics Co., Ltd. 2021-2023 V2.2
+
+                                                                 3
+
+--- PDF PAGE 4 ---
+ 管状熔断体                                                 SCT1032系列 Series, 慢断 Time-Lag, 陶瓷管 Ceramic Tube
+Cartridge Fuse-links (CFL)
+时间电流特性曲线 Time Current Curve                                     （仅供参考 For Reference Only）
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                           电流 Current (A)
+
+包装信息 Packaging Information
+ 尺寸 Dimensions (mm)
+
+
+
+
+
+
+                                   2,000 PCS / Reel                 10 Reels / Carton
+
+
+
+
+
+
+
+
+
+                         项目 Item            卷轴 Reel           箱 Carton
+
+                      数量 Q’ty (PCS)           2,000             20,000
+
+                         毛重 Gross Weight (kg)               9.0 ± 10%
+
+
+
+
+                                                                                                            厦门赛尔特电子有限公司版权所有
++86-592-571-5838   www.SETfuse.com   www.SETsafe.com   E-mail : sales@SETfuse.com All Rights Reserved by Xiamen SET Electronics Co., Ltd. 2021-2023 V2.2
+
+                                                                 4
+
+--- PDF PAGE 5 ---
+ 管状熔断体                                              SCT1032系列 Series, 慢断 Time-Lag, 陶瓷管 Ceramic Tube
+Cartridge Fuse-links (CFL)
+
+
+                                            注意
+                                            ATTENTION
+
+检测 Inspection
+
+冷电阻测试 Cold Resistance Test
+
+a. 环境温度为(23±2) °C，测试电流不大于熔断器额定电流的10%。
+  Applied current shall be less than 10% of rated current, at ambient Temp. of (23±2) °C.
+b. 采用四端测试法 (4-Wire) Resistance Measurement.
+
+使用 Usage
+
+a. 通电情况下请勿直接触碰熔断器本体或引线，防止烫伤或触电。
+  Do not touch the fuse body or lead wire when power on, avoiding scald or electric shock.
+b. 气压在80 kPa 到106 kPa，对应海拔为+2000 m至- 500 m。
+   Air pressure is 80 kPa to 106 kPa. These values represent an altitude of +2000 m to -500 m, respectively.
+
+更换 Replacement
+
+基于安全原因，熔断器是不可修复的产品，替换时应使用同类别同型号的产品。
+For safety reasons, the Fuse is the non-resettable product, please ensure that the alternative Fuse is the same type when
+replace it.
+
+贮存 Storage
+
+熔断器的贮存应避免高温、高湿、日光直射和腐蚀性气体的场合，以免影响引脚可焊性，产品购入后请于1年内使用完毕。
+Please store the fuse in the environment without high temperature, high humidity or corrosive gas, to avoid reducing the
+solderability of  the lead wire. Please use them up within 1 year after receiving the goods.
+
+                                                                                                       厦门赛尔特电子有限公司版权所有
++86-592-571-5838   www.SETfuse.com   www.SETsafe.com   E-mail : sales@SETfuse.com All Rights Reserved by Xiamen SET Electronics Co., Ltd. 2021-2023 V2.2
+
+                                                             5
+
+--- PDF PAGE 6 ---
+ 管状熔断体                                                 SCT1032系列 Series, 慢断 Time-Lag, 陶瓷管 Ceramic Tube
+Cartridge Fuse-links (CFL)
+安装 Installation
+机械应力 Mechanical stress
+安装过程和安装后不宜对熔断器本体施加机械应力。
+Do not apply mechanical stress to the fuse body during or after the installation.
+焊接参数 Soldering Parameters
+波峰焊参数 Wave soldering Parameters (仅供参考 For Reference Only)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                Preheating Time                Cooling Time
+                                                                                   Dwelling Time
+                                                           表3 TABLE 3
+
+                 项目 Item                                温度 Temp. （°C）                                时间 Time （s）
+
+             预热 Preheating                                   100 - 150                                    60 - 180
+
+               过锡 Dwelling                                   255 - 265                                      4 - 8
+
+推荐的手工焊参数 Recommended Soldering Parameters
+
+烙铁温度 Solder Iron Temp.：(350 ± 5) °C
+
+焊接时间 Soldering Time：≤ 5 s
+安装位置 Installation Position
+
+勿将熔断器安装在可能经常出现剧烈振动的位置。
+Do not install the fuse on a location that may often subject to severe continuous vibration.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                                                            厦门赛尔特电子有限公司版权所有
++86-592-571-5838   www.SETfuse.com   www.SETsafe.com   E-mail : sales@SETfuse.com All Rights Reserved by Xiamen SET Electronics Co., Ltd. 2021-2023 V2.2
+
+                                                                 6

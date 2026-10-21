@@ -1,0 +1,40 @@
+[
+  {
+    "name": "74LVC244A",
+    "url": "https://assets.nexperia.com/documents/data-sheet/74LVC_LVCH244A.pdf?download=1",
+    "status": "error",
+    "error": "ValueError: public manufacturer-PDF link not retrievable"
+  },
+  {
+    "name": "ADXL355",
+    "url": "https://www.analog.com/media/en/technical-documentation/data-sheets/adxl354_adxl355.pdf",
+    "status": "error",
+    "error": "ValueError: PDF download failed"
+  },
+  {
+    "name": "SHT4x",
+    "url": "https://sensirion.com/resource/datasheet/sht4x",
+    "status": "ok",
+    "pages": 25,
+    "sha256": "8db4a43f17149b76811cfb504caaeca4ef844ddc710cb9b45905c51c7ddfe3c2",
+    "local_path": "D:\\codex\\见微_AX7010视觉测振仪\\01_数据手册\\厂家核验_2026-10-15\\SHT4x.pdf"
+  },
+  {
+    "name": "PN532",
+    "url": "https://www.nxp.com/docs/en/nxp/data-sheets/PN532_C1.pdf",
+    "status": "error",
+    "error": "ValueError: PDF download failed"
+  },
+  {
+    "name": "NKK-JW",
+    "url": "https://www.nkkswitches.com/pdf/JW.pdf",
+    "status": "error",
+    "error": "ValueError: PDF download failed"
+  },
+  {
+    "name": "MPA106D",
+    "url": "https://www.te.com/commerce/DocumentDelivery/DDEController?Action=srchrtrv&DocFormat=pdf&DocLang=English&DocNm=2-1437567-9&DocType=Customer+Drawing&PartCntxt=2-1437567-8",
+    "status": "error",
+    "error": "ValueError: PDF download failed"
+  }
+]

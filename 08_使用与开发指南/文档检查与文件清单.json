@@ -1,0 +1,18 @@
+{
+  "title": "见微视觉测振仪：主载板与前面板成品使用及开发指南",
+  "version": "V1.0",
+  "basis": "主板/前面板V1.10与已确认J306照明接口",
+  "guideType": "成品使用与开发接口，不含原理图绘制进度",
+  "headings": 50,
+  "interfaceRows": 186,
+  "configRows": 45,
+  "acceptanceRows": 26,
+  "files": {
+    "README.md": "b13c63664d75fff80c885518312540742986336dfd746ba788adf22406868512",
+    "主载板与前面板成品使用及开发指南_V1.0.html": "fcfaf5bb57d569ebbf0ad71045fd33b3b31ad52cfc91a4422ee3588442e1064e",
+    "主载板与前面板成品使用及开发指南_V1.0.md": "ff5da3591046fb9f0fb4141a87359e757ea53d4f1133bb62301d666ba079869d",
+    "主载板与前面板接口速查.csv": "ad77b2c92d1c2bd70e89e68da15990cf1f4e9d6c8158a4fd079ee57fe0d0eaf0",
+    "成品功能验收记录模板.csv": "389293025f98b03414311d4639e3ea910675be2b08d29212b7ad7fe8a33543c7",
+    "设备配置单模板.csv": "618835e4f2dd2386a722fd63a3c069e284cb2989963ea410b663fcbdd3964606"
+  }
+}

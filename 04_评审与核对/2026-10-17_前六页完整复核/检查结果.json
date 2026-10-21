@@ -1,0 +1,5573 @@
+{
+  "readAt": "2026-10-17T17:11:20.437517+08:00",
+  "wholeProjectCount": 214,
+  "scopeCount": 205,
+  "scopePins": 617,
+  "pageCounts": {
+    "1": 19,
+    "2": 51,
+    "3": 60,
+    "4": 19,
+    "5": 22,
+    "6": 34
+  },
+  "drcPassed": true,
+  "checks": [
+    {
+      "check": "FB201阻抗和频率字段",
+      "passed": true,
+      "detail": "磁珠使用Impedance字段，不能把600Ω看作直流电阻"
+    },
+    {
+      "check": "全工程位号唯一",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "前六页205个器件均有独立预期",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C101页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "C101针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C101全部针脚网络",
+      "passed": true,
+      "detail": "Panasonic EEUFR1V471：470uF/35V，库1正2负；现用D10/P5直插封装"
+    },
+    {
+      "check": "C101数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C101BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C102页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "C102针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C102全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "C102数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C102BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C103页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "C103针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C103全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "C103数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C103BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C104页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "C104针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C104全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "C104数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C104BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C105页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "C105针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C105全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "C105数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C105BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C106页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "C106针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C106全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "C106数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C106BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "D101页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "D101针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "D101全部针脚网络",
+      "passed": true,
+      "detail": "PTTC SMBJ13A：K到正极，A到地"
+    },
+    {
+      "check": "D101BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "F101页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "F101针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "F101全部针脚网络",
+      "passed": true,
+      "detail": "SCT1032T6.3A250V；输入正极串联主保险"
+    },
+    {
+      "check": "F101BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J101页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "J101针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J101全部针脚网络",
+      "passed": true,
+      "detail": "Same Sky PJ-002BH PDF1/2：1中心正极；2/3套筒及切换触点接地"
+    },
+    {
+      "check": "J101BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J102页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "J102针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J102全部针脚网络",
+      "passed": true,
+      "detail": "机壳SW101两端串联电源正极，非开关器件本体"
+    },
+    {
+      "check": "J102BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R101页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "R101针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R101全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "R101数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R101BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R102页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "R102针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R102全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "R102数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R102BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R103页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "R103针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R103全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "R103数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R103BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R104页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "R104针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R104全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "R104数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R104BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R105页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "R105针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R105全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "R105数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R105BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R106页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "R106针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R106全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "R106数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R106BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "RS101页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "RS101针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "RS101全部针脚网络",
+      "passed": true,
+      "detail": "5mΩ分流电阻；两端与INA226正负取样方向对应"
+    },
+    {
+      "check": "RS101数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "RS101BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "U101页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "U101针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "U101全部针脚网络",
+      "passed": true,
+      "detail": "TI INA226 PDF3 pin functions：10 IN+在上游，9 IN-在下游"
+    },
+    {
+      "check": "U101BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "U102页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "U102针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "U102全部针脚网络",
+      "passed": true,
+      "detail": "TI TLV3011B DBV6：OUT/GND/IN+/IN-/REF/VCC；开漏输出"
+    },
+    {
+      "check": "U102BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C201页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "C201针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C201全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "C201数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C201BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C202页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "C202针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C202全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "C202数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C202BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C203页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "C203针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C203全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "C203数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C203BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C204页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "C204针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C204全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "C204数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C204BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C205页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "C205针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C205全部针脚网络",
+      "passed": true,
+      "detail": "Panasonic 10TPB220ML：库1正2负，220uF/10V/40mΩ"
+    },
+    {
+      "check": "C205数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C205BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C206页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "C206针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C206全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "C206数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C206BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C207页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "C207针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C207全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "C207数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C207BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C208页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "C208针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C208全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "C208数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C208BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C209页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "C209针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C209全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "C209数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C209BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C210页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "C210针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C210全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "C210数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C210BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C211页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "C211针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C211全部针脚网络",
+      "passed": true,
+      "detail": "Panasonic 10TPB220ML：库1正2负，220uF/10V/40mΩ"
+    },
+    {
+      "check": "C211数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C211BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C212页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "C212针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C212全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "C212数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C212BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C213页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "C213针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C213全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "C213数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C213BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C214页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "C214针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C214全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "C214数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C214BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C215页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "C215针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C215全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "C215数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C215BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C216页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "C216针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C216全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "C216数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C216BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C217页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "C217针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C217全部针脚网络",
+      "passed": true,
+      "detail": "Panasonic 10TPB220ML：库1正2负，220uF/10V/40mΩ"
+    },
+    {
+      "check": "C217数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C217BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C218页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "C218针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C218全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "C218数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C218BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C219页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "C219针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C219全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "C219数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C219BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C220页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "C220针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C220全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "C220数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C220BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C221页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "C221针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C221全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "C221数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C221BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C222页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "C222针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C222全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "C222数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C222BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C223页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "C223针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C223全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "C223数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C223BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C224页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "C224针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C224全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "C224数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C224BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C225页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "C225针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C225全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "C225数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C225BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C226页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "C226针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C226全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "C226数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C226BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C227页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "C227针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C227全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "C227数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C227BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "D201页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "D201针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "D201全部针脚网络",
+      "passed": true,
+      "detail": "MCC SK54B-L：K接PH，A接地，降压续流"
+    },
+    {
+      "check": "D201BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "D202页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "D202针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "D202全部针脚网络",
+      "passed": true,
+      "detail": "MCC SK54B-L：K接PH，A接地，降压续流"
+    },
+    {
+      "check": "D202BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "D203页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "D203针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "D203全部针脚网络",
+      "passed": true,
+      "detail": "MCC SK54B-L：K接PH，A接地，降压续流"
+    },
+    {
+      "check": "D203BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "D204页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "D204针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "D204全部针脚网络",
+      "passed": true,
+      "detail": "Nexperia BAT54 SOT23：1A/2NC/3K，加速EN放电"
+    },
+    {
+      "check": "D204BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "F201页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "F201针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "F201全部针脚网络",
+      "passed": true,
+      "detail": "Bourns MF-MSMF050/40X-2：12V到Nano VIN串联PTC"
+    },
+    {
+      "check": "F201BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "FB201页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "FB201针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "FB201全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "FB201BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "HL201页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "HL201针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "HL201全部针脚网络",
+      "passed": true,
+      "detail": "Lite-On LTST-C190KGKT：K接地，A经R208"
+    },
+    {
+      "check": "HL201BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J201页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "J201针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J201全部针脚网络",
+      "passed": true,
+      "detail": "916-152A1013Y10220 USB-A仅供电：1VCC/4GND；2/3不接，固定脚接地"
+    },
+    {
+      "check": "J201BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "L201页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "L201针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "L201全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "L201数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "L201BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "L202页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "L202针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "L202全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "L202数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "L202BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "L203页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "L203针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "L203全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "L203数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "L203BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R201页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "R201针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R201全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "R201数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R201BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R202页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "R202针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R202全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "R202数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R202BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R203页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "R203针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R203全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "R203数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R203BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R204页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "R204针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R204全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "R204数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R204BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R205页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "R205针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R205全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "R205数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R205BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R206页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "R206针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R206全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "R206数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R206BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R207页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "R207针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R207全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "R207数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R207BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R208页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "R208针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R208全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "R208数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R208BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "U201页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "U201针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "U201全部针脚网络",
+      "passed": true,
+      "detail": "TI TPS5430 DDA8+EP：BOOT/NC/NC/VSENSE/ENA/GND/VIN/PH/EP；ENA允许悬空自启"
+    },
+    {
+      "check": "U201BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "U202页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "U202针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "U202全部针脚网络",
+      "passed": true,
+      "detail": "TI TPS5430 DDA8+EP：BOOT/NC/NC/VSENSE/ENA/GND/VIN/PH/EP；ENA允许悬空自启"
+    },
+    {
+      "check": "U202BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "U203页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "U203针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "U203全部针脚网络",
+      "passed": true,
+      "detail": "TI TPS5430 DDA8+EP：BOOT/NC/NC/VSENSE/ENA/GND/VIN/PH/EP；ENA允许悬空自启"
+    },
+    {
+      "check": "U203BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "U204页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "U204针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "U204全部针脚网络",
+      "passed": true,
+      "detail": "TI TLV1117LV DCY：1GND/2OUT/3IN/4TAB=OUT；不是旧TLV1117"
+    },
+    {
+      "check": "U204BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "U205页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "U205针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "U205全部针脚网络",
+      "passed": true,
+      "detail": "TI TPS7A20 DBV5：IN/GND/EN/NC/OUT"
+    },
+    {
+      "check": "U205BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C301页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "C301针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C301全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "C301数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C301BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C302页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "C302针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C302全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "C302数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C302BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C303页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "C303针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C303全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "C303数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C303BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C304页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "C304针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C304全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "C304数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C304BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C305页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "C305针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C305全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "C305数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C305BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C306页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "C306针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C306全部针脚网络",
+      "passed": true,
+      "detail": "Panasonic EEUFR1V471：库1正2负，470uF/35V"
+    },
+    {
+      "check": "C306数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C306BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C307页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "C307针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C307全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "C307数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C307BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C308页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "C308针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C308全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "C308数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C308BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C309页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "C309针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C309全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "C309数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C309BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C310页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "C310针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C310全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "C310数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C310BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "D301页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "D301针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "D301全部针脚网络",
+      "passed": true,
+      "detail": "MCC SK54B-L：K接正端/A接低边漏极"
+    },
+    {
+      "check": "D301BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "D302页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "D302针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "D302全部针脚网络",
+      "passed": true,
+      "detail": "MCC SK54B-L：K接正端/A接低边漏极"
+    },
+    {
+      "check": "D302BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "D303页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "D303针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "D303全部针脚网络",
+      "passed": true,
+      "detail": "SS14：库1K/2A，续流；PCB焊盘编号与厂家可能不同，需核色带"
+    },
+    {
+      "check": "D303BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "D304页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "D304针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "D304全部针脚网络",
+      "passed": true,
+      "detail": "SS14：库1K/2A，续流；PCB焊盘编号与厂家可能不同，需核色带"
+    },
+    {
+      "check": "D304BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "DZ301页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "DZ301针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "DZ301全部针脚网络",
+      "passed": true,
+      "detail": "MCC BZT52C12：K到S，A到G，限制负VGS"
+    },
+    {
+      "check": "DZ301BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "F301页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "F301针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "F301全部针脚网络",
+      "passed": true,
+      "detail": "Bourns MF-MSMF110/24X-2串联补光正端"
+    },
+    {
+      "check": "F301BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "F302页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "F302针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "F302全部针脚网络",
+      "passed": true,
+      "detail": "Bourns MF-MSMF110/24X-2串联补光正端"
+    },
+    {
+      "check": "F302BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "F303页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "F303针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "F303全部针脚网络",
+      "passed": true,
+      "detail": "Bourns MF-MSMF250/16X-2串联打印输入"
+    },
+    {
+      "check": "F303BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "F304页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "F304针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "F304全部针脚网络",
+      "passed": true,
+      "detail": "Bourns MF-MSMF110/24X-2：声光/风扇共用支路PTC"
+    },
+    {
+      "check": "F304BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J301页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "J301针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J301全部针脚网络",
+      "passed": true,
+      "detail": "JL128-50802G01：1受保护正极/2PWM负极"
+    },
+    {
+      "check": "J301BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J302页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "J302针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J302全部针脚网络",
+      "passed": true,
+      "detail": "DB128V-5.08-6P-GN-S；外接共正声光与风扇低边回流"
+    },
+    {
+      "check": "J302BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J304页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "J304针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J304全部针脚网络",
+      "passed": true,
+      "detail": "JL128-50802G01：1受保护正极/2PWM负极"
+    },
+    {
+      "check": "J304BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J305页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "J305针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J305全部针脚网络",
+      "passed": true,
+      "detail": "GH2P：1信号2地，3/4库固定焊盘接地"
+    },
+    {
+      "check": "J305BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J306页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "J306针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J306全部针脚网络",
+      "passed": true,
+      "detail": "新增GH2P按钮灯辅助供电接口；3/4为机械固定焊盘"
+    },
+    {
+      "check": "J306BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "Q301页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "Q301针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "Q301全部针脚网络",
+      "passed": true,
+      "detail": "AOS AOD4184A：1G/2D/3S，低边N MOS"
+    },
+    {
+      "check": "Q301BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "Q302页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "Q302针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "Q302全部针脚网络",
+      "passed": true,
+      "detail": "AOS AO4407A：1/2/3S、4G、5/6/7/8D；高边P MOS"
+    },
+    {
+      "check": "Q302BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "Q303页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "Q303针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "Q303全部针脚网络",
+      "passed": true,
+      "detail": "AOS AO3400A：1G/2S/3D，低边拉低高边栅极"
+    },
+    {
+      "check": "Q303BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "Q304页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "Q304针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "Q304全部针脚网络",
+      "passed": true,
+      "detail": "AOS AO3400A：1G/2S/3D；驱动高电平按2.5V RDS(on)规格核对"
+    },
+    {
+      "check": "Q304BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "Q305页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "Q305针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "Q305全部针脚网络",
+      "passed": true,
+      "detail": "AOS AO3400A：1G/2S/3D；驱动高电平按2.5V RDS(on)规格核对"
+    },
+    {
+      "check": "Q305BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "Q306页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "Q306针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "Q306全部针脚网络",
+      "passed": true,
+      "detail": "CJ 2N7002：1G/2S/3D，5V域开漏转换"
+    },
+    {
+      "check": "Q306BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "Q307页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "Q307针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "Q307全部针脚网络",
+      "passed": true,
+      "detail": "AOS AOD4184A：1G/2D/3S，低边N MOS"
+    },
+    {
+      "check": "Q307BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "Q308页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "Q308针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "Q308全部针脚网络",
+      "passed": true,
+      "detail": "AOS AO3400A：1G/2S/3D；驱动高电平按2.5V RDS(on)规格核对"
+    },
+    {
+      "check": "Q308BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "Q309页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "Q309针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "Q309全部针脚网络",
+      "passed": true,
+      "detail": "AOS AO3400A：1G/2S/3D；驱动高电平按2.5V RDS(on)规格核对"
+    },
+    {
+      "check": "Q309BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "Q310页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "Q310针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "Q310全部针脚网络",
+      "passed": true,
+      "detail": "AOS AO3400A：1G/2S/3D；驱动高电平按2.5V RDS(on)规格核对"
+    },
+    {
+      "check": "Q310BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R301页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "R301针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R301全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "R301数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R301BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R302页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "R302针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R302全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "R302数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R302BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R303页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "R303针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R303全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "R303数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R303BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R304页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "R304针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R304全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "R304数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R304BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R305页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "R305针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R305全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "R305数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R305BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R306页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "R306针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R306全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "R306数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R306BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R307页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "R307针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R307全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "R307数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R307BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R308页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "R308针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R308全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "R308数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R308BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R309页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "R309针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R309全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "R309数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R309BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R310页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "R310针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R310全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "R310数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R310BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R311页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "R311针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R311全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "R311数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R311BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R312页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "R312针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R312全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "R312数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R312BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R313页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "R313针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R313全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "R313数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R313BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R314页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "R314针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R314全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "R314数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R314BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R315页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "R315针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R315全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "R315数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R315BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R316页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "R316针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R316全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "R316数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R316BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R317页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "R317针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R317全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "R317数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R317BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R318页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "R318针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R318全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "R318数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R318BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R319页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "R319针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R319全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "R319数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R319BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R320页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "R320针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R320全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "R320数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R320BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R321页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "R321针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R321全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "R321数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R321BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R322页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "R322针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R322全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "R322数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R322BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R323页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "R323针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R323全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "R323数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R323BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R324页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "R324针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R324全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "R324数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R324BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "U301页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "U301针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "U301全部针脚网络",
+      "passed": true,
+      "detail": "TI UCC27517 DBV5：VDD/GND/IN+/IN-/OUT；LED_EN低允许输出"
+    },
+    {
+      "check": "U301BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "U302页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "U302针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "U302全部针脚网络",
+      "passed": true,
+      "detail": "TI UCC27517 DBV5：VDD/GND/IN+/IN-/OUT；LED_EN低允许输出"
+    },
+    {
+      "check": "U302BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C401页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "C401针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C401全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "C401数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C401BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C402页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "C402针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C402全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "C402数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C402BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J401页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "J401针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J401全部针脚网络",
+      "passed": true,
+      "detail": "用户打印机PH2.0五针表：3TX及4RX按主机视角，不能再交叉一次"
+    },
+    {
+      "check": "J401BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "Q401页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "Q401针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "Q401全部针脚网络",
+      "passed": true,
+      "detail": "AOS AO3400A：1G/2S/3D；开漏低使能打印发送"
+    },
+    {
+      "check": "Q401BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R401页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "R401针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R401全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "R401数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R401BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R402页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "R402针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R402全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "R402数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R402BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R403页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "R403针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R403全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "R403数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R403BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R404页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "R404针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R404全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "R404数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R404BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R405页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "R405针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R405全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "R405数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R405BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R406页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "R406针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R406全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "R406数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R406BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R407页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "R407针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R407全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "R407数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R407BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R408页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "R408针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R408全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "R408数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R408BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R409页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "R409针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R409全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "R409数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R409BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R410页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "R410针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R410全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "R410数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R410BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R411页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "R411针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R411全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "R411数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R411BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "RN401页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "RN401针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "RN401全部针脚网络",
+      "passed": true,
+      "detail": "YC164厂家PDF3 Figure4：1–8/2–7/3–6/4–5独立4R"
+    },
+    {
+      "check": "RN401数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "RN401BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "RN402页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "RN402针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "RN402全部针脚网络",
+      "passed": true,
+      "detail": "YC164厂家PDF3 Figure4：1–8/2–7/3–6/4–5独立4R"
+    },
+    {
+      "check": "RN402数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "RN402BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "U401页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "U401针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "U401全部针脚网络",
+      "passed": true,
+      "detail": "Nexperia 74LVC244A PDF4；17未用输入接地，3未用输出留空"
+    },
+    {
+      "check": "U401BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "U402页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "U402针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "U402全部针脚网络",
+      "passed": true,
+      "detail": "TI SN74LVC1G125 DBV5：/OE/A/GND/Y/VCC"
+    },
+    {
+      "check": "U402BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C501页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "C501针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C501全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "C501数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C501BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C502页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "C502针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C502全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "C502数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C502BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C503页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "C503针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C503全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "C503数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C503BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C504页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "C504针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C504全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "C504数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C504BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C505页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "C505针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C505全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "C505数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C505BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C506页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "C506针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C506全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "C506数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C506BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "F501页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "F501针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "F501全部针脚网络",
+      "passed": true,
+      "detail": "Littelfuse1812L200/16DR串联屏幕电源"
+    },
+    {
+      "check": "F501BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J501页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "J501针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J501全部针脚网络",
+      "passed": true,
+      "detail": "AF180ZJB13.7 USB仅供电，2/3数据空脚"
+    },
+    {
+      "check": "J501BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J502页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "J502针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J502全部针脚网络",
+      "passed": true,
+      "detail": "GH10线束1对1契约；11/12仅机械固定焊盘"
+    },
+    {
+      "check": "J502BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R501页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "R501针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R501全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "R501数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R501BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R502页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "R502针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R502全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "R502数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R502BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R503页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "R503针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R503全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "R503数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R503BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R504页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "R504针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R504全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "R504数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R504BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R505页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "R505针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R505全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "R505数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R505BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R506页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "R506针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R506全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "R506数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R506BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R507页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "R507针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R507全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "R507数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R507BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R508页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "R508针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R508全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "R508数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R508BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R509页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "R509针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R509全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "R509数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R509BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R510页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "R510针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R510全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "R510数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R510BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "RN501页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "RN501针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "RN501全部针脚网络",
+      "passed": true,
+      "detail": "YC164厂家PDF3 Figure4：A=4–5/B=3–6/IMU=2–7/ADXL=1–8"
+    },
+    {
+      "check": "RN501数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "RN501BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "U501页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "U501针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "U501全部针脚网络",
+      "passed": true,
+      "detail": "TI SN74LVC2G17 PDF3 DBV6：1A/GND/2A/2Y/VCC/1Y；A→A、B→B"
+    },
+    {
+      "check": "U501BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "U502页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "U502针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "U502全部针脚网络",
+      "passed": true,
+      "detail": "TI SN74AHCT1G125 DBV5：TTL阈值适用3.3V输入/5V输出"
+    },
+    {
+      "check": "U502BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C601页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "C601针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C601全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "C601数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C601BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C602页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "C602针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C602全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "C602数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C602BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C603页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "C603针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C603全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "C603数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C603BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C604页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "C604针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C604全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "C604数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C604BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C605页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "C605针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C605全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "C605数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C605BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C606页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "C606针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C606全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "C606数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C606BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C607页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "C607针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C607全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "C607数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C607BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C608页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "C608针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C608全部针脚网络",
+      "passed": true,
+      "detail": "Panasonic EEEFK1C101P有极性100uF/16V；1正/2负"
+    },
+    {
+      "check": "C608数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C608BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J601页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "J601针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J601全部针脚网络",
+      "passed": true,
+      "detail": "GH2P喇叭：1OUTP、2OUTN，3/4机械地；两个电气触点均非地"
+    },
+    {
+      "check": "J601BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J602页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "J602针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J602全部针脚网络",
+      "passed": true,
+      "detail": "PN532 V3模块5V供电/3.3V SPI；8 RSTO为可选输出测试点，当前不连接"
+    },
+    {
+      "check": "J602BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J603页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "J603针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J603全部针脚网络",
+      "passed": true,
+      "detail": "Hirose DM3AT-SF-PEJM5针序；9为SW_B，11为SW_A；2是SPI片选而非机械检测"
+    },
+    {
+      "check": "J603BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J604页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "J604针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J604全部针脚网络",
+      "passed": true,
+      "detail": "Arduino ABX00083官方JP1/JP2针序；USB-C朝上，左J604/右J606，从USB端1至15"
+    },
+    {
+      "check": "J604BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J605页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "J605针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J605全部针脚网络",
+      "passed": true,
+      "detail": "Nano UART调试，只有3.3V信号和GND，不包含供电脚"
+    },
+    {
+      "check": "J605BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J606页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "J606针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J606全部针脚网络",
+      "passed": true,
+      "detail": "Arduino ABX00083官方JP1/JP2针序；USB-C朝上，左J604/右J606，从USB端1至15"
+    },
+    {
+      "check": "J606BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "Q601页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "Q601针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "Q601全部针脚网络",
+      "passed": true,
+      "detail": "AO3400A物理1G/2S/3D，开漏复位输出与Gate控制不并网"
+    },
+    {
+      "check": "Q601BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R601页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "R601针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R601全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "R601数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R601BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R602页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "R602针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R602全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "R602数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R602BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R603页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "R603针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R603全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "R603数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R603BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R604页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "R604针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R604全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "R604数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R604BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R605页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "R605针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R605全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "R605数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R605BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R606页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "R606针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R606全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "R606数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R606BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R607页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "R607针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R607全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "R607数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R607BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R608页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "R608针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R608全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "R608数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R608BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R609页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "R609针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R609全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "R609数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R609BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R610页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "R610针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R610全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "R610数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R610BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R611页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "R611针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R611全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "R611数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R611BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R612页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "R612针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R612全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "R612数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R612BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R613页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "R613针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R613全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "R613数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R613BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R614页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "R614针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R614全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "R614数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R614BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R615页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "R615针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R615全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "R615数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R615BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R616页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "R616针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R616全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "R616数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R616BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R617页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "R617针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R617全部针脚网络",
+      "passed": true,
+      "detail": "当前方案端点和标称值；无极性两端件可交换针号"
+    },
+    {
+      "check": "R617数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R617BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "U601页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "U601针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "U601全部针脚网络",
+      "passed": true,
+      "detail": "TI SN74LVC2G125DCUT DCU8物理引脚表；两输出并联但使能须互斥"
+    },
+    {
+      "check": "U601BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "U602页号位号",
+      "passed": true,
+      "detail": "位号数值百位对应原理图页号"
+    },
+    {
+      "check": "U602针号字段一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "U602全部针脚网络",
+      "passed": true,
+      "detail": "ADI MAX98357A TQFN16+EP；2悬空=9dB，5/6/12/13为NC；EP接地散热"
+    },
+    {
+      "check": "U602BOM身份或已明确批准差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "29个有意空脚，没有额外未知空脚",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "仅3项已知BOM身份差异",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "Nano供电端点同网",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "Nano发数据端点同网",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "Nano硬件流控RTS端点同网",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "Nano事件端点同网",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "Nano收数据端点同网",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "Nano接CTS端点同网",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "掉电至Nano端点同网",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "RST输出端点同网",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "SD片选端点同网",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "NFC片选端点同网",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "SPI时钟端点同网",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "SPI MOSI端点同网",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "NFC MISO端点同网",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "SD MISO端点同网",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "MISO选通合并端点同网",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "SD机械检测端点同网",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "NFC IRQ端点同网",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "NFC IRQ至Nano端点同网",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "I2S BCLK端点同网",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "I2S LRCLK端点同网",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "I2S DIN端点同网",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "AMP EN端点同网",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "打印供电端点同网",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "打印发送端点同网",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "打印返回端点同网",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "打印CTS端点同网",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "前面板5V端点同网",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "前面板数据端点同网",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "输入保险和总开关未旁路",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "分流电阻正反向取样",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "PFAIL三段网络分开",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "SD机械检测与片选独立",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "三个MISO域无旁路",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "喇叭输出仅连功放与插座",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "RN401内部1-8两端不同网",
+      "passed": true,
+      "detail": "YC164四路独立排阻真实配对"
+    },
+    {
+      "check": "RN401内部2-7两端不同网",
+      "passed": true,
+      "detail": "YC164四路独立排阻真实配对"
+    },
+    {
+      "check": "RN401内部3-6两端不同网",
+      "passed": true,
+      "detail": "YC164四路独立排阻真实配对"
+    },
+    {
+      "check": "RN401内部4-5两端不同网",
+      "passed": true,
+      "detail": "YC164四路独立排阻真实配对"
+    },
+    {
+      "check": "RN402内部1-8两端不同网",
+      "passed": true,
+      "detail": "YC164四路独立排阻真实配对"
+    },
+    {
+      "check": "RN402内部2-7两端不同网",
+      "passed": true,
+      "detail": "YC164四路独立排阻真实配对"
+    },
+    {
+      "check": "RN402内部3-6两端不同网",
+      "passed": true,
+      "detail": "YC164四路独立排阻真实配对"
+    },
+    {
+      "check": "RN402内部4-5两端不同网",
+      "passed": true,
+      "detail": "YC164四路独立排阻真实配对"
+    },
+    {
+      "check": "RN501内部1-8两端不同网",
+      "passed": true,
+      "detail": "YC164四路独立排阻真实配对"
+    },
+    {
+      "check": "RN501内部2-7两端不同网",
+      "passed": true,
+      "detail": "YC164四路独立排阻真实配对"
+    },
+    {
+      "check": "RN501内部3-6两端不同网",
+      "passed": true,
+      "detail": "YC164四路独立排阻真实配对"
+    },
+    {
+      "check": "RN501内部4-5两端不同网",
+      "passed": true,
+      "detail": "YC164四路独立排阻真实配对"
+    },
+    {
+      "check": "C101耐压",
+      "passed": true,
+      "detail": "只检查额定耐压；有效容量和纹波由对应资料及样机另核"
+    },
+    {
+      "check": "C102耐压",
+      "passed": true,
+      "detail": "只检查额定耐压；有效容量和纹波由对应资料及样机另核"
+    },
+    {
+      "check": "C103耐压",
+      "passed": true,
+      "detail": "只检查额定耐压；有效容量和纹波由对应资料及样机另核"
+    },
+    {
+      "check": "C104耐压",
+      "passed": true,
+      "detail": "只检查额定耐压；有效容量和纹波由对应资料及样机另核"
+    },
+    {
+      "check": "C105耐压",
+      "passed": true,
+      "detail": "只检查额定耐压；有效容量和纹波由对应资料及样机另核"
+    },
+    {
+      "check": "C106耐压",
+      "passed": true,
+      "detail": "只检查额定耐压；有效容量和纹波由对应资料及样机另核"
+    },
+    {
+      "check": "C201耐压",
+      "passed": true,
+      "detail": "只检查额定耐压；有效容量和纹波由对应资料及样机另核"
+    },
+    {
+      "check": "C202耐压",
+      "passed": true,
+      "detail": "只检查额定耐压；有效容量和纹波由对应资料及样机另核"
+    },
+    {
+      "check": "C203耐压",
+      "passed": true,
+      "detail": "只检查额定耐压；有效容量和纹波由对应资料及样机另核"
+    },
+    {
+      "check": "C204耐压",
+      "passed": true,
+      "detail": "只检查额定耐压；有效容量和纹波由对应资料及样机另核"
+    },
+    {
+      "check": "C205耐压",
+      "passed": true,
+      "detail": "只检查额定耐压；有效容量和纹波由对应资料及样机另核"
+    },
+    {
+      "check": "C206耐压",
+      "passed": true,
+      "detail": "只检查额定耐压；有效容量和纹波由对应资料及样机另核"
+    },
+    {
+      "check": "C207耐压",
+      "passed": true,
+      "detail": "只检查额定耐压；有效容量和纹波由对应资料及样机另核"
+    },
+    {
+      "check": "C208耐压",
+      "passed": true,
+      "detail": "只检查额定耐压；有效容量和纹波由对应资料及样机另核"
+    },
+    {
+      "check": "C209耐压",
+      "passed": true,
+      "detail": "只检查额定耐压；有效容量和纹波由对应资料及样机另核"
+    },
+    {
+      "check": "C210耐压",
+      "passed": true,
+      "detail": "只检查额定耐压；有效容量和纹波由对应资料及样机另核"
+    },
+    {
+      "check": "C211耐压",
+      "passed": true,
+      "detail": "只检查额定耐压；有效容量和纹波由对应资料及样机另核"
+    },
+    {
+      "check": "C212耐压",
+      "passed": true,
+      "detail": "只检查额定耐压；有效容量和纹波由对应资料及样机另核"
+    },
+    {
+      "check": "C213耐压",
+      "passed": true,
+      "detail": "只检查额定耐压；有效容量和纹波由对应资料及样机另核"
+    },
+    {
+      "check": "C214耐压",
+      "passed": true,
+      "detail": "只检查额定耐压；有效容量和纹波由对应资料及样机另核"
+    },
+    {
+      "check": "C215耐压",
+      "passed": true,
+      "detail": "只检查额定耐压；有效容量和纹波由对应资料及样机另核"
+    },
+    {
+      "check": "C216耐压",
+      "passed": true,
+      "detail": "只检查额定耐压；有效容量和纹波由对应资料及样机另核"
+    },
+    {
+      "check": "C217耐压",
+      "passed": true,
+      "detail": "只检查额定耐压；有效容量和纹波由对应资料及样机另核"
+    },
+    {
+      "check": "C218耐压",
+      "passed": true,
+      "detail": "只检查额定耐压；有效容量和纹波由对应资料及样机另核"
+    },
+    {
+      "check": "C221耐压",
+      "passed": true,
+      "detail": "只检查额定耐压；有效容量和纹波由对应资料及样机另核"
+    },
+    {
+      "check": "C222耐压",
+      "passed": true,
+      "detail": "只检查额定耐压；有效容量和纹波由对应资料及样机另核"
+    },
+    {
+      "check": "C223耐压",
+      "passed": true,
+      "detail": "只检查额定耐压；有效容量和纹波由对应资料及样机另核"
+    },
+    {
+      "check": "C224耐压",
+      "passed": true,
+      "detail": "只检查额定耐压；有效容量和纹波由对应资料及样机另核"
+    },
+    {
+      "check": "C225耐压",
+      "passed": true,
+      "detail": "只检查额定耐压；有效容量和纹波由对应资料及样机另核"
+    },
+    {
+      "check": "C219耐压",
+      "passed": true,
+      "detail": "只检查额定耐压；有效容量和纹波由对应资料及样机另核"
+    },
+    {
+      "check": "C220耐压",
+      "passed": true,
+      "detail": "只检查额定耐压；有效容量和纹波由对应资料及样机另核"
+    },
+    {
+      "check": "C226耐压",
+      "passed": true,
+      "detail": "只检查额定耐压；有效容量和纹波由对应资料及样机另核"
+    },
+    {
+      "check": "C227耐压",
+      "passed": true,
+      "detail": "只检查额定耐压；有效容量和纹波由对应资料及样机另核"
+    },
+    {
+      "check": "C301耐压",
+      "passed": true,
+      "detail": "只检查额定耐压；有效容量和纹波由对应资料及样机另核"
+    },
+    {
+      "check": "C302耐压",
+      "passed": true,
+      "detail": "只检查额定耐压；有效容量和纹波由对应资料及样机另核"
+    },
+    {
+      "check": "C303耐压",
+      "passed": true,
+      "detail": "只检查额定耐压；有效容量和纹波由对应资料及样机另核"
+    },
+    {
+      "check": "C304耐压",
+      "passed": true,
+      "detail": "只检查额定耐压；有效容量和纹波由对应资料及样机另核"
+    },
+    {
+      "check": "C305耐压",
+      "passed": true,
+      "detail": "只检查额定耐压；有效容量和纹波由对应资料及样机另核"
+    },
+    {
+      "check": "C309耐压",
+      "passed": true,
+      "detail": "只检查额定耐压；有效容量和纹波由对应资料及样机另核"
+    },
+    {
+      "check": "C310耐压",
+      "passed": true,
+      "detail": "只检查额定耐压；有效容量和纹波由对应资料及样机另核"
+    },
+    {
+      "check": "C306耐压",
+      "passed": true,
+      "detail": "只检查额定耐压；有效容量和纹波由对应资料及样机另核"
+    },
+    {
+      "check": "C307耐压",
+      "passed": true,
+      "detail": "只检查额定耐压；有效容量和纹波由对应资料及样机另核"
+    },
+    {
+      "check": "C308耐压",
+      "passed": true,
+      "detail": "只检查额定耐压；有效容量和纹波由对应资料及样机另核"
+    },
+    {
+      "check": "C401耐压",
+      "passed": true,
+      "detail": "只检查额定耐压；有效容量和纹波由对应资料及样机另核"
+    },
+    {
+      "check": "C402耐压",
+      "passed": true,
+      "detail": "只检查额定耐压；有效容量和纹波由对应资料及样机另核"
+    },
+    {
+      "check": "C502耐压",
+      "passed": true,
+      "detail": "只检查额定耐压；有效容量和纹波由对应资料及样机另核"
+    },
+    {
+      "check": "C503耐压",
+      "passed": true,
+      "detail": "只检查额定耐压；有效容量和纹波由对应资料及样机另核"
+    },
+    {
+      "check": "C504耐压",
+      "passed": true,
+      "detail": "只检查额定耐压；有效容量和纹波由对应资料及样机另核"
+    },
+    {
+      "check": "C505耐压",
+      "passed": true,
+      "detail": "只检查额定耐压；有效容量和纹波由对应资料及样机另核"
+    },
+    {
+      "check": "C506耐压",
+      "passed": true,
+      "detail": "只检查额定耐压；有效容量和纹波由对应资料及样机另核"
+    },
+    {
+      "check": "C501耐压",
+      "passed": true,
+      "detail": "只检查额定耐压；有效容量和纹波由对应资料及样机另核"
+    },
+    {
+      "check": "C601耐压",
+      "passed": true,
+      "detail": "只检查额定耐压；有效容量和纹波由对应资料及样机另核"
+    },
+    {
+      "check": "C602耐压",
+      "passed": true,
+      "detail": "只检查额定耐压；有效容量和纹波由对应资料及样机另核"
+    },
+    {
+      "check": "C603耐压",
+      "passed": true,
+      "detail": "只检查额定耐压；有效容量和纹波由对应资料及样机另核"
+    },
+    {
+      "check": "C604耐压",
+      "passed": true,
+      "detail": "只检查额定耐压；有效容量和纹波由对应资料及样机另核"
+    },
+    {
+      "check": "C605耐压",
+      "passed": true,
+      "detail": "只检查额定耐压；有效容量和纹波由对应资料及样机另核"
+    },
+    {
+      "check": "C606耐压",
+      "passed": true,
+      "detail": "只检查额定耐压；有效容量和纹波由对应资料及样机另核"
+    },
+    {
+      "check": "C607耐压",
+      "passed": true,
+      "detail": "只检查额定耐压；有效容量和纹波由对应资料及样机另核"
+    },
+    {
+      "check": "C608耐压",
+      "passed": true,
+      "detail": "只检查额定耐压；有效容量和纹波由对应资料及样机另核"
+    },
+    {
+      "check": "L201电感电流",
+      "passed": true,
+      "detail": "Bourns SRP1038A-150M，6.25A温升电流、10A饱和电流；TPS5430额定3A"
+    },
+    {
+      "check": "L202电感电流",
+      "passed": true,
+      "detail": "Bourns SRP1038A-150M，6.25A温升电流、10A饱和电流；TPS5430额定3A"
+    },
+    {
+      "check": "L203电感电流",
+      "passed": true,
+      "detail": "Bourns SRP1038A-150M，6.25A温升电流、10A饱和电流；TPS5430额定3A"
+    },
+    {
+      "check": "12V入口匹配",
+      "passed": true,
+      "detail": "原厂PDF2 mating plug直径5.5mm，中心针2.5mm；6.5mm为座前开口，不是插头尺寸"
+    },
+    {
+      "check": "Nano实际使用VIN非VBUS",
+      "passed": true,
+      "detail": "12V在Arduino开发板VIN推荐6--21V范围"
+    },
+    {
+      "check": "语音SD_MODE高电平计算范围",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "UCC27517高阈值裕量",
+      "passed": true,
+      "detail": "DS187 LVCMOS33 VOH>=VCCO-0.4；VCCO低端3.135V和电阻1%取值，非实测"
+    }
+  ],
+  "failed": [],
+  "bomDifferences": [
+    {
+      "位号": "C103",
+      "实际型号": "CC0603KRX7R9BB104",
+      "实际C编号": "C14663",
+      "BOM型号": "CL10B104KB8NNNC",
+      "BOM C编号": "C1591",
+      "性质": "实际换料，名义参数可用，文档未同步"
+    },
+    {
+      "位号": "D101",
+      "实际型号": "SMBJ13A",
+      "实际C编号": "C163651",
+      "BOM型号": "SMBJ13A",
+      "BOM C编号": "C151252",
+      "性质": "实际换料，名义参数可用，文档未同步"
+    },
+    {
+      "位号": "J306",
+      "实际型号": "SM02B-GHS-TB(LF)(SN)",
+      "实际C编号": "C189893",
+      "BOM型号": "未列入",
+      "BOM C编号": "",
+      "性质": "新增接口，文档未同步"
+    }
+  ],
+  "intentionalEmptyPins": [
+    "D204.2",
+    "J201.2",
+    "J201.3",
+    "J501.2",
+    "J501.3",
+    "J602.8",
+    "J604.12",
+    "J604.13",
+    "J604.2",
+    "J604.3",
+    "J604.6",
+    "J604.8",
+    "J604.9",
+    "U201.2",
+    "U201.3",
+    "U201.5",
+    "U202.2",
+    "U202.3",
+    "U202.5",
+    "U203.2",
+    "U203.3",
+    "U203.5",
+    "U205.4",
+    "U401.3",
+    "U602.12",
+    "U602.13",
+    "U602.2",
+    "U602.5",
+    "U602.6"
+  ],
+  "referenceGaps": [
+    {
+      "页": 3,
+      "前缀": "J",
+      "空号": [
+        3
+      ]
+    }
+  ],
+  "singleEndpointNamedNets": {
+    "I2C0_SDA": [
+      "U101.4"
+    ],
+    "I2C0_SCL": [
+      "U101.5"
+    ],
+    "AX_3V3_RAW": [
+      "FB201.2"
+    ],
+    "LED1_PWM": [
+      "R301.1"
+    ],
+    "LED2_PWM": [
+      "R305.1"
+    ],
+    "ESP_TXD": [
+      "R406.1"
+    ],
+    "ESP_RTS": [
+      "R407.1"
+    ],
+    "PRN_RXD": [
+      "RN401.1"
+    ],
+    "ESP_IRQ": [
+      "RN401.2"
+    ],
+    "ESP_CTS": [
+      "RN401.3"
+    ],
+    "ESP_RXD": [
+      "RN401.4"
+    ],
+    "IMU_INT1": [
+      "RN402.1"
+    ],
+    "AX_PFAIL_N": [
+      "RN402.2"
+    ],
+    "TACH_IN": [
+      "RN402.3"
+    ],
+    "PRN_CTS": [
+      "RN402.4"
+    ],
+    "IMU_INT1_RAW": [
+      "RN402.8"
+    ],
+    "TACH_BUF_IN": [
+      "U401.13"
+    ],
+    "ADXL_DRDY": [
+      "RN501.1"
+    ],
+    "IMU_INT2": [
+      "RN501.2"
+    ],
+    "ENC_B": [
+      "RN501.3"
+    ],
+    "ENC_A": [
+      "RN501.4"
+    ],
+    "IMU_INT2_RAW": [
+      "RN501.7"
+    ],
+    "ADXL_DRDY_RAW": [
+      "RN501.8"
+    ]
+  },
+  "calculations": {
+    "buckVout_V": 4.989518518518518,
+    "buckRipple_A": 0.3888888888888889,
+    "shuntDropAt5A_V": 0.025,
+    "shuntPowerAt5A_W": 0.125,
+    "INA_CAL": 4096.0,
+    "printerVgs_V": -8.16326530612245,
+    "SD_MODE_min_V": 0.40006588700378853,
+    "SD_MODE_max_V": 0.5814977973568282,
+    "PL_UCC_high_min_V": 2.613791136463361
+  },
+  "excludedPage7": [
+    "J702",
+    "C703",
+    "C704",
+    "C705",
+    "C706",
+    "R705",
+    "R706",
+    "R707",
+    "J703"
+  ],
+  "edaModified": false
+}

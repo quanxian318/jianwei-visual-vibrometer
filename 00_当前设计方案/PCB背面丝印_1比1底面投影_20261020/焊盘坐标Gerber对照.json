@@ -1,0 +1,1430 @@
+[
+  {
+    "ref": "J101",
+    "pin": 1,
+    "bottom_x_mm": 86.2209826,
+    "bottom_y_mm": 92.428006,
+    "gerber_error_mm": 3.972054645195637e-15
+  },
+  {
+    "ref": "J101",
+    "pin": 2,
+    "bottom_x_mm": 86.2209826,
+    "bottom_y_mm": 98.427994,
+    "gerber_error_mm": 2.5121479338940403e-15
+  },
+  {
+    "ref": "J101",
+    "pin": 3,
+    "bottom_x_mm": 81.52096660000001,
+    "bottom_y_mm": 95.428,
+    "gerber_error_mm": 7.588599744428075e-15
+  },
+  {
+    "ref": "J102",
+    "pin": 1,
+    "bottom_x_mm": 94.412,
+    "bottom_y_mm": 83.363,
+    "gerber_error_mm": 6.217248937900877e-15
+  },
+  {
+    "ref": "J102",
+    "pin": 2,
+    "bottom_x_mm": 94.412,
+    "bottom_y_mm": 88.443,
+    "gerber_error_mm": 6.466036496704424e-15
+  },
+  {
+    "ref": "J201",
+    "pin": 5,
+    "bottom_x_mm": 2.9488860000000017,
+    "bottom_y_mm": 90.321076,
+    "gerber_error_mm": 5.329070518200751e-15
+  },
+  {
+    "ref": "J201",
+    "pin": 1,
+    "bottom_x_mm": 10.107113999999996,
+    "bottom_y_mm": 87.37112,
+    "gerber_error_mm": 3.552713678800501e-15
+  },
+  {
+    "ref": "J201",
+    "pin": 2,
+    "bottom_x_mm": 10.107113999999996,
+    "bottom_y_mm": 84.870998,
+    "gerber_error_mm": 0.0
+  },
+  {
+    "ref": "J201",
+    "pin": 3,
+    "bottom_x_mm": 10.107113999999996,
+    "bottom_y_mm": 82.871002,
+    "gerber_error_mm": 3.552713678800501e-15
+  },
+  {
+    "ref": "J201",
+    "pin": 4,
+    "bottom_x_mm": 10.107113999999996,
+    "bottom_y_mm": 80.37088,
+    "gerber_error_mm": 3.552713678800501e-15
+  },
+  {
+    "ref": "J201",
+    "pin": 5,
+    "bottom_x_mm": 2.9488860000000017,
+    "bottom_y_mm": 77.420924,
+    "gerber_error_mm": 0.0
+  },
+  {
+    "ref": "J501",
+    "pin": 5,
+    "bottom_x_mm": 2.9488860000000017,
+    "bottom_y_mm": 73.049076,
+    "gerber_error_mm": 3.552713678800501e-15
+  },
+  {
+    "ref": "J501",
+    "pin": 1,
+    "bottom_x_mm": 10.107113999999996,
+    "bottom_y_mm": 70.09912,
+    "gerber_error_mm": 0.0
+  },
+  {
+    "ref": "J501",
+    "pin": 2,
+    "bottom_x_mm": 10.107113999999996,
+    "bottom_y_mm": 67.598998,
+    "gerber_error_mm": 7.105427357601002e-15
+  },
+  {
+    "ref": "J501",
+    "pin": 3,
+    "bottom_x_mm": 10.107113999999996,
+    "bottom_y_mm": 65.59900200000001,
+    "gerber_error_mm": 7.105427357601002e-15
+  },
+  {
+    "ref": "J501",
+    "pin": 4,
+    "bottom_x_mm": 10.107113999999996,
+    "bottom_y_mm": 63.09888,
+    "gerber_error_mm": 0.0
+  },
+  {
+    "ref": "J501",
+    "pin": 5,
+    "bottom_x_mm": 2.9488860000000017,
+    "bottom_y_mm": 60.148924,
+    "gerber_error_mm": 0.0
+  },
+  {
+    "ref": "J301",
+    "pin": 1,
+    "bottom_x_mm": 94.412,
+    "bottom_y_mm": 59.29606058,
+    "gerber_error_mm": 6.217248937900877e-15
+  },
+  {
+    "ref": "J301",
+    "pin": 2,
+    "bottom_x_mm": 94.412,
+    "bottom_y_mm": 64.37606058,
+    "gerber_error_mm": 6.217248937900877e-15
+  },
+  {
+    "ref": "J304",
+    "pin": 1,
+    "bottom_x_mm": 94.412,
+    "bottom_y_mm": 71.32952902,
+    "gerber_error_mm": 7.160723346098895e-15
+  },
+  {
+    "ref": "J304",
+    "pin": 2,
+    "bottom_x_mm": 94.412,
+    "bottom_y_mm": 76.40952902,
+    "gerber_error_mm": 9.441466109136565e-15
+  },
+  {
+    "ref": "J302",
+    "pin": 1,
+    "bottom_x_mm": 94.4745094,
+    "bottom_y_mm": 26.848,
+    "gerber_error_mm": 1.7763568394002505e-15
+  },
+  {
+    "ref": "J302",
+    "pin": 2,
+    "bottom_x_mm": 94.4745094,
+    "bottom_y_mm": 31.927999999999997,
+    "gerber_error_mm": 1.7763568394002505e-15
+  },
+  {
+    "ref": "J302",
+    "pin": 3,
+    "bottom_x_mm": 94.4745094,
+    "bottom_y_mm": 37.008,
+    "gerber_error_mm": 1.7763568394002505e-15
+  },
+  {
+    "ref": "J302",
+    "pin": 4,
+    "bottom_x_mm": 94.4745094,
+    "bottom_y_mm": 42.088,
+    "gerber_error_mm": 1.7763568394002505e-15
+  },
+  {
+    "ref": "J302",
+    "pin": 5,
+    "bottom_x_mm": 94.4745094,
+    "bottom_y_mm": 47.168,
+    "gerber_error_mm": 1.7763568394002505e-15
+  },
+  {
+    "ref": "J302",
+    "pin": 6,
+    "bottom_x_mm": 94.4745094,
+    "bottom_y_mm": 52.248000000000005,
+    "gerber_error_mm": 1.7763568394002505e-15
+  },
+  {
+    "ref": "J305",
+    "pin": 1,
+    "bottom_x_mm": 31.91809400000001,
+    "bottom_y_mm": 94.868946,
+    "gerber_error_mm": 6.217248937900877e-15
+  },
+  {
+    "ref": "J305",
+    "pin": 2,
+    "bottom_x_mm": 30.667906000000002,
+    "bottom_y_mm": 94.868946,
+    "gerber_error_mm": 6.217248937900877e-15
+  },
+  {
+    "ref": "J305",
+    "pin": 3,
+    "bottom_x_mm": 28.81802400000001,
+    "bottom_y_mm": 98.068838,
+    "gerber_error_mm": 4.440892098500626e-16
+  },
+  {
+    "ref": "J305",
+    "pin": 4,
+    "bottom_x_mm": 33.767976000000004,
+    "bottom_y_mm": 98.068838,
+    "gerber_error_mm": 4.440892098500626e-16
+  },
+  {
+    "ref": "J306",
+    "pin": 1,
+    "bottom_x_mm": 38.87015274000001,
+    "bottom_y_mm": 94.868946,
+    "gerber_error_mm": 9.441466109136565e-15
+  },
+  {
+    "ref": "J306",
+    "pin": 2,
+    "bottom_x_mm": 37.61996474,
+    "bottom_y_mm": 94.868946,
+    "gerber_error_mm": 6.217248937900877e-15
+  },
+  {
+    "ref": "J306",
+    "pin": 3,
+    "bottom_x_mm": 35.77008274000001,
+    "bottom_y_mm": 98.068838,
+    "gerber_error_mm": 4.440892098500626e-16
+  },
+  {
+    "ref": "J306",
+    "pin": 4,
+    "bottom_x_mm": 40.72003474000001,
+    "bottom_y_mm": 98.068838,
+    "gerber_error_mm": 1.4217791915866692e-14
+  },
+  {
+    "ref": "J401",
+    "pin": 1,
+    "bottom_x_mm": 93.523,
+    "bottom_y_mm": 11.54500800000001,
+    "gerber_error_mm": 4.440892098500626e-15
+  },
+  {
+    "ref": "J401",
+    "pin": 2,
+    "bottom_x_mm": 93.523,
+    "bottom_y_mm": 13.545004000000006,
+    "gerber_error_mm": 4.440892098500626e-15
+  },
+  {
+    "ref": "J401",
+    "pin": 3,
+    "bottom_x_mm": 93.523,
+    "bottom_y_mm": 15.545000000000002,
+    "gerber_error_mm": 4.440892098500626e-15
+  },
+  {
+    "ref": "J401",
+    "pin": 4,
+    "bottom_x_mm": 93.523,
+    "bottom_y_mm": 17.544995999999998,
+    "gerber_error_mm": 4.440892098500626e-15
+  },
+  {
+    "ref": "J401",
+    "pin": 5,
+    "bottom_x_mm": 93.523,
+    "bottom_y_mm": 19.544992000000008,
+    "gerber_error_mm": 4.440892098500626e-15
+  },
+  {
+    "ref": "J502",
+    "pin": 12,
+    "bottom_x_mm": 1.7530540000000059,
+    "bottom_y_mm": 45.880093,
+    "gerber_error_mm": 0.0
+  },
+  {
+    "ref": "J502",
+    "pin": 7,
+    "bottom_x_mm": 4.952945999999997,
+    "bottom_y_mm": 36.530099,
+    "gerber_error_mm": 0.0
+  },
+  {
+    "ref": "J502",
+    "pin": 6,
+    "bottom_x_mm": 4.952945999999997,
+    "bottom_y_mm": 37.78028700000001,
+    "gerber_error_mm": 0.0
+  },
+  {
+    "ref": "J502",
+    "pin": 5,
+    "bottom_x_mm": 4.952945999999997,
+    "bottom_y_mm": 39.030221,
+    "gerber_error_mm": 0.0
+  },
+  {
+    "ref": "J502",
+    "pin": 4,
+    "bottom_x_mm": 4.952945999999997,
+    "bottom_y_mm": 40.280155,
+    "gerber_error_mm": 0.0
+  },
+  {
+    "ref": "J502",
+    "pin": 3,
+    "bottom_x_mm": 4.952945999999997,
+    "bottom_y_mm": 41.530089,
+    "gerber_error_mm": 0.0
+  },
+  {
+    "ref": "J502",
+    "pin": 2,
+    "bottom_x_mm": 4.952945999999997,
+    "bottom_y_mm": 42.780277000000005,
+    "gerber_error_mm": 0.0
+  },
+  {
+    "ref": "J502",
+    "pin": 1,
+    "bottom_x_mm": 4.952945999999997,
+    "bottom_y_mm": 44.03021100000001,
+    "gerber_error_mm": 0.0
+  },
+  {
+    "ref": "J502",
+    "pin": 8,
+    "bottom_x_mm": 4.952945999999997,
+    "bottom_y_mm": 35.280165,
+    "gerber_error_mm": 0.0
+  },
+  {
+    "ref": "J502",
+    "pin": 9,
+    "bottom_x_mm": 4.952945999999997,
+    "bottom_y_mm": 34.029977,
+    "gerber_error_mm": 0.0
+  },
+  {
+    "ref": "J502",
+    "pin": 10,
+    "bottom_x_mm": 4.952945999999997,
+    "bottom_y_mm": 32.780043000000006,
+    "gerber_error_mm": 0.0
+  },
+  {
+    "ref": "J502",
+    "pin": 11,
+    "bottom_x_mm": 1.7530540000000059,
+    "bottom_y_mm": 30.929907,
+    "gerber_error_mm": 0.0
+  },
+  {
+    "ref": "J601",
+    "pin": 1,
+    "bottom_x_mm": 5.333945999999997,
+    "bottom_y_mm": 12.233094000000008,
+    "gerber_error_mm": 0.0
+  },
+  {
+    "ref": "J601",
+    "pin": 2,
+    "bottom_x_mm": 5.333945999999997,
+    "bottom_y_mm": 10.982906,
+    "gerber_error_mm": 0.0
+  },
+  {
+    "ref": "J601",
+    "pin": 3,
+    "bottom_x_mm": 2.134054000000006,
+    "bottom_y_mm": 9.133024000000006,
+    "gerber_error_mm": 0.0
+  },
+  {
+    "ref": "J601",
+    "pin": 4,
+    "bottom_x_mm": 2.134054000000006,
+    "bottom_y_mm": 14.082976000000002,
+    "gerber_error_mm": 0.0
+  },
+  {
+    "ref": "J602",
+    "pin": 10,
+    "bottom_x_mm": 1.9049459999999954,
+    "bottom_y_mm": 16.432095000000004,
+    "gerber_error_mm": 0.0
+  },
+  {
+    "ref": "J602",
+    "pin": 8,
+    "bottom_x_mm": 5.055054000000013,
+    "bottom_y_mm": 18.282230999999996,
+    "gerber_error_mm": 0.0
+  },
+  {
+    "ref": "J602",
+    "pin": 5,
+    "bottom_x_mm": 5.055054000000013,
+    "bottom_y_mm": 22.03228700000001,
+    "gerber_error_mm": 0.0
+  },
+  {
+    "ref": "J602",
+    "pin": 6,
+    "bottom_x_mm": 5.055054000000013,
+    "bottom_y_mm": 20.782353,
+    "gerber_error_mm": 0.0
+  },
+  {
+    "ref": "J602",
+    "pin": 7,
+    "bottom_x_mm": 5.055054000000013,
+    "bottom_y_mm": 19.532165000000006,
+    "gerber_error_mm": 0.0
+  },
+  {
+    "ref": "J602",
+    "pin": 11,
+    "bottom_x_mm": 1.9049459999999954,
+    "bottom_y_mm": 28.881905000000003,
+    "gerber_error_mm": 0.0
+  },
+  {
+    "ref": "J602",
+    "pin": 4,
+    "bottom_x_mm": 5.055054000000013,
+    "bottom_y_mm": 23.282220999999993,
+    "gerber_error_mm": 0.0
+  },
+  {
+    "ref": "J602",
+    "pin": 3,
+    "bottom_x_mm": 5.055054000000013,
+    "bottom_y_mm": 24.532409,
+    "gerber_error_mm": 0.0
+  },
+  {
+    "ref": "J602",
+    "pin": 2,
+    "bottom_x_mm": 5.055054000000013,
+    "bottom_y_mm": 25.78234300000001,
+    "gerber_error_mm": 0.0
+  },
+  {
+    "ref": "J602",
+    "pin": 1,
+    "bottom_x_mm": 5.055054000000013,
+    "bottom_y_mm": 27.032277000000008,
+    "gerber_error_mm": 0.0
+  },
+  {
+    "ref": "J701",
+    "pin": 1,
+    "bottom_x_mm": 5.229425000000006,
+    "bottom_y_mm": 56.13547,
+    "gerber_error_mm": 0.0
+  },
+  {
+    "ref": "J701",
+    "pin": 2,
+    "bottom_x_mm": 5.229425000000006,
+    "bottom_y_mm": 54.885536,
+    "gerber_error_mm": 0.0
+  },
+  {
+    "ref": "J701",
+    "pin": 3,
+    "bottom_x_mm": 5.229425000000006,
+    "bottom_y_mm": 53.635348,
+    "gerber_error_mm": 0.0
+  },
+  {
+    "ref": "J701",
+    "pin": 4,
+    "bottom_x_mm": 5.229425000000006,
+    "bottom_y_mm": 52.385414000000004,
+    "gerber_error_mm": 0.0
+  },
+  {
+    "ref": "J701",
+    "pin": 5,
+    "bottom_x_mm": 5.229425000000006,
+    "bottom_y_mm": 51.13548,
+    "gerber_error_mm": 0.0
+  },
+  {
+    "ref": "J701",
+    "pin": 7,
+    "bottom_x_mm": 1.7310829999999982,
+    "bottom_y_mm": 57.98459,
+    "gerber_error_mm": 0.0
+  },
+  {
+    "ref": "J701",
+    "pin": 8,
+    "bottom_x_mm": 1.7305750000000018,
+    "bottom_y_mm": 48.035410000000006,
+    "gerber_error_mm": 0.0
+  },
+  {
+    "ref": "J701",
+    "pin": 6,
+    "bottom_x_mm": 5.229425000000006,
+    "bottom_y_mm": 49.885546000000005,
+    "gerber_error_mm": 0.0
+  },
+  {
+    "ref": "J702",
+    "pin": 10,
+    "bottom_x_mm": 50.534208660000004,
+    "bottom_y_mm": 98.019054,
+    "gerber_error_mm": 3.1086244689504383e-15
+  },
+  {
+    "ref": "J702",
+    "pin": 8,
+    "bottom_x_mm": 52.384344660000004,
+    "bottom_y_mm": 94.868946,
+    "gerber_error_mm": 6.217248937900877e-15
+  },
+  {
+    "ref": "J702",
+    "pin": 5,
+    "bottom_x_mm": 56.134400660000004,
+    "bottom_y_mm": 94.868946,
+    "gerber_error_mm": 6.217248937900877e-15
+  },
+  {
+    "ref": "J702",
+    "pin": 6,
+    "bottom_x_mm": 54.88446666,
+    "bottom_y_mm": 94.868946,
+    "gerber_error_mm": 6.217248937900877e-15
+  },
+  {
+    "ref": "J702",
+    "pin": 7,
+    "bottom_x_mm": 53.63427866,
+    "bottom_y_mm": 94.868946,
+    "gerber_error_mm": 6.217248937900877e-15
+  },
+  {
+    "ref": "J702",
+    "pin": 11,
+    "bottom_x_mm": 62.984018660000004,
+    "bottom_y_mm": 98.019054,
+    "gerber_error_mm": 7.755684626330685e-15
+  },
+  {
+    "ref": "J702",
+    "pin": 4,
+    "bottom_x_mm": 57.38433466000001,
+    "bottom_y_mm": 94.868946,
+    "gerber_error_mm": 6.217248937900877e-15
+  },
+  {
+    "ref": "J702",
+    "pin": 3,
+    "bottom_x_mm": 58.63452266,
+    "bottom_y_mm": 94.868946,
+    "gerber_error_mm": 6.217248937900877e-15
+  },
+  {
+    "ref": "J702",
+    "pin": 2,
+    "bottom_x_mm": 59.884456660000005,
+    "bottom_y_mm": 94.868946,
+    "gerber_error_mm": 9.441466109136565e-15
+  },
+  {
+    "ref": "J702",
+    "pin": 1,
+    "bottom_x_mm": 61.13439066,
+    "bottom_y_mm": 94.868946,
+    "gerber_error_mm": 6.217248937900877e-15
+  },
+  {
+    "ref": "J703",
+    "pin": 10,
+    "bottom_x_mm": 64.692095,
+    "bottom_y_mm": 98.019054,
+    "gerber_error_mm": 7.755684626330685e-15
+  },
+  {
+    "ref": "J703",
+    "pin": 8,
+    "bottom_x_mm": 66.542231,
+    "bottom_y_mm": 94.868946,
+    "gerber_error_mm": 6.217248937900877e-15
+  },
+  {
+    "ref": "J703",
+    "pin": 5,
+    "bottom_x_mm": 70.292287,
+    "bottom_y_mm": 94.868946,
+    "gerber_error_mm": 6.217248937900877e-15
+  },
+  {
+    "ref": "J703",
+    "pin": 6,
+    "bottom_x_mm": 69.04235299999999,
+    "bottom_y_mm": 94.868946,
+    "gerber_error_mm": 9.441466109136565e-15
+  },
+  {
+    "ref": "J703",
+    "pin": 7,
+    "bottom_x_mm": 67.792165,
+    "bottom_y_mm": 94.868946,
+    "gerber_error_mm": 6.217248937900877e-15
+  },
+  {
+    "ref": "J703",
+    "pin": 11,
+    "bottom_x_mm": 77.14190500000001,
+    "bottom_y_mm": 98.019054,
+    "gerber_error_mm": 7.755684626330685e-15
+  },
+  {
+    "ref": "J703",
+    "pin": 4,
+    "bottom_x_mm": 71.542221,
+    "bottom_y_mm": 94.868946,
+    "gerber_error_mm": 7.160723346098895e-15
+  },
+  {
+    "ref": "J703",
+    "pin": 3,
+    "bottom_x_mm": 72.792409,
+    "bottom_y_mm": 94.868946,
+    "gerber_error_mm": 7.160723346098895e-15
+  },
+  {
+    "ref": "J703",
+    "pin": 2,
+    "bottom_x_mm": 74.042343,
+    "bottom_y_mm": 94.868946,
+    "gerber_error_mm": 7.160723346098895e-15
+  },
+  {
+    "ref": "J703",
+    "pin": 1,
+    "bottom_x_mm": 75.292277,
+    "bottom_y_mm": 94.868946,
+    "gerber_error_mm": 7.160723346098895e-15
+  },
+  {
+    "ref": "J704",
+    "pin": 6,
+    "bottom_x_mm": 10.55034400000001,
+    "bottom_y_mm": 2.7694350000000014,
+    "gerber_error_mm": 0.0
+  },
+  {
+    "ref": "J704",
+    "pin": 5,
+    "bottom_x_mm": 17.999656,
+    "bottom_y_mm": 2.7694350000000014,
+    "gerber_error_mm": 0.0
+  },
+  {
+    "ref": "J704",
+    "pin": 4,
+    "bottom_x_mm": 16.14952000000001,
+    "bottom_y_mm": 5.968564999999998,
+    "gerber_error_mm": 0.0
+  },
+  {
+    "ref": "J704",
+    "pin": 3,
+    "bottom_x_mm": 14.899586000000014,
+    "bottom_y_mm": 5.968564999999998,
+    "gerber_error_mm": 0.0
+  },
+  {
+    "ref": "J704",
+    "pin": 2,
+    "bottom_x_mm": 13.649398000000005,
+    "bottom_y_mm": 5.968564999999998,
+    "gerber_error_mm": 0.0
+  },
+  {
+    "ref": "J704",
+    "pin": 1,
+    "bottom_x_mm": 12.399463999999995,
+    "bottom_y_mm": 5.968564999999998,
+    "gerber_error_mm": 0.0
+  },
+  {
+    "ref": "J705",
+    "pin": 5,
+    "bottom_x_mm": 48.79920578,
+    "bottom_y_mm": 98.57709200000001,
+    "gerber_error_mm": 7.549516567451064e-15
+  },
+  {
+    "ref": "J705",
+    "pin": 4,
+    "bottom_x_mm": 42.599065780000004,
+    "bottom_y_mm": 98.5769396,
+    "gerber_error_mm": 2.886579864025407e-15
+  },
+  {
+    "ref": "J705",
+    "pin": 3,
+    "bottom_x_mm": 44.449074780000004,
+    "bottom_y_mm": 94.868946,
+    "gerber_error_mm": 6.217248937900877e-15
+  },
+  {
+    "ref": "J705",
+    "pin": 2,
+    "bottom_x_mm": 45.699262780000005,
+    "bottom_y_mm": 94.868946,
+    "gerber_error_mm": 9.441466109136565e-15
+  },
+  {
+    "ref": "J705",
+    "pin": 1,
+    "bottom_x_mm": 46.94919678000001,
+    "bottom_y_mm": 94.868946,
+    "gerber_error_mm": 1.551136925266137e-14
+  },
+  {
+    "ref": "J706",
+    "pin": 6,
+    "bottom_x_mm": 82.051344,
+    "bottom_y_mm": 2.642435000000006,
+    "gerber_error_mm": 0.0
+  },
+  {
+    "ref": "J706",
+    "pin": 5,
+    "bottom_x_mm": 89.50065599999999,
+    "bottom_y_mm": 2.642435000000006,
+    "gerber_error_mm": 7.105427357601002e-15
+  },
+  {
+    "ref": "J706",
+    "pin": 4,
+    "bottom_x_mm": 87.65052,
+    "bottom_y_mm": 5.841565000000003,
+    "gerber_error_mm": 0.0
+  },
+  {
+    "ref": "J706",
+    "pin": 3,
+    "bottom_x_mm": 86.400586,
+    "bottom_y_mm": 5.841565000000003,
+    "gerber_error_mm": 3.552713678800501e-15
+  },
+  {
+    "ref": "J706",
+    "pin": 2,
+    "bottom_x_mm": 85.150398,
+    "bottom_y_mm": 5.841565000000003,
+    "gerber_error_mm": 5.329070518200751e-15
+  },
+  {
+    "ref": "J706",
+    "pin": 1,
+    "bottom_x_mm": 83.900464,
+    "bottom_y_mm": 5.841565000000003,
+    "gerber_error_mm": 0.0
+  },
+  {
+    "ref": "J605",
+    "pin": 1,
+    "bottom_x_mm": 39.04,
+    "bottom_y_mm": 19.101,
+    "gerber_error_mm": 0.0
+  },
+  {
+    "ref": "J605",
+    "pin": 2,
+    "bottom_x_mm": 39.04,
+    "bottom_y_mm": 21.641000000000005,
+    "gerber_error_mm": 0.0
+  },
+  {
+    "ref": "J605",
+    "pin": 3,
+    "bottom_x_mm": 39.04,
+    "bottom_y_mm": 24.180999999999997,
+    "gerber_error_mm": 0.0
+  },
+  {
+    "ref": "J802",
+    "pin": 1,
+    "bottom_x_mm": 33.833,
+    "bottom_y_mm": 18.974000000000004,
+    "gerber_error_mm": 0.0
+  },
+  {
+    "ref": "J802",
+    "pin": 2,
+    "bottom_x_mm": 33.833,
+    "bottom_y_mm": 21.51400000000001,
+    "gerber_error_mm": 0.0
+  },
+  {
+    "ref": "J802",
+    "pin": 3,
+    "bottom_x_mm": 33.833,
+    "bottom_y_mm": 24.054000000000002,
+    "gerber_error_mm": 0.0
+  },
+  {
+    "ref": "J802",
+    "pin": 4,
+    "bottom_x_mm": 33.833,
+    "bottom_y_mm": 26.59400000000001,
+    "gerber_error_mm": 0.0
+  },
+  {
+    "ref": "BT801",
+    "pin": 1,
+    "bottom_x_mm": 11.3711196,
+    "bottom_y_mm": 24.43489840000001,
+    "gerber_error_mm": 0.0
+  },
+  {
+    "ref": "BT801",
+    "pin": 2,
+    "bottom_x_mm": 29.37108359999999,
+    "bottom_y_mm": 24.43489840000001,
+    "gerber_error_mm": 0.0
+  },
+  {
+    "ref": "J604",
+    "pin": 15,
+    "bottom_x_mm": 78.91783998,
+    "bottom_y_mm": 55.42290856,
+    "gerber_error_mm": 3.552713678800501e-15
+  },
+  {
+    "ref": "J604",
+    "pin": 14,
+    "bottom_x_mm": 78.91783998,
+    "bottom_y_mm": 52.882908560000004,
+    "gerber_error_mm": 3.552713678800501e-15
+  },
+  {
+    "ref": "J604",
+    "pin": 13,
+    "bottom_x_mm": 78.91783998,
+    "bottom_y_mm": 50.342908560000005,
+    "gerber_error_mm": 3.552713678800501e-15
+  },
+  {
+    "ref": "J604",
+    "pin": 12,
+    "bottom_x_mm": 78.91783998,
+    "bottom_y_mm": 47.80290856,
+    "gerber_error_mm": 3.552713678800501e-15
+  },
+  {
+    "ref": "J604",
+    "pin": 11,
+    "bottom_x_mm": 78.91783998,
+    "bottom_y_mm": 45.26290856,
+    "gerber_error_mm": 3.552713678800501e-15
+  },
+  {
+    "ref": "J604",
+    "pin": 10,
+    "bottom_x_mm": 78.91783998,
+    "bottom_y_mm": 42.72290856,
+    "gerber_error_mm": 3.552713678800501e-15
+  },
+  {
+    "ref": "J604",
+    "pin": 9,
+    "bottom_x_mm": 78.91783998,
+    "bottom_y_mm": 40.18290856,
+    "gerber_error_mm": 3.552713678800501e-15
+  },
+  {
+    "ref": "J604",
+    "pin": 8,
+    "bottom_x_mm": 78.91783998,
+    "bottom_y_mm": 37.64290856,
+    "gerber_error_mm": 3.552713678800501e-15
+  },
+  {
+    "ref": "J604",
+    "pin": 7,
+    "bottom_x_mm": 78.91783998,
+    "bottom_y_mm": 35.10290856,
+    "gerber_error_mm": 3.552713678800501e-15
+  },
+  {
+    "ref": "J604",
+    "pin": 6,
+    "bottom_x_mm": 78.91783998,
+    "bottom_y_mm": 32.56290856,
+    "gerber_error_mm": 3.552713678800501e-15
+  },
+  {
+    "ref": "J604",
+    "pin": 5,
+    "bottom_x_mm": 78.91783998,
+    "bottom_y_mm": 30.022908560000005,
+    "gerber_error_mm": 3.552713678800501e-15
+  },
+  {
+    "ref": "J604",
+    "pin": 4,
+    "bottom_x_mm": 78.91783998,
+    "bottom_y_mm": 27.48290856,
+    "gerber_error_mm": 3.552713678800501e-15
+  },
+  {
+    "ref": "J604",
+    "pin": 3,
+    "bottom_x_mm": 78.91783998,
+    "bottom_y_mm": 24.942908560000006,
+    "gerber_error_mm": 3.552713678800501e-15
+  },
+  {
+    "ref": "J604",
+    "pin": 2,
+    "bottom_x_mm": 78.91783998,
+    "bottom_y_mm": 22.40290856,
+    "gerber_error_mm": 3.552713678800501e-15
+  },
+  {
+    "ref": "J604",
+    "pin": 1,
+    "bottom_x_mm": 78.91783998,
+    "bottom_y_mm": 19.862908560000008,
+    "gerber_error_mm": 3.552713678800501e-15
+  },
+  {
+    "ref": "J606",
+    "pin": 15,
+    "bottom_x_mm": 63.678000000000004,
+    "bottom_y_mm": 55.423,
+    "gerber_error_mm": 0.0
+  },
+  {
+    "ref": "J606",
+    "pin": 14,
+    "bottom_x_mm": 63.678000000000004,
+    "bottom_y_mm": 52.883,
+    "gerber_error_mm": 0.0
+  },
+  {
+    "ref": "J606",
+    "pin": 13,
+    "bottom_x_mm": 63.678000000000004,
+    "bottom_y_mm": 50.343,
+    "gerber_error_mm": 0.0
+  },
+  {
+    "ref": "J606",
+    "pin": 12,
+    "bottom_x_mm": 63.678000000000004,
+    "bottom_y_mm": 47.803000000000004,
+    "gerber_error_mm": 0.0
+  },
+  {
+    "ref": "J606",
+    "pin": 11,
+    "bottom_x_mm": 63.678000000000004,
+    "bottom_y_mm": 45.263000000000005,
+    "gerber_error_mm": 0.0
+  },
+  {
+    "ref": "J606",
+    "pin": 10,
+    "bottom_x_mm": 63.678000000000004,
+    "bottom_y_mm": 42.723,
+    "gerber_error_mm": 0.0
+  },
+  {
+    "ref": "J606",
+    "pin": 9,
+    "bottom_x_mm": 63.678000000000004,
+    "bottom_y_mm": 40.183,
+    "gerber_error_mm": 0.0
+  },
+  {
+    "ref": "J606",
+    "pin": 8,
+    "bottom_x_mm": 63.678000000000004,
+    "bottom_y_mm": 37.643,
+    "gerber_error_mm": 0.0
+  },
+  {
+    "ref": "J606",
+    "pin": 7,
+    "bottom_x_mm": 63.678000000000004,
+    "bottom_y_mm": 35.10300000000001,
+    "gerber_error_mm": 0.0
+  },
+  {
+    "ref": "J606",
+    "pin": 6,
+    "bottom_x_mm": 63.678000000000004,
+    "bottom_y_mm": 32.563,
+    "gerber_error_mm": 0.0
+  },
+  {
+    "ref": "J606",
+    "pin": 5,
+    "bottom_x_mm": 63.678000000000004,
+    "bottom_y_mm": 30.022999999999996,
+    "gerber_error_mm": 0.0
+  },
+  {
+    "ref": "J606",
+    "pin": 4,
+    "bottom_x_mm": 63.678000000000004,
+    "bottom_y_mm": 27.483000000000004,
+    "gerber_error_mm": 0.0
+  },
+  {
+    "ref": "J606",
+    "pin": 3,
+    "bottom_x_mm": 63.678000000000004,
+    "bottom_y_mm": 24.942999999999998,
+    "gerber_error_mm": 0.0
+  },
+  {
+    "ref": "J606",
+    "pin": 2,
+    "bottom_x_mm": 63.678000000000004,
+    "bottom_y_mm": 22.403000000000006,
+    "gerber_error_mm": 0.0
+  },
+  {
+    "ref": "J606",
+    "pin": 1,
+    "bottom_x_mm": 63.678000000000004,
+    "bottom_y_mm": 19.863,
+    "gerber_error_mm": 0.0
+  },
+  {
+    "ref": "J603",
+    "pin": 14,
+    "bottom_x_mm": 15.336085000000011,
+    "bottom_y_mm": 83.432977,
+    "gerber_error_mm": 7.105427357601002e-15
+  },
+  {
+    "ref": "J603",
+    "pin": 13,
+    "bottom_x_mm": 12.986077000000009,
+    "bottom_y_mm": 98.533023,
+    "gerber_error_mm": 0.0
+  },
+  {
+    "ref": "J603",
+    "pin": 12,
+    "bottom_x_mm": 26.485923,
+    "bottom_y_mm": 98.082935,
+    "gerber_error_mm": 5.995204332975845e-15
+  },
+  {
+    "ref": "J603",
+    "pin": 11,
+    "bottom_x_mm": 26.485923,
+    "bottom_y_mm": 93.933083,
+    "gerber_error_mm": 4.440892098500626e-15
+  },
+  {
+    "ref": "J603",
+    "pin": 10,
+    "bottom_x_mm": 26.485923,
+    "bottom_y_mm": 87.732943,
+    "gerber_error_mm": 5.329070518200751e-15
+  },
+  {
+    "ref": "J603",
+    "pin": 9,
+    "bottom_x_mm": 25.535962999999995,
+    "bottom_y_mm": 83.432977,
+    "gerber_error_mm": 7.105427357601002e-15
+  },
+  {
+    "ref": "J603",
+    "pin": 8,
+    "bottom_x_mm": 24.586003000000005,
+    "bottom_y_mm": 83.432977,
+    "gerber_error_mm": 7.105427357601002e-15
+  },
+  {
+    "ref": "J603",
+    "pin": 7,
+    "bottom_x_mm": 23.485929000000013,
+    "bottom_y_mm": 83.432977,
+    "gerber_error_mm": 7.105427357601002e-15
+  },
+  {
+    "ref": "J603",
+    "pin": 6,
+    "bottom_x_mm": 22.386109000000005,
+    "bottom_y_mm": 83.432977,
+    "gerber_error_mm": 7.105427357601002e-15
+  },
+  {
+    "ref": "J603",
+    "pin": 5,
+    "bottom_x_mm": 21.286035000000012,
+    "bottom_y_mm": 83.432977,
+    "gerber_error_mm": 7.105427357601002e-15
+  },
+  {
+    "ref": "J603",
+    "pin": 4,
+    "bottom_x_mm": 20.185961000000006,
+    "bottom_y_mm": 83.432977,
+    "gerber_error_mm": 7.105427357601002e-15
+  },
+  {
+    "ref": "J603",
+    "pin": 3,
+    "bottom_x_mm": 19.085887000000014,
+    "bottom_y_mm": 83.432977,
+    "gerber_error_mm": 7.105427357601002e-15
+  },
+  {
+    "ref": "J603",
+    "pin": 2,
+    "bottom_x_mm": 17.986067000000006,
+    "bottom_y_mm": 83.432977,
+    "gerber_error_mm": 7.105427357601002e-15
+  },
+  {
+    "ref": "J603",
+    "pin": 1,
+    "bottom_x_mm": 16.885993,
+    "bottom_y_mm": 83.432977,
+    "gerber_error_mm": 7.105427357601002e-15
+  },
+  {
+    "ref": "J801",
+    "pin": 1,
+    "bottom_x_mm": 74.13000094,
+    "bottom_y_mm": 7.036000000000001,
+    "gerber_error_mm": 3.552713678800501e-15
+  },
+  {
+    "ref": "J801",
+    "pin": 2,
+    "bottom_x_mm": 74.13000094,
+    "bottom_y_mm": 4.496000000000009,
+    "gerber_error_mm": 3.552713678800501e-15
+  },
+  {
+    "ref": "J801",
+    "pin": 3,
+    "bottom_x_mm": 71.59000094000001,
+    "bottom_y_mm": 7.036000000000001,
+    "gerber_error_mm": 7.105427357601002e-15
+  },
+  {
+    "ref": "J801",
+    "pin": 4,
+    "bottom_x_mm": 71.59000094000001,
+    "bottom_y_mm": 4.496000000000009,
+    "gerber_error_mm": 7.105427357601002e-15
+  },
+  {
+    "ref": "J801",
+    "pin": 5,
+    "bottom_x_mm": 69.05000094,
+    "bottom_y_mm": 7.036000000000001,
+    "gerber_error_mm": 0.0
+  },
+  {
+    "ref": "J801",
+    "pin": 6,
+    "bottom_x_mm": 69.05000094,
+    "bottom_y_mm": 4.496000000000009,
+    "gerber_error_mm": 0.0
+  },
+  {
+    "ref": "J801",
+    "pin": 7,
+    "bottom_x_mm": 66.51000094,
+    "bottom_y_mm": 7.036000000000001,
+    "gerber_error_mm": 7.105427357601002e-15
+  },
+  {
+    "ref": "J801",
+    "pin": 8,
+    "bottom_x_mm": 66.51000094,
+    "bottom_y_mm": 4.496000000000009,
+    "gerber_error_mm": 7.105427357601002e-15
+  },
+  {
+    "ref": "J801",
+    "pin": 9,
+    "bottom_x_mm": 63.970000940000006,
+    "bottom_y_mm": 7.036000000000001,
+    "gerber_error_mm": 0.0
+  },
+  {
+    "ref": "J801",
+    "pin": 10,
+    "bottom_x_mm": 63.970000940000006,
+    "bottom_y_mm": 4.496000000000009,
+    "gerber_error_mm": 0.0
+  },
+  {
+    "ref": "J801",
+    "pin": 11,
+    "bottom_x_mm": 61.430000940000006,
+    "bottom_y_mm": 7.036000000000001,
+    "gerber_error_mm": 0.0
+  },
+  {
+    "ref": "J801",
+    "pin": 12,
+    "bottom_x_mm": 61.430000940000006,
+    "bottom_y_mm": 4.496000000000009,
+    "gerber_error_mm": 0.0
+  },
+  {
+    "ref": "J801",
+    "pin": 13,
+    "bottom_x_mm": 58.89000094,
+    "bottom_y_mm": 7.036000000000001,
+    "gerber_error_mm": 0.0
+  },
+  {
+    "ref": "J801",
+    "pin": 14,
+    "bottom_x_mm": 58.89000094,
+    "bottom_y_mm": 4.496000000000009,
+    "gerber_error_mm": 0.0
+  },
+  {
+    "ref": "J801",
+    "pin": 15,
+    "bottom_x_mm": 56.35000094,
+    "bottom_y_mm": 7.036000000000001,
+    "gerber_error_mm": 0.0
+  },
+  {
+    "ref": "J801",
+    "pin": 16,
+    "bottom_x_mm": 56.35000094,
+    "bottom_y_mm": 4.496000000000009,
+    "gerber_error_mm": 0.0
+  },
+  {
+    "ref": "J801",
+    "pin": 17,
+    "bottom_x_mm": 53.81000094,
+    "bottom_y_mm": 7.036000000000001,
+    "gerber_error_mm": 0.0
+  },
+  {
+    "ref": "J801",
+    "pin": 18,
+    "bottom_x_mm": 53.81000094,
+    "bottom_y_mm": 4.496000000000009,
+    "gerber_error_mm": 0.0
+  },
+  {
+    "ref": "J801",
+    "pin": 19,
+    "bottom_x_mm": 51.27000094,
+    "bottom_y_mm": 7.036000000000001,
+    "gerber_error_mm": 0.0
+  },
+  {
+    "ref": "J801",
+    "pin": 20,
+    "bottom_x_mm": 51.27000094,
+    "bottom_y_mm": 4.496000000000009,
+    "gerber_error_mm": 0.0
+  },
+  {
+    "ref": "J801",
+    "pin": 21,
+    "bottom_x_mm": 48.730000940000004,
+    "bottom_y_mm": 7.036000000000001,
+    "gerber_error_mm": 0.0
+  },
+  {
+    "ref": "J801",
+    "pin": 22,
+    "bottom_x_mm": 48.730000940000004,
+    "bottom_y_mm": 4.496000000000009,
+    "gerber_error_mm": 0.0
+  },
+  {
+    "ref": "J801",
+    "pin": 23,
+    "bottom_x_mm": 46.19000094000001,
+    "bottom_y_mm": 7.036000000000001,
+    "gerber_error_mm": 1.4210854715202004e-14
+  },
+  {
+    "ref": "J801",
+    "pin": 24,
+    "bottom_x_mm": 46.19000094000001,
+    "bottom_y_mm": 4.496000000000009,
+    "gerber_error_mm": 1.4210854715202004e-14
+  },
+  {
+    "ref": "J801",
+    "pin": 25,
+    "bottom_x_mm": 43.65000094000001,
+    "bottom_y_mm": 7.036000000000001,
+    "gerber_error_mm": 1.4210854715202004e-14
+  },
+  {
+    "ref": "J801",
+    "pin": 26,
+    "bottom_x_mm": 43.65000094000001,
+    "bottom_y_mm": 4.496000000000009,
+    "gerber_error_mm": 1.4210854715202004e-14
+  },
+  {
+    "ref": "J801",
+    "pin": 27,
+    "bottom_x_mm": 41.11000094000001,
+    "bottom_y_mm": 7.036000000000001,
+    "gerber_error_mm": 1.4210854715202004e-14
+  },
+  {
+    "ref": "J801",
+    "pin": 28,
+    "bottom_x_mm": 41.11000094000001,
+    "bottom_y_mm": 4.496000000000009,
+    "gerber_error_mm": 1.4210854715202004e-14
+  },
+  {
+    "ref": "J801",
+    "pin": 29,
+    "bottom_x_mm": 38.57000094000001,
+    "bottom_y_mm": 7.036000000000001,
+    "gerber_error_mm": 7.105427357601002e-15
+  },
+  {
+    "ref": "J801",
+    "pin": 30,
+    "bottom_x_mm": 38.57000094000001,
+    "bottom_y_mm": 4.496000000000009,
+    "gerber_error_mm": 7.105427357601002e-15
+  },
+  {
+    "ref": "J801",
+    "pin": 31,
+    "bottom_x_mm": 36.03000094000001,
+    "bottom_y_mm": 7.036000000000001,
+    "gerber_error_mm": 7.105427357601002e-15
+  },
+  {
+    "ref": "J801",
+    "pin": 32,
+    "bottom_x_mm": 36.03000094000001,
+    "bottom_y_mm": 4.496000000000009,
+    "gerber_error_mm": 7.105427357601002e-15
+  },
+  {
+    "ref": "J801",
+    "pin": 33,
+    "bottom_x_mm": 33.490000940000016,
+    "bottom_y_mm": 7.036000000000001,
+    "gerber_error_mm": 1.4210854715202004e-14
+  },
+  {
+    "ref": "J801",
+    "pin": 34,
+    "bottom_x_mm": 33.490000940000016,
+    "bottom_y_mm": 4.496000000000009,
+    "gerber_error_mm": 1.4210854715202004e-14
+  },
+  {
+    "ref": "J801",
+    "pin": 35,
+    "bottom_x_mm": 30.95000094000001,
+    "bottom_y_mm": 7.036000000000001,
+    "gerber_error_mm": 1.4210854715202004e-14
+  },
+  {
+    "ref": "J801",
+    "pin": 36,
+    "bottom_x_mm": 30.95000094000001,
+    "bottom_y_mm": 4.496000000000009,
+    "gerber_error_mm": 1.4210854715202004e-14
+  },
+  {
+    "ref": "J801",
+    "pin": 37,
+    "bottom_x_mm": 28.410000940000018,
+    "bottom_y_mm": 7.036000000000001,
+    "gerber_error_mm": 1.4210854715202004e-14
+  },
+  {
+    "ref": "J801",
+    "pin": 38,
+    "bottom_x_mm": 28.410000940000018,
+    "bottom_y_mm": 4.496000000000009,
+    "gerber_error_mm": 1.4210854715202004e-14
+  },
+  {
+    "ref": "J801",
+    "pin": 39,
+    "bottom_x_mm": 25.87000094000001,
+    "bottom_y_mm": 7.036000000000001,
+    "gerber_error_mm": 1.4210854715202004e-14
+  },
+  {
+    "ref": "J801",
+    "pin": 40,
+    "bottom_x_mm": 25.87000094000001,
+    "bottom_y_mm": 4.496000000000009,
+    "gerber_error_mm": 1.4210854715202004e-14
+  }
+]

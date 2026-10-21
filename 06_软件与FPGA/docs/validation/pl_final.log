@@ -1,0 +1,2 @@
+tb_carrier_ctrl: all checks passed
+/mnt/d/codex/见微_AX7010视觉测振仪/06_软件与FPGA/ax7010/pl/sim/tb_carrier_ctrl.v:410: $finish called at 15151945000 (1ps)

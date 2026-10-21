@@ -1,0 +1,12 @@
+PHASE  Identity and defaults. t=145000
+PHASE  PWM 25 percent t=285000
+PHASE  Encoder: t=6078075000
+PHASE  FIFO overflow: t=6280615000
+PHASE  WS2812: t=6364775000
+FAIL: LED0 GRB (t=6818345000)
+FAIL: LED1 GRB (t=6818345000)
+FAIL: LED2 GRB (t=6818345000)
+FAIL: LED3 GRB (t=6818345000)
+FAIL: LED4 GRB (t=6818345000)
+tb_carrier_ctrl: timeout
+/mnt/d/codex/2026-10-13/pcb-12v-5a-5-5-2/work/code_review_20261021/tb_trace.v:136: $finish called at 40000000000 (1ps)

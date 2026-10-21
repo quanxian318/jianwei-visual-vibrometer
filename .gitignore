@@ -1,0 +1,8 @@
+# Machine-local connector settings and caches are not project deliverables.
+/.agents/
+/.claude/
+/.mcp.json*
+**/__pycache__/
+*.pyc
+Thumbs.db
+Desktop.ini

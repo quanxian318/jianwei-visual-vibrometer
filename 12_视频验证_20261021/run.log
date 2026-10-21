@@ -1,0 +1,6 @@
+Traceback (most recent call last):
+  File "/mnt/d/codex/见微_AX7010视觉测振仪/12_视频验证_20261021/scripts/run_clips.py", line 46, in <module>
+    subprocess.run([str(BUILD / 'measure_clip'), str(pts), str(out), '8', *rois], stdin=f, check=True)
+  File "/usr/lib/python3.12/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['/mnt/d/codex/2026-10-13/pcb-12v-5a-5-5-2/work/code_review_20261021/host_build/measure_clip', '/mnt/d/codex/见微_AX7010视觉测振仪/12_视频验证_20261021/video1/pts_seconds.txt', '/mnt/d/codex/见微_AX7010视觉测振仪/12_视频验证_20261021/video1', '8', 'tip_lower:818:488:64', 'tip_upper:828:178:64', 'flat:518:328:64', 'support:136:513:64']' returned non-zero exit status 2.

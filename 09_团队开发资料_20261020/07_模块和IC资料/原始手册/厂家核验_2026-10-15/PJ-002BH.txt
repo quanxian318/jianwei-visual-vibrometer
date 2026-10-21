@@ -1,0 +1,170 @@
+
+--- PDF PAGE 1 ---
+                                                CUI Devices is now Same Sky!                     Learn More
+
+                                             Additional Resources:    Product Page    |    3D Model    |    PCB Footprint
+                                                                                                                                                    1 of 3
+
+
+MODEL: PJ-002BH | DESCRIPTION: DC POWER JACK
+
+
+FEATURES
+• 2.5 mm center pin
+• 5.0 A rating
+• right-angle orientation
+• through hole
+
+
+
+
+
+RoHS
+
+
+SPECIFICATIONS
+parameter                               conditions/description                                              min            typ             max            units
+rated input voltage                                                                                                         24                            Vd c
+rated input current                                                                                                                        5.0              A
+contact resistance                                                                                                                         30             mΩ
+insulation resistance                   at 500 Vdc                                                          100                                           MΩ
+voltage withstand                       for 1 minute                                                                                       500            Va c
+insertion/withdrawal force                                                                                  0.3                             3              kg
+terminal strength                       any direction for 10 seconds                                                                       500              g
+operating temperature                                                                                       -40                            85              °C
+life                                                                                                                      5,000                          cycles
+flammability rating                     UL94V-0
+RoHS                                    yes
+SOLDERABILITY
+parameter                               conditions/description                                              min            typ             max            units
+wave soldering                          dipped in solder pot for 5 ±0.5 seconds                             255            260             265             °C
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                      sameskydevices.com
+
+--- PDF PAGE 2 ---
+                                             Additional Resources:    Product Page    |    3D Model    |    PCB Footprint
+
+SAME SKY | MODEL: PJ-002BH | DESCRIPTION: DC POWER JACK                                                                            date 09/12/2024 | page 2 of 3
+
+
+MECHANICAL DRAWING
+
+units: mm                                                                                       DESCRIPTION            MATERIAL                PLATING/COLOR
+tolerance:
+X. ±0.50 mm                                                                                     center pin             copper                  nickel
+X.X ±0.30 mm                                                                                    terminal 1             brass                   silver
+X.XX ±0.20 mm                                                                                   terminal 2             copper alloy            silver
+PCB: ±0.05 mm
+unless otherwise specified                                                                      terminal 3             brass                   silver
+                                                                                                housing                PBT (UL94V-0)           black
+                                                                                                cover                  PBT (UL94V-0)           black
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                                                                            Recommended PCB Layout
+                                                                                                                                        Top View
+
+
+
+
+
+
+
+
+
+
+                                                                                                                                                            1
+                                                                                                                         SCHEMATIC                          3
+                                                                                                                                                            2
+
+                                                                                                                             Model             PJ-002BH
+                                                                           MATING PLUG                                    Center Pin            Ø2.5 mm
+                                                                   Jack Insertion Depth: 9.5 mm
+
+
+
+
+
+                                                                       sameskydevices.com
+
+--- PDF PAGE 3 ---
+                                              Additional Resources:    Product Page    |    3D Model    |    PCB Footprint
+
+SAME SKY | MODEL: PJ-002BH | DESCRIPTION: DC POWER JACK                                                                              date 09/12/2024 | page 3 of 3
+
+
+REVISION HISTORY
+
+
+                  r e v.                                              description                                                         date
+
+                  1.0                                                initial release                                                  04/17/2006
+                  1.01                                      changed pin thickness layout                                              08/31/2006
+                  1.02                                       applied new spec template                                                10/07/2013
+                  1.03                                            updated datasheet                                                   05/12/2016
+                  1.04                                               brand update                                                     10/31/2019
+                  1.05                                      logo, datasheet style update                                             08/05/2022
+                  1.06        product reengineered for improved manufacturability and production yield, see                           01/20/2023
+                                                                    PCN for details
+                  1.07                              changed minimum operating temperature                                            08/05/2024
+                  1.08                                  CUI Devices rebranded to Same Sky                                             09/12/2024
+
+                                        The revision history provided is for informational purposes only and is believed to be accurate.

@@ -1,0 +1,180 @@
+[
+  {
+    "type": "BOARD",
+    "uuid": "1e38b1ae4c5988d7",
+    "meta": [
+      {
+        "title": "前面板",
+        "zIndex": 2
+      }
+    ]
+  },
+  {
+    "type": "BOARD",
+    "uuid": "26e8ce4f49940134",
+    "meta": [
+      {
+        "title": "主载板",
+        "zIndex": 1
+      }
+    ]
+  },
+  {
+    "type": "SCH",
+    "uuid": "5c1bd65786a495a2",
+    "meta": [
+      {
+        "title": "前面板原理图",
+        "source": "",
+        "board": "1e38b1ae4c5988d7",
+        "zIndex": null
+      }
+    ]
+  },
+  {
+    "type": "SCH",
+    "uuid": "17c87214d8ef5e31",
+    "meta": [
+      {
+        "title": "主载板原理图",
+        "source": "",
+        "board": "26e8ce4f49940134",
+        "zIndex": null
+      }
+    ]
+  },
+  {
+    "type": "SCH_PAGE",
+    "uuid": "c08bae80339a36d3",
+    "meta": [
+      {
+        "title": "跨域接口与打印通信",
+        "schematic": "17c87214d8ef5e31",
+        "source": "",
+        "zIndex": 4
+      }
+    ]
+  },
+  {
+    "type": "SCH_PAGE",
+    "uuid": "50026534b3138760",
+    "meta": [
+      {
+        "title": "电源转换与分配",
+        "schematic": "17c87214d8ef5e31",
+        "source": "",
+        "zIndex": 2
+      }
+    ]
+  },
+  {
+    "type": "SCH_PAGE",
+    "uuid": "be3cb73daa12fa86",
+    "meta": [
+      {
+        "title": "Nano 与辅助外设",
+        "schematic": "17c87214d8ef5e31",
+        "source": "",
+        "zIndex": 6
+      }
+    ]
+  },
+  {
+    "type": "SCH_PAGE",
+    "uuid": "e24f91af4de42ce0",
+    "meta": [
+      {
+        "title": "传感器与扩展接口",
+        "schematic": "17c87214d8ef5e31",
+        "source": "",
+        "zIndex": 7
+      }
+    ]
+  },
+  {
+    "type": "SCH_PAGE",
+    "uuid": "82bdbcba806de72a",
+    "meta": [
+      {
+        "title": "屏幕与前面板接口",
+        "schematic": "17c87214d8ef5e31",
+        "source": "",
+        "zIndex": 5
+      }
+    ]
+  },
+  {
+    "type": "SCH_PAGE",
+    "uuid": "73814175fbac6a3e",
+    "meta": [
+      {
+        "title": "板内管理与主控连接",
+        "schematic": "17c87214d8ef5e31",
+        "source": "",
+        "zIndex": 8
+      }
+    ]
+  },
+  {
+    "type": "SCH_PAGE",
+    "uuid": "d347eb372591a3f2",
+    "meta": [
+      {
+        "title": "前面板操作与状态显示",
+        "schematic": "5c1bd65786a495a2",
+        "source": "",
+        "zIndex": 1
+      }
+    ]
+  },
+  {
+    "type": "SCH_PAGE",
+    "uuid": "7aa2d2a6e73a8442",
+    "meta": [
+      {
+        "title": "补光与负载驱动",
+        "schematic": "17c87214d8ef5e31",
+        "source": "",
+        "zIndex": 3
+      }
+    ]
+  },
+  {
+    "type": "SCH_PAGE",
+    "uuid": "16d3be782b236102",
+    "meta": [
+      {
+        "title": "电源输入与监测",
+        "schematic": "17c87214d8ef5e31",
+        "source": "",
+        "zIndex": 1
+      }
+    ]
+  },
+  {
+    "type": "PCB",
+    "uuid": "3e21aace04f8c74b",
+    "meta": [
+      {
+        "title": "前面板PCB",
+        "parent": "",
+        "source": "",
+        "board": "1e38b1ae4c5988d7",
+        "zIndex": null
+      }
+    ]
+  },
+  {
+    "type": "PCB",
+    "uuid": "d10b442eda50d6c5",
+    "meta": [
+      {
+        "title": "主载板PCB",
+        "parent": "",
+        "source": "",
+        "board": "26e8ce4f49940134",
+        "zIndex": null
+      }
+    ]
+  }
+]

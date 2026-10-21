@@ -1,0 +1,48 @@
+{
+  "date": "2026-10-21",
+  "linux_host": {
+    "platform": "WSL x86-64",
+    "unit_suites": 5,
+    "application_checks": 19,
+    "passed": true
+  },
+  "pl_behavior_simulation": {
+    "tool": "Icarus Verilog",
+    "passed": true,
+    "simulation_ns": 15151945
+  },
+  "protocol": {
+    "known_vectors": 4,
+    "random_vectors": 300,
+    "passed": true
+  },
+  "wav_parser": {
+    "passed": true
+  },
+  "end_to_end_smoke": {
+    "passed": true
+  },
+  "nano_modified_translation_units": [
+    {
+      "source": "power_service.cpp",
+      "sha256": "2a10c5b0433983765397098e2f349a1d125b395edcdef97885d70d0287bd5017",
+      "returncode": 0,
+      "seconds": 265.42,
+      "object_bytes": 322572,
+      "elf_machine": 94
+    },
+    {
+      "source": "audio_service.cpp",
+      "sha256": "fd77e6946d48a2ba86089e474023be89b92cf80cd65dec9c2238d0b149fdcc59",
+      "returncode": 0,
+      "seconds": 288.55,
+      "object_bytes": 830888,
+      "elf_machine": 94
+    }
+  ],
+  "nano_full_firmware_relink": false,
+  "arm_cross_build": false,
+  "vivado_synthesis_implementation": false,
+  "hardware_test": false,
+  "existing_nano_bin_updated": false
+}

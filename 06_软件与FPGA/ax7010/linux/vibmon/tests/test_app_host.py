@@ -1,0 +1,155 @@
+#!/usr/bin/env python3
+"""Host regressions using synthetic frames and a memory-backed register fixture."""
+import json
+import pathlib
+import socket
+import struct
+import subprocess
+import sys
+import tempfile
+import time
+
+binary = pathlib.Path(sys.argv[1]).resolve()
+failures = []
+
+def check(ok, message):
+    print(('PASS ' if ok else 'FAIL ') + message, flush=True)
+    if not ok:
+        failures.append(message)
+
+class Daemon:
+    def __init__(self, directory, calibrated=True, carrier=False):
+        self.dir = pathlib.Path(directory)
+        self.sock = self.dir / 'ctl.sock'
+        cfg = {
+            'camera': {'source': 'synthetic', 'synthetic': {'fps': 60}},
+            'measurement': {'roi_size_px': 48, 'search_radius_px': 6,
+                            'duration_s': 1.2, 'calibration_file': str(self.dir / 'cal.json')},
+            'storage': {'records_dir': str(self.dir / 'records'), 'settings_file': str(self.dir / 'settings.json')},
+            'ui': {'enabled': False}, 'voice': {'enabled': False},
+            'control_socket': str(self.sock), 'poweroff_on_shutdown': False,
+            'imu': {'enabled': False}, 'adxl345': {'enabled': False},
+        }
+        if calibrated:
+            (self.dir / 'cal.json').write_text(json.dumps({'id': 'test', 'mm_per_px': .05, 'axis': 'y'}))
+        if carrier:
+            regs = bytearray(4096)
+            struct.pack_into('<III', regs, 0, 0x56424331, 0x10000, 100000000)
+            (self.dir / 'carrier').write_bytes(regs)  # PFAIL remains low at boot.
+            if carrier == 'lighting':
+                struct.pack_into('<I', regs, 0x20, 1 << 6)
+                (self.dir / 'carrier').write_bytes(regs)
+            cfg['hardware'] = {'devices': {'carrier_uio': str(self.dir / 'carrier')}}
+        (self.dir / 'cfg.json').write_text(json.dumps(cfg))
+        self.log = (self.dir / 'daemon.log').open('w')
+        self.p = subprocess.Popen([str(binary), '-c', str(self.dir / 'cfg.json')], stdout=self.log, stderr=self.log)
+
+    def ready(self):
+        for _ in range(150):
+            if self.p.poll() is not None:
+                return False
+            if self.sock.exists():
+                return True
+            time.sleep(.02)
+        return False
+
+    def cmd(self, cmd, **args):
+        with socket.socket(socket.AF_UNIX) as s:
+            s.settimeout(4)
+            s.connect(str(self.sock))
+            s.sendall((json.dumps(dict(cmd=cmd, **args)) + '\n').encode())
+            data = b''
+            while b'\n' not in data:
+                data += s.recv(65536)
+            return json.loads(data)
+
+    def result(self):
+        for _ in range(200):
+            st = self.cmd('status')['data']
+            last = st['measurement'].get('last')
+            if last:
+                return last
+            time.sleep(.03)
+        raise AssertionError('measurement did not finish')
+
+    def close(self):
+        if self.p.poll() is None:
+            self.p.terminate()
+            try:
+                self.p.wait(timeout=5)
+            except subprocess.TimeoutExpired:
+                self.p.kill()
+                self.p.wait()
+        self.log.close()
+
+with tempfile.TemporaryDirectory(prefix='vibmon-regression-') as temp:
+    root = pathlib.Path(temp)
+    for name in ['point', 'pixel', 'startup', 'lighting', 'laser', 'shutdown', 'settings']:
+        d = root / name
+        d.mkdir()
+        app = Daemon(d, calibrated=name != 'pixel', carrier={'startup': 'startup', 'lighting': 'lighting', 'laser': 'lighting'}.get(name, False))
+        try:
+            ready = app.ready()
+            check(ready, name + ': starts without crashing')
+            if not ready:
+                print((d / 'daemon.log').read_text()[-1800:])
+                continue
+            if name == 'startup':
+                check(app.cmd('status')['data']['power']['pfail'], 'PFAIL low at boot is retained')
+            elif name == 'lighting':
+                app.cmd('measure_start')
+                check(app.cmd('status')['data']['light']['on'], 'automatic light is on during capture')
+                last = app.result()
+                rec = json.loads((d / 'records' / last['measurement_id'] / 'record.json').read_text())
+                check(rec['lighting']['on'], 'record retains automatic light state after it is switched off')
+            elif name == 'point':
+                app.cmd('set_point', id='A', name='point A')
+                check(app.cmd('measure_start')['ok'], 'capture accepted')
+                time.sleep(.25)
+                app.cmd('set_point', id='B', name='point B')
+                last = app.result()
+                rec = json.loads((d / 'records' / last['measurement_id'] / 'record.json').read_text())
+                check(rec['point_id'] == 'A' and last['valid'], 'record keeps the point selected at capture start')
+            elif name == 'pixel':
+                check(app.cmd('status')['data']['alarm_level'] == '未判级', 'startup has no normal vibration judgment')
+                app.cmd('measure_start')
+                last = app.result()
+                check(last['valid'] and last['unit'] == 'px' and last['level'] == '未判级', 'uncalibrated pixels do not use mm alarm thresholds')
+            elif name == 'laser':
+                check(app.cmd('laser', on=True)['ok'], 'laser projector switches on')
+                st = app.cmd('status')['data']
+                check(st['laser']['on'] and not st['light']['on'], 'lighting and laser are separate outputs')
+                app.cmd('measure_start')
+                check(not app.cmd('status')['data']['laser']['on'], 'laser is off while displacement is tracked')
+                check(not app.cmd('laser', on=True)['ok'], 'capture refuses manually re-enabling the projector')
+                check(not app.cmd('status')['data']['laser']['on'], 'a refused projector command leaves LED2 off')
+                check(not app.cmd('set', laser_off_during_measurement=False)['ok'],
+                      'capture refuses changing the projector interlock policy')
+                last = app.result()
+                rec = json.loads((d / 'records' / last['measurement_id'] / 'record.json').read_text())
+                check(rec['laser_projector'] == {'on': False, 'switched_off_for_capture': True},
+                      'record notes the laser switched off for the capture')
+                check(app.cmd('status')['data']['laser']['on'], 'laser is back on after the capture')
+            elif name == 'settings':
+                r = app.cmd('set', duration_s=30, warn_pp=0.5, alarm_pp=1.0)
+                check(r['ok'] and r['data']['duration_s'] == 30, 'settings are applied')
+                check(not app.cmd('set', warn_pp=2.0, alarm_pp=1.0)['ok'], 'warning threshold above the alarm threshold is refused')
+                check(app.cmd('settings')['data']['warn_pp'] == 0.5, 'a refused change leaves the settings unchanged')
+                saved = json.loads((d / 'settings.json').read_text())
+                check(saved['measurement']['duration_s'] == 30 and saved['alarm']['alarm_peak_to_peak'] == 1.0,
+                      'settings are written to the settings file')
+                app.close()
+                app = Daemon(d)
+                check(app.ready() and app.cmd('settings')['data']['duration_s'] == 30, 'settings survive a restart')
+            elif name == 'shutdown':
+                app.cmd('measure_start', duration_s=3)
+                time.sleep(.15)
+                app.cmd('shutdown')
+                time.sleep(2)
+                check(app.cmd('status')['data']['shutdown_prepared'], 'shutdown completes during capture')
+                check(not list((d / 'records').glob('*/record.json')), 'cancelled capture produces no late result')
+        finally:
+            app.close()
+            check(app.p.returncode == 0, name + ': SIGTERM follows orderly exit')
+
+sys.exit(bool(failures))

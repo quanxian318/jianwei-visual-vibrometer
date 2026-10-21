@@ -1,0 +1,18 @@
+[
+  {
+    "file": "主载板_BOM_V1.10.csv",
+    "targetRows": 3,
+    "totalRows": 244,
+    "passed": true
+  },
+  {
+    "file": "绘图元件清单_V1.10.csv",
+    "targetRows": 3,
+    "totalRows": 263,
+    "passed": true
+  },
+  {
+    "check": "新旧型号当前文件无残留、两张清单三处一致、位号唯一、配置及验收模板原样保留",
+    "passed": true
+  }
+]

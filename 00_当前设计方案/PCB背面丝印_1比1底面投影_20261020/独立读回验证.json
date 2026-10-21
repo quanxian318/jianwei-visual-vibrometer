@@ -1,0 +1,12 @@
+{
+  "result": "PASS",
+  "svg_module_pairs": 26,
+  "csv_pin_to_latest_netlist_checks": 178,
+  "combined_svg_line_segments_mask_checked": 3618,
+  "bottom_mask_openings": 117,
+  "normal_mirror_consistency": true,
+  "individual_combined_position_consistency": true,
+  "critical_bottom_view_direction_checks": true,
+  "geometry_only_not_eda_drc": true,
+  "edge_facing_text_angle_checks": 230
+}

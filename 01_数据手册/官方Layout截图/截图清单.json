@@ -1,0 +1,287 @@
+[
+  {
+    "name": "TPS5430",
+    "page": 24,
+    "kind": "实际PCB示例",
+    "target": "U201/U202/U203，DDA-8",
+    "note": "Figure 7-12；输入旁路、续流二极管和开关电流回路紧凑，FB远离SW。",
+    "source": "../厂家核验_2026-10-15/TPS5430.pdf",
+    "sha256": "88c98e6e51851285fbbfc17837d002b29af7cd3fe30442fa7e4612c5179985da",
+    "full": "TPS5430_PDFp24_整页.png",
+    "crop": "TPS5430_PDFp24_图示.png",
+    "crop_fraction": [
+      0.08,
+      0.13,
+      0.93,
+      0.6
+    ]
+  },
+  {
+    "name": "TLV1117LV",
+    "page": 15,
+    "kind": "实际PCB示例",
+    "target": "U204，SOT-223/DCY",
+    "note": "Figure 8-4；散热片/大焊盘为VOUT，不可接地。",
+    "source": "../厂家核验_2026-10-15/TLV1117LV.pdf",
+    "sha256": "84091b2a9521014cf80b72dca4cf6edf4dba2773d4aaec0d5716dbd1ff412bb8",
+    "full": "TLV1117LV_PDFp15_整页.png",
+    "crop": "TLV1117LV_PDFp15_图示.png",
+    "crop_fraction": [
+      0.24,
+      0.34,
+      0.75,
+      0.65
+    ]
+  },
+  {
+    "name": "TPS7A20",
+    "page": 31,
+    "kind": "实际PCB示例",
+    "target": "U205，DBV/SOT-23-5",
+    "note": "Figure 7-7为本项目DBV封装；不要采用下一页DQN/WLCSP图。",
+    "source": "../厂家核验_2026-10-15/TPS7A20.pdf",
+    "sha256": "b6c487d79ebed6dd43bf220b07fc5b3ecb9ee55d87e6daa2312acda6546046c0",
+    "full": "TPS7A20_PDFp31_整页.png",
+    "crop": "TPS7A20_PDFp31_图示.png",
+    "crop_fraction": [
+      0.27,
+      0.73,
+      0.73,
+      0.92
+    ]
+  },
+  {
+    "name": "INA226",
+    "page": 31,
+    "kind": "实际PCB示例",
+    "target": "U101，VSSOP-10",
+    "note": "Figure 8-4；分流电阻Kelvin引线独立取样，不从负载大电流铜皮中途取样。",
+    "source": "../厂家核验_2026-10-15/INA226.pdf",
+    "sha256": "c9b67f886d4a5241a5e070723f7b61867409eeb27eed768b9cdd9cb17e03ca2d",
+    "full": "INA226_PDFp31_整页.png",
+    "crop": "INA226_PDFp31_图示.png",
+    "crop_fraction": [
+      0.08,
+      0.38,
+      0.93,
+      0.83
+    ]
+  },
+  {
+    "name": "TLV3011B",
+    "page": 28,
+    "kind": "实际PCB示例",
+    "target": "U102，DBV/SOT-23-6",
+    "note": "Figure 10-7；反馈与参考节点短而安静，远离Buck和灯带开关回路。",
+    "source": "../厂家核验_2026-10-15/TLV3011B.pdf",
+    "sha256": "02993c016420887ee4f1ab2fa640e7596c9c1324a73f4f72bee3b32adec38df3",
+    "full": "TLV3011B_PDFp28_整页.png",
+    "crop": "TLV3011B_PDFp28_图示.png",
+    "crop_fraction": [
+      0.1,
+      0.12,
+      0.9,
+      0.38
+    ]
+  },
+  {
+    "name": "TCA9555",
+    "page": 31,
+    "kind": "实际PCB示例",
+    "target": "U801，PW/TSSOP-24",
+    "note": "Figure 43；去耦贴近VCC，保留连续地回路。",
+    "source": "../厂家核验_2026-10-15/TCA9555.pdf",
+    "sha256": "9706a3ccbf0bc915387949ab82bc0020a1a5bfdd67d8f51c4605a8d4b16bb231",
+    "full": "TCA9555_PDFp31_整页.png",
+    "crop": "TCA9555_PDFp31_图示.png",
+    "crop_fraction": [
+      0.08,
+      0.43,
+      0.93,
+      0.93
+    ]
+  },
+  {
+    "name": "UCC27517",
+    "page": 23,
+    "kind": "实际PCB示例",
+    "target": "U301/U302，DBV/SOT-23-5",
+    "note": "Figure 29明确为UCC27517DBV；驱动器—MOSFET Gate—Source回路短，去耦贴近。",
+    "source": "../厂家核验_2026-10-15/UCC27517.pdf",
+    "sha256": "6b7b8c088746010dfbce36367a03de3e971a91bd6fb705adad0c6258d44bf90c",
+    "full": "UCC27517_PDFp23_整页.png",
+    "crop": "UCC27517_PDFp23_图示.png",
+    "crop_fraction": [
+      0.07,
+      0.1,
+      0.94,
+      0.7
+    ]
+  },
+  {
+    "name": "MAX98357A-TQFN-EVK",
+    "page": 7,
+    "kind": "原厂评估板PCB",
+    "target": "U602，ETE/TQFN-16",
+    "note": "同封装评估板：顶层丝印、元件面铜层及Layer 2；供电去耦与功率回流可参考。",
+    "source": "../厂家核验_2026-10-15/MAX98357A-TQFN-EVK.pdf",
+    "sha256": "77dbd3bafe0ce1488c6e6c17ac824a500e9deaa36c848e4a2380781a74000d1b",
+    "full": "MAX98357A-TQFN-EVK_PDFp07_整页.png",
+    "crop": "MAX98357A-TQFN-EVK_PDFp07_图示.png",
+    "crop_fraction": [
+      0.07,
+      0.17,
+      0.94,
+      0.94
+    ]
+  },
+  {
+    "name": "MAX98357A-TQFN-EVK",
+    "page": 8,
+    "kind": "原厂评估板PCB",
+    "target": "U602，ETE/TQFN-16",
+    "note": "同封装评估板：Layer 3与焊接面；评估板是4层，不能直接当成本项目Gerber。",
+    "source": "../厂家核验_2026-10-15/MAX98357A-TQFN-EVK.pdf",
+    "sha256": "77dbd3bafe0ce1488c6e6c17ac824a500e9deaa36c848e4a2380781a74000d1b",
+    "full": "MAX98357A-TQFN-EVK_PDFp08_整页.png",
+    "crop": "MAX98357A-TQFN-EVK_PDFp08_图示.png",
+    "crop_fraction": [
+      0.07,
+      0.17,
+      0.94,
+      0.57
+    ]
+  },
+  {
+    "name": "MAX98357A",
+    "page": 33,
+    "kind": "文字布局指南",
+    "target": "U602，ETE/TQFN-16",
+    "note": "Layout and Grounding；主手册下一页WLP布局不适用于本项目封装，未截入示例。",
+    "source": "../厂家核验_2026-10-15/MAX98357A.pdf",
+    "sha256": "dea228ad619901d34c2f5f106243bdb9b9e95e38989d4d66fd6c6c489bfa6f1c",
+    "full": "MAX98357A_PDFp33_整页.png",
+    "crop": null,
+    "crop_fraction": null
+  },
+  {
+    "name": "SN74LVC1G125",
+    "page": 15,
+    "kind": "通用布局示意",
+    "target": "U402，DBV/SOT-23-5",
+    "note": "原厂图含通用转角、TSSOP/WQFN及6脚SOT示意，不是本型号5脚封装的逐脚布线模板。",
+    "source": "../厂家核验_2026-10-15/SN74LVC1G125.pdf",
+    "sha256": "1098d46e4565695e9823a08309bc581e2c9ead26b19e99a43a011a38642b27ca",
+    "full": "SN74LVC1G125_PDFp15_整页.png",
+    "crop": null,
+    "crop_fraction": null
+  },
+  {
+    "name": "SN74LVC2G125",
+    "page": 14,
+    "kind": "通用连接/走线示意",
+    "target": "U601，DCU/VSSOP-8",
+    "note": "Figure 7是未用输入端接法，Figure 8是转角示意；不是本封装的完整PCB布局。",
+    "source": "../厂家核验_2026-10-15/SN74LVC2G125.pdf",
+    "sha256": "15dab14095892f561bc7407dde6c7fb2fb75d92c6bdafc34e949e5dca1fed340",
+    "full": "SN74LVC2G125_PDFp14_整页.png",
+    "crop": null,
+    "crop_fraction": null
+  },
+  {
+    "name": "SN74LVC2G17",
+    "page": 11,
+    "kind": "通用连接示意",
+    "target": "U501，DBV/SOT-23-6",
+    "note": "Figure 7虽题为Layout Diagram，主体为通用端接示意；不是PCB铜层图。",
+    "source": "../厂家核验_2026-10-15/SN74LVC2G17.pdf",
+    "sha256": "624dbe55679d2fed4123b0d7708cd0d295efcc78de395e71a0caf5cd13cbc216",
+    "full": "SN74LVC2G17_PDFp11_整页.png",
+    "crop": null,
+    "crop_fraction": null
+  },
+  {
+    "name": "SN74AHCT1G125",
+    "page": 11,
+    "kind": "通用连接示意",
+    "target": "U502，DBV/SOT-23-5",
+    "note": "Figure 8-3为未用输入端接法，不是PCB铜层图；封装焊盘另见本索引。",
+    "source": "../厂家核验_2026-10-15/SN74AHCT1G125.pdf",
+    "sha256": "386389b623620d89a260b11d272af5625e387e0b24d0981cb4f7d66a4e1bc9fa",
+    "full": "SN74AHCT1G125_PDFp11_整页.png",
+    "crop": null,
+    "crop_fraction": null
+  },
+  {
+    "name": "DS3231",
+    "page": 18,
+    "kind": "文字布局/装配指南",
+    "target": "U802，SO-16W",
+    "note": "Handling, PCB Layout, and Assembly；没有官方走线实例。关注封装下走线隔离与禁止超声清洗。",
+    "source": "../厂家核验_2026-10-15/DS3231.pdf",
+    "sha256": "dc81cd89bee82d0c57b654d6315e03dec913fb8fe753cc80b2a3f1cca71cbb34",
+    "full": "DS3231_PDFp18_整页.png",
+    "crop": null,
+    "crop_fraction": null
+  },
+  {
+    "name": "WS2812B-V6",
+    "page": 5,
+    "kind": "典型应用电路",
+    "target": "前面板HL101–HL105",
+    "note": "原厂仅给级联应用电路，未给PCB Layout；每颗附近保留本项目去耦电容。",
+    "source": "../厂家核验_2026-10-15/WS2812B-V6.pdf",
+    "sha256": "f6ee89835465bc6eabd52c039017abde30e2e04a062e465c12d7ada4c7b30a65",
+    "full": "WS2812B-V6_PDFp05_整页.png",
+    "crop": null,
+    "crop_fraction": null
+  },
+  {
+    "name": "SN74LVC1G125",
+    "page": 27,
+    "kind": "封装焊盘参考",
+    "target": "U402，DBV/SOT-23-5",
+    "note": "DBV0005A推荐焊盘；仅用于核对封装尺寸，不是外围电路布局。",
+    "source": "../厂家核验_2026-10-15/SN74LVC1G125.pdf",
+    "sha256": "1098d46e4565695e9823a08309bc581e2c9ead26b19e99a43a011a38642b27ca",
+    "full": "SN74LVC1G125_PDFp27_整页.png",
+    "crop": null,
+    "crop_fraction": null
+  },
+  {
+    "name": "SN74LVC2G125",
+    "page": 25,
+    "kind": "封装焊盘参考",
+    "target": "U601，DCU/VSSOP-8",
+    "note": "DCU0008A推荐焊盘；仅用于核对封装尺寸，不是外围电路布局。",
+    "source": "../厂家核验_2026-10-15/SN74LVC2G125.pdf",
+    "sha256": "15dab14095892f561bc7407dde6c7fb2fb75d92c6bdafc34e949e5dca1fed340",
+    "full": "SN74LVC2G125_PDFp25_整页.png",
+    "crop": null,
+    "crop_fraction": null
+  },
+  {
+    "name": "SN74LVC2G17",
+    "page": 31,
+    "kind": "封装焊盘参考",
+    "target": "U501，DBV/SOT-23-6",
+    "note": "DBV0006A推荐焊盘；仅用于核对封装尺寸，不是外围电路布局。",
+    "source": "../厂家核验_2026-10-15/SN74LVC2G17.pdf",
+    "sha256": "624dbe55679d2fed4123b0d7708cd0d295efcc78de395e71a0caf5cd13cbc216",
+    "full": "SN74LVC2G17_PDFp31_整页.png",
+    "crop": null,
+    "crop_fraction": null
+  },
+  {
+    "name": "SN74AHCT1G125",
+    "page": 18,
+    "kind": "封装焊盘参考",
+    "target": "U502，DBV/SOT-23-5",
+    "note": "DBV0005A推荐焊盘；仅用于核对封装尺寸，不是外围电路布局。",
+    "source": "../厂家核验_2026-10-15/SN74AHCT1G125.pdf",
+    "sha256": "386389b623620d89a260b11d272af5625e387e0b24d0981cb4f7d66a4e1bc9fa",
+    "full": "SN74AHCT1G125_PDFp18_整页.png",
+    "crop": null,
+    "crop_fraction": null
+  }
+]

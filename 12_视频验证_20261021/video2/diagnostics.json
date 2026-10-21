@@ -1,0 +1,27 @@
+{
+  "tip_upper": {
+    "initialized": true,
+    "accepted_fraction": 0.9849624060150376,
+    "production_valid_x": false,
+    "production_valid_y": false
+  },
+  "tip_lower": {
+    "initialized": true,
+    "accepted_fraction": 0.9736842105263158,
+    "production_valid_x": false,
+    "production_valid_y": false
+  },
+  "flat": {
+    "initialized": true,
+    "accepted_fraction": 0.3533834586466165,
+    "production_valid_x": false,
+    "production_valid_y": false
+  },
+  "support": {
+    "initialized": true,
+    "accepted_fraction": 0.2781954887218045,
+    "production_valid_x": false,
+    "production_valid_y": false
+  },
+  "model_check": "first 4 full-resolution frames: all four C++ outputs bit-exact with Python"
+}

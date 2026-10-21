@@ -1,0 +1,27 @@
+[
+  {
+    "name": "Samsung_CL31B106KBHNNNE_厂家规格_Farnell镜像",
+    "url": "https://www.farnell.com/datasheets/4189546.pdf",
+    "status": "downloaded",
+    "pages": 38,
+    "sha256": "c607deeb9edea76ae2d2dc8f63b4c12faf0b7dd15ff0d2dead791799ef71d2f5",
+    "source": "Samsung厂家编写，2020-07-17规格页，Farnell镜像"
+  },
+  {
+    "name": "Panasonic_FR_EEUFR1V471",
+    "url": "https://industrial.panasonic.com/cdbs/www-data/pdf/RDF0000/ABA0000C1259.pdf",
+    "status": "web_verified_local_download_timeout",
+    "local_pdf": false,
+    "manufacturerProductPage": "https://industrial.panasonic.com/ww/products/pt/aluminum-cap-lead/models/EEUFR1V471",
+    "verifiedSpecs": {
+      "capacitance_uF": 470,
+      "voltage_V": 35,
+      "diameter_mm": 10,
+      "bodyLength_mm": 16,
+      "pitch_mm": 5,
+      "impedanceMax_Ohm_at100kHz": 0.028,
+      "rippleCurrent_A_at100kHz": 1.79
+    },
+    "note": "原厂页面及PDF通过web工具核对；直接下载超时，不声称本地已有此PDF。"
+  }
+]

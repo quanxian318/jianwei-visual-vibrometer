@@ -1,0 +1,828 @@
+--- PDF PAGE 1 ---
+                 规格承认书
+                                                Specification for approval
+客户名称:       深圳市立创电子商务有限公司
+（Customer Name）
+产品名称:      贴片铝电解电容器
+（Product Name）      SMD Aluminum Electrolytic Capacitor
+客户料号：
+（Customer part number）
+科尼盛料号：      RVE470UF35V167RV084
+（KNSCHA number）      RVE470UF35V167RV084
+型号规格:      SMD E/C 470UF/35V 10*10.2mm RVE
+（Specifications）      SMD E/C 470UF/35V 10*10.2mm RVE
+制   造
+(Manufacture)
+客        户
+(Customer)
+Approval Approval
+拟   制
+(Fiction)
+审    核
+(Chief)
+核       准
+(Approval)
+检  验
+(Inspect)
+审    核
+(Chief)
+核       准
+(Approval)
+东莞市科尼盛电子有限公司
+DONG GUAN KNSCHA ELECTRONICS CO.,LTD.
+No. 8th floor, A3 building, R&D center (Phase I), 
+Songshan Lake Intelligent Valley, Liaobu Town, Dongguan City.
+TEL:0769-83698067  81035570     FAX: 0769-83861559
+Email：sales@knscha.com Website: http://www.knscha.com
+
+--- PDF PAGE 2 ---
+RVE 系列铝电解电容器
+Alumnum Electrolytic Capacitors RVESERIES
+第 2页
+历 年 更 改 目 录 表
+型 号： (RVE1V471M-CRG10 )
+更改年月日 更改页码 更 改 事 项
+全新发2022 年 8 月 2 6日 行
+--- PDF PAGE 3 ---
+RVE 系列铝电解电容器
+Alumnum Electrolytic Capacitors RVESERIES
+第 3页
+物料规格
+NO Series Name
+(uF / WV)
+WV
+(V)
+Cap.
+(uF)
+Cap. tol.
+120Hz
+20℃
+DF
+120Hz
+20℃
+≤
+LC
+（uA）
+（2min）
+≤
+Z（Ω）
+100KHZ DΦ* L P
+±0.2
+Allowable ripple
+current (mA
+rms) at 105C,
+120Hz
+Code
+1. RVE 470/35 35 470 ±20% 0.12 164.5 0.23 10x10.2 4.5 670 M
+--- PDF PAGE 4 ---
+RVE 系列铝电解电容器
+Alumnum Electrolytic Capacitors RVESERIES
+第 4页
+RVE环保型标准品贴片铝电解电容器
+RVE Series environmental protection standard product SMD(V-chip) aluminum electrolytic capacitors.
+1.范围 Scope
+适用“RVE 系列”立式片式铝电解电容器
+This specification covers “RVE Series” SMD(V-chip) aluminum electrolytic capacitors.
+2.参考标准 Reference Standard
+日本工业标准 JIS C-5141 JIS C-5101
+Japanese industrial Standard JIS C-5141 characteristics W and JIS C-5101 except as specified
+3.环境保护标准 environment protection standard
+RoHS 指令 2015/863/EU
+4.主要技术性能 SPECIFICATION
+NO 项目
+Item
+性能
+Performance Characteristics 试验方法 test method（JIS C 5101-1）
+1
+使用温度范围
+Operating
+temperature range
+- 40 ~ +105℃
+2 额定工作电压范围
+Voltage Range
+6.3 ~100 (VDC)
+3 泄漏电流
+Leakage Current
+I ≦ 0.01 CV 或 3 uA
+(2分钟取大值) whichever is greater (after 2 minutes)
+4
+静电容量允许偏差
+Capacitance
+Tolerance
+±20 (%) (120 Hz, +20℃)
+5
+损失角正切值
+Tan 
+(120 Hz, +20℃)
+Rated Voltage (VDC)
+额定电压 6.3 10 16 25 35 50
+Tan 
+(max.) 4~10 0.22 0.19 0.16 0.14 0.12 0.12
+6
+温度特性
+Temperature
+Characteristics
+温度试验阶段 temperature test
+Step1时，Impedance Ratio：CAP±20％ ，DF、LC 在规格值内
+Step2时，Impedance Ratio：
+Rated Voltage (V) 6.3 10 16 25 35 50 63 100
+Impedance Ratio
+ZT/Z20 (max.)
+Z-25C /Z+20C 4 3 2 2 2 2 2 3
+Z-40C /Z+20C 10 8 6 5 5 5 6 6
+Step4时，Impedance Ratio：
+静电容量变化率 Capacitance Change ±25 %of the value in Step1
+损失角正切值 Tan  initial specified value
+Step5 时，Impedance Ratio：
+静电容量变化率 Capacitance Change ±10 %of the value in Step1
+损失角正切值 Tan  initial specified value
+Step T （℃） H（min） Measurement (120 Hz)
+1 20±2 3 CAP、Z
+2 -25、-40（+0、-2） 分别放置 30 Z
+3 15~35 15
+4 105（+2、-0） 30 LC、CAP、DF
+5 20±2 3
+--- PDF PAGE 5 ---
+RVE 系列铝电解电容器
+Alumnum Electrolytic Capacitors RVESERIES
+第 5页
+NO 项目
+Item
+性能
+Performance Characteristics 试验方法 test method（JIS C 5101-1）
+7
+浪涌测试
+Surge Voltage
+Test
+A
+After surge voltage applied at a cycling rate of 30 seconds charge and 5.5 minutes discharge1000
+successive test cycle.Test temperature:15~35℃.
+judgement：
+a. 容量△C/C ≦ ±15 % b. 损耗角正切DF ≦ 100 % 之规格值
+c. 漏电流LC 应 ≦ 规格值 d. 产品外观无任何异常
+Rated Voltage (VDC)
+额定电压 6.3 10 16 25 35 50 63 100
+Surge Voltage (VDC)
+浪涌电压 7.2 10.5 18.4 29 40 58 73 115
+8
+可焊性
+Solderability 焊料润湿试验表面 95％区域，焊锡应光亮均匀
+A minimum of 95% of the surface being immersed
+The capacitor shall be tested under the following
+conditions: Soldering temperature: 245±5℃
+Dipping depth: 2mm
+Dipping speed: 25±2.5mm/s
+Dipping time: 3±0.5s
+9 耐振性
+Vibration test
+电容量变化 Capacitance Change: Within ±5%
+of initial value.
+外观无损坏 Appearance: There shall be no
+leakage of electrolyte.
+The following conditions shall be applied for 2 hours in
+each (X,Y,Z) 3 mutually perpendicular directions,with a
+total of 6 hours .
+Vibration frequency range: 10Hz ~ 55Hz
+Peak to peak amplitude: 1.5mm
+10
+标示耐溶剂性
+Solvent
+Resistance of the
+Marking
+标示应清晰可辨
+There shall be no damage end legibly marked
+can be deciphered easily
+在 20～25C 条件下将电容器本体浸入异丙醇中 30±5S
+后，目视检查
+Class of Reagent:Isopropyl Alcohol;
+Test Temperature:20~25C;Immersing Time:30±5S
+11
+耐焊接热
+Solder Heat
+Resistance Test
+判定： a. 容量变化量 ≦ ±10 %
+△C/C ≦ ±10% ;
+b. 外观不得有损坏现象
+Appearance:
+No significant change can be observe
+经过回流焊后（参见第 9页）在室温中恢复后，电容
+器满足如左要求
+After reflow soldering according to Reflow Soldering
+Condition (see page 9) and restored at room
+temperature, they meet the characteristics listed.
+12
+高温负载
+High
+Temperature
+Load Life Test
+容量变化
+量△C/C
+≦±30%初始值内
+≦±30% initial specified value
+损耗角正
+切值 Tan 
+≤300%初始规定值
+≦300% initial specified value
+漏电流 LC
+≤初始规定值
+≦ initial specified value
+105℃施加额定电压 2000小时，让其在室温下冷却
+恢复后检查 105℃施加额定电压 2000小时后，电容
+器应满足如左要求
+After 2000 hours application of rated voltage at
+105C, capacitors meet the characteristics
+requirements listed.
+13 高温存储
+Shelf life
+容量变化
+量△C/C
+≦±30%初始值内
+≦±30% initial specified value
+损耗角正
+切值 Tan 
+≤300%初始规定值
+≦300% initial specified value
+漏电流 LC
+≤2倍初始规定值
+≦ 200% initial specified value
+105℃ 1000小时后高温放置后，让其在室温下冷却
+恢复后，电容器应满足如左要求.
+After storge for 1000 hours at 105C, capacitors
+meet the characteristics requirements listed.
+14 耐湿性
+Humidity Test
+A.容量变化量 △C/C≦± 15%
+b. 损耗角正切值 DF ≦ 100 % initial
+specified value
+c. 漏电流 LC≦ 100 % initial specified value
+d. 产品外观无损坏 Appearance:No
+significant change can be observe
+电容器放置在湿度 90 - 95 % 温度 40℃的环境中 240
+小时± 8小时，电容器取出恢复 1~2小时后电容器满足
+左要求：
+Capacitors shall be exposed for 240 ± 8 hrs in an
+atmosphere of 90 - 95 % R.H.at40℃ And then the
+Capacitor shall be subjected to standard atmospherjc
+Conditions for 1-2hours, after which measurements
+Shall be made.
+--- PDF PAGE 6 ---
+RVE 系列铝电解电容器
+Alumnum Electrolytic Capacitors RVESERIES
+第 6页
+5.标识
+Marking
+A)电容器标识内容如下：
+Capacitors shall be legibly marked with the following:
+1）产品系列
+Manufacture’s mark
+2）额定电压和额定电容
+Rated voltage and nominal capacitance
+3）负极标识
+Negative polarity
+B)电容器的编带包装盘上印刷以下内容
+Following items should be marked on the taping reel
+1）额定电压&容量
+Rated Voltage and Capacitance
+2) 客户料号（客户有要求时）
+Customer’s Part Number(if request)
+3) 系列名称
+Series Mark
+4) 制造批号
+Lot Number
+5) 编带数量
+Packing quantity
+6.编带粘接力测试
+Adhedion Test
+平均上带剥离力强度:10~80g ； 测试速度：200~300mm/min
+Reasonable pulling strength:10~80g ；Pulling speed: 200~300mm/min
+下卷始15个空格 卷尾15个空格
+卷始留15个空格
+～
+15°匣盒上带
+上带平均剥离力：
+10～80
+S 
+e 
+r 
+i 
+e 
+s 
+P 
+o 
+l 
+a 
+r 
+i 
+t 
+y 
+C 
+a 
+p 
+a 
+c 
+i 
+t 
+a 
+n 
+c 
+e 
+ 
+u 
+F 
+V 
+o 
+l 
+t 
+a 
+g 
+e 
+--- PDF PAGE 7 ---
+RVE 系列铝电解电容器
+Alumnum Electrolytic Capacitors RVESERIES
+第 7页
+7.图样
+Drawing (Unit: mm)(4~6.3)
+(8, 10)
+8.尺寸
+Dimensions (Unit: mm)
+DL 45.4 55.4 6.35.4 6.37.7 86.5 810.2
+A 4.3 5.3 6.6 6.6 8.3 8.3
+B 4.3 5.3 6.6 6.6 8.3 8.3
+C 5.0 6.0 7.2 7.2 9.1 9.1
+P 1.0 1.5 2.1 2.1 3.1 3.1
+L 5.4 5.4 5.4 7.7 6.5 10.2
+1010.2
+10.3
+10.3
+11.1
+4.5
+10.2
+9.编带说明
+Taping Specifications
+符合标准 JIS C0806
+Applicable standard JIS C0806
+(RVE)
+盒带
+Carrier Tape
+P:±0.2
+P:±0.2
+0.2
+正极  
+正极 
+0.2
+--- PDF PAGE 8 ---
+RVE 系列铝电解电容器
+Alumnum Electrolytic Capacitors RVESERIES
+第 8页
+9.1.图样
+Drawing 1 (for 4 ~ 10) Unit:mm
+负极
+尺寸
+Dimension Unit:mm
+Series RVE
+DL
+W
+P
+F
+45.4
+12.0
+8.0
+5.5
+55.4
+12.0
+12.0
+5.5
+6.35.4
+16.0
+12.0
+7.5
+6.37.7
+16.0
+12.0
+7.5
+86.5
+16.0
+12.0
+7.5
+810.2
+24.0
+16.0
+11.5
+1010.2
+24.0
+16.0
+11.5
+A 4.7 6.0 7.0 7.0 8.7 10.7
+B 4.7 6.0 7.0 7.0
+8.7
+8.7 8.7 10.7
+T1 5.8 5.8 5.8 8.3 7.0 11.0 11.0
+9.2.卷盘
+Reel
+Unit:mm
+D 4*5.4 5*5.4 6.3*5.4 6.3*7.7 8*6.5 8*10.2 10*10.2
+A 12.5 12.5 16.5 16.5 16.5 24.5 24.5
+包装数量 Package quantity
+DL
+45.4
+卷装数量
+Qty./Reel
+2000 pcs.
+盒装数量
+Qty./Bag
+24000 pcs.
+55.4 1000 pcs. 12000 pcs.
+6.35.4 1000 pcs. 10000 pcs.
+6.37.7 1000 pcs. 10000 pcs.
+86.5 1000 pcs. 10000 pcs.
+810.2
+1010.
+500 pcs.
+3500 pcs.2 500 pcs.
+3500 pcs.
+ 
+ 
+ 
+ 
+   
+  
+ 
+ 
+A
+3
+2.0
+382Max.
+50Min.
+130.5
+23
+正极
+--- PDF PAGE 9 ---
+RVE 系列铝电解电容器
+Alumnum Electrolytic Capacitors RVESERIES
+第 9页
+10. 无铅回流焊接
+Lead-free Reflow Soldering Condition
+A. 回流焊条件推荐
+Recommended Conditions for Reflow Soldering
+（1）应采用红外线及热风回流焊接，不宜采用汽相加热回流焊接；
+A thermal condition system such as infrared radiation (IR) or hot blast should be adopted, and
+vapor heat transfer systems (VPS) are not recommended.
+（2）推荐回流焊只进行一次，回流焊次数如果需要二次，必须相隔 30 分钟以上；
+Reflow soldering should be performed one time. If the capacitor has to be reflowed twice, 30
+minutes must be layout between each time.
+（3）无铅回流焊，请符合下述条件：
+For lead-free type reflow soldering, please observe proper conditions below:
+a)从 150℃至 200℃的预热时间在 t1 秒钟以内；
+The time of preheating from 150°C to 200°C shall be within maximum t1 seconds;
+b)电容器顶部温度超过 217℃的焊接时间不超过 t2秒；
+The time of soldering temperature at 217°C measured on capacitors' top shall not exceed t2
+(second);
+c)电容器顶部尖峰温度不超过 Tp℃，在 5℃范围内的实际尖峰温度时间不超过 t3 秒
+The peak temperature on capacitors' top shall not exceed Tp(°C), and the time within 5°C of
+actual peak temperature shall not exceed t3 (second).
+B.回流焊曲线图
+Classification Reflow Profile
+（℃）
+（ ）
+C. 尖峰温度允许范围
+Allowable Range of Peak Temperature
+Size Thickness
+(mm) TP(°C) t1(Max,secs) t2(Max,secs) t3(TP,secs)
+4~6.3 2.5 260 120 90 5
+8 2.5 240 100 60 5
+10 2.5 235 100 40 5
+*1. Average ramp-up rate is 3℃/second max.
+*2. Ramp-down rate is 6℃/second max.
+*3 .Time from 25℃ to peak temperature is 8
+minutes max.
+--- PDF PAGE 10 ---
+RVE 系列铝电解电容器
+Alumnum Electrolytic Capacitors RVESERIES
+第 10页
+D.表面安装推荐尺寸
+Recommended Land Size (Unit: mm)
+11.引线原材料
+The Raw Materials of Lead Wire
+Name Material Percentage
+TPCS
+Fe 77.04%
+Cu 14.25%
+Sn 8.71%
+12.电容器代码标志
+Explanation of Part Number
+Series (RVE) Voltage (35V) Capacitance (470F) Capacitance Tolerance (20%) Case Diameter
+(10x10.2mm)
+1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
+13
+Series Voltage (WV) Capacitance (F) Cap. Tol. (%) Dash Type Conflgurtion Dia Length
+系列 额定电压(WV) 静电容量 (F) 容量允许差 破折号 类型 引线结构 直径 高度
+范例：
+Example: RVE 1V 471 M 破折号 类型 引线结构 G 10
+铝壳高度(10.2mm)
+外壳外径
+Case Size (10)
+引线结构
+类型
+破折号
+Capacitance Tolerance (20%)
+电容量允许偏差
+电容量
+Capacitance (470uF)
+电压
+Voltage (35V)
+系列 Series (RVE)
+Size X Y a
+4 1.6 2.6 1.0
+5 1.6 3.0 1.4
+6.3 1.6 3.5 2.1
+8 2.5 3.5 3.0
+10 2.5 4.0 4.0
+Y
+Y
+a
+X
+-
+--- PDF PAGE 11 ---
+RVE 系列铝电解电容器
+Alumnum Electrolytic Capacitors RVESERIES
+第 11页
+13. 结构 Construction
+
+--- PDF PAGE 12 ---
+RVE 系列铝电解电容器
+Alumnum Electrolytic Capacitors RVESERIES
+第 12页
+14.额定纹波电流的频率系数
+Frequency Coefficient of Allowable Ripple Current
+15.尺寸和纹波电流（本公司 RVE 标准）
+Case Size and Ripple Current(Our company’s stan
+WV
+Code
+代码
+µF
+6.3V 10V 16V 25V 35V 50V
+0J 1A 1C 1E 1V 1H
+DxLmm Z mA DxLmm Z mA DxLmm Z mA DxLmm Z mA DxLmm Z mA DxLmm Z mA
+1 010 4x5.4 5.0 30
+2.2 2R2 4x5.4 5.0 30
+3.3 3R3 4x5.4 5.0 30
+4.7 4R7 4x5.4 3.2 6 4x5.4 3.2 60 5x5.4 3.0 50
+10 100 4x5.4 3.2 60
+4x5.4 3.2 60 4x5.4 3.2 60
+6.3x5.4 2.0 70
+5x5.4 1.5 110 5x5.4 1.5 110
+22 220 4x5.4 3.2 60
+4x5.4 3.2 60
+5x5.4 1.5 110
+5x5.4 1.5 110 5x5.4 1.5 110 6.3x5.4 2.0 70
+5x5.4 1.5 110 6.3x5.4 0.85 170 6.3x5.4 0.85 170 6.3x7.7 1.0 120
+33 330 5x5.4 1.5 110 5x5.4 1.5 110
+5x5.4 1.5 110
+6.3x5.4 0.85 170 6.3x5.4 0.85 170 6.3x7.7 1.0 120
+6.3x5.4 0.85 170
+47 470 5x5.4 1.5 110
+5x5.4 1.5 110 5x5.4 1.5 110 6.3x5.4 0.85 170 6.3x5.4 0.85 170 6.3x7.7 1.0 120
+6.3x5.4 0.85 170 6.3x5.4 0.85 170 6.3x7.7 0.6 230 6.3x7.7 0.6 230 8x10.2 0.6 300
+100 101
+5x5.4 1.5 110 6.3x5.4 0.85 170 6.3x5.4 0.85 170
+6.3x7.7 0.6 230
+6.3x7.7 0.6 230 8x10.2 0.6 300
+6.3x5.4 0.85 170 6.3x7.7 0.6 230 6.3x7.7 0.6 230 8x10.2 0.43 450 10x10.2 0.3 500
+150 151 6.3x5.4 0.85 170 6.3x5.4 0.85 170 6.3x7.7 0.6 230 8x10.2 0.45 450 8x10.2 0.43 450 10x10.2 0.3 500
+220 221
+6.3x5.4 0.85 170
+6.3x7.7 0.6 230
+6.3x7.7 0.6 230 8x10.2 0.43 450
+10x10.2 0.23 670 10x10.2 0.3 500
+6.3x7.7 0.6 230 8x10.2 0.43 450 10x10.2 0.23 670
+330 331 6.3x7.7 0.6 230 8x10.2 0.43 450 8x10.2 0.43 450
+8x10.2 0.43 450
+10x10.2 0.23 670 10x10.2 0.3 500
+10x10.2 0.23 670
+470 471 8x10.2 0.43 450 8x10.2 0.43 450
+8x10.2 0.43 450
+10x10.2 0.23 670 10x10.2 0.23 670
+10x10.2 0.23 670
+680 681 8x10.2 0.43 450 10x10.2 0.23 670 10x10.2 0.23 670
+1000 102
+8x10.2 0.43 450
+10x10.2 0.23 670
+10x10.2 0.23 670
+1500 152 10x10.2 0.23 670
+额定纹波电流 Rated ripple current(mA,105℃,120Hz)
+NO 材料名 material 材质.处理 Textures
+1 涂膜铝壳 Case 涂聚氨脂醇膜铝壳（AL纯度 purity98％以上、PU 纯度 purity1.5％）
+2 座板 Base 热可塑性尼龙（Polyphthalamide 纯度 purity40~70％）
+3 +引出线 Lead Wire 铝线(AL)、CP 线(Fe、Cu、Sn)（扁平形加工 flat）
+4 -引出线 Lead Wire 铝线(AL)、CP 线(Fe、Cu、Sn)（扁平形加工 flat）
+5 封口胶盖 Rubber 丁基橡胶 IIR
+6 素子 cores. 铝箔 aluminum foil、电解纸 Paper、电解液（GBL、electrolyte）导针 Lead Wire
+Frequency 50Hz 120Hz 300Hz 1kHz 10kHz Up
+Coefficient
+1~10uF 0.60 1.0 1.15 1.25 1.40
+22~1500uF 0.75 1.11.0 0 1.20 1.35
+
+--- PDF PAGE 13 ---
+RVE 系列铝电解电容器
+Alumnum Electrolytic Capacitors RVESERIES
+第 13页
+16. 片式铝电解电容器一般使用注意事项
+Application guideline for V-CHIP aluminum electolytic capacitors
+A)电路设计
+Circuit Design
+1) 充分考虑电容器使用和安装条件在产品目录的规定范围内
+Please make sure the environmental and mounting conditions to which the capacitor will be exposed
+are within the conditions specified in catalogue.
+2) 工作温度和施加的纹波电流应在产品目录的规定范围内
+Operating temperature and applied ripple shall be within RJ specification.
+3) 在设计电路时，应选择符合寿命要求的产品
+Appropriate capacitors which comply with the life requirement of the products should be selected
+when designing the circuit.
+4) 铝电解电容器是有极性的，不应加反向电压或交流电压。对可能出现反向电压的电路，应选择双极性
+电容器。注意：即使双极性电容器，也不能直接用于纯交流电路
+Aluminum electrolytic capacitors are polar. Make sure that no reverse voltage or AC voltage is applied
+to the capacitors. Please use bi-polar capacitors for a circuit that can possibly see reversed polarity.
+Note: Even bi-polar capacitors cannot be used for AC voltage application.
+5）对需要快速和频繁充放电的电路，不应使用铝电解电容器，而应选择特别设计的具有长寿命的电容器
+Do not use aluminum electrolytic capacitors in a circuit that requires rapid and very frequent charge /
+discharge.
+In this type of circuit, it is necessary to use a special design capacitor with extended life
+characteristics.
+6）不应使用过载电压
+Do not apply excess voltage.
+1 直流电压与纹波电压叠加后的峰值电压不应超过额定工作电压
+Please pay attention to that the peak voltage, which is DC voltage overlapped by ripple current, will
+not exceed the rated voltage.
+2 若 2 个以上电容器串联，应确保施加电压低于额定值，而且要并联一个平衡电阻，以使每个电容器
+所加电压相等。
+In the case where more than 2 aluminum electrolytic capacitors are used in series, please make
+sure that applied voltage will be lower than rated voltage and the voltage will be applied to each
+capacitor equally by using a balancing resistor in parallel with the capacitor
+7）电容器不能应用于下述环境条件下：
+Aluminum electrolytic capacitors shall not be used under the following environmental conditions:
+①(a) 电容器被暴露于水（包括浓缩液）、盐水或油中。
+Capacitors will be exposed to water (including condensation), brine or oil.
+(b) 周围环境中有氢化硫、亚硫酸、亚硝酸、氯气、溴气、溴化甲烷、氨气等有毒气体。
+Ambient conditions that include toxic gases such as hydrogen sulfide, sulfurous acid, nitrous
+acid, chlorine, bromine, methyl bromide, ammonium, etc.
+(c) 周围环境中有臭氧、紫外线及辐射。
+Ambient conditions that expose the capacitor to ozone, ultraviolet ray and radiation.
+2 严重的振动及机械冲击超过产品目录的规定范围。
+Severe vibration and physical shock conditions that exceed pecification.
+--- PDF PAGE 14 ---
+RVE 系列铝电解电容器
+Alumnum Electrolytic Capacitors RVESERIES
+第 14页
+振动的测试条件如下
+Vibration test condition:
+振动频率范围 ： 10-55-10Hz
+vibration frequency range : 10～55～10Hz
+扫描频率 ： 10-55-10Hz/分钟
+sweep rate : 10～55～10Hz/minute
+扫描方式 ： 对数
+sweep method : logarithmic
+振幅或加速度 ：1.5mm
+amplitude or acceleration : 1.5mm
+振动方向 ： X、Y、Z 方向
+direction of vibration : X, Y, Z direction
+测试时间 ： 每个方向 2 小时
+testing time: 2 hours per each direction
+冲击一般不适用。
+Shock is not applicable normally.
+如有特殊要求，请与我们销售部门联系。
+If a particular condition is required, please contact our sales office.
+8） 电解液主要化学溶剂及电解纸为易燃物，且电解液导电。当电解液与 PC 板接触时，可能会腐蚀 PC
+板上的线路，或造成短路，以致产生烟或着火。因此在电容器封口下端不应有任何线路。
+The main chemical solution of the electrolyte and the separator paper used in the capacitors are
+combustible. The electrolyte is conductive. When it comes in contact with the PC board, there is a
+possibility of pattern corrosion or short circuit between the circuit pattern, which could result in
+smoking or catching fire. Do not locate any circuit pattern beneath the capacitor end seal.
+9） 设计线路板时应确保发热元器件不靠近铝电解电容器或 PC 板的另一面，避免其正好在电容器的下面。
+Do not design a circuit board that the heat generating components are placed near the aluminum
+electrolytic capacitor or on the reverse side of PC board, if that just under the capacitor.
+10） 设计线路板时应考虑到电容器的电性能可能随温度和频率的变化而变化。
+Electrical characteristics may vary depending on changes in temperature and frequency. Please
+consider this variation when you design circuits.
+11） 当 2 个以上电容器并联时，应考虑到通过这些电容器的电流平衡。
+When you install more than 2 capacitors in parallel, please consider the balance of current flowing
+into the capacitors.
+12） 在双面线路板上安装电容器时，电容器的安装位置应避开多余的基板孔和过孔。
+While mounting capacitors on double-side PC board, the capacitors should be away from those
+unnecessary base plate holes and connection holes.
+B）安装
+Mounting
+1）一旦电容器经过安装及加载，不要再试图用于其他线路板或其他用途。
+Once a capacitor has been assembled in the set and power applied, do not attempt to re-use the
+capacitor in other circuits or application.
+2）贮存超过 2 年的电容器，其漏电流可能增大。若漏电流增大，请使用 1KΩ电阻做充电处理。
+Leakage current of the capacitors that have been stored for more than 2 years may increase. When
+leakage current has increased, please perform a voltage treatment using a 1kΩ resistor.
+3）在将电容器安装在 PC 板之前，请确认其规格和极性。
+Please confirm specifications and polarity before installing capacitors on the PC board.
+4) 不要将电容器掉在地上，或不要使用掉在地上的电容器。
+--- PDF PAGE 15 ---
+RVE 系列铝电解电容器
+Alumnum Electrolytic Capacitors RVESERIES
+第 15页
+Do not drop capacitors on the floor, nor use a capacitor that was dropped.
+5) 安装时请不要损伤电容器。
+Do not deform the capacitor during installation.
+6) 请注意贴片机的吸头、产品检测夹具或对中装置对电容器的机械冲击。
+Please pay attention to the mechanical shock to the capacitor by suction nozzle of the automatic
+insertion machine or automatic mounter, or by product checker, or by centering mechanism.
+7) 回流焊
+Reflow soldering
+1 请遵守产品目录中的回流焊条件。
+Please follow “Reflow Soldering Conditions” in catalogue.
+2 当使用红外线加热时，请注意加热程度，因为红外线吸收率会随着电容器颜色和大小的不同而改变。
+When an infrared heater is used, please pay attention to the extent of heating since the absorption
+rate of infrared will vary due to difference in the color and size of the capacitor.
+8) 将电容器焊接在 PC 板后，不要倾斜或扭动电容器。
+Do not tilt lay down or twist the capacitor body after the capacitor are soldered to the PC board.
+9) 不要抓住焊接后的电容器搬动 PC 板。
+Do not carry the PC board by grasping the soldered capacitor.
+10)不要让任何物品接触焊接后的电容器。如果 PC 板堆放储存，请确保 PC 板或其他零部件不触到电容器。
+Please do not allow anything to touch the capacitor after soldering. If PC boards are stored in stack,
+please make sure the PC board or other components away from the capacitor.
+11）焊接后的电容器不应受到任何已焊接 PC 板或其他元器件热辐射的影响。
+The capacitors shall not be effected by any radiated heat from the soldered PC board or other
+components after soldering.
+12）清洗：
+Cleaning
+①不能用卤化清洗剂清洗电容器。如必须使用卤化清洗剂，请与我们销售部门联系。
+Do not clean capacitors with halogenated cleaning agent. However, if it is necessary to clean with
+halogenated cleaning agent, please contact our sales office.
+②推荐清洗方法：
+Recommended cleaning method
+使用范围：任何类型及规格
+Applicable : Any type, any ratings
+清洗方法：浸泡、超声波或其他方法的总清洗时间应在 2分钟内。清洗剂温度应在 40℃以下。清洗
+后，应将电容器与 PC 板一起用热风吹至少 10 分钟。热风温度应低于电容器工作温度。水洗后若不
+充分吹干，可能导致外观不良，如座板发胀等。
+Cleaning conditions : Total cleaning time shall be within 2 minutes by immersion,
+ultrasonic or other methods. Temperature of the cleaning agents shall be 40℃ or below.
+After cleaning, capacitors should be dried by using hot air for the minimum 10 minutes
+along with the PC board mounted. Hot air temperature should be within the maximum operating
+temperature of the capacitor. Insufficient dryness after water rinse may cause appearance
+problems, such as bottom-plate bulge and etc.
+3 避免使用破坏臭氧层的清洗剂以保护环境。
+Avoid using ozone destructive substances as cleaning agents for protecting global
+environment.
+--- PDF PAGE 16 ---
+RVE 系列铝电解电容器
+Alumnum Electrolytic Capacitors RVESERIES
+第 16页
+C）安装后
+In the Equipment
+1）不要直接用手接触电容器正负极。
+Do not directly touch terminal by hand.
+2）不要在正负极之间用导体连接，也不要在电容器及其附近溅撒导电液体，如酸碱溶液等。
+Do not link positive terminal and negative terminal by conductor, nor spill conductible liquid such
+as alkaline or acidic solution on or near the capacitor.
+3）在使用环境中应避免溅上水或油，避免阳光直射、紫外线照射、辐射、有毒气体、振动或机械冲击。
+Please make sure that the ambient conditions where the set is installed are free from spilling water
+or oil, direct sunlight, ultraviolet rays, radiation, poisonous gases, vibration or mechanical shock.
+D） 维护和检验
+Maintenance and Inspection
+请定期检测安装在工业设备上的电容器。检测项目如下：
+Please periodically inspect the aluminum capacitors that are installed in industrial equipment. The
+following items should be checked:
+外观：明显缺陷，如防爆阀打开、电解液泄露等。
+Appearance: remarkable abnormality such as pressure relief vent opening, electrolyte leaking, etc.
+电性能：电容量、损耗角正切、漏电流等，具体数据参见产品目录和相关产品规格书。
+Electrical characteristics: capacitance, dielectric loss tangent, leakage current and etc., which are
+specified in catalogue or alternate product specification.
+E）紧急情况
+In an Emergency
+1）若看见因防爆阀动作而产生的烟气，请关闭主开关或拔开离合器。
+If you see smoke due to operation of safety vent, please turn off the main switch or pull out the
+plug from the outlet.
+2）若吸入气体或咽下电解液，应立即用水清洗口腔和喉咙。
+If you breathe the gas or ingest the electrolyte, please wash out your mouth and throat with water
+immediately.
+3）若皮肤沾上电解液，请用肥皂和水清洗干净。
+If your skin is exposed to the electrolyte, please wash it away using soap and water.
+F）储存
+Storage
+1）不要将电容器储存在温度和湿度高的地方。
+储存环境应为温度：5℃-35℃，相对湿度：<75%，储存地点：室内。
+Do not keep capacitor in high temperature and high humidity atmosphere.
+Storage conditions should be:
+Temperature: 5℃～35℃ Humidity : lower than 75% Place : Indoor
+2）避免电容器的储存环境中有水、盐水或油。
+Avoid ambient conditions where capacitors are covered with water, brine or oil.
+4）避免电容器暴露在臭氧、紫外线或辐射中。
+Avoid ambient conditions where capacitors are exposed to ozone, ultraviolet ray or radiation.
+--- PDF PAGE 17 ---
+RVE 系列铝电解电容器
+Alumnum Electrolytic Capacitors RVESERIES
+第 17页
+G) 处置
+Disposal
+请用下面任何一种方法处置电容器：
+Please take either of the following methods in disposing capacitors.
+1）在电容器壳体上开孔或将电容器压碎后焚烧。
+Incinerate them after crushing capacitors or making a hole on the capacitor body.
+2）如不能进行焚烧，请交给废物处理机构进行填埋。
+If incineration is not applicable, hand them over to a waste disposal agent and have them buried
+in landfills.

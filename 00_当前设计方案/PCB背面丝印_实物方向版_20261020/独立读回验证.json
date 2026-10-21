@@ -1,0 +1,12 @@
+{
+  "modules_read_back": 26,
+  "edge_port_pin1_left_checked": 18,
+  "mirrored_paths_checked": 3440,
+  "svg_bounds": "PASS",
+  "ax40_row_order": "PASS",
+  "zip_crc": "PASS",
+  "body_height_mm": 1.0,
+  "small_body_height_mm": 1.1,
+  "stroke_mm": 0.15,
+  "actual_pcb_svg_import_tested": false
+}

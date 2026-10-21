@@ -1,0 +1,1085 @@
+--- PDF PAGE 1 ---
+74LVC244A; 74LVCH244A
+Octal buffer/line driver; 3-state
+Rev. 9 — 13 August 2018 Product data sheet
+1.  General description
+The 74LVC244A; 74LVCH244A is an octal non-inverting buffer/line driver with 3-state outputs.
+The 3-state outputs are controlled by the output enable inputs 1OE and 2OE. A HIGH on nOE
+causes the outputs to assume a high-impedance OFF-state. Schmitt-trigger action at all inputs
+makes the circuit highly tolerant for slower input rise and fall times.
+Inputs can be driven from either 3.3 V or 5.0 V devices. In 3-state operation, outputs can handle
+5 V. These features allow the use of these devices as translators in a mixed 3.3 V and 5 V
+environment.
+The 74LVCH244A bus hold on data inputs eliminates the need for external pull-up resistors to hold
+unused inputs.
+2.  Features and benefits
+• 5 V tolerant inputs/outputs for interfacing with 5 V logic
+• Wide supply voltage range from 1.2 V to 3.6 V
+• CMOS low-power consumption
+• Direct interface with TTL levels
+• Inputs accept voltages up to 5.5 V
+• High-impedance when VCC = 0 V
+• Bus hold on all data inputs (74LVCH244A only)
+• Complies with JEDEC standard:
+• JESD8-7A (1.65 V to 1.95 V)
+• JESD8-5A (2.3 V to 2.7 V)
+• JESD8-C/JESD36 (2.7 V to 3.6 V)
+• ESD protection:
+• HBM JESD22-A114F exceeds 2000 V
+• MM JESD22-A115B exceeds 200 V
+• CDM JESD22-C101E exceeds 1000 V
+• Specified from -40 °C to +85 °C and -40 °C to +125 °C
+--- PDF PAGE 2 ---
+Nexperia 74LVC244A; 74LVCH244A
+Octal buffer/line driver; 3-state
+3.  Ordering information
+Table 1. Ordering information
+PackageType number
+Temperature range Name Description Version
+74LVC244AD
+74LVCH244AD
+-40 °C to +125 °C SO20 plastic small outline package; 20 leads;
+body width 7.5 mm
+SOT163-1
+74LVC244ADB
+74LVCH244ADB
+-40 °C to +125 °C SSOP20 plastic shrink small outline package; 20 leads;
+body width 5.3 mm
+SOT339-1
+74LVC244APW
+74LVCH244APW
+-40 °C to +125 °C TSSOP20 plastic thin shrink small outline package; 20 leads;
+body width 4.4 mm
+SOT360-1
+74LVC244ABQ
+74LVCH244ABQ
+-40 °C to +125 °C DHVQFN20 plastic dual in-line compatible thermal
+enhanced very thin quad flat package; no leads;
+20 terminals; body 2.5 × 4.5 × 0.85 mm
+SOT764-1
+4.  Functional diagram
+12
+14
+2
+4
+6
+8
+18
+16
+1 EN
+mna873
+3
+5
+11
+13
+15
+17
+9
+7
+19 EN
+Fig. 1. IEC logic diagram
+mna875
+1A3
+1A2
+1A1
+1A02
+4
+6
+8
+1
+1Y0
+1Y1
+18
+16
+14
+12
+1Y2
+1Y3
+1OE
+2A3
+2A2
+2A1
+2A0
+17
+15
+13
+11
+19
+2Y0
+2Y1
+3
+5
+7
+9
+2Y2
+2Y3
+2OE
+Fig. 2. Functional diagram
+74LVC_LVCH244A All information provided in this document is subject to legal disclaimers. © Nexperia B.V. 2018. All rights reserved
+Product data sheet Rev. 9 — 13 August 2018 2 / 16
+--- PDF PAGE 3 ---
+Nexperia 74LVC244A; 74LVCH244A
+Octal buffer/line driver; 3-state
+mna874
+8
+6
+4
+21A0
+1A1
+1A2
+1A3
+1OE
+18
+16
+1Y0
+1Y1
+1Y2
+1Y3
+14
+12
+1
+11
+13
+15
+172A0
+2A1
+2A2
+2A3
+2OE
+3
+5
+2Y0
+2Y1
+2Y2
+2Y3
+7
+9
+19
+Fig. 3. Logic symbol
+5.  Pinning information
+5.1.  Pinning
+74LVC244A 
+74LVCH244A
+1OE VCC
+1A0 2OE
+2Y0 1Y0
+1A1 2A0
+2Y1 1Y1
+1A2 2A1
+2Y2 1Y2
+1A3 2A2
+2Y3 1Y3
+GND 2A3
+001aad113
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+12
+11
+14
+13
+16
+15
+18
+17
+20
+19
+Fig. 4. Pin configuration SOT163-1 (SO20),
+SOT339-1 (SSOP20) and SOT360-1 (TSSOP20)
+001aad114
+74LVC244A 
+74LVCH244A
+Transparent top view
+GND(1)
+GND
+2A3
+1OE
+VCC
+9 12
+8 13
+7 14
+6 15
+5 16
+4 17
+3 18
+2 19
+10
+11
+1
+20
+terminal 1 
+index area
+1A0
+2Y0
+1A1
+2Y1
+1A2
+2Y2
+1A3
+2Y3
+2OE
+1Y0
+2A0
+1Y1
+2A1
+1Y2
+2A2
+1Y3
+(1) This is not a supply pin. The substrate is
+attached to this pad using conductive die attach
+material. There is no electrical or mechanical
+requirement to solder this pad.However, if it is
+soldered, the solder land should remain floating or
+be connected to GND.
+Fig. 5. Pin configuration SOT764-1 (DHVQFN20)
+74LVC_LVCH244A All information provided in this document is subject to legal disclaimers. © Nexperia B.V. 2018. All rights reserved
+Product data sheet Rev. 9 — 13 August 2018 3 / 16
+--- PDF PAGE 4 ---
+Nexperia 74LVC244A; 74LVCH244A
+Octal buffer/line driver; 3-state
+5.2.  Pin description
+Table 2. Pin description
+Symbol Pin Description
+1OE, 2OE 1, 19 output enable input (active low)
+1A0, 1A1, 1A2, 1A3 2, 4, 6, 8 data input
+2Y0, 2Y1, 2Y2, 2Y3 3, 5, 7, 9 data output
+GND 10 ground (0 V)
+2A0, 2A1, 2A2, 2A3 17, 15, 13, 11 data input
+1Y0, 1Y1, 1Y2, 1Y3, 18, 16, 14, 12 data output
+VCC 20 supply voltage
+6.  Functional description
+Table 3. Function table
+H = HIGH voltage level; L = LOW voltage level; X = don’t care; Z = high-impedance OFF-state.
+Control Input Output
+nOE nAn nYn
+L L L
+L H H
+H X Z
+7.  Limiting values
+Table 4. Limiting values
+In accordance with the Absolute Maximum Rating System (IEC 60134). Voltages are referenced to GND (ground = 0 V).
+Symbol Parameter Conditions Min Max Unit
+VCC supply voltage -0.5 +6.5 V
+IIK input clamping current VI < 0 V -50 - mA
+VI input voltage [1] -0.5 +6.5 V
+IOK output clamping current VO > VCC or VO < 0 V - ±50 mA
+output HIGH or LOW [2] -0.5 VCC + 0.5 VVO output voltage
+output 3-state [2] -0.5 +6.5 V
+IO output current VO = 0 V to VCC - ±50 mA
+ICC supply current - 100 mA
+IGND ground current -100 - mA
+Tstg storage temperature -65 +150 °C
+Ptot total power dissipation Tamb = -40 °C to +125 °C [3] - 500 mW
+[1] The minimum input voltage ratings may be exceeded if the input current ratings are observed.
+[2] The output voltage ratings may be exceeded if the output current ratings are observed.
+[3] For SO20 packages: above 70 °C derate linearly with 8 mW/K.
+For (T)SSOP20 packages: above 60 °C derate linearly with 5.5 mW/K.
+For DHVQFN20 packages: above 60 °C derate linearly with 4.5 mW/K.
+74LVC_LVCH244A All information provided in this document is subject to legal disclaimers. © Nexperia B.V. 2018. All rights reserved
+Product data sheet Rev. 9 — 13 August 2018 4 / 16
+--- PDF PAGE 5 ---
+Nexperia 74LVC244A; 74LVCH244A
+Octal buffer/line driver; 3-state
+8.  Recommended operating conditions
+Table 5. Recommended operating conditions
+Symbol Parameter Conditions Min Typ Max Unit
+1.65 - 3.6 VVCC supply voltage
+functional 1.2 - 3.6 V
+VI input voltage 0 - 5.5 V
+output HIGH or LOW 0 - VCC VVO output voltage
+output 3-state 0 - 5.5 V
+Tamb ambient temperature in free air -40 - +125 °C
+VCC = 1.2 V to 2.7 V 0 - 20 ns/VΔt/ΔV input transition rise and fall rate
+VCC = 2.7 V to 3.6 V 0 - 10 ns/V
+9.  Static characteristics
+Table 6. Static characteristics
+At recommended operating conditions. Voltages are referenced to GND (ground = 0 V).
+-40 °C to +85 °C -40 °C to +125 °CSymbol Parameter Conditions
+Min Typ [1] Max Min Max
+Unit
+VCC = 1.2 V 1.08 - - 1.08 - V
+VCC = 1.65 V to 1.95 V 0.65VCC - - 0.65VCC - V
+VCC = 2.3 V to 2.7 V 1.7 - - 1.7 - V
+VIH HIGH-level input
+voltage
+VCC = 2.7 V to 3.6 V 2.0 - - 2.0 - V
+VCC = 1.2 V - - 0.12 - 0.12 V
+VCC = 1.65 V to 1.95 V - - 0.35 VCC - 0.35 VCC V
+VCC = 2.3 V to 2.7 V - - 0.7 - 0.7 V
+VIL LOW-level input
+voltage
+VCC = 2.7 V to 3.6 V - - 0.8 - 0.8 V
+VI = VIH or VIL
+IO = -100 μA;
+VCC = 1.65 V to 3.6 V
+VCC - 0.2 - - VCC - 0.3 - V
+IO = -4 mA; VCC = 1.65 V 1.2 - - 1.05 - V
+IO = -8 mA; VCC = 2.3 V 1.8 - - 1.65 - V
+IO = -12 mA; VCC = 2.7 V 2.2 - - 2.05 - V
+IO = -18 mA; VCC = 3.0 V 2.4 - - 2.25 - V
+VOH HIGH-level
+output voltage
+IO = -24 mA; VCC = 3.0 V 2.2 - - 2.0 - V
+VI = VIH or VIL
+IO = 100 μA;
+VCC = 1.65 V to 3.6 V
+- - 0.2 - 0.3 V
+IO = 4 mA; VCC = 1.65 V - - 0.45 - 0.65 V
+IO = 8 mA; VCC = 2.3 V - - 0.6 - 0.8 V
+IO = 12 mA; VCC = 2.7 V - - 0.4 - 0.6 V
+VOL LOW-level output
+voltage
+IO = 24 mA; VCC = 3.0 V - - 0.55 - 0.8 V
+74LVC_LVCH244A All information provided in this document is subject to legal disclaimers. © Nexperia B.V. 2018. All rights reserved
+Product data sheet Rev. 9 — 13 August 2018 5 / 16
+--- PDF PAGE 6 ---
+Nexperia 74LVC244A; 74LVCH244A
+Octal buffer/line driver; 3-state
+-40 °C to +85 °C -40 °C to +125 °CSymbol Parameter Conditions
+Min Typ [1] Max Min Max
+Unit
+II input leakage
+current
+VI = 5.5 V or GND; VCC = 3.6 V [2] - ±0.1 ±5 - ±20 μA
+IOZ OFF-state output
+current
+VI = VIH or VIL;
+VO = 5.5 V or GND; VCC = 3.6 V
+[2] - ±0.1 ±5 - ±20 μA
+IOFF power-off
+leakage current
+VI or VO = 5.5 V; VCC = 0.0 V - ±0.1 ±10 - ±20 μA
+ICC supply current VI = VCC or GND; IO = 0 A;
+VCC = 3.6 V
+- 0.1 10 - 40 μA
+ΔICC additional supply
+current
+per input pin; VI = VCC - 0.6 V;
+IO = 0 A; VCC = 2.7 V to 3.6 V
+- 5 500 - 5000 μA
+CI input
+capacitance
+- 4.0 - - - pF
+VCC = 1.65 V; VI = 0.58 V [3][4] 10 - - 10 - μA
+VCC = 2.3 V; VI = 0.7 V 30 - - 25 - μA
+IBHL bus hold LOW
+current
+VCC = 3.0 V; VI = 0.8 V 75 - - 60 - μA
+VCC = 1.65 V; VI = 1.07 V [3][4] -10 - - -10 - μA
+VCC = 2.3 V; VI = 1.7 V -30 - - -25 - μA
+IBHH bus hold HIGH
+current
+VCC = 3.0 V; VI = 2.0 V -75 - - -60 - μA
+VCC = 1.95 V [3][5] 200 - - 200 - μA
+VCC = 2.7 V 300 - - 300 - μA
+IBHLO bus hold LOW
+overdrive current
+VCC = 3.6 V 500 - - 500 - μA
+VCC = 1.95 V [3][5] -200 - - -200 - μA
+VCC = 2.7 V -300 - - -300 - μA
+IBHHO bus hold HIGH
+overdrive current
+VCC = 3.6 V -500 - - -500 - μA
+[1] All typical values are measured at VCC = 3.3 V (unless stated otherwise) and Tamb = 25 °C.
+[2] The bus hold circuit is switched off when VI > VCC allowing 5.5 V on the input terminal.
+[3] Valid for data inputs of bus hold parts only (74LVCH244A). Note that control inputs do not have a bus hold circuit.
+[4] The specified sustaining current at the data input holds the input below the specified VI level.
+[5] The specified overdrive current at the data input forces the data input to the opposite input state.
+74LVC_LVCH244A All information provided in this document is subject to legal disclaimers. © Nexperia B.V. 2018. All rights reserved
+Product data sheet Rev. 9 — 13 August 2018 6 / 16
+--- PDF PAGE 7 ---
+Nexperia 74LVC244A; 74LVCH244A
+Octal buffer/line driver; 3-state
+10.  Dynamic characteristics
+Table 7. Dynamic characteristics
+Voltages are referenced to GND (ground = 0 V). For test circuit see Fig. 8.
+-40 °C to +85 °C -40 °C to +125 °CSymbol Parameter Conditions
+Min Typ [1] Max Min Max
+Unit
+nAn to nYn; see Fig. 6 [2]
+VCC = 1.2 V - 17.0 - - - ns
+VCC = 1.65 V to 1.95 V 1.5 6.4 13.7 1.5 15.8 ns
+VCC = 2.3 V to 2.7 V 1.0 3.4 7.1 1.0 8.2 ns
+VCC = 2.7 V 1.5 3.4 6.9 1.5 9.0 ns
+tpd propagation delay
+VCC = 3.0 V to 3.6 V 1.5 2.9 5.9 1.5 7.5 ns
+nOE to nYn; see Fig. 7 [2]
+VCC = 1.2 V - 24.0 - - - ns
+VCC = 1.65 V to 1.95 V 1.5 7.0 17.3 1.5 20.0 ns
+VCC = 2.3 V to 2.7 V 1.5 3.9 9.5 1.5 11.0 ns
+VCC = 2.7 V 1.5 4.1 8.6 1.5 11.0 ns
+ten enable time
+VCC = 3.0 V to 3.6 V 1.0 3.2 7.6 1.0 9.5 ns
+nOE to nYn; see Fig. 7 [2]
+VCC = 1.2 V - 9.0 - - - ns
+VCC = 1.65 V to 1.95 V 2.2 4.5 9.8 2.2 11.3 ns
+VCC = 2.3 V to 2.7 V 0.5 3.6 5.5 0.5 6.4 ns
+VCC = 2.7 V 1.5 3.3 6.8 1.5 8.5 ns
+tdis disable time
+VCC = 3.0 V to 3.6 V 1.5 3.1 5.8 1.5 7.5 ns
+tsk(o) output skew time [3] - - 1.0 - 1.5 ns
+per input; VI = GND to VCC [4]
+VCC = 1.65 V to 1.95 V - 6.4 - - - pF
+VCC = 2.3 V to 2.7 V - 9.6 - - - pF
+CPD power dissipation
+capacitance
+VCC = 3.0 V to 3.6 V - 12.5 - - - pF
+[1] Typical values are measured at Tamb = 25 °C and VCC = 1.2 V, 1.8 V, 2.5 V, 2.7 V, and 3.3 V respectively.
+[2] tpd is the same as tPLH and tPHL.
+ten is the same as tPZL and tPZH.
+tdis is the same as tPLZ and tPHZ.
+[3] Skew between any two outputs of the same package switching in the same direction. This parameter is guaranteed by design.
+[4] CPD is used to determine the dynamic power dissipation (PD in μW).
+PD = CPD × VCC
+2 × fi × N + Σ(CL × VCC
+2 × fo) where:
+fi = input frequency in MHz; fo = output frequency in MHz
+CL = output load capacitance in pF
+VCC = supply voltage in Volts
+N = number of inputs switching
+Σ(CL × VCC
+2 × fo) = sum of the outputs.
+74LVC_LVCH244A All information provided in this document is subject to legal disclaimers. © Nexperia B.V. 2018. All rights reserved
+Product data sheet Rev. 9 — 13 August 2018 7 / 16
+--- PDF PAGE 8 ---
+Nexperia 74LVC244A; 74LVCH244A
+Octal buffer/line driver; 3-state
+10.1.  Waveforms and test circuit
+mna171
+nAn input 
+ 
+nYn output 
+ 
+tPLH tPHL
+GND
+VI
+VM
+VM
+VM
+VM
+VOH
+VOL
+Measurement points are given in Table 8.
+Logic levels: VOL and VOH are typical output voltage levels that occur with the output load.
+Fig. 6. The input (nAn) to output (nYn) propagation delays
+mna362
+tPLZ
+tPHZ
+outputs 
+disabled
+outputs 
+enabled
+VY
+VX
+outputs 
+enabled
+output 
+LOW-to-OFF 
+OFF-to-LOW
+output 
+HIGH-to-OFF 
+OFF-to-HIGH
+nOE input
+VI
+VOL
+VOH
+VCC
+VM
+GND
+GND
+tPZL
+tPZH
+VM
+VM
+Measurement points are given in Table 8.
+Logic levels: VOL and VOH are typical output voltage levels that occur with the output load.
+Fig. 7. 3-state enable and disable times
+Table 8. Measurement points
+Supply voltage Input Output
+VCC VI VM VM VX VY
+1.2 V VCC 0.5 × VCC 0.5 × VCC VOL + 0.15 V VOH - 0.15 V
+1.65 V to 1.95 V VCC 0.5 × VCC 0.5 × VCC VOL + 0.15 V VOH - 0.15 V
+2.3 V to 2.7 V VCC 0.5 × VCC 0.5 × VCC VOL + 0.15 V VOH - 0.15 V
+2.7 V 2.7 V 1.5 V 1.5 V VOL + 0.3 V VOH - 0.3 V
+3.0 V to 3.6 V 2.7 V 1.5 V 1.5 V VOL + 0.3 V VOH - 0.3 V
+74LVC_LVCH244A All information provided in this document is subject to legal disclaimers. © Nexperia B.V. 2018. All rights reserved
+Product data sheet Rev. 9 — 13 August 2018 8 / 16
+--- PDF PAGE 9 ---
+Nexperia 74LVC244A; 74LVCH244A
+Octal buffer/line driver; 3-state
+VM VM
+tW
+tW
+10 %
+90 %
+0 V
+VI
+VI
+negative 
+pulse
+positive 
+pulse
+0 V
+VM VM
+90 %
+10 %
+tf
+tr
+tr
+tf
+001aae331
+VEXT
+VCC
+VI VO
+DUT
+CLRT
+RL
+RL
+G
+Test data is given in Table 9.
+Definitions for test circuit:
+RL = Load resistance.
+CL = Load capacitance including jig and probe capacitance.
+RT = Termination resistance should be equal to output impedance Zo of the pulse generator.
+VEXT = External voltage for measuring switching times.
+Fig. 8. Test circuit for measuring switching times
+Table 9. Test data
+Input Load VEXTSupply voltage
+VI tr, tf CL RL tPLH, tPHL tPLZ, tPZL tPHZ, tPZH
+1.2 V VCC ≤ 2 ns 30 pF 1 kΩ open 2 × VCC GND
+1.65 V to 1.95 V VCC ≤ 2 ns 30 pF 1 kΩ open 2 × VCC GND
+2.3 V to 2.7 V VCC ≤ 2 ns 30 pF 500 Ω open 2 × VCC GND
+2.7 V 2.7 V ≤ 2.5 ns 50 pF 500 Ω open 2 × VCC GND
+3.0 V to 3.6 V 2.7 V ≤ 2.5 ns 50 pF 500 Ω open 2 × VCC GND
+74LVC_LVCH244A All information provided in this document is subject to legal disclaimers. © Nexperia B.V. 2018. All rights reserved
+Product data sheet Rev. 9 — 13 August 2018 9 / 16
+--- PDF PAGE 10 ---
+Nexperia 74LVC244A; 74LVCH244A
+Octal buffer/line driver; 3-state
+11.  Package outline
+UNIT A 
+max. A 1 A 2 A 3 b p c D (1) E (1) (1) e H E L L p Q Z y w v θ 
+ REFERENCES OUTLINE 
+VERSION 
+EUROPEAN 
+PROJECTION ISSUE DATE 
+ IEC  JEDEC  JEITA 
+mm 
+inches 
+2.65 0.3 
+0.1 
+2.45 
+2.25 
+0.49 
+0.36 
+0.32 
+0.23 
+13.0 
+12.6 
+7.6 
+7.4 1.27 10.65 
+10.00 
+1.1 
+1.0 
+0.9 
+0.4 8 
+0 
+o 
+o 
+0.25 0.1 
+DIMENSIONS (inch dimensions are derived from the original mm dimensions) 
+Note 
+1. Plastic or metal protrusions of 0.15 mm (0.006 inch) maximum per side are not included.   
+1.1 
+0.4 
+ SOT163-1 
+10 
+20 
+w M 
+b p 
+detail X 
+Z 
+e 
+11 
+1 
+D 
+y 
+0.25 
+ 075E04  MS-013 
+pin 1 index 
+0.1 0.012 
+0.004 
+0.096 
+0.089 
+0.019 
+0.014 
+0.013 
+0.009 
+0.51 
+0.49 
+0.30 
+0.29 0.05 
+1.4 
+0.055 0.419 
+0.394 
+0.043 
+0.039 
+0.035 
+0.016 0.01 
+0.25 
+0.01 0.004 0.043 
+0.016 0.01 
+0 5 10 mm 
+scale 
+X 
+θ 
+A A 1 
+A 2 
+H E 
+L p 
+Q 
+E 
+c 
+L 
+v M A 
+(A  ) 3 
+A 
+SO20: plastic small outline package; 20 leads; body width 7.5 mm SOT163-1 
+99-12-27 
+03-02-19 
+Fig. 9. Package outline SOT163-1 (SO20)
+74LVC_LVCH244A All information provided in this document is subject to legal disclaimers. © Nexperia B.V. 2018. All rights reserved
+Product data sheet Rev. 9 — 13 August 2018 10 / 16
+--- PDF PAGE 11 ---
+Nexperia 74LVC244A; 74LVCH244A
+Octal buffer/line driver; 3-state
+UNIT A 1 A 2 A 3 b p c D (1) E (1) e H E L L p Q (1) Z y w v θ 
+ REFERENCES OUTLINE 
+VERSION 
+EUROPEAN 
+PROJECTION ISSUE DATE 
+ IEC  JEDEC  JEITA 
+mm 0.21 
+0.05 
+1.80 
+1.65 
+0.38 
+0.25 
+0.20 
+0.09 
+7.4 
+7.0 
+5.4 
+5.2 0.65 7.9 
+7.6 
+0.9 
+0.7 
+0.9 
+0.5 
+8 
+0 
+o 
+o 0.13 1.25 0.2 0.1 
+DIMENSIONS (mm are the original dimensions) 
+Note 
+1. Plastic or metal protrusions of 0.2 mm maximum per side are not included.  
+1.03 
+0.63 
+ SOT339-1  MO-150 99-12-27 
+03-02-19 
+X 
+w M 
+θ 
+A 
+A 1 
+A 2 
+b p 
+D 
+H E 
+L p 
+Q 
+detail X 
+E 
+Z 
+e 
+c 
+L 
+v M A 
+(A  ) 3 
+A 
+1 10 
+20 11 
+y 
+0.25 
+pin 1 index 
+0 2.5 5 mm 
+scale 
+SSOP20: plastic shrink small outline package; 20 leads; body width 5.3 mm SOT339-1 
+A 
+max. 
+2 
+Fig. 10. Package outline SOT339-1 (SSOP20)
+74LVC_LVCH244A All information provided in this document is subject to legal disclaimers. © Nexperia B.V. 2018. All rights reserved
+Product data sheet Rev. 9 — 13 August 2018 11 / 16
+--- PDF PAGE 12 ---
+Nexperia 74LVC244A; 74LVCH244A
+Octal buffer/line driver; 3-state
+UNIT A 1 A 2 A 3 b p c D (1) E (2) (1) e H E L L p Q Z y w v θ 
+ REFERENCES OUTLINE 
+VERSION 
+EUROPEAN 
+PROJECTION ISSUE DATE 
+ IEC  JEDEC  JEITA 
+mm 0.15 
+0.05 
+0.95 
+0.80 
+0.30 
+0.19 
+0.2 
+0.1 
+6.6 
+6.4 
+4.5 
+4.3 0.65 6.6 
+6.2 
+0.4 
+0.3 
+0.5 
+0.2 
+8 
+0 
+o 
+o 0.13 0.1 0.2 1 
+DIMENSIONS (mm are the original dimensions) 
+Notes 
+1. Plastic or metal protrusions of 0.15 mm maximum per side are not included. 
+2. Plastic interlead protrusions of 0.25 mm maximum per side are not included. 
+0.75 
+0.50 
+ SOT360-1  MO-153 99-12-27 
+03-02-19 
+w M 
+b p 
+D 
+Z 
+e 
+0.25 
+1 10 
+20 11 
+pin 1 index 
+θ 
+A A 1 
+A 2 
+L p 
+Q 
+detail X 
+L 
+(A  ) 3 
+H E 
+E 
+c 
+v M A 
+X A 
+y 
+0 2.5 5 mm 
+scale 
+TSSOP20: plastic thin shrink small outline package; 20 leads; body width 4.4 mm SOT360-1 
+A 
+max. 
+1.1 
+Fig. 11. Package outline SOT360-1 (TSSOP20)
+74LVC_LVCH244A All information provided in this document is subject to legal disclaimers. © Nexperia B.V. 2018. All rights reserved
+Product data sheet Rev. 9 — 13 August 2018 12 / 16
+--- PDF PAGE 13 ---
+Nexperia 74LVC244A; 74LVCH244A
+Octal buffer/line driver; 3-state
+ReferencesOutline
+version
+European
+projection Issue date
+IEC JEDEC JEITA
+SOT764-1 - - -MO-241- - -
+sot764-1_po
+03-01-27
+14-12-12
+Unit
+mm
+max
+nom
+min
+1.00 0.05 4.6 3.15 2.6
+0.5 3.5 0.1
+A(1)
+Dimensions (mm are the original dimensions)
+Note
+1. Plastic or metal protrusions of 0.075 mm maximum per side are not included.
+A1 b
+0.30
+c D(1) Dh E(1) Eh
+1.00
+e e1 L
+0.4
+v w
+0.05
+y y1
+0.90 0.02 0.2 4.5 3.00 2.50.25 0.05 0.1
+0.85 0.30.80 0.00 4.4 2.85 2.40.18
+1.15 0.5
+detail X
+B A
+e1
+e
+e
+C
+yCy1
+X
+AC Bv
+Cw
+scale
+A
+A1
+c
+L
+Eh
+Dh
+b
+2 9
+19 12
+11
+101
+20
+D
+E
+terminal 1
+index area
+terminal 1
+index area
+0 5 mm2.5
+DHVQFN20: plastic dual in-line compatible thermal enhanced very thin quad flat package; no leads;
+20 terminals; body 2.5 x 4.5 x 0.85 mm SOT764-1
+Fig. 12. Package outline SOT764-1 (DHVQFN20)
+74LVC_LVCH244A All information provided in this document is subject to legal disclaimers. © Nexperia B.V. 2018. All rights reserved
+Product data sheet Rev. 9 — 13 August 2018 13 / 16
+--- PDF PAGE 14 ---
+Nexperia 74LVC244A; 74LVCH244A
+Octal buffer/line driver; 3-state
+12.  Abbreviations
+Table 10. Abbreviations
+Acronym Description
+CDM Charged Device Model
+CMOS Complementary Metal-Oxide Semiconductor
+DUT Device Under Test
+ESD ElectroStatic Discharge
+HBM Human Body Model
+MM Machine Model
+TTL Transistor-Transistor Logic
+13.  Revision history
+Table 11. Revision history
+Document ID Release date Data sheet status Change notice Supersedes
+74LVC_LVCH244A v.9 20180813 Product data sheet - 74LVC_LVCH244A v.8
+Modifications: • The format of this data sheet has been redesigned to comply with the identity
+guidelines of Nexperia.
+• Legal texts have been adapted to the new company name where appropriate.
+• Type numbers 74LVC244ABX and 74LVCH244ABX (SOT1045-2) removed.
+74LVC_LVCH244A v.8 20130626 Product data sheet - 74LVC_LVCH244A v.7
+Modifications: • For type numbers 74LVC244ABX and 74LVCH244ABX DHXQFN20U (SOT1045-1)
+has changed to DHXQFN20 (SOT1045-2).
+74LVC_LVCH244A v.7 20111122 Product data sheet - 74LVC_LVCH244A v.6
+Modifications: • The format of this document has been redesigned to comply with the new identity
+guidelines of NXP Semiconductors.
+• Legal texts have been adapted to the new company name where appropriate.
+• Table 4, Table 5, Table 6, Table 7, Table 8 and Table 9: values added for lower
+voltage ranges.
+74LVC_LVCH244A v.6 20090813 Product data sheet - 74LVC_LVCH244A v.5
+74LVC_LVCH244A v.5 20090709 Product data sheet - 74LVC_LVCH244A v.4
+74LVC_LVCH244A v.4 20031030 Product specification - 74LVC_LVCH244A v.3
+74LVC_LVCH244A v.3 20030520 Product specification - 74LVC_H244A v.2
+74LVC_H244A v.2 19980520 Product specification - 74LVC244A_74LVCH244A v.1
+74LVC244A_74LVCH244A v.1 19960906 Product specification - -
+74LVC_LVCH244A All information provided in this document is subject to legal disclaimers. © Nexperia B.V. 2018. All rights reserved
+Product data sheet Rev. 9 — 13 August 2018 14 / 16
+--- PDF PAGE 15 ---
+Nexperia 74LVC244A; 74LVCH244A
+Octal buffer/line driver; 3-state
+14.  Legal information
+Data sheet status
+Document status
+[1][2]
+Product
+status [3]
+Definition
+Objective [short]
+data sheet
+Development This document contains data from
+the objective specification for
+product development.
+Preliminary [short]
+data sheet
+Qualification This document contains data from
+the preliminary specification.
+Product [short]
+data sheet
+Production This document contains the product
+specification.
+[1] Please consult the most recently issued document before initiating or
+completing a design.
+[2] The term 'short data sheet' is explained in section "Definitions".
+[3] The product status of device(s) described in this document may have
+changed since this document was published and may differ in case of
+multiple devices. The latest product status information is available on
+the internet at https://www.nexperia.com.
+Definitions
+Draft — The document is a draft version only. The content is still under
+internal review and subject to formal approval, which may result in
+modifications or additions. Nexperia does not give any representations or
+warranties as to the accuracy or completeness of information included herein
+and shall have no liability for the consequences of use of such information.
+Short data sheet — A short data sheet is an extract from a full data sheet
+with the same product type number(s) and title. A short data sheet is
+intended for quick reference only and should not be relied upon to contain
+detailed and full information. For detailed and full information see the relevant
+full data sheet, which is available on request via the local Nexperia sales
+office. In case of any inconsistency or conflict with the short data sheet, the
+full data sheet shall prevail.
+Product specification — The information and data provided in a Product
+data sheet shall define the specification of the product as agreed between
+Nexperia and its customer, unless Nexperia and customer have explicitly
+agreed otherwise in writing. In no event however, shall an agreement be
+valid in which the Nexperia product is deemed to offer functions and qualities
+beyond those described in the Product data sheet.
+Disclaimers
+Limited warranty and liability — Information in this document is believed
+to be accurate and reliable. However, Nexperia does not give any
+representations or warranties, expressed or implied, as to the accuracy
+or completeness of such information and shall have no liability for the
+consequences of use of such information. Nexperia takes no responsibility
+for the content in this document if provided by an information source outside
+of Nexperia.
+In no event shall Nexperia be liable for any indirect, incidental, punitive,
+special or consequential damages (including - without limitation - lost
+profits, lost savings, business interruption, costs related to the removal
+or replacement of any products or rework charges) whether or not such
+damages are based on tort (including negligence), warranty, breach of
+contract or any other legal theory.
+Notwithstanding any damages that customer might incur for any reason
+whatsoever, Nexperia’s aggregate and cumulative liability towards customer
+for the products described herein shall be limited in accordance with the
+Terms and conditions of commercial sale of Nexperia.
+Right to make changes — Nexperia reserves the right to make changes
+to information published in this document, including without limitation
+specifications and product descriptions, at any time and without notice. This
+document supersedes and replaces all information supplied prior to the
+publication hereof.
+Suitability for use — Nexperia products are not designed, authorized or
+warranted to be suitable for use in life support, life-critical or safety-critical
+systems or equipment, nor in applications where failure or malfunction
+of an Nexperia product can reasonably be expected to result in personal
+injury, death or severe property or environmental damage. Nexperia and its
+suppliers accept no liability for inclusion and/or use of Nexperia products in
+such equipment or applications and therefore such inclusion and/or use is at
+the customer’s own risk.
+Quick reference data — The Quick reference data is an extract of the
+product data given in the Limiting values and Characteristics sections of this
+document, and as such is not complete, exhaustive or legally binding.
+Applications — Applications that are described herein for any of these
+products are for illustrative purposes only. Nexperia makes no representation
+or warranty that such applications will be suitable for the specified use
+without further testing or modification.
+Customers are responsible for the design and operation of their applications
+and products using Nexperia products, and Nexperia accepts no liability for
+any assistance with applications or customer product design. It is customer’s
+sole responsibility to determine whether the Nexperia product is suitable
+and fit for the customer’s applications and products planned, as well as
+for the planned application and use of customer’s third party customer(s).
+Customers should provide appropriate design and operating safeguards to
+minimize the risks associated with their applications and products.
+Nexperia does not accept any liability related to any default, damage, costs
+or problem which is based on any weakness or default in the customer’s
+applications or products, or the application or use by customer’s third party
+customer(s). Customer is responsible for doing all necessary testing for the
+customer’s applications and products using Nexperia products in order to
+avoid a default of the applications and the products or of the application or
+use by customer’s third party customer(s). Nexperia does not accept any
+liability in this respect.
+Limiting values — Stress above one or more limiting values (as defined in
+the Absolute Maximum Ratings System of IEC 60134) will cause permanent
+damage to the device. Limiting values are stress ratings only and (proper)
+operation of the device at these or any other conditions above those
+given in the Recommended operating conditions section (if present) or the
+Characteristics sections of this document is not warranted. Constant or
+repeated exposure to limiting values will permanently and irreversibly affect
+the quality and reliability of the device.
+Terms and conditions of commercial sale — Nexperia products are
+sold subject to the general terms and conditions of commercial sale, as
+published at http://www.nexperia.com/profile/terms, unless otherwise agreed
+in a valid written individual agreement. In case an individual agreement is
+concluded only the terms and conditions of the respective agreement shall
+apply. Nexperia hereby expressly objects to applying the customer’s general
+terms and conditions with regard to the purchase of Nexperia products by
+customer.
+No offer to sell or license — Nothing in this document may be interpreted
+or construed as an offer to sell products that is open for acceptance or the
+grant, conveyance or implication of any license under any copyrights, patents
+or other industrial or intellectual property rights.
+Export control — This document as well as the item(s) described herein
+may be subject to export control regulations. Export might require a prior
+authorization from competent authorities.
+Non-automotive qualified products — Unless this data sheet expressly
+states that this specific Nexperia product is automotive qualified, the
+product is not suitable for automotive use. It is neither qualified nor tested in
+accordance with automotive testing or application requirements. Nexperia
+accepts no liability for inclusion and/or use of non-automotive qualified
+products in automotive equipment or applications.
+In the event that customer uses the product for design-in and use in
+automotive applications to automotive specifications and standards,
+customer (a) shall use the product without Nexperia’s warranty of the
+product for such automotive applications, use and specifications, and (b)
+whenever customer uses the product for automotive applications beyond
+Nexperia’s specifications such use shall be solely at customer’s own risk,
+and (c) customer fully indemnifies Nexperia for any liability, damages or failed
+product claims resulting from customer design and use of the product for
+automotive applications beyond Nexperia’s standard warranty and Nexperia’s
+product specifications.
+Translations — A non-English (translated) version of a document is for
+reference only. The English version shall prevail in case of any discrepancy
+between the translated and English versions.
+Trademarks
+Notice: All referenced brands, product names, service names and
+trademarks are the property of their respective owners.
+74LVC_LVCH244A All information provided in this document is subject to legal disclaimers. © Nexperia B.V. 2018. All rights reserved
+Product data sheet Rev. 9 — 13 August 2018 15 / 16
+--- PDF PAGE 16 ---
+Nexperia 74LVC244A; 74LVCH244A
+Octal buffer/line driver; 3-state
+Contents
+1.  General description......................................................1
+2.  Features and benefits .................................................. 1
+3.  Ordering information....................................................2
+4.  Functional diagram.......................................................2
+5.  Pinning information......................................................3
+5.1.  Pinning.........................................................................3
+5.2.  Pin description.............................................................4
+6.  Functional description................................................. 4
+7.  Limiting values............................................................. 4
+8.  Recommended operating conditions..........................5
+9.  Static characteristics....................................................5
+10.  Dynamic characteristics............................................ 7
+10.1.  Waveforms and test circuit........................................ 8
+11.  Package outline........................................................ 10
+12.  Abbreviations............................................................14
+13.  Revision history........................................................14
+14.  Legal information ......................................................15
+© Nexperia B.V. 2018. All rights reserved
+For more information, please visit: http://www.nexperia.com
+For sales office addresses, please send an email to: salesaddresses@nexperia.com
+Date of release: 13 August 2018
+74LVC_LVCH244A All information provided in this document is subject to legal disclaimers. © Nexperia B.V. 2018. All rights reserved
+Product data sheet Rev. 9 — 13 August 2018 16 / 16

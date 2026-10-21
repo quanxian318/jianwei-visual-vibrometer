@@ -1,0 +1,316 @@
+--- PDF PAGE 1 ---
+MCCSEMI.COM
+Rev.3-2-112220191/4
+SK52B-L  THRU  SK520B-L
+Features
+Maximum Ratings
+5 Amp
+Schottky Rectifier 
+20 to 200 Volts
+Electrical Characteristics @ 25°C Unless Otherwise Specified
+• Lead Free Finish/RoHS Compliant(Note 1) ("P" Suffix Designates
+Compliant. See Ordering Information)
+• High Current Capability
+• For Surface Mount Applications
+• Epoxy Meets UL 94 V-0 Flammability Rating
+• Moisture Sensitivity Level 1
+• Halogen Free Available Upon Request By Adding Suffix "-HF"
+SK56B-L SK56B 60V 42V
+SK54B-L SK54B 40V 28V
+SK55B-L SK55B 50V 35V
+SK52B-L SK52B 20V 14V
+SK53B-L SK53B 30V 21V
+MCC
+Part Number
+Device
+Marking
+Maximum
+Recurrent
+Peak Reverse
+Voltage
+Maximum
+RMS Voltage
+Maximum DC
+Blocking
+Voltage
+Maximum DC Reverse Current 
+at  Rated DC Blocking Voltage
+IR
+TJ=25⁰C
+Typical Junction
+Capacitance CJ 200pF Measured at 1.0MHz
+VR=4.0V
+Peak Forward Surge Current IFSM 100A 8.3ms,Half Sine
+VF 0.55V IFM=5.0A;
+Average Forward
+Current IF(AV)
+5.0A TC=120⁰C
+Maximum Instantaneous 
+Forward Voltage
+0.75V
+0.85V
+• Operating Junction Temperature Range: -55⁰C to +150⁰C
+• Storage Temperature Range: -55⁰C to +150⁰C
+• Maximum Thermal Resistance: 16°C/W Junction to Lead
+• Maximum Thermal Resistance: 55°C/W Junction to Ambient
+TJ=25⁰C*
+SK58B-L
+SK510B-L
+SK5150B-L
+SK58B
+SK510B
+SK5150
+80V
+100V
+150V
+56V
+70V
+105V
+*Pulse test: Pulse width 200 μsec, Duty cycle 2%
+Note:1. High Temperature Solder Exemptions Applied, See EU Directive Annex 7a.
+0.9V
+0.1mA
+20mA
+SK520B-L SK520B 200V 140V
+60V
+40V
+50V
+20V
+30V
+80V
+1
+00V
+150V
+200V
+  SK52B-L~54B-L 
+SK55B-L~56B-L 
+SK58B-L~510B-L 
+SK5150B-L
+ 
+SK520B-L
+0.87V
+TJ=125⁰C
+SMB (DO-214AA)
+H
+J
+E
+F
+G
+A
+BD
+C
+MIN MAX MIN MAX
+A 0.079 0.103 2.00 2.62
+B 0.075 0.087 1.91 2.21
+C 0.002 0.008 0.05 0.20
+D 0.006   0.012 0.15     0.31
+E 0.030 0.060 0.76 1.52
+F 0.065 0.091 1.65 2.32
+G 0.200 0.220 5.08 5.59
+H 0.160 0.191 4.06 4.85
+J 0.130 0.155 3.30 3.94
+DIMENSIONS
+DIM INCHES MM NOTE
+Cathode Mark
+2.50mm
+1.80mm
+2.30mm
+Suggested Solder Pad Layout
+  SK52B-L~56B-L
+  SK58B-L~520B-L
+ 
+TJ=25⁰C0.05mA
+2mA TJ=125⁰C
+--- PDF PAGE 2 ---
+MCCSEMI.COM
+Rev.3-2-112220192/4
+SK52B-L THRU SK520B-L
+ Curve Characteristics
+0 25 50 75 100 125 150
+0
+1
+2
+3
+4
+5
+6
+Average Forward Current (A)
+Case Temperature (°C)
+Resistive or Inductive Load
+Fig. 1 - Forward Current Derating Curve
+1 100
+0
+20
+40
+60
+80
+100
+120
+Peak Forward Surge Current (A)
+8.3 ms 8.3 ms Single Half Sine-Wave
+Fig. 2 - Maximum Non-Repetitive Peak Forward Surge 
+Current
+10
+Number of Cycles at 60 Hz
+0.02
+0.05
+0.2
+0.5
+2
+5
+20
+0.01
+0.1
+1
+10
+0.0 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 1.0
+TJ=125°C
+TJ=25°C
+Instantaneous Forward Voltage (V)
+Instantaneous Forward Current (A)
+Fig. 3 - Typical Instantaneous Forward Characteristics
+TJ=75°C
+SK52B-L~54B-L
+0.02
+0.05
+0.2
+0.5
+2
+5
+20
+0.01
+0.1
+1
+10
+0.0 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 1.0TJ=125°C
+TJ=25°C
+Instantaneous Forward Voltage (V)
+Instantaneous Forward Current (A)
+Fig. 4 - Typical Instantaneous Forward Characteristics
+TJ=75°C
+SK55B-L~56B -L
+0.02
+0.05
+0.2
+0.5
+2
+5
+20
+0.01
+0.1
+1
+10
+0.0 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 1.0
+TJ=125°C
+TJ=25°C
+Instantaneous Forward Voltage (V)
+Instantaneous Forward Current (A)
+Fig. 5 - Typical Instantaneous Forward Characteristics
+TJ=75°C
+SK58B-L~510B -L
+0.02
+0.05
+0.2
+0.5
+2
+5
+20
+0.01
+0.1
+1
+10
+0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 1.0 1.1 1.2TJ=125°C
+TJ=25°C
+Instantaneous Forward Voltage (V)
+Instantaneous Forward Current (A)
+Fig. 6 - Typical Instantaneous Forward Characteristics
+TJ=75°C
+SK5150B-L~520B -L
+--- PDF PAGE 3 ---
+MCCSEMI.COMRev.3-2-11222019 3/4
+SK52B-L THRU SK520B-L
+ Curve Characteristics
+20 100
+1
+10
+100
+1000
+10000
+TJ=125°C
+TJ=75°C
+Instantaneous Reverse Leakage Current (μA)
+Fig. 7 - Typical Reverse Leakage Characteristics
+TJ=25°C
+SK52B-L~54B-L
+40 60 80 
+Percent of Rated Peak Reverse Voltage (%)
+20 100
+1
+10
+100
+1000
+10000
+TJ=125°C
+TJ=75°C
+Instantaneous Reverse Leakage Current (μA)
+40 60 80
+Percent of Rated Peak Reverse Voltage (%)
+Fig. 8 - Typical Reverse Leakage Characteristics
+TJ=25°C SK55B-L~56B -L
+20 100
+0.01
+0.1
+1
+10
+100
+1000
+TJ=125°C
+TJ=75°C
+Instantaneous Reverse Leakage Current (μA)
+Fig. 9 - Typical Reverse Leakage Characteristics
+TJ=25°C
+SK58B-L~510B -L
+40 60 80 
+Percent of Rated Peak Reverse Voltage (%)
+20 100
+0.001
+0.01
+0.1
+1
+10
+100
+TJ=125°C
+TJ=75°C
+Instantaneous Reverse Leakage Current (μA)
+40 60 80
+Percent of Rated Peak Reverse Voltage (%)
+Fig. 10 - Typical Reverse Leakage Characteristics
+TJ=25°C
+SK5150B-L~520B -L
+--- PDF PAGE 4 ---
+MCCSEMI.COM
+Rev.3-2-11220194/4
+ Ordering Information
+SK52B-L THRU SK520B-L
+Device Packing
+SK52B-LTP~SK520B-LTP Tape&Reel: 3Kpcs/Reel
+Note : Adding "-HF" Suffix For Halogen Free, eg. SK52B-LTP-HF~SK520B-LTP-HF
+***IMPORTANT NOTICE***
+Micro Commercial Components Corp. reserves the right to make changes without further notice to any product herein to 
+make corrections, modifications , enhancements , improvements , or other changes . Micro Commercial Components 
+Corp . does not assume any liability  arising out of the application or use of any product described herein; neither does it 
+convey any license under its patent rights ,nor the rights of others . The user of products in such applications shall assume all 
+risks of such use and will agree to hold Micro Commercial Components Corp . and all the companies whose products are 
+represented on our website, harmless against all damages.
+***LIFE SUPPORT***
+MCC's products are not authorized for use as critical components in life support devices or systems without the express 
+written approval of Micro Commercial Components Corporation.
+***CUSTOMER AWARENESS***
+Counterfeiting of semiconductor parts is a growing problem in the industry. Micro Commercial Components (MCC) is taking
+strong measures to protect ourselves and our customers from the proliferation of counterfeit parts. MCC strongly encourages
+customers to purchase MCC parts either directly from MCC or from Authorized MCC Distributors who are listed by country on
+our web page cited below. Products customers buy either from MCC directly or from Authorized MCC Distributors are genuine
+parts, have full traceability, meet MCC's quality standards for handling and storage. MCC will not provide any warranty
+coverage or other assistance for parts bought from Unauthorized Sources. MCC is committed to combat this global
+problem and encourage our customers to do their part in stopping this practice by buying direct or from authorized
+distributors.

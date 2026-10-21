@@ -1,0 +1,794 @@
+{
+  "readAt": "2026-10-17T19:35:31.309760+08:00",
+  "wholeProjectCount": 234,
+  "page7Count": 29,
+  "page7Pins": 92,
+  "page7ConnectedPins": 91,
+  "drc": true,
+  "checks": [
+    {
+      "check": "全工程位号唯一",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "第7页29器件全部覆盖",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "与第7页BOM器件集合一致",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C701位号页号",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C701MPN与C编号",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C701数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C701全部引脚连接",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C701耐压",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C702位号页号",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C702MPN与C编号",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C702数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C702全部引脚连接",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C702耐压",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C703位号页号",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C703MPN与C编号",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C703数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C703全部引脚连接",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C703耐压",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C704位号页号",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C704MPN与C编号",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C704数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C704全部引脚连接",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C704耐压",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C705位号页号",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C705MPN与C编号",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C705数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C705全部引脚连接",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C705耐压",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C706位号页号",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C706MPN与C编号",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C706数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C706全部引脚连接",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C706耐压",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C707位号页号",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C707MPN与C编号",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C707数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C707全部引脚连接",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C707耐压",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C708位号页号",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C708MPN与C编号",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C708数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C708全部引脚连接",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C708耐压",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C709位号页号",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C709MPN与C编号",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C709数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C709全部引脚连接",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C709耐压",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C710位号页号",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C710MPN与C编号",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C710数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C710全部引脚连接",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C710耐压",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C711位号页号",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C711MPN与C编号",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C711数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C711全部引脚连接",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "C711耐压",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J701位号页号",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J701MPN与C编号",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J701全部引脚连接",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J702位号页号",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J702MPN与C编号",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J702全部引脚连接",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J703位号页号",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J703MPN与C编号",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J703全部引脚连接",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J704位号页号",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J704MPN与C编号",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J704全部引脚连接",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J705位号页号",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J705MPN与C编号",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J705全部引脚连接",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J706位号页号",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J706MPN与C编号",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "J706全部引脚连接",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "Q701位号页号",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "Q701MPN与C编号",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "Q701全部引脚连接",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R701位号页号",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R701MPN与C编号",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R701数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R701全部引脚连接",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R702位号页号",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R702MPN与C编号",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R702数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R702全部引脚连接",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R703位号页号",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R703MPN与C编号",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R703数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R703全部引脚连接",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R704位号页号",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R704MPN与C编号",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R704数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R704全部引脚连接",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R705位号页号",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R705MPN与C编号",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R705数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R705全部引脚连接",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R706位号页号",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R706MPN与C编号",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R706数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R706全部引脚连接",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R707位号页号",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R707MPN与C编号",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R707数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R707全部引脚连接",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R708位号页号",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R708MPN与C编号",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R708数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R708全部引脚连接",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R709位号页号",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R709MPN与C编号",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R709数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R709全部引脚连接",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R710位号页号",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R710MPN与C编号",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R710数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R710全部引脚连接",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R711位号页号",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R711MPN与C编号",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R711数值",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "R711全部引脚连接",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "SIG仅为转速原始信号且与其他域独立",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "转速输入节点正确",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "转速上拉到常电3V3_D",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "转速输入无旁路",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "转速返回排阻通道",
+      "passed": true,
+      "detail": "RN402内部3-6配对"
+    },
+    {
+      "check": "SENS_SPI_SCLK实际端点同网",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "SENS_SPI_MOSI实际端点同网",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "SENS_SPI_MISO实际端点同网",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "I2C1_SCL实际端点同网",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "I2C1_SDA实际端点同网",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "I2C2_SCL实际端点同网",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "I2C2_SDA实际端点同网",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "XSHUT_OD实际端点同网",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "TOF_DISABLE实际端点同网",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "IMU_INT1_RAW实际端点同网",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "IMU_INT2_RAW实际端点同网",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "ADXL_DRDY_RAW实际端点同网",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "SPI源端与模块侧分网",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "两个从机片选独立",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "XSHUT控制与输出未误并",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "第7页仅有一处有意不接",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "转速滤波C0G",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "前六页205器件型号数值脚网未变",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "check": "第7页位号连续且无缺项",
+      "passed": true,
+      "detail": ""
+    }
+  ],
+  "failed": [],
+  "page7Refs": [
+    "C701",
+    "C702",
+    "C703",
+    "C704",
+    "C705",
+    "C706",
+    "C707",
+    "C708",
+    "C709",
+    "C710",
+    "C711",
+    "J701",
+    "J702",
+    "J703",
+    "J704",
+    "J705",
+    "J706",
+    "Q701",
+    "R701",
+    "R702",
+    "R703",
+    "R704",
+    "R705",
+    "R706",
+    "R707",
+    "R708",
+    "R709",
+    "R710",
+    "R711"
+  ],
+  "page7ReferenceGaps": {
+    "R": [],
+    "C": [],
+    "J": [],
+    "Q": []
+  },
+  "previousSixUnchanged": true,
+  "R702": {
+    "1": "TACH_BUF_IN",
+    "2": "3V3_D"
+  },
+  "edaModified": false,
+  "limits": [
+    "R702为可选装，是否实际焊接取决于传感器输出及自带上拉",
+    "J801/U801尚未绘制，不能确认最终FPGA和TOF控制源连接",
+    "实际模块内部上拉、PCB封装和线束方向及上电时序仍需实体验证"
+  ]
+}

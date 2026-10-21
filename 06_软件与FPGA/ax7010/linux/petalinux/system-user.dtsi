@@ -1,0 +1,45 @@
+/*
+ * Carrier-board additions for project-spec/meta-user/recipes-bsp/device-tree/files/system-user.dtsi.
+ * Merge into the vendor's existing system-user.dtsi (keep its own content).
+ *
+ * 1. carrier_ctrl as UIO: copy ax7010/pl/bd/generated/carrier_generated.dtsi
+ *    (written by add_carrier.tcl with the real address and IRQ) next to this
+ *    file, add it to SRC_URI in device-tree.bbappend and include it below.
+ *    Append to the kernel command line:  uio_pdrv_genirq.of_id=vibmon,carrier-ctrl
+ * 2. The AXI IIC / UART16550 / Quad SPI nodes come from the XSA (DTG); the
+ *    labels below are the block-design instance names used by add_carrier.tcl.
+ */
+/include/ "carrier_generated.dtsi"
+
+/* Two spidev nodes: chip select 0 = LSM6DSV (mode 0), 1 = ADXL345 (mode 3).
+ * vibmond sets the mode per device; spi-xilinx applies it while both
+ * selects are high. "rohm,dh2228fv" is a spidev-bound compatible. */
+&spi_sens {
+	#address-cells = <1>;
+	#size-cells = <0>;
+	imu@0 {
+		compatible = "rohm,dh2228fv";
+		reg = <0>;
+		spi-max-frequency = <1000000>;
+	};
+	adxl345@1 {
+		compatible = "rohm,dh2228fv";
+		reg = <1>;
+		spi-max-frequency = <1000000>;
+		spi-cpol;
+		spi-cpha;
+	};
+};
+
+/* I2C buses keep the controller nodes from DTG; no child devices are bound in
+ * the kernel because vibmond drives TCA9555/INA226/DS3231/SHT40/VL53L1X
+ * through /dev/i2c-N (located by AXI base address, not by bus number). */
+&iic_mgmt {
+	clock-frequency = <100000>;
+};
+&iic_sens {
+	clock-frequency = <100000>;
+};
+&iic_exp {
+	clock-frequency = <100000>;
+};

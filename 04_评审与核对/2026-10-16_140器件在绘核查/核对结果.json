@@ -1,0 +1,88 @@
+{
+  "readAt": "2026-10-16T16:35:26.639008+08:00",
+  "componentCount": 140,
+  "pinCount": 381,
+  "drcCheckPassed": true,
+  "perSheet": {
+    "$1": 19,
+    "$2": 51,
+    "$3": 59,
+    "$4": 11
+  },
+  "first129UnchangedSinceDetailedCheck": true,
+  "page4NewPartChecks": [
+    {
+      "actual": "U1",
+      "planned": "U401",
+      "partMatchesBOM": true,
+      "allPinsWithoutRecognizedNet": true
+    },
+    {
+      "actual": "C1",
+      "planned": "C401",
+      "partMatchesBOM": true,
+      "allPinsWithoutRecognizedNet": true
+    },
+    {
+      "actual": "R1",
+      "planned": "R401",
+      "partMatchesBOM": true,
+      "allPinsWithoutRecognizedNet": true
+    },
+    {
+      "actual": "R2",
+      "planned": "R402",
+      "partMatchesBOM": true,
+      "allPinsWithoutRecognizedNet": true
+    },
+    {
+      "actual": "R3",
+      "planned": "R403",
+      "partMatchesBOM": true,
+      "allPinsWithoutRecognizedNet": true
+    },
+    {
+      "actual": "R4",
+      "planned": "R404",
+      "partMatchesBOM": true,
+      "allPinsWithoutRecognizedNet": true
+    },
+    {
+      "actual": "R5",
+      "planned": "R405",
+      "partMatchesBOM": true,
+      "allPinsWithoutRecognizedNet": true
+    },
+    {
+      "actual": "R6",
+      "planned": "R406",
+      "partMatchesBOM": true,
+      "allPinsWithoutRecognizedNet": true
+    },
+    {
+      "actual": "R7",
+      "planned": "R407",
+      "partMatchesBOM": true,
+      "allPinsWithoutRecognizedNet": true
+    },
+    {
+      "actual": "RN1",
+      "planned": "RN401",
+      "partMatchesBOM": true,
+      "allPinsWithoutRecognizedNet": true
+    },
+    {
+      "actual": "RN2",
+      "planned": "RN402",
+      "partMatchesBOM": true,
+      "allPinsWithoutRecognizedNet": true
+    }
+  ],
+  "page4ConnectivityStatus": "11个新放器件全部引脚未识别到网络；不能判定其接线已通过",
+  "schematicWiresModified": false,
+  "documentCorrections": [
+    "U401第二组通道名称按Nexperia针脚表更正，物理脚号配对不变",
+    "PFAIL_N→U401-15→U401-5 PFAIL_BUF_N→1kΩ→AX_PFAIL_N→J801-9，缓冲前后及串阻两端不同名"
+  ],
+  "xdcSHA256": "11c9f7f362b4beaf38775727aef7d9c58bccb5fd83c0fc97e1008cbf0588e744"
+}

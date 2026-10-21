@@ -1,0 +1,426 @@
+
+*** Running vivado
+    with args -log design_1_sdoira_bm_axi_0_0.vds -m64 -product Vivado -mode batch -messageDb vivado.pb -notrace -source design_1_sdoira_bm_axi_0_0.tcl
+
+
+
+****** Vivado v2025.2 (64-bit)
+  **** SW Build 6299465 on Fri Nov 14 19:35:11 GMT 2025
+  **** IP Build 6300035 on Fri Nov 14 10:48:45 MST 2025
+  **** SharedData Build 6298862 on Thu Nov 13 04:50:51 MST 2025
+  **** Start of session at: Fri Oct 16 22:00:53 2026
+    ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+    ** Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
+
+source design_1_sdoira_bm_axi_0_0.tcl -notrace
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1700] Loaded user IP repository 'd:/AX7010_2023.1/course_s2_vitis/22_ov5640_single/Vivado/auto_create_project/my_ip'.
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository 'G:/Xilinx2025/2025.2/Vivado/data/ip'.
+Command: synth_design -top design_1_sdoira_bm_axi_0_0 -part xc7z010clg400-1 -incremental_mode off -mode out_of_context
+Starting synth_design
+Attempting to get a license for feature 'Synthesis' and/or device 'xc7z010'
+INFO: [Common 17-349] Got license for feature 'Synthesis' and/or device 'xc7z010'
+INFO: [Device 21-403] Loading part xc7z010clg400-1
+INFO: [Synth 8-7079] Multithreading enabled for synth_design using a maximum of 2 processes.
+INFO: [Synth 8-7078] Launching helper process for spawning children vivado processes
+INFO: [Synth 8-7075] Helper process launched with PID 2216
+---------------------------------------------------------------------------------
+Starting RTL Elaboration : Time (s): cpu = 00:00:05 ; elapsed = 00:00:07 . Memory (MB): peak = 1293.086 ; gain = 541.012
+---------------------------------------------------------------------------------
+INFO: [Synth 8-11241] undeclared symbol 'bank', assumed default net type 'wire' [D:/AX7010_Sdoira_PL_V1/vendor/rtl/bm.v:335]
+INFO: [Synth 8-11241] undeclared symbol 'dphase_end', assumed default net type 'wire' [D:/AX7010_Sdoira_PL_V1/vendor/rtl/bm_ibuf.v:347]
+WARNING: [Synth 8-11065] parameter 'MAX_COUNT' becomes localparam in 'simple_fifo' with formal parameter declaration list [D:/AX7010_Sdoira_PL_V1/vendor/rtl/simple_fifo.v:27]
+WARNING: [Synth 8-11065] parameter 'VERSION' becomes localparam in 'sdoira_bm_axi' with formal parameter declaration list [D:/AX7010_Sdoira_PL_V1/rtl/sdoira_bm_axi.v:111]
+WARNING: [Synth 8-6901] identifier 'adapter_rddata' is used before its declaration [D:/AX7010_Sdoira_PL_V1/rtl/sdoira_bm_axi.v:372]
+WARNING: [Synth 8-6014] Unused sequential element rem_r_reg[8] was removed.  [D:/AX7010_Sdoira_PL_V1/vendor/rtl/diven.v:149]
+WARNING: [Synth 8-6014] Unused sequential element rem_r_reg[11] was removed.  [D:/AX7010_Sdoira_PL_V1/vendor/rtl/diven.v:149]
+WARNING: [Synth 8-6014] Unused sequential element hcnt_reg was removed.  [D:/AX7010_Sdoira_PL_V1/vendor/rtl/bm_calc.v:340]
+WARNING: [Synth 8-6014] Unused sequential element vcnt_reg was removed.  [D:/AX7010_Sdoira_PL_V1/vendor/rtl/bm_calc.v:359]
+INFO: [Synth 8-7129] Port ALMOST_FULL_I in module output_blk__parameterized1 is either unconnected or has no load
+INFO: [Synth 8-7129] Port PROG_FULL_I in module output_blk__parameterized1 is either unconnected or has no load
+INFO: [Synth 8-7129] Port ALMOST_EMPTY_I in module output_blk__parameterized1 is either unconnected or has no load
+INFO: [Synth 8-7129] Port PROG_EMPTY_I in module output_blk__parameterized1 is either unconnected or has no load
+INFO: [Synth 8-7129] Port WR_ACK_I in module output_blk__parameterized1 is either unconnected or has no load
+INFO: [Synth 8-7129] Port VALID_I in module output_blk__parameterized1 is either unconnected or has no load
+INFO: [Synth 8-7129] Port OVERFLOW_I in module output_blk__parameterized1 is either unconnected or has no load
+INFO: [Synth 8-7129] Port UNDERFLOW_I in module output_blk__parameterized1 is either unconnected or has no load
+INFO: [Synth 8-7129] Port DATA_COUNT_I[9] in module output_blk__parameterized1 is either unconnected or has no load
+INFO: [Synth 8-7129] Port DATA_COUNT_I[8] in module output_blk__parameterized1 is either unconnected or has no load
+INFO: [Synth 8-7129] Port DATA_COUNT_I[7] in module output_blk__parameterized1 is either unconnected or has no load
+INFO: [Synth 8-7129] Port DATA_COUNT_I[6] in module output_blk__parameterized1 is either unconnected or has no load
+INFO: [Synth 8-7129] Port DATA_COUNT_I[5] in module output_blk__parameterized1 is either unconnected or has no load
+INFO: [Synth 8-7129] Port DATA_COUNT_I[4] in module output_blk__parameterized1 is either unconnected or has no load
+INFO: [Synth 8-7129] Port DATA_COUNT_I[3] in module output_blk__parameterized1 is either unconnected or has no load
+INFO: [Synth 8-7129] Port DATA_COUNT_I[2] in module output_blk__parameterized1 is either unconnected or has no load
+INFO: [Synth 8-7129] Port DATA_COUNT_I[1] in module output_blk__parameterized1 is either unconnected or has no load
+INFO: [Synth 8-7129] Port DATA_COUNT_I[0] in module output_blk__parameterized1 is either unconnected or has no load
+INFO: [Synth 8-7129] Port WR_DATA_COUNT_I[9] in module output_blk__parameterized1 is either unconnected or has no load
+INFO: [Synth 8-7129] Port WR_DATA_COUNT_I[8] in module output_blk__parameterized1 is either unconnected or has no load
+INFO: [Synth 8-7129] Port WR_DATA_COUNT_I[7] in module output_blk__parameterized1 is either unconnected or has no load
+INFO: [Synth 8-7129] Port WR_DATA_COUNT_I[6] in module output_blk__parameterized1 is either unconnected or has no load
+INFO: [Synth 8-7129] Port WR_DATA_COUNT_I[5] in module output_blk__parameterized1 is either unconnected or has no load
+INFO: [Synth 8-7129] Port WR_DATA_COUNT_I[4] in module output_blk__parameterized1 is either unconnected or has no load
+INFO: [Synth 8-7129] Port WR_DATA_COUNT_I[3] in module output_blk__parameterized1 is either unconnected or has no load
+INFO: [Synth 8-7129] Port WR_DATA_COUNT_I[2] in module output_blk__parameterized1 is either unconnected or has no load
+INFO: [Synth 8-7129] Port WR_DATA_COUNT_I[1] in module output_blk__parameterized1 is either unconnected or has no load
+INFO: [Synth 8-7129] Port WR_DATA_COUNT_I[0] in module output_blk__parameterized1 is either unconnected or has no load
+INFO: [Synth 8-7129] Port RD_DATA_COUNT_I[9] in module output_blk__parameterized1 is either unconnected or has no load
+INFO: [Synth 8-7129] Port RD_DATA_COUNT_I[8] in module output_blk__parameterized1 is either unconnected or has no load
+INFO: [Synth 8-7129] Port RD_DATA_COUNT_I[7] in module output_blk__parameterized1 is either unconnected or has no load
+INFO: [Synth 8-7129] Port RD_DATA_COUNT_I[6] in module output_blk__parameterized1 is either unconnected or has no load
+INFO: [Synth 8-7129] Port RD_DATA_COUNT_I[5] in module output_blk__parameterized1 is either unconnected or has no load
+INFO: [Synth 8-7129] Port RD_DATA_COUNT_I[4] in module output_blk__parameterized1 is either unconnected or has no load
+INFO: [Synth 8-7129] Port RD_DATA_COUNT_I[3] in module output_blk__parameterized1 is either unconnected or has no load
+INFO: [Synth 8-7129] Port RD_DATA_COUNT_I[2] in module output_blk__parameterized1 is either unconnected or has no load
+INFO: [Synth 8-7129] Port RD_DATA_COUNT_I[1] in module output_blk__parameterized1 is either unconnected or has no load
+INFO: [Synth 8-7129] Port RD_DATA_COUNT_I[0] in module output_blk__parameterized1 is either unconnected or has no load
+INFO: [Synth 8-7129] Port SBITERR_I in module output_blk__parameterized1 is either unconnected or has no load
+INFO: [Synth 8-7129] Port DBITERR_I in module output_blk__parameterized1 is either unconnected or has no load
+INFO: [Synth 8-7129] Port RST_FULL_FF in module wr_status_flags_ss__parameterized1 is either unconnected or has no load
+INFO: [Synth 8-7129] Port WR_RST in module wr_status_flags_ss__parameterized1 is either unconnected or has no load
+INFO: [Synth 8-7129] Port SRST in module wr_status_flags_ss__parameterized1 is either unconnected or has no load
+INFO: [Synth 8-7129] Port SAFETY_CKT_WR_RST in module wr_status_flags_ss__parameterized1 is either unconnected or has no load
+INFO: [Synth 8-7129] Port WR_PNTR_PLUS2[8] in module wr_status_flags_ss__parameterized1 is either unconnected or has no load
+INFO: [Synth 8-7129] Port WR_PNTR_PLUS2[7] in module wr_status_flags_ss__parameterized1 is either unconnected or has no load
+INFO: [Synth 8-7129] Port WR_PNTR_PLUS2[6] in module wr_status_flags_ss__parameterized1 is either unconnected or has no load
+INFO: [Synth 8-7129] Port WR_PNTR_PLUS2[5] in module wr_status_flags_ss__parameterized1 is either unconnected or has no load
+INFO: [Synth 8-7129] Port WR_PNTR_PLUS2[4] in module wr_status_flags_ss__parameterized1 is either unconnected or has no load
+INFO: [Synth 8-7129] Port WR_PNTR_PLUS2[3] in module wr_status_flags_ss__parameterized1 is either unconnected or has no load
+INFO: [Synth 8-7129] Port WR_PNTR_PLUS2[2] in module wr_status_flags_ss__parameterized1 is either unconnected or has no load
+INFO: [Synth 8-7129] Port WR_PNTR_PLUS2[1] in module wr_status_flags_ss__parameterized1 is either unconnected or has no load
+INFO: [Synth 8-7129] Port WR_PNTR_PLUS2[0] in module wr_status_flags_ss__parameterized1 is either unconnected or has no load
+INFO: [Synth 8-7129] Port WR_PNTR_PLUS3[8] in module wr_status_flags_ss__parameterized1 is either unconnected or has no load
+INFO: [Synth 8-7129] Port WR_PNTR_PLUS3[7] in module wr_status_flags_ss__parameterized1 is either unconnected or has no load
+INFO: [Synth 8-7129] Port WR_PNTR_PLUS3[6] in module wr_status_flags_ss__parameterized1 is either unconnected or has no load
+INFO: [Synth 8-7129] Port WR_PNTR_PLUS3[5] in module wr_status_flags_ss__parameterized1 is either unconnected or has no load
+INFO: [Synth 8-7129] Port WR_PNTR_PLUS3[4] in module wr_status_flags_ss__parameterized1 is either unconnected or has no load
+INFO: [Synth 8-7129] Port WR_PNTR_PLUS3[3] in module wr_status_flags_ss__parameterized1 is either unconnected or has no load
+INFO: [Synth 8-7129] Port WR_PNTR_PLUS3[2] in module wr_status_flags_ss__parameterized1 is either unconnected or has no load
+INFO: [Synth 8-7129] Port WR_PNTR_PLUS3[1] in module wr_status_flags_ss__parameterized1 is either unconnected or has no load
+INFO: [Synth 8-7129] Port WR_PNTR_PLUS3[0] in module wr_status_flags_ss__parameterized1 is either unconnected or has no load
+INFO: [Synth 8-7129] Port RST in module wr_bin_cntr__parameterized1 is either unconnected or has no load
+INFO: [Synth 8-7129] Port WR_EN_INTO_LOGIC in module wr_logic__parameterized1 is either unconnected or has no load
+INFO: [Synth 8-7129] Port WR_RST_INTO_LOGIC in module wr_logic__parameterized1 is either unconnected or has no load
+INFO: [Synth 8-7129] Port RD_EN in module wr_logic__parameterized1 is either unconnected or has no load
+INFO: [Synth 8-7129] Port WR_RST_BUSY in module wr_logic__parameterized1 is either unconnected or has no load
+INFO: [Synth 8-7129] Port EMPTY in module wr_logic__parameterized1 is either unconnected or has no load
+INFO: [Synth 8-7129] Port ALMOST_EMPTY in module wr_logic__parameterized1 is either unconnected or has no load
+INFO: [Synth 8-7129] Port PROG_FULL_THRESH[8] in module wr_logic__parameterized1 is either unconnected or has no load
+INFO: [Synth 8-7129] Port PROG_FULL_THRESH[7] in module wr_logic__parameterized1 is either unconnected or has no load
+INFO: [Synth 8-7129] Port PROG_FULL_THRESH[6] in module wr_logic__parameterized1 is either unconnected or has no load
+INFO: [Synth 8-7129] Port PROG_FULL_THRESH[5] in module wr_logic__parameterized1 is either unconnected or has no load
+INFO: [Synth 8-7129] Port PROG_FULL_THRESH[4] in module wr_logic__parameterized1 is either unconnected or has no load
+INFO: [Synth 8-7129] Port PROG_FULL_THRESH[3] in module wr_logic__parameterized1 is either unconnected or has no load
+INFO: [Synth 8-7129] Port PROG_FULL_THRESH[2] in module wr_logic__parameterized1 is either unconnected or has no load
+INFO: [Synth 8-7129] Port PROG_FULL_THRESH[1] in module wr_logic__parameterized1 is either unconnected or has no load
+INFO: [Synth 8-7129] Port PROG_FULL_THRESH[0] in module wr_logic__parameterized1 is either unconnected or has no load
+INFO: [Synth 8-7129] Port PROG_FULL_THRESH_ASSERT[8] in module wr_logic__parameterized1 is either unconnected or has no load
+INFO: [Synth 8-7129] Port PROG_FULL_THRESH_ASSERT[7] in module wr_logic__parameterized1 is either unconnected or has no load
+INFO: [Synth 8-7129] Port PROG_FULL_THRESH_ASSERT[6] in module wr_logic__parameterized1 is either unconnected or has no load
+INFO: [Synth 8-7129] Port PROG_FULL_THRESH_ASSERT[5] in module wr_logic__parameterized1 is either unconnected or has no load
+INFO: [Synth 8-7129] Port PROG_FULL_THRESH_ASSERT[4] in module wr_logic__parameterized1 is either unconnected or has no load
+INFO: [Synth 8-7129] Port PROG_FULL_THRESH_ASSERT[3] in module wr_logic__parameterized1 is either unconnected or has no load
+INFO: [Synth 8-7129] Port PROG_FULL_THRESH_ASSERT[2] in module wr_logic__parameterized1 is either unconnected or has no load
+INFO: [Synth 8-7129] Port PROG_FULL_THRESH_ASSERT[1] in module wr_logic__parameterized1 is either unconnected or has no load
+INFO: [Synth 8-7129] Port PROG_FULL_THRESH_ASSERT[0] in module wr_logic__parameterized1 is either unconnected or has no load
+INFO: [Synth 8-7129] Port PROG_FULL_THRESH_NEGATE[8] in module wr_logic__parameterized1 is either unconnected or has no load
+INFO: [Synth 8-7129] Port PROG_FULL_THRESH_NEGATE[7] in module wr_logic__parameterized1 is either unconnected or has no load
+INFO: [Synth 8-7129] Port PROG_FULL_THRESH_NEGATE[6] in module wr_logic__parameterized1 is either unconnected or has no load
+INFO: [Synth 8-7129] Port PROG_FULL_THRESH_NEGATE[5] in module wr_logic__parameterized1 is either unconnected or has no load
+INFO: [Synth 8-7129] Port PROG_FULL_THRESH_NEGATE[4] in module wr_logic__parameterized1 is either unconnected or has no load
+INFO: [Synth 8-7129] Port PROG_FULL_THRESH_NEGATE[3] in module wr_logic__parameterized1 is either unconnected or has no load
+INFO: [Synth 8-7129] Port PROG_FULL_THRESH_NEGATE[2] in module wr_logic__parameterized1 is either unconnected or has no load
+INFO: [Synth 8-7129] Port PROG_FULL_THRESH_NEGATE[1] in module wr_logic__parameterized1 is either unconnected or has no load
+INFO: [Synth 8-7129] Port PROG_FULL_THRESH_NEGATE[0] in module wr_logic__parameterized1 is either unconnected or has no load
+INFO: [Synth 8-7129] Port RD_RST in module rd_status_flags_ss__parameterized1 is either unconnected or has no load
+INFO: [Synth 8-7129] Port SAFETY_CKT_RD_RST in module rd_status_flags_ss__parameterized1 is either unconnected or has no load
+INFO: [Synth 8-7129] Port RD_PNTR_PLUS2[8] in module rd_status_flags_ss__parameterized1 is either unconnected or has no load
+INFO: [Synth 8-7129] Port RD_PNTR_PLUS2[7] in module rd_status_flags_ss__parameterized1 is either unconnected or has no load
+INFO: [Common 17-14] Message 'Synth 8-7129' appears 100 times and further instances of the messages will be disabled. Use the Tcl command set_msg_config to change the current settings.
+---------------------------------------------------------------------------------
+Finished RTL Elaboration : Time (s): cpu = 00:00:26 ; elapsed = 00:00:35 . Memory (MB): peak = 2278.078 ; gain = 1526.004
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Handling Custom Attributes
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:27 ; elapsed = 00:00:35 . Memory (MB): peak = 2278.078 ; gain = 1526.004
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished RTL Optimization Phase 1 : Time (s): cpu = 00:00:27 ; elapsed = 00:00:35 . Memory (MB): peak = 2278.078 ; gain = 1526.004
+---------------------------------------------------------------------------------
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.267 . Memory (MB): peak = 2278.078 ; gain = 0.000
+INFO: [Netlist 29-17] Analyzing 69 Unisim elements for replacement
+INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
+INFO: [Project 1-570] Preparing netlist for logic optimization
+
+Processing XDC Constraints
+Initializing timing engine
+Parsing XDC File [d:/AX7010_Sdoira_PL_V1/project/stereo_depth.gen/sources_1/bd/design_1/ip/design_1_sdoira_bm_axi_0_0/design_1_sdoira_bm_axi_0_0_ooc.xdc] for cell 'inst'
+Finished Parsing XDC File [d:/AX7010_Sdoira_PL_V1/project/stereo_depth.gen/sources_1/bd/design_1/ip/design_1_sdoira_bm_axi_0_0/design_1_sdoira_bm_axi_0_0_ooc.xdc] for cell 'inst'
+Parsing XDC File [d:/AX7010_Sdoira_PL_V1/vendor/ip/fifo_frm/fifo_frm.xdc] for cell 'inst/arb/fifo_frm/U0'
+Finished Parsing XDC File [d:/AX7010_Sdoira_PL_V1/vendor/ip/fifo_frm/fifo_frm.xdc] for cell 'inst/arb/fifo_frm/U0'
+Parsing XDC File [d:/AX7010_Sdoira_PL_V1/vendor/ip/bm_obuf_fifo/bm_obuf_fifo.xdc] for cell 'inst/bm/bm_obuf/bm_obuf_fifo/U0'
+Finished Parsing XDC File [d:/AX7010_Sdoira_PL_V1/vendor/ip/bm_obuf_fifo/bm_obuf_fifo.xdc] for cell 'inst/bm/bm_obuf/bm_obuf_fifo/U0'
+Parsing XDC File [d:/AX7010_Sdoira_PL_V1/vendor/ip/bm_calc_dly/bm_calc_dly.xdc] for cell 'inst/bm/bm_calc/bm_calc_sad/bm_calc_dly/U0'
+Finished Parsing XDC File [d:/AX7010_Sdoira_PL_V1/vendor/ip/bm_calc_dly/bm_calc_dly.xdc] for cell 'inst/bm/bm_calc/bm_calc_sad/bm_calc_dly/U0'
+Parsing XDC File [D:/AX7010_Sdoira_PL_V1/project/stereo_depth.runs/design_1_sdoira_bm_axi_0_0_synth_1/dont_touch.xdc]
+Finished Parsing XDC File [D:/AX7010_Sdoira_PL_V1/project/stereo_depth.runs/design_1_sdoira_bm_axi_0_0_synth_1/dont_touch.xdc]
+INFO: [Project 1-236] Implementation specific constraints were found while reading constraint file [D:/AX7010_Sdoira_PL_V1/project/stereo_depth.runs/design_1_sdoira_bm_axi_0_0_synth_1/dont_touch.xdc]. These constraints will be ignored for synthesis but will be used in implementation. Impacted constraints are listed in the file [.Xil/design_1_sdoira_bm_axi_0_0_propImpl.xdc].
+Resolution: To avoid this warning, move constraints listed in [.Xil/design_1_sdoira_bm_axi_0_0_propImpl.xdc] to another XDC file and exclude this new file from synthesis with the used_in_synthesis property (File Properties dialog in GUI) and re-run elaboration/synthesis.
+Completed Processing XDC Constraints
+
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.005 . Memory (MB): peak = 2278.078 ; gain = 0.000
+INFO: [Project 1-111] Unisim Transformation Summary:
+No Unisim elements were transformed.
+
+Constraint Validation Runtime : Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.180 . Memory (MB): peak = 2278.078 ; gain = 0.000
+INFO: [Designutils 20-5008] Incremental synthesis strategy off
+---------------------------------------------------------------------------------
+Finished Constraint Validation : Time (s): cpu = 00:00:37 ; elapsed = 00:00:47 . Memory (MB): peak = 2278.078 ; gain = 1526.004
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Loading Part and Timing Information
+---------------------------------------------------------------------------------
+Loading part: xc7z010clg400-1
+---------------------------------------------------------------------------------
+Finished Loading Part and Timing Information : Time (s): cpu = 00:00:37 ; elapsed = 00:00:47 . Memory (MB): peak = 2278.078 ; gain = 1526.004
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Applying 'set_property' XDC Constraints
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished applying 'set_property' XDC Constraints : Time (s): cpu = 00:00:37 ; elapsed = 00:00:47 . Memory (MB): peak = 2278.078 ; gain = 1526.004
+---------------------------------------------------------------------------------
+INFO: [Synth 8-802] inferred FSM for state register 'op_phase_reg' in module 'bm_ibuf'
+INFO: [Synth 8-802] inferred FSM for state register 'state_reg' in module 'bm_ibuf'
+INFO: [Synth 8-802] inferred FSM for state register 'lr_state_reg' in module 'bm_calc_sad'
+INFO: [Synth 8-802] inferred FSM for state register 'sad_state_reg' in module 'bm_calc_sad'
+INFO: [Synth 8-802] inferred FSM for state register 'state_reg' in module 'bm_obuf'
+INFO: [Synth 8-802] inferred FSM for state register 'rd_state_reg' in module 'arb'
+---------------------------------------------------------------------------------------------------
+                   State |                     New Encoding |                Previous Encoding 
+---------------------------------------------------------------------------------------------------
+                  iSTATE |                              000 |                              000
+                 iSTATE4 |                              001 |                              001
+                 iSTATE0 |                              010 |                              010
+                 iSTATE3 |                              011 |                              011
+                 iSTATE1 |                              100 |                              100
+                 iSTATE2 |                              101 |                              101
+---------------------------------------------------------------------------------------------------
+INFO: [Synth 8-3354] encoded FSM with state register 'op_phase_reg' using encoding 'sequential' in module 'bm_ibuf'
+---------------------------------------------------------------------------------------------------
+                   State |                     New Encoding |                Previous Encoding 
+---------------------------------------------------------------------------------------------------
+                 iSTATE5 |                              000 |                              000
+                  iSTATE |                              001 |                              001
+                 iSTATE0 |                              010 |                              010
+                 iSTATE1 |                              011 |                              011
+                 iSTATE2 |                              100 |                              100
+                 iSTATE4 |                              101 |                              101
+                 iSTATE3 |                              110 |                              110
+---------------------------------------------------------------------------------------------------
+INFO: [Synth 8-3354] encoded FSM with state register 'state_reg' using encoding 'sequential' in module 'bm_ibuf'
+---------------------------------------------------------------------------------------------------
+                   State |                     New Encoding |                Previous Encoding 
+---------------------------------------------------------------------------------------------------
+                  iSTATE |                              000 |                              000
+                 iSTATE0 |                              001 |                              001
+                 iSTATE1 |                              010 |                              010
+                 iSTATE2 |                              011 |                              011
+                 iSTATE3 |                              100 |                              100
+                 iSTATE4 |                              101 |                              101
+---------------------------------------------------------------------------------------------------
+INFO: [Synth 8-3354] encoded FSM with state register 'lr_state_reg' using encoding 'sequential' in module 'bm_calc_sad'
+---------------------------------------------------------------------------------------------------
+                   State |                     New Encoding |                Previous Encoding 
+---------------------------------------------------------------------------------------------------
+                  iSTATE |                            00010 |                              000
+                 iSTATE0 |                            10000 |                              001
+                 iSTATE1 |                            01000 |                              010
+                 iSTATE2 |                            00100 |                              011
+                 iSTATE3 |                            00001 |                              100
+---------------------------------------------------------------------------------------------------
+INFO: [Synth 8-3354] encoded FSM with state register 'sad_state_reg' using encoding 'one-hot' in module 'bm_calc_sad'
+---------------------------------------------------------------------------------------------------
+                   State |                     New Encoding |                Previous Encoding 
+---------------------------------------------------------------------------------------------------
+                 iSTATE4 |                              001 |                              000
+                 iSTATE3 |                              010 |                              001
+                  iSTATE |                              101 |                              010
+                 iSTATE0 |                              100 |                              011
+                 iSTATE1 |                              011 |                              100
+                 iSTATE2 |                              000 |                              101
+---------------------------------------------------------------------------------------------------
+INFO: [Synth 8-3354] encoded FSM with state register 'state_reg' using encoding 'sequential' in module 'bm_obuf'
+---------------------------------------------------------------------------------------------------
+                   State |                     New Encoding |                Previous Encoding 
+---------------------------------------------------------------------------------------------------
+                  iSTATE |                            00010 |                              000
+                 iSTATE0 |                            10000 |                              001
+                 iSTATE3 |                            01000 |                              010
+                 iSTATE1 |                            00100 |                              011
+                 iSTATE2 |                            00001 |                              100
+---------------------------------------------------------------------------------------------------
+INFO: [Synth 8-3354] encoded FSM with state register 'rd_state_reg' using encoding 'one-hot' in module 'arb'
+---------------------------------------------------------------------------------
+Finished RTL Optimization Phase 2 : Time (s): cpu = 00:00:40 ; elapsed = 00:00:49 . Memory (MB): peak = 2278.078 ; gain = 1526.004
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start RTL Component Statistics 
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished RTL Component Statistics 
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Part Resource Summary
+---------------------------------------------------------------------------------
+Part Resources:
+DSPs: 80 (col length:40)
+BRAMs: 120 (col length: RAMB18 40 RAMB36 20)
+---------------------------------------------------------------------------------
+Finished Part Resource Summary
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Cross Boundary and Area Optimization
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Cross Boundary and Area Optimization : Time (s): cpu = 00:01:01 ; elapsed = 00:01:11 . Memory (MB): peak = 2278.078 ; gain = 1526.004
+---------------------------------------------------------------------------------
+ Sort Area is  rem0_0 : 0 0 : 620 620 : Used 1 time 0
+---------------------------------------------------------------------------------
+Start Applying XDC Timing Constraints
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Applying XDC Timing Constraints : Time (s): cpu = 00:01:07 ; elapsed = 00:01:18 . Memory (MB): peak = 2278.078 ; gain = 1526.004
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Timing Optimization
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Timing Optimization : Time (s): cpu = 00:01:10 ; elapsed = 00:01:21 . Memory (MB): peak = 2278.078 ; gain = 1526.004
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Technology Mapping
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Technology Mapping : Time (s): cpu = 00:01:14 ; elapsed = 00:01:24 . Memory (MB): peak = 2278.078 ; gain = 1526.004
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Flattening Before IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Flattening Before IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Final Netlist Cleanup
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Final Netlist Cleanup
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished IO Insertion : Time (s): cpu = 00:01:17 ; elapsed = 00:01:27 . Memory (MB): peak = 2278.078 ; gain = 1526.004
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Instances
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Instances : Time (s): cpu = 00:01:17 ; elapsed = 00:01:27 . Memory (MB): peak = 2278.078 ; gain = 1526.004
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Rebuilding User Hierarchy
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Rebuilding User Hierarchy : Time (s): cpu = 00:01:17 ; elapsed = 00:01:28 . Memory (MB): peak = 2278.078 ; gain = 1526.004
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Ports
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Ports : Time (s): cpu = 00:01:18 ; elapsed = 00:01:28 . Memory (MB): peak = 2278.078 ; gain = 1526.004
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Handling Custom Attributes
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Handling Custom Attributes : Time (s): cpu = 00:01:18 ; elapsed = 00:01:29 . Memory (MB): peak = 2278.078 ; gain = 1526.004
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Nets
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Nets : Time (s): cpu = 00:01:18 ; elapsed = 00:01:29 . Memory (MB): peak = 2278.078 ; gain = 1526.004
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Writing Synthesis Report
+---------------------------------------------------------------------------------
+
+DSP Final Report (the ' indicates corresponding REG is set)
++------------+-------------+--------+--------+--------+--------+--------+------+------+------+------+-------+------+------+
+|Module Name | DSP Mapping | A Size | B Size | C Size | D Size | P Size | AREG | BREG | CREG | DREG | ADREG | MREG | PREG | 
++------------+-------------+--------+--------+--------+--------+--------+------+------+------+------+-------+------+------+
+|bm_obuf     | Dynamic     | -      | -      | -      | -      | 19     | -    | -    | -    | -    | -     | 0    | 0    | 
++------------+-------------+--------+--------+--------+--------+--------+------+------+------+------+-------+------+------+
+
+
+Report BlackBoxes: 
++-+--------------+----------+
+| |BlackBox name |Instances |
++-+--------------+----------+
++-+--------------+----------+
+
+Report Cell Usage: 
++------+---------+------+
+|      |Cell     |Count |
++------+---------+------+
+|1     |CARRY4   |   851|
+|2     |DSP48E1  |     1|
+|3     |LUT1     |   237|
+|4     |LUT2     |  2702|
+|5     |LUT3     |  1092|
+|6     |LUT4     |  1890|
+|7     |LUT5     |   958|
+|8     |LUT6     |  1472|
+|9     |MUXCY    |    44|
+|10    |RAM64M   |    48|
+|11    |RAM64X1D |     4|
+|12    |RAMB18E1 |     4|
+|14    |RAMB36E1 |    15|
+|17    |SRL16E   |    59|
+|18    |FDCE     |  4001|
+|19    |FDPE     |    25|
+|20    |FDRE     |   607|
+|21    |FDSE     |    12|
++------+---------+------+
+---------------------------------------------------------------------------------
+Finished Writing Synthesis Report : Time (s): cpu = 00:01:18 ; elapsed = 00:01:29 . Memory (MB): peak = 2278.078 ; gain = 1526.004
+---------------------------------------------------------------------------------
+Synthesis finished with 0 errors, 0 critical warnings and 0 warnings.
+Synthesis Optimization Runtime : Time (s): cpu = 00:00:46 ; elapsed = 00:01:22 . Memory (MB): peak = 2278.078 ; gain = 1526.004
+Synthesis Optimization Complete : Time (s): cpu = 00:01:18 ; elapsed = 00:01:29 . Memory (MB): peak = 2278.078 ; gain = 1526.004
+INFO: [Project 1-571] Translating synthesized netlist
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.169 . Memory (MB): peak = 2278.078 ; gain = 0.000
+INFO: [Netlist 29-17] Analyzing 967 Unisim elements for replacement
+INFO: [Netlist 29-28] Unisim Transformation completed in 1 CPU seconds
+INFO: [Project 1-570] Preparing netlist for logic optimization
+INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s).
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.004 . Memory (MB): peak = 2278.078 ; gain = 0.000
+INFO: [Project 1-111] Unisim Transformation Summary:
+  A total of 68 instances were transformed.
+  (MUXCY,XORCY) => CARRY4: 16 instances
+  RAM64M => RAM64M (RAMD64E(x4)): 48 instances
+  RAM64X1D => RAM64X1D (RAMD64E(x2)): 4 instances
+
+Synth Design complete | Checksum: 908c4a85
+INFO: [Common 17-83] Releasing license: Synthesis
+207 Infos, 7 Warnings, 0 Critical Warnings and 0 Errors encountered.
+synth_design completed successfully
+synth_design: Time (s): cpu = 00:01:24 ; elapsed = 00:01:37 . Memory (MB): peak = 2278.078 ; gain = 1737.227
+INFO: [Coretcl 2-1174] Renamed 133 cell refs.
+Write ShapeDB Complete: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.016 . Memory (MB): peak = 2278.078 ; gain = 0.000
+INFO: [Common 17-1381] The checkpoint 'D:/AX7010_Sdoira_PL_V1/project/stereo_depth.runs/design_1_sdoira_bm_axi_0_0_synth_1/design_1_sdoira_bm_axi_0_0.dcp' has been generated.
+INFO: [Vivado 12-24828] Executing command : report_utilization -file design_1_sdoira_bm_axi_0_0_utilization_synth.rpt -pb design_1_sdoira_bm_axi_0_0_utilization_synth.pb
+INFO: [Common 17-206] Exiting Vivado at Fri Oct 16 22:02:40 2026...

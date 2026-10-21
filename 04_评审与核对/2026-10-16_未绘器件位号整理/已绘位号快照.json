@@ -1,0 +1,2237 @@
+{
+  "readAt": "2026-10-16T14:27:30+08:00",
+  "componentCount": 119,
+  "ok": true,
+  "drcCheckPassed": true,
+  "parts": [
+    {
+      "ref": "D101",
+      "part": "SMBJ13A",
+      "pins": [
+        {
+          "number": "1",
+          "name": "C",
+          "net": "12V_PROTECTED"
+        },
+        {
+          "number": "2",
+          "name": "A",
+          "net": "GND"
+        }
+      ]
+    },
+    {
+      "ref": "C101",
+      "part": "RVE470UF35V167RV084",
+      "pins": [
+        {
+          "number": "1",
+          "name": "1",
+          "net": "12V_PROTECTED"
+        },
+        {
+          "number": "2",
+          "name": "2",
+          "net": "GND"
+        }
+      ]
+    },
+    {
+      "ref": "C102",
+      "part": "GRM21BR61H106KE43L",
+      "pins": [
+        {
+          "number": "1",
+          "name": "1",
+          "net": "GND"
+        },
+        {
+          "number": "2",
+          "name": "2",
+          "net": "12V_PROTECTED"
+        }
+      ]
+    },
+    {
+      "ref": "C103",
+      "part": "CC0603KRX7R9BB104",
+      "pins": [
+        {
+          "number": "1",
+          "name": "1",
+          "net": "GND"
+        },
+        {
+          "number": "2",
+          "name": "2",
+          "net": "12V_PROTECTED"
+        }
+      ]
+    },
+    {
+      "ref": "J102",
+      "part": "JL128-50802G01",
+      "pins": [
+        {
+          "number": "1",
+          "name": "1",
+          "net": "$1N3"
+        },
+        {
+          "number": "2",
+          "name": "2",
+          "net": "12V_PROTECTED"
+        }
+      ]
+    },
+    {
+      "ref": "F101",
+      "part": "SCT1032T6.3A250V",
+      "pins": [
+        {
+          "number": "1",
+          "name": "1",
+          "net": "$1N1"
+        },
+        {
+          "number": "2",
+          "name": "2",
+          "net": "$1N3"
+        }
+      ]
+    },
+    {
+      "ref": "RS101",
+      "part": "WSLP25125L000FEA",
+      "pins": [
+        {
+          "number": "1",
+          "name": "1",
+          "net": "12V_MAIN"
+        },
+        {
+          "number": "2",
+          "name": "2",
+          "net": "12V_PROTECTED"
+        }
+      ]
+    },
+    {
+      "ref": "U101",
+      "part": "INA226AIDGSR",
+      "pins": [
+        {
+          "number": "1",
+          "name": "A1",
+          "net": "GND"
+        },
+        {
+          "number": "2",
+          "name": "A0",
+          "net": "GND"
+        },
+        {
+          "number": "3",
+          "name": "Alert",
+          "net": "INA_ALERT"
+        },
+        {
+          "number": "4",
+          "name": "SDA",
+          "net": "I2C0_SDA"
+        },
+        {
+          "number": "5",
+          "name": "SCL",
+          "net": "I2C0_SCL"
+        },
+        {
+          "number": "6",
+          "name": "VS+",
+          "net": "AX_3V3"
+        },
+        {
+          "number": "7",
+          "name": "GND",
+          "net": "GND"
+        },
+        {
+          "number": "8",
+          "name": "VBUS",
+          "net": "12V_MAIN"
+        },
+        {
+          "number": "9",
+          "name": "VIN-",
+          "net": "12V_MAIN"
+        },
+        {
+          "number": "10",
+          "name": "VIN+",
+          "net": "12V_PROTECTED"
+        }
+      ]
+    },
+    {
+      "ref": "C104",
+      "part": "CL10B104KB8NNNC",
+      "pins": [
+        {
+          "number": "1",
+          "name": "1",
+          "net": "GND"
+        },
+        {
+          "number": "2",
+          "name": "2",
+          "net": "AX_3V3"
+        }
+      ]
+    },
+    {
+      "ref": "R106",
+      "part": "RC0603FR-0710KL",
+      "pins": [
+        {
+          "number": "1",
+          "name": "1",
+          "net": "AX_3V3"
+        },
+        {
+          "number": "2",
+          "name": "2",
+          "net": "INA_ALERT"
+        }
+      ]
+    },
+    {
+      "ref": "U102",
+      "part": "TLV3011BIDBVR",
+      "pins": [
+        {
+          "number": "1",
+          "name": "OUT",
+          "net": "PFAIL_N"
+        },
+        {
+          "number": "2",
+          "name": "V-",
+          "net": "GND"
+        },
+        {
+          "number": "3",
+          "name": "IN+",
+          "net": "$1N18"
+        },
+        {
+          "number": "4",
+          "name": "IN-",
+          "net": "$1N23"
+        },
+        {
+          "number": "5",
+          "name": "REF",
+          "net": "$1N23"
+        },
+        {
+          "number": "6",
+          "name": "V+",
+          "net": "3V3_D"
+        }
+      ]
+    },
+    {
+      "ref": "C105",
+      "part": "CL10B104KB8NNNC",
+      "pins": [
+        {
+          "number": "1",
+          "name": "1",
+          "net": "3V3_D"
+        },
+        {
+          "number": "2",
+          "name": "2",
+          "net": "GND"
+        }
+      ]
+    },
+    {
+      "ref": "C106",
+      "part": "CL10C102JB8NNNC",
+      "pins": [
+        {
+          "number": "1",
+          "name": "1",
+          "net": "$1N18"
+        },
+        {
+          "number": "2",
+          "name": "2",
+          "net": "GND"
+        }
+      ]
+    },
+    {
+      "ref": "R101",
+      "part": "RC0603FR-0710KL",
+      "pins": [
+        {
+          "number": "1",
+          "name": "1",
+          "net": "3V3_D"
+        },
+        {
+          "number": "2",
+          "name": "2",
+          "net": "PFAIL_N"
+        }
+      ]
+    },
+    {
+      "ref": "R102",
+      "part": "RC0603FR-07100KL",
+      "pins": [
+        {
+          "number": "1",
+          "name": "1",
+          "net": "$1N18"
+        },
+        {
+          "number": "2",
+          "name": "2",
+          "net": "12V_MAIN"
+        }
+      ]
+    },
+    {
+      "ref": "R103",
+      "part": "RC0603FR-0712K7L",
+      "pins": [
+        {
+          "number": "1",
+          "name": "1",
+          "net": "GND"
+        },
+        {
+          "number": "2",
+          "name": "2",
+          "net": "$1N18"
+        }
+      ]
+    },
+    {
+      "ref": "R104",
+      "part": "RC0603FR-071ML",
+      "pins": [
+        {
+          "number": "1",
+          "name": "1",
+          "net": "$1N18"
+        },
+        {
+          "number": "2",
+          "name": "2",
+          "net": "PFAIL_N"
+        }
+      ]
+    },
+    {
+      "ref": "R105",
+      "part": "RC0603FR-071KL",
+      "pins": [
+        {
+          "number": "1",
+          "name": "1",
+          "net": "NANO_A6_PFAIL"
+        },
+        {
+          "number": "2",
+          "name": "2",
+          "net": "PFAIL_N"
+        }
+      ]
+    },
+    {
+      "ref": "J101",
+      "part": "PJ-002BH",
+      "pins": [
+        {
+          "number": "1",
+          "name": "1",
+          "net": "$1N1"
+        },
+        {
+          "number": "2",
+          "name": "2",
+          "net": "GND"
+        },
+        {
+          "number": "3",
+          "name": "3",
+          "net": "GND"
+        }
+      ]
+    },
+    {
+      "ref": "U201",
+      "part": "TPS5430DDAR",
+      "pins": [
+        {
+          "number": "1",
+          "name": "BOOT",
+          "net": "$2N1"
+        },
+        {
+          "number": "2",
+          "name": "NC",
+          "net": ""
+        },
+        {
+          "number": "3",
+          "name": "NC",
+          "net": ""
+        },
+        {
+          "number": "4",
+          "name": "VSENSE",
+          "net": "$2N2"
+        },
+        {
+          "number": "5",
+          "name": "ENA",
+          "net": ""
+        },
+        {
+          "number": "6",
+          "name": "GND",
+          "net": "GND"
+        },
+        {
+          "number": "7",
+          "name": "VIN",
+          "net": "12V_MAIN"
+        },
+        {
+          "number": "8",
+          "name": "PH",
+          "net": "$2N6"
+        },
+        {
+          "number": "9",
+          "name": "PowerPAD",
+          "net": "GND"
+        }
+      ]
+    },
+    {
+      "ref": "L201",
+      "part": "SRP1038A-150M",
+      "pins": [
+        {
+          "number": "1",
+          "name": "1",
+          "net": "$2N6"
+        },
+        {
+          "number": "2",
+          "name": "2",
+          "net": "5V_AX"
+        }
+      ]
+    },
+    {
+      "ref": "D201",
+      "part": "SK54B-LTP",
+      "pins": [
+        {
+          "number": "1",
+          "name": "K",
+          "net": "$2N6"
+        },
+        {
+          "number": "2",
+          "name": "A",
+          "net": "GND"
+        }
+      ]
+    },
+    {
+      "ref": "C201",
+      "part": "CL10B103KB8NNNC",
+      "pins": [
+        {
+          "number": "1",
+          "name": "1",
+          "net": "$2N6"
+        },
+        {
+          "number": "2",
+          "name": "2",
+          "net": "$2N1"
+        }
+      ]
+    },
+    {
+      "ref": "C202",
+      "part": "GRM21BR61H106KE43L",
+      "pins": [
+        {
+          "number": "1",
+          "name": "1",
+          "net": "GND"
+        },
+        {
+          "number": "2",
+          "name": "2",
+          "net": "12V_MAIN"
+        }
+      ]
+    },
+    {
+      "ref": "C203",
+      "part": "GRM21BR61H106KE43L",
+      "pins": [
+        {
+          "number": "1",
+          "name": "1",
+          "net": "GND"
+        },
+        {
+          "number": "2",
+          "name": "2",
+          "net": "12V_MAIN"
+        }
+      ]
+    },
+    {
+      "ref": "C204",
+      "part": "CL10B104KB8NNNC",
+      "pins": [
+        {
+          "number": "1",
+          "name": "1",
+          "net": "GND"
+        },
+        {
+          "number": "2",
+          "name": "2",
+          "net": "12V_MAIN"
+        }
+      ]
+    },
+    {
+      "ref": "C205",
+      "part": "10TPB220ML",
+      "pins": [
+        {
+          "number": "1",
+          "name": "1",
+          "net": "5V_AX"
+        },
+        {
+          "number": "2",
+          "name": "2",
+          "net": "GND"
+        }
+      ]
+    },
+    {
+      "ref": "C206",
+      "part": "CL10B104KB8NNNC",
+      "pins": [
+        {
+          "number": "1",
+          "name": "1",
+          "net": "5V_AX"
+        },
+        {
+          "number": "2",
+          "name": "2",
+          "net": "GND"
+        }
+      ]
+    },
+    {
+      "ref": "R201",
+      "part": "RC0603FR-0710KL",
+      "pins": [
+        {
+          "number": "1",
+          "name": "1",
+          "net": "5V_AX"
+        },
+        {
+          "number": "2",
+          "name": "2",
+          "net": "$2N2"
+        }
+      ]
+    },
+    {
+      "ref": "R202",
+      "part": "0603WAF3241T5E",
+      "pins": [
+        {
+          "number": "1",
+          "name": "1",
+          "net": "GND"
+        },
+        {
+          "number": "2",
+          "name": "2",
+          "net": "$2N2"
+        }
+      ]
+    },
+    {
+      "ref": "U202",
+      "part": "TPS5430DDAR",
+      "pins": [
+        {
+          "number": "1",
+          "name": "BOOT",
+          "net": "$2N12"
+        },
+        {
+          "number": "2",
+          "name": "NC",
+          "net": ""
+        },
+        {
+          "number": "3",
+          "name": "NC",
+          "net": ""
+        },
+        {
+          "number": "4",
+          "name": "VSENSE",
+          "net": "$2N15"
+        },
+        {
+          "number": "5",
+          "name": "ENA",
+          "net": ""
+        },
+        {
+          "number": "6",
+          "name": "GND",
+          "net": "GND"
+        },
+        {
+          "number": "7",
+          "name": "VIN",
+          "net": "12V_MAIN"
+        },
+        {
+          "number": "8",
+          "name": "PH",
+          "net": "$2N14"
+        },
+        {
+          "number": "9",
+          "name": "PowerPAD",
+          "net": "GND"
+        }
+      ]
+    },
+    {
+      "ref": "L202",
+      "part": "SRP1038A-150M",
+      "pins": [
+        {
+          "number": "1",
+          "name": "1",
+          "net": "$2N14"
+        },
+        {
+          "number": "2",
+          "name": "2",
+          "net": "5V_LCD"
+        }
+      ]
+    },
+    {
+      "ref": "D202",
+      "part": "SK54B-LTP",
+      "pins": [
+        {
+          "number": "1",
+          "name": "K",
+          "net": "$2N14"
+        },
+        {
+          "number": "2",
+          "name": "A",
+          "net": "GND"
+        }
+      ]
+    },
+    {
+      "ref": "C207",
+      "part": "CL10B103KB8NNNC",
+      "pins": [
+        {
+          "number": "1",
+          "name": "1",
+          "net": "$2N12"
+        },
+        {
+          "number": "2",
+          "name": "2",
+          "net": "$2N14"
+        }
+      ]
+    },
+    {
+      "ref": "C208",
+      "part": "GRM21BR61H106KE43L",
+      "pins": [
+        {
+          "number": "1",
+          "name": "1",
+          "net": "GND"
+        },
+        {
+          "number": "2",
+          "name": "2",
+          "net": "12V_MAIN"
+        }
+      ]
+    },
+    {
+      "ref": "C209",
+      "part": "GRM21BR61H106KE43L",
+      "pins": [
+        {
+          "number": "1",
+          "name": "1",
+          "net": "GND"
+        },
+        {
+          "number": "2",
+          "name": "2",
+          "net": "12V_MAIN"
+        }
+      ]
+    },
+    {
+      "ref": "C210",
+      "part": "CL10B104KB8NNNC",
+      "pins": [
+        {
+          "number": "1",
+          "name": "1",
+          "net": "GND"
+        },
+        {
+          "number": "2",
+          "name": "2",
+          "net": "12V_MAIN"
+        }
+      ]
+    },
+    {
+      "ref": "C211",
+      "part": "10TPB220ML",
+      "pins": [
+        {
+          "number": "1",
+          "name": "1",
+          "net": "5V_LCD"
+        },
+        {
+          "number": "2",
+          "name": "2",
+          "net": "GND"
+        }
+      ]
+    },
+    {
+      "ref": "C212",
+      "part": "CL10B104KB8NNNC",
+      "pins": [
+        {
+          "number": "1",
+          "name": "1",
+          "net": "5V_LCD"
+        },
+        {
+          "number": "2",
+          "name": "2",
+          "net": "GND"
+        }
+      ]
+    },
+    {
+      "ref": "R203",
+      "part": "RC0603FR-0710KL",
+      "pins": [
+        {
+          "number": "1",
+          "name": "1",
+          "net": "5V_LCD"
+        },
+        {
+          "number": "2",
+          "name": "2",
+          "net": "$2N15"
+        }
+      ]
+    },
+    {
+      "ref": "R204",
+      "part": "0603WAF3241T5E",
+      "pins": [
+        {
+          "number": "1",
+          "name": "1",
+          "net": "GND"
+        },
+        {
+          "number": "2",
+          "name": "2",
+          "net": "$2N15"
+        }
+      ]
+    },
+    {
+      "ref": "U203",
+      "part": "TPS5430DDAR",
+      "pins": [
+        {
+          "number": "1",
+          "name": "BOOT",
+          "net": "$2N24"
+        },
+        {
+          "number": "2",
+          "name": "NC",
+          "net": ""
+        },
+        {
+          "number": "3",
+          "name": "NC",
+          "net": ""
+        },
+        {
+          "number": "4",
+          "name": "VSENSE",
+          "net": "$2N26"
+        },
+        {
+          "number": "5",
+          "name": "ENA",
+          "net": ""
+        },
+        {
+          "number": "6",
+          "name": "GND",
+          "net": "GND"
+        },
+        {
+          "number": "7",
+          "name": "VIN",
+          "net": "12V_MAIN"
+        },
+        {
+          "number": "8",
+          "name": "PH",
+          "net": "$2N25"
+        },
+        {
+          "number": "9",
+          "name": "PowerPAD",
+          "net": "GND"
+        }
+      ]
+    },
+    {
+      "ref": "L203",
+      "part": "SRP1038A-150M",
+      "pins": [
+        {
+          "number": "1",
+          "name": "1",
+          "net": "$2N25"
+        },
+        {
+          "number": "2",
+          "name": "2",
+          "net": "5V_AUX"
+        }
+      ]
+    },
+    {
+      "ref": "D203",
+      "part": "SK54B-LTP",
+      "pins": [
+        {
+          "number": "1",
+          "name": "K",
+          "net": "$2N25"
+        },
+        {
+          "number": "2",
+          "name": "A",
+          "net": "GND"
+        }
+      ]
+    },
+    {
+      "ref": "C213",
+      "part": "CL10B103KB8NNNC",
+      "pins": [
+        {
+          "number": "1",
+          "name": "1",
+          "net": "$2N24"
+        },
+        {
+          "number": "2",
+          "name": "2",
+          "net": "$2N25"
+        }
+      ]
+    },
+    {
+      "ref": "C214",
+      "part": "GRM21BR61H106KE43L",
+      "pins": [
+        {
+          "number": "1",
+          "name": "1",
+          "net": "GND"
+        },
+        {
+          "number": "2",
+          "name": "2",
+          "net": "12V_MAIN"
+        }
+      ]
+    },
+    {
+      "ref": "C215",
+      "part": "GRM21BR61H106KE43L",
+      "pins": [
+        {
+          "number": "1",
+          "name": "1",
+          "net": "GND"
+        },
+        {
+          "number": "2",
+          "name": "2",
+          "net": "12V_MAIN"
+        }
+      ]
+    },
+    {
+      "ref": "C216",
+      "part": "CL10B104KB8NNNC",
+      "pins": [
+        {
+          "number": "1",
+          "name": "1",
+          "net": "GND"
+        },
+        {
+          "number": "2",
+          "name": "2",
+          "net": "12V_MAIN"
+        }
+      ]
+    },
+    {
+      "ref": "C217",
+      "part": "10TPB220ML",
+      "pins": [
+        {
+          "number": "1",
+          "name": "1",
+          "net": "5V_AUX"
+        },
+        {
+          "number": "2",
+          "name": "2",
+          "net": "GND"
+        }
+      ]
+    },
+    {
+      "ref": "C218",
+      "part": "CL10B104KB8NNNC",
+      "pins": [
+        {
+          "number": "1",
+          "name": "1",
+          "net": "5V_AUX"
+        },
+        {
+          "number": "2",
+          "name": "2",
+          "net": "GND"
+        }
+      ]
+    },
+    {
+      "ref": "R205",
+      "part": "RC0603FR-0710KL",
+      "pins": [
+        {
+          "number": "1",
+          "name": "1",
+          "net": "5V_AUX"
+        },
+        {
+          "number": "2",
+          "name": "2",
+          "net": "$2N26"
+        }
+      ]
+    },
+    {
+      "ref": "R206",
+      "part": "0603WAF3241T5E",
+      "pins": [
+        {
+          "number": "1",
+          "name": "1",
+          "net": "GND"
+        },
+        {
+          "number": "2",
+          "name": "2",
+          "net": "$2N26"
+        }
+      ]
+    },
+    {
+      "ref": "U204",
+      "part": "TLV1117LV33DCYR",
+      "pins": [
+        {
+          "number": "1",
+          "name": "ADJ/GND",
+          "net": "GND"
+        },
+        {
+          "number": "2",
+          "name": "OUT",
+          "net": "3V3_D"
+        },
+        {
+          "number": "3",
+          "name": "IN",
+          "net": "5V_AUX"
+        },
+        {
+          "number": "4",
+          "name": "OUT",
+          "net": "3V3_D"
+        }
+      ]
+    },
+    {
+      "ref": "C221",
+      "part": "GRM21BR61H106KE43L",
+      "pins": [
+        {
+          "number": "1",
+          "name": "1",
+          "net": "5V_AUX"
+        },
+        {
+          "number": "2",
+          "name": "2",
+          "net": "GND"
+        }
+      ]
+    },
+    {
+      "ref": "C222",
+      "part": "CL31B226KPHNNNE",
+      "pins": [
+        {
+          "number": "1",
+          "name": "1",
+          "net": "3V3_D"
+        },
+        {
+          "number": "2",
+          "name": "2",
+          "net": "GND"
+        }
+      ]
+    },
+    {
+      "ref": "U205",
+      "part": "TPS7A2033PDBVR",
+      "pins": [
+        {
+          "number": "1",
+          "name": "IN",
+          "net": "5V_AUX"
+        },
+        {
+          "number": "2",
+          "name": "GND",
+          "net": "GND"
+        },
+        {
+          "number": "3",
+          "name": "EN",
+          "net": "$2N50"
+        },
+        {
+          "number": "4",
+          "name": "NC",
+          "net": ""
+        },
+        {
+          "number": "5",
+          "name": "OUT",
+          "net": "3V3_SENS"
+        }
+      ]
+    },
+    {
+      "ref": "C223",
+      "part": "CL31B225KAHNNNE",
+      "pins": [
+        {
+          "number": "1",
+          "name": "1",
+          "net": "5V_AUX"
+        },
+        {
+          "number": "2",
+          "name": "2",
+          "net": "GND"
+        }
+      ]
+    },
+    {
+      "ref": "C224",
+      "part": "CL31B225KAHNNNE",
+      "pins": [
+        {
+          "number": "1",
+          "name": "1",
+          "net": "3V3_SENS"
+        },
+        {
+          "number": "2",
+          "name": "2",
+          "net": "GND"
+        }
+      ]
+    },
+    {
+      "ref": "R207",
+      "part": "RC0603FR-07100KL",
+      "pins": [
+        {
+          "number": "1",
+          "name": "1",
+          "net": "AX_3V3"
+        },
+        {
+          "number": "2",
+          "name": "2",
+          "net": "$2N50"
+        }
+      ]
+    },
+    {
+      "ref": "C225",
+      "part": "CL21B105KAFNNNE",
+      "pins": [
+        {
+          "number": "1",
+          "name": "1",
+          "net": "GND"
+        },
+        {
+          "number": "2",
+          "name": "2",
+          "net": "$2N50"
+        }
+      ]
+    },
+    {
+      "ref": "D204",
+      "part": "BAT54,215",
+      "pins": [
+        {
+          "number": "1",
+          "name": "A",
+          "net": "$2N50"
+        },
+        {
+          "number": "2",
+          "name": "NC",
+          "net": ""
+        },
+        {
+          "number": "3",
+          "name": "C",
+          "net": "AX_3V3"
+        }
+      ]
+    },
+    {
+      "ref": "HL201",
+      "part": "LTST-C190KGKT",
+      "pins": [
+        {
+          "number": "1",
+          "name": "-",
+          "net": "GND"
+        },
+        {
+          "number": "2",
+          "name": "+",
+          "net": "$2N46"
+        }
+      ]
+    },
+    {
+      "ref": "R208",
+      "part": "RC0603FR-072K2L",
+      "pins": [
+        {
+          "number": "1",
+          "name": "1",
+          "net": "$2N46"
+        },
+        {
+          "number": "2",
+          "name": "2",
+          "net": "AX_3V3"
+        }
+      ]
+    },
+    {
+      "ref": "FB201",
+      "part": "BLM18AG601SN1D",
+      "pins": [
+        {
+          "number": "1",
+          "name": "1",
+          "net": "AX_3V3"
+        },
+        {
+          "number": "2",
+          "name": "2",
+          "net": "AX_3V3_RAW"
+        }
+      ]
+    },
+    {
+      "ref": "C219",
+      "part": "GRM21BR61H106KE43L",
+      "pins": [
+        {
+          "number": "1",
+          "name": "1",
+          "net": "GND"
+        },
+        {
+          "number": "2",
+          "name": "2",
+          "net": "AX_3V3"
+        }
+      ]
+    },
+    {
+      "ref": "C220",
+      "part": "CL10B104KB8NNNC",
+      "pins": [
+        {
+          "number": "1",
+          "name": "1",
+          "net": "GND"
+        },
+        {
+          "number": "2",
+          "name": "2",
+          "net": "AX_3V3"
+        }
+      ]
+    },
+    {
+      "ref": "C226",
+      "part": "GRM21BR61H106KE43L",
+      "pins": [
+        {
+          "number": "1",
+          "name": "1",
+          "net": "NANO_VIN"
+        },
+        {
+          "number": "2",
+          "name": "2",
+          "net": "GND"
+        }
+      ]
+    },
+    {
+      "ref": "C227",
+      "part": "CL10B104KB8NNNC",
+      "pins": [
+        {
+          "number": "1",
+          "name": "1",
+          "net": "NANO_VIN"
+        },
+        {
+          "number": "2",
+          "name": "2",
+          "net": "GND"
+        }
+      ]
+    },
+    {
+      "ref": "J201",
+      "part": "916-152A1013Y10220",
+      "pins": [
+        {
+          "number": "1",
+          "name": "VCC",
+          "net": "5V_AX"
+        },
+        {
+          "number": "2",
+          "name": "D-",
+          "net": ""
+        },
+        {
+          "number": "3",
+          "name": "D+",
+          "net": ""
+        },
+        {
+          "number": "4",
+          "name": "GND",
+          "net": "GND"
+        },
+        {
+          "number": "5",
+          "name": "GND",
+          "net": "GND"
+        },
+        {
+          "number": "6",
+          "name": "GND",
+          "net": "GND"
+        }
+      ]
+    },
+    {
+      "ref": "F201",
+      "part": "MF-MSMF050/40X-2",
+      "pins": [
+        {
+          "number": "1",
+          "name": "1",
+          "net": "12V_MAIN"
+        },
+        {
+          "number": "2",
+          "name": "2",
+          "net": "NANO_VIN"
+        }
+      ]
+    },
+    {
+      "ref": "U301",
+      "part": "UCC27517DBVR",
+      "pins": [
+        {
+          "number": "1",
+          "name": "VDD",
+          "net": "5V_AUX"
+        },
+        {
+          "number": "2",
+          "name": "GND",
+          "net": "GND"
+        },
+        {
+          "number": "3",
+          "name": "IN+",
+          "net": "$3N4"
+        },
+        {
+          "number": "4",
+          "name": "IN-",
+          "net": "LED_EN"
+        },
+        {
+          "number": "5",
+          "name": "OUT",
+          "net": "$3N9"
+        }
+      ]
+    },
+    {
+      "ref": "Q301",
+      "part": "AOD4184A",
+      "pins": [
+        {
+          "number": "1",
+          "name": "G",
+          "net": "$3N10"
+        },
+        {
+          "number": "2",
+          "name": "D",
+          "net": "$3N14"
+        },
+        {
+          "number": "3",
+          "name": "S",
+          "net": "GND"
+        }
+      ]
+    },
+    {
+      "ref": "D301",
+      "part": "SK54B-LTP",
+      "pins": [
+        {
+          "number": "1",
+          "name": "K",
+          "net": "$3N16"
+        },
+        {
+          "number": "2",
+          "name": "A",
+          "net": "$3N14"
+        }
+      ]
+    },
+    {
+      "ref": "F301",
+      "part": "MF-MSMF110/24X-2",
+      "pins": [
+        {
+          "number": "1",
+          "name": "1",
+          "net": "$3N16"
+        },
+        {
+          "number": "2",
+          "name": "2",
+          "net": "12V_MAIN"
+        }
+      ]
+    },
+    {
+      "ref": "J301",
+      "part": "JL128-50802G01",
+      "pins": [
+        {
+          "number": "1",
+          "name": "1",
+          "net": "$3N16"
+        },
+        {
+          "number": "2",
+          "name": "2",
+          "net": "$3N14"
+        }
+      ]
+    },
+    {
+      "ref": "R301",
+      "part": "RC0603FR-07100RL",
+      "pins": [
+        {
+          "number": "1",
+          "name": "1",
+          "net": "LED1_PWM"
+        },
+        {
+          "number": "2",
+          "name": "2",
+          "net": "$3N4"
+        }
+      ]
+    },
+    {
+      "ref": "R302",
+      "part": "RC0603FR-072K2L",
+      "pins": [
+        {
+          "number": "1",
+          "name": "1",
+          "net": "GND"
+        },
+        {
+          "number": "2",
+          "name": "2",
+          "net": "$3N4"
+        }
+      ]
+    },
+    {
+      "ref": "R303",
+      "part": "RC0603FR-0710RL",
+      "pins": [
+        {
+          "number": "1",
+          "name": "1",
+          "net": "$3N10"
+        },
+        {
+          "number": "2",
+          "name": "2",
+          "net": "$3N9"
+        }
+      ]
+    },
+    {
+      "ref": "R304",
+      "part": "RC0603FR-07100KL",
+      "pins": [
+        {
+          "number": "1",
+          "name": "1",
+          "net": "$3N10"
+        },
+        {
+          "number": "2",
+          "name": "2",
+          "net": "GND"
+        }
+      ]
+    },
+    {
+      "ref": "C301",
+      "part": "CL21B105KAFNNNE",
+      "pins": [
+        {
+          "number": "1",
+          "name": "1",
+          "net": "5V_AUX"
+        },
+        {
+          "number": "2",
+          "name": "2",
+          "net": "GND"
+        }
+      ]
+    },
+    {
+      "ref": "C302",
+      "part": "CL10B104KB8NNNC",
+      "pins": [
+        {
+          "number": "1",
+          "name": "1",
+          "net": "5V_AUX"
+        },
+        {
+          "number": "2",
+          "name": "2",
+          "net": "GND"
+        }
+      ]
+    },
+    {
+      "ref": "U302",
+      "part": "UCC27517DBVR",
+      "pins": [
+        {
+          "number": "1",
+          "name": "VDD",
+          "net": "5V_AUX"
+        },
+        {
+          "number": "2",
+          "name": "GND",
+          "net": "GND"
+        },
+        {
+          "number": "3",
+          "name": "IN+",
+          "net": "$3N20"
+        },
+        {
+          "number": "4",
+          "name": "IN-",
+          "net": "LED_EN"
+        },
+        {
+          "number": "5",
+          "name": "OUT",
+          "net": "$3N24"
+        }
+      ]
+    },
+    {
+      "ref": "Q307",
+      "part": "AOD4184A",
+      "pins": [
+        {
+          "number": "1",
+          "name": "G",
+          "net": "$3N25"
+        },
+        {
+          "number": "2",
+          "name": "D",
+          "net": "$3N28"
+        },
+        {
+          "number": "3",
+          "name": "S",
+          "net": "GND"
+        }
+      ]
+    },
+    {
+      "ref": "D302",
+      "part": "SK54B-LTP",
+      "pins": [
+        {
+          "number": "1",
+          "name": "K",
+          "net": "$3N29"
+        },
+        {
+          "number": "2",
+          "name": "A",
+          "net": "$3N28"
+        }
+      ]
+    },
+    {
+      "ref": "F302",
+      "part": "MF-MSMF110/24X-2",
+      "pins": [
+        {
+          "number": "1",
+          "name": "1",
+          "net": "$3N29"
+        },
+        {
+          "number": "2",
+          "name": "2",
+          "net": "12V_MAIN"
+        }
+      ]
+    },
+    {
+      "ref": "J304",
+      "part": "JL128-50802G01",
+      "pins": [
+        {
+          "number": "1",
+          "name": "1",
+          "net": "$3N29"
+        },
+        {
+          "number": "2",
+          "name": "2",
+          "net": "$3N28"
+        }
+      ]
+    },
+    {
+      "ref": "R305",
+      "part": "RC0603FR-07100RL",
+      "pins": [
+        {
+          "number": "1",
+          "name": "1",
+          "net": "LED2_PWM"
+        },
+        {
+          "number": "2",
+          "name": "2",
+          "net": "$3N20"
+        }
+      ]
+    },
+    {
+      "ref": "R306",
+      "part": "RC0603FR-072K2L",
+      "pins": [
+        {
+          "number": "1",
+          "name": "1",
+          "net": "GND"
+        },
+        {
+          "number": "2",
+          "name": "2",
+          "net": "$3N20"
+        }
+      ]
+    },
+    {
+      "ref": "R307",
+      "part": "RC0603FR-0710RL",
+      "pins": [
+        {
+          "number": "1",
+          "name": "1",
+          "net": "$3N25"
+        },
+        {
+          "number": "2",
+          "name": "2",
+          "net": "$3N24"
+        }
+      ]
+    },
+    {
+      "ref": "R308",
+      "part": "RC0603FR-07100KL",
+      "pins": [
+        {
+          "number": "1",
+          "name": "1",
+          "net": "$3N25"
+        },
+        {
+          "number": "2",
+          "name": "2",
+          "net": "GND"
+        }
+      ]
+    },
+    {
+      "ref": "C303",
+      "part": "CL21B105KAFNNNE",
+      "pins": [
+        {
+          "number": "1",
+          "name": "1",
+          "net": "5V_AUX"
+        },
+        {
+          "number": "2",
+          "name": "2",
+          "net": "GND"
+        }
+      ]
+    },
+    {
+      "ref": "C304",
+      "part": "CL10B104KB8NNNC",
+      "pins": [
+        {
+          "number": "1",
+          "name": "1",
+          "net": "5V_AUX"
+        },
+        {
+          "number": "2",
+          "name": "2",
+          "net": "GND"
+        }
+      ]
+    },
+    {
+      "ref": "J305",
+      "part": "SM02B-GHS-TB(LF)(SN)",
+      "pins": [
+        {
+          "number": "1",
+          "name": "1",
+          "net": "LED_EN"
+        },
+        {
+          "number": "2",
+          "name": "2",
+          "net": "GND"
+        },
+        {
+          "number": "3",
+          "name": "3",
+          "net": "GND"
+        },
+        {
+          "number": "4",
+          "name": "4",
+          "net": "GND"
+        }
+      ]
+    },
+    {
+      "ref": "R309",
+      "part": "RC0603FR-0710KL",
+      "pins": [
+        {
+          "number": "1",
+          "name": "1",
+          "net": "LED_EN"
+        },
+        {
+          "number": "2",
+          "name": "2",
+          "net": "5V_AUX"
+        }
+      ]
+    },
+    {
+      "ref": "C305",
+      "part": "CL10B104KB8NNNC",
+      "pins": [
+        {
+          "number": "1",
+          "name": "1",
+          "net": "LED_EN"
+        },
+        {
+          "number": "2",
+          "name": "2",
+          "net": "GND"
+        }
+      ]
+    },
+    {
+      "ref": "Q306",
+      "part": "2N7002",
+      "pins": [
+        {
+          "number": "1",
+          "name": "G",
+          "net": "LED_EN"
+        },
+        {
+          "number": "2",
+          "name": "S",
+          "net": "GND"
+        },
+        {
+          "number": "3",
+          "name": "D",
+          "net": "LIGHT_OK"
+        }
+      ]
+    },
+    {
+      "ref": "R310",
+      "part": "RC0603FR-0710KL",
+      "pins": [
+        {
+          "number": "1",
+          "name": "1",
+          "net": "LIGHT_OK"
+        },
+        {
+          "number": "2",
+          "name": "2",
+          "net": "AX_3V3"
+        }
+      ]
+    },
+    {
+      "ref": "Q302",
+      "part": "AO4407A",
+      "pins": [
+        {
+          "number": "1",
+          "name": "S",
+          "net": "$3N42"
+        },
+        {
+          "number": "2",
+          "name": "S",
+          "net": "$3N42"
+        },
+        {
+          "number": "3",
+          "name": "S",
+          "net": "$3N42"
+        },
+        {
+          "number": "4",
+          "name": "G",
+          "net": "$3N47"
+        },
+        {
+          "number": "5",
+          "name": "D",
+          "net": "12V_PRN"
+        },
+        {
+          "number": "6",
+          "name": "D",
+          "net": "12V_PRN"
+        },
+        {
+          "number": "7",
+          "name": "D",
+          "net": "12V_PRN"
+        },
+        {
+          "number": "8",
+          "name": "D",
+          "net": "12V_PRN"
+        }
+      ]
+    },
+    {
+      "ref": "Q303",
+      "part": "AO3400A",
+      "pins": [
+        {
+          "number": "1",
+          "name": "G",
+          "net": "$3N52"
+        },
+        {
+          "number": "2",
+          "name": "S",
+          "net": "GND"
+        },
+        {
+          "number": "3",
+          "name": "D",
+          "net": "$3N50"
+        }
+      ]
+    },
+    {
+      "ref": "DZ301",
+      "part": "BZT52C12-TP",
+      "pins": [
+        {
+          "number": "1",
+          "name": "K",
+          "net": "$3N42"
+        },
+        {
+          "number": "2",
+          "name": "A",
+          "net": "$3N47"
+        }
+      ]
+    },
+    {
+      "ref": "F303",
+      "part": "MF-MSMF250/16X-2",
+      "pins": [
+        {
+          "number": "1",
+          "name": "1",
+          "net": "12V_MAIN"
+        },
+        {
+          "number": "2",
+          "name": "2",
+          "net": "$3N42"
+        }
+      ]
+    },
+    {
+      "ref": "R311",
+      "part": "RC0603FR-07100KL",
+      "pins": [
+        {
+          "number": "1",
+          "name": "1",
+          "net": "$3N42"
+        },
+        {
+          "number": "2",
+          "name": "2",
+          "net": "$3N47"
+        }
+      ]
+    },
+    {
+      "ref": "R312",
+      "part": "RC0603FR-0747KL",
+      "pins": [
+        {
+          "number": "1",
+          "name": "1",
+          "net": "$3N47"
+        },
+        {
+          "number": "2",
+          "name": "2",
+          "net": "$3N50"
+        }
+      ]
+    },
+    {
+      "ref": "R313",
+      "part": "RC0603FR-07100RL",
+      "pins": [
+        {
+          "number": "1",
+          "name": "1",
+          "net": "$3N52"
+        },
+        {
+          "number": "2",
+          "name": "2",
+          "net": "PRN_PWR_EN"
+        }
+      ]
+    },
+    {
+      "ref": "R314",
+      "part": "RC0603FR-071KL",
+      "pins": [
+        {
+          "number": "1",
+          "name": "1",
+          "net": "GND"
+        },
+        {
+          "number": "2",
+          "name": "2",
+          "net": "PRN_PWR_EN"
+        }
+      ]
+    },
+    {
+      "ref": "C309",
+      "part": "CL10B104KB8NNNC",
+      "pins": [
+        {
+          "number": "1",
+          "name": "1",
+          "net": "12V_PRN"
+        },
+        {
+          "number": "2",
+          "name": "2",
+          "net": "$3N47"
+        }
+      ]
+    },
+    {
+      "ref": "C310",
+      "part": "CL31B225KAHNNNE",
+      "pins": [
+        {
+          "number": "1",
+          "name": "1",
+          "net": "$3N42"
+        },
+        {
+          "number": "2",
+          "name": "2",
+          "net": "$3N47"
+        }
+      ]
+    },
+    {
+      "ref": "C306",
+      "part": "EEUFR1V471",
+      "pins": [
+        {
+          "number": "1",
+          "name": "1",
+          "net": "12V_PRN"
+        },
+        {
+          "number": "2",
+          "name": "2",
+          "net": "GND"
+        }
+      ]
+    },
+    {
+      "ref": "C307",
+      "part": "CL21B105KAFNNNE",
+      "pins": [
+        {
+          "number": "1",
+          "name": "1",
+          "net": "12V_PRN"
+        },
+        {
+          "number": "2",
+          "name": "2",
+          "net": "GND"
+        }
+      ]
+    },
+    {
+      "ref": "C308",
+      "part": "CL10B104KB8NNNC",
+      "pins": [
+        {
+          "number": "1",
+          "name": "1",
+          "net": "12V_PRN"
+        },
+        {
+          "number": "2",
+          "name": "2",
+          "net": "GND"
+        }
+      ]
+    },
+    {
+      "ref": "Q304",
+      "part": "AO3400A",
+      "pins": [
+        {
+          "number": "1",
+          "name": "G",
+          "net": "$3N54"
+        },
+        {
+          "number": "2",
+          "name": "S",
+          "net": "GND"
+        },
+        {
+          "number": "3",
+          "name": "D",
+          "net": ""
+        }
+      ]
+    },
+    {
+      "ref": "R315",
+      "part": "RC0603FR-07100RL",
+      "pins": [
+        {
+          "number": "1",
+          "name": "1",
+          "net": "ALM_R"
+        },
+        {
+          "number": "2",
+          "name": "2",
+          "net": "$3N54"
+        }
+      ]
+    },
+    {
+      "ref": "R316",
+      "part": "RC0603FR-071KL",
+      "pins": [
+        {
+          "number": "1",
+          "name": "1",
+          "net": "GND"
+        },
+        {
+          "number": "2",
+          "name": "2",
+          "net": "ALM_R"
+        }
+      ]
+    },
+    {
+      "ref": "Q305",
+      "part": "AO3400A",
+      "pins": [
+        {
+          "number": "1",
+          "name": "G",
+          "net": "$3N57"
+        },
+        {
+          "number": "2",
+          "name": "S",
+          "net": "GND"
+        },
+        {
+          "number": "3",
+          "name": "D",
+          "net": ""
+        }
+      ]
+    },
+    {
+      "ref": "R317",
+      "part": "RC0603FR-07100RL",
+      "pins": [
+        {
+          "number": "1",
+          "name": "1",
+          "net": "ALM_Y"
+        },
+        {
+          "number": "2",
+          "name": "2",
+          "net": "$3N57"
+        }
+      ]
+    },
+    {
+      "ref": "R318",
+      "part": "RC0603FR-071KL",
+      "pins": [
+        {
+          "number": "1",
+          "name": "1",
+          "net": "ALM_Y"
+        },
+        {
+          "number": "2",
+          "name": "2",
+          "net": "GND"
+        }
+      ]
+    },
+    {
+      "ref": "Q308",
+      "part": "AO3400A",
+      "pins": [
+        {
+          "number": "1",
+          "name": "G",
+          "net": "$3N60"
+        },
+        {
+          "number": "2",
+          "name": "S",
+          "net": "GND"
+        },
+        {
+          "number": "3",
+          "name": "D",
+          "net": ""
+        }
+      ]
+    },
+    {
+      "ref": "R319",
+      "part": "RC0603FR-07100RL",
+      "pins": [
+        {
+          "number": "1",
+          "name": "1",
+          "net": "ALM_G"
+        },
+        {
+          "number": "2",
+          "name": "2",
+          "net": "$3N60"
+        }
+      ]
+    },
+    {
+      "ref": "R320",
+      "part": "RC0603FR-071KL",
+      "pins": [
+        {
+          "number": "1",
+          "name": "1",
+          "net": "ALM_G"
+        },
+        {
+          "number": "2",
+          "name": "2",
+          "net": "GND"
+        }
+      ]
+    }
+  ]
+}

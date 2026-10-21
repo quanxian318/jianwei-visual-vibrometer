@@ -1,0 +1,14 @@
+# Preserve the supplied engineering packages and SHA256 manifests byte-for-byte.
+* -text
+*.pdf binary
+*.zip binary
+*.epro2 binary
+*.bit binary
+*.dcp binary
+*.elf binary
+*.bin binary
+*.mp4 binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary

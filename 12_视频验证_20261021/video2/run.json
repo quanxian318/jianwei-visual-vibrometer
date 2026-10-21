@@ -1,0 +1,17 @@
+{
+  "source": "cfb2f104a3598cc4c02675bb049f8b5b.mp4",
+  "width": 1280,
+  "height": 720,
+  "frames": 266,
+  "fps": 29.99784807889819,
+  "duration_s": 8.833967,
+  "levels": 3,
+  "band_hz": [
+    0.5,
+    10.0
+  ],
+  "gain": 20,
+  "timestamps": "container presentation timestamps; exposure synchronization unverified",
+  "units": "native pixels; no physical calibration",
+  "backend": "production C++ tracker/analyzeCapture/vision::core"
+}

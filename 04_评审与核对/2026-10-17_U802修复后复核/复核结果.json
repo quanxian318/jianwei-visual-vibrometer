@@ -1,0 +1,36 @@
+{
+  "checkedAt": "2026-10-17T23:21:13.315530+08:00",
+  "mainCount": 245,
+  "mainPins": 807,
+  "changedParts": [
+    "U802"
+  ],
+  "other244PartsUnchanged": true,
+  "U802MergedAsOneDevice": true,
+  "U802Pins": {
+    "1": "",
+    "2": "AX_3V3",
+    "3": "RTC_1HZ",
+    "4": "",
+    "5": "GND",
+    "6": "GND",
+    "7": "GND",
+    "8": "GND",
+    "9": "GND",
+    "10": "GND",
+    "11": "GND",
+    "12": "GND",
+    "13": "GND",
+    "14": "$8N25",
+    "15": "I2C0_SDA",
+    "16": "I2C0_SCL"
+  },
+  "allEightNCPinsGrounded": true,
+  "originalEightFunctionalPinsUnchanged": true,
+  "MPNAndFootprintUnchanged": true,
+  "drcCheckPassed": true,
+  "strictErcVerified": false,
+  "fullEdaMessageListAvailable": false,
+  "edaModifiedByAssistant": false,
+  "method": "增量复核，复用同一批其他244颗器件已通过的完整逐脚证据；不覆盖原始失败快照"
+}

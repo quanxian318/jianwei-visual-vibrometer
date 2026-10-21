@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="10.841mm" height="11.203mm" viewBox="0 0 10.841 11.203">
+<title>J304 顶视坐标镜像导入备用</title><desc>PCB-derived pin directions; inspect each stated viewing direction. Visual vibration meter 2026/10/20.</desc>
+<path d="M7.8130,4.5589 L8.0630,4.3089 L7.0630,4.3089" fill="none" stroke="#000000" stroke-width="0.150" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M7.0630,4.5589 L7.0630,4.0589" fill="none" stroke="#000000" stroke-width="0.150" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M7.8297,3.3755 L7.7963,3.3755" fill="none" stroke="#000000" stroke-width="0.150" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M7.3297,3.3755 L7.2963,3.3755" fill="none" stroke="#000000" stroke-width="0.150" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M7.0630,2.7755 L8.0630,2.7755 L8.0630,2.2755 L7.8963,2.1089 L7.7297,2.1089 L7.5630,2.2755 L7.5630,2.7755" fill="none" stroke="#000000" stroke-width="0.150" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M7.0630,8.7889 L8.0630,8.7889 L7.0630,8.1222 L8.0630,8.1222" fill="none" stroke="#000000" stroke-width="0.150" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M3.9630,7.3349 L3.9630,6.6682 L3.1297,6.6682 L2.9630,6.8349 L2.9630,7.1682 L3.1297,7.3349" fill="none" stroke="#000000" stroke-width="0.150" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M3.9630,6.4015 L3.9630,5.7349 L3.4630,6.0682 L3.4630,5.9015 L3.2963,5.7349 L3.1297,5.7349 L2.9630,5.9015 L2.9630,6.2349 L3.1297,6.4015" fill="none" stroke="#000000" stroke-width="0.150" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M3.9630,5.3015 L3.9630,4.9682 L3.7963,4.8015 L3.1297,4.8015 L2.9630,4.9682 L2.9630,5.3015 L3.1297,5.4682 L3.7963,5.4682 L3.9630,5.3015" fill="none" stroke="#000000" stroke-width="0.150" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M3.0797,5.3849 L3.8463,4.8849" fill="none" stroke="#000000" stroke-width="0.150" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M2.9630,4.0349 L3.9630,4.0349 L3.2963,4.5349 L3.2963,3.8682" fill="none" stroke="#000000" stroke-width="0.150" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M1.2630,8.7349 L2.2630,8.4015 L1.2630,8.0682" fill="none" stroke="#000000" stroke-width="0.150" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M1.6797,8.5682 L1.6797,8.2349" fill="none" stroke="#000000" stroke-width="0.150" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M2.2630,7.8015 L1.4297,7.8015 L1.2630,7.6349 L1.2630,7.3015 L1.4297,7.1349 L2.2630,7.1349" fill="none" stroke="#000000" stroke-width="0.150" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M2.2630,6.8682 L1.2630,6.2015" fill="none" stroke="#000000" stroke-width="0.150" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M2.2630,6.2015 L1.2630,6.8682" fill="none" stroke="#000000" stroke-width="0.150" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M2.2630,5.0015 L1.2630,5.0015 L1.2630,4.3349" fill="none" stroke="#000000" stroke-width="0.150" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M2.2630,3.4015 L2.2630,4.0682 L1.2630,4.0682 L1.2630,3.4015" fill="none" stroke="#000000" stroke-width="0.150" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M1.7630,4.0682 L1.7630,3.5349" fill="none" stroke="#000000" stroke-width="0.150" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M1.2630,3.1349 L2.2630,3.1349 L2.2630,2.7182 L2.0130,2.4682 L1.5130,2.4682 L1.2630,2.7182 L1.2630,3.1349" fill="none" stroke="#000000" stroke-width="0.150" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M10.6400,0.2005 L10.6400,11.0025" fill="none" stroke="#000000" stroke-width="0.150" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M10.6400,11.0025 L0.2000,11.0025" fill="none" stroke="#000000" stroke-width="0.150" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M0.2000,0.2005 L10.6400,0.2005" fill="none" stroke="#000000" stroke-width="0.150" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

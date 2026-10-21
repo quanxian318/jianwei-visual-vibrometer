@@ -1,0 +1,36 @@
+PASS point: starts without crashing
+PASS capture accepted
+PASS record keeps the point selected at capture start
+PASS point: SIGTERM follows orderly exit
+PASS pixel: starts without crashing
+PASS startup has no normal vibration judgment
+PASS uncalibrated pixels do not use mm alarm thresholds
+PASS pixel: SIGTERM follows orderly exit
+PASS startup: starts without crashing
+PASS PFAIL low at boot is retained
+PASS startup: SIGTERM follows orderly exit
+PASS lighting: starts without crashing
+PASS automatic light is on during capture
+PASS record retains automatic light state after it is switched off
+PASS lighting: SIGTERM follows orderly exit
+PASS laser: starts without crashing
+PASS laser projector switches on
+PASS lighting and laser are separate outputs
+PASS laser is off while displacement is tracked
+FAIL capture refuses manually re-enabling the projector
+FAIL a refused projector command leaves LED2 off
+FAIL capture refuses changing the projector interlock policy
+PASS record notes the laser switched off for the capture
+PASS laser is back on after the capture
+PASS laser: SIGTERM follows orderly exit
+PASS shutdown: starts without crashing
+PASS shutdown completes during capture
+PASS cancelled capture produces no late result
+PASS shutdown: SIGTERM follows orderly exit
+PASS settings: starts without crashing
+PASS settings are applied
+PASS warning threshold above the alarm threshold is refused
+PASS a refused change leaves the settings unchanged
+PASS settings are written to the settings file
+PASS settings survive a restart
+PASS settings: SIGTERM follows orderly exit

@@ -1,0 +1,150 @@
+#pragma once
+
+#include <cstdint>
+#include <deque>
+#include <memory>
+#include <mutex>
+#include <string>
+
+#include "app/alarm_service.h"
+#include "app/board_service.h"
+#include "app/config.h"
+#include "app/control_server.h"
+#include "app/panel_service.h"
+#include "app/printer_service.h"
+#include "app/sensor_service.h"
+#include "app/state.h"
+#include "drv/carrier_ctrl.h"
+#include "hw/i2c_bus.h"
+#include "hw/serial_port.h"
+#include "hw/spi_dev.h"
+#include "hw/uio.h"
+#include "link/nano_link.h"
+#include "measure/depth.h"
+#include "measure/session.h"
+#include "util/event_loop.h"
+#include "util/json_util.h"
+
+namespace vm {
+
+#define VIBMON_APP_VERSION "0.2.0"
+
+class SerialChannel : public ByteChannel {
+ public:
+  explicit SerialChannel(SerialPort& p) : p_(p) {}
+  ssize_t readSome(uint8_t* b, size_t n) override { return p_.readSome(b, n); }
+  ssize_t writeSome(const uint8_t* b, size_t n) override { return p_.writeSome(b, n); }
+
+ private:
+  SerialPort& p_;
+};
+
+class FbUi;
+
+// vibmond: owns the devices and services and runs the main event loop.
+// Commands from the touch UI and the control socket are executed on the loop
+// thread through command(), so both paths behave identically.
+class Application {
+ public:
+  explicit Application(const AppConfig& cfg);
+  ~Application();
+  bool init();
+  int run();
+  void requestExit();
+
+  JsonValue command(const JsonValue& cmd);  // any thread
+  SystemState snapshot() { return state_.snapshot(); }
+  MeasurementEngine::Live cameraLive();
+  const AppConfig& config() const { return cfg_; }
+  // Stereo depth: the stereo module publishes, the UI reads (any thread).
+  // A map older than 3 s is reported as missing.
+  void publishDepth(std::shared_ptr<const DepthMap> depth);
+  std::shared_ptr<const DepthMap> depthLive();
+
+ private:
+  JsonValue handleCommand(const JsonValue& cmd);
+  void openDevices();
+  void setupCarrierEvents();
+  void pumpCarrierEvents();
+  void onCarrierEvent(const CarrierEvent& e);
+  void onNanoEvent(const NanoEvent& e);
+  void updateFromNanoStatus();
+  void syncTimeFromNano();
+  void applyTime(int64_t unixMs, const char* source);
+  void loadRtcTime();
+
+  bool startMeasurement(double durationS, std::string& err);
+  void stopMeasurement();
+  void onMeasureDone(const MeasureResult& r);
+  bool printRecord(const std::string& id, std::string& err);
+  void onPrintDone(bool ok, const std::string& id, const std::string& error);
+  // LED1 lamps (PWM) and LED2 laser projector (100 % duty), see applyOutputs().
+  bool setLight(bool on, std::string* err);
+  bool setLaser(bool on, std::string* err);
+  std::string outputBlocker();
+  void applyOutputs();
+  void muteAlarm();
+  void playVoice(const char* asset);
+  void powerFail(bool active);
+  void requestShutdown();
+  void finishShutdown();
+  void setMessage(const std::string& msg);
+  void every100ms();
+  void every200ms();
+  void every1s();
+  std::string makeMeasurementId();
+  JsonValue stateJson();
+  // Operator settings ("set" command, settings page).
+  bool applySettings(const JsonValue& c, std::string& err);
+  bool saveSettings();
+  void publishSettings();
+  JsonValue settingsJson();
+
+  AppConfig cfg_;
+  EventLoop loop_;
+  StateStore state_;
+  TickClock tickClock_;
+
+  UioDevice uio_;
+  std::unique_ptr<CarrierCtrl> carrier_;
+  LinuxI2cBus i2cMgmt_, i2cSens_;
+  LinuxSpiDevice spiImu_, spiAdxl_;
+  SerialPort nanoPort_;
+  std::unique_ptr<SerialChannel> nanoChan_;
+  std::unique_ptr<NanoLink> nano_;
+  std::unique_ptr<BoardService> board_;
+  std::unique_ptr<PanelService> panel_;
+  std::unique_ptr<AlarmService> alarm_;
+  std::unique_ptr<SensorService> sensors_;
+  std::unique_ptr<PrinterService> printer_;
+  std::unique_ptr<MeasurementEngine> engine_;
+  std::unique_ptr<ControlServer> ctl_;
+  std::unique_ptr<FbUi> ui_;
+
+  bool carrierOk_ = false;
+  std::atomic<bool> pfail_{false};
+  int64_t pfailHighSinceMs_ = 0;
+  bool lightAuto_ = false;
+  bool laserRestore_ = false;     // laser switched off for the running capture
+  bool captureLaserOff_ = false;  // recorded with the capture
+  std::atomic<bool> measuring_{false};
+  SystemState captureContext_;
+  int64_t captureStartMonoNs_ = 0, captureStartUtcMs_ = 0;
+  uint64_t captureGeneration_ = 0;
+  std::atomic<bool> shutdown_{false};
+  bool exiting_ = false;
+  bool fanOn_ = false;
+  int exitCode_ = 0;
+  uint64_t lastTachTicks_ = 0;
+  int64_t lastTachMs_ = 0;
+  std::deque<double> tachPeriods_;
+  std::string lastRecordId_;
+  std::string lastVoiceJob_;
+  int64_t lastTimeSyncMs_ = -1000000000;
+  int64_t cameraRetryMs_ = 0;
+  int64_t nanoOfflineSinceMs_ = 0;
+  std::mutex depthMutex_;
+  std::shared_ptr<const DepthMap> depth_;
+};
+
+}  // namespace vm

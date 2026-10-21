@@ -1,0 +1,85 @@
+{
+  "hardware_date": "2026-10-20",
+  "framework": {
+    "ax": "Linux + PL",
+    "nano": "Arduino Nano ESP32 ABX00083"
+  },
+  "modules": {
+    "nfc": "PN532 NFC RFID V3 (SPI)",
+    "imu": "LSM6DSV",
+    "reference_accelerometer": "GY-291 ADXL345",
+    "tof": "VL53L1X",
+    "temperature_humidity": "GY-SHT40",
+    "printer": "EM5820H, 用户确认12V版"
+  },
+  "software_baseline_status": "方案与配置参考，未提供已编译整机固件",
+  "uart_ax_nano": {
+    "bringup_baud": 115200,
+    "target_baud": 921600,
+    "format": "8N1",
+    "flow_control": "RTS/CTS low-active; verify before enabling"
+  },
+  "spi_profiles": {
+    "imu": {
+      "mode": 0,
+      "hz_start": 1000000,
+      "bit_order": "MSB"
+    },
+    "adxl345": {
+      "mode": 3,
+      "hz_start": 1000000,
+      "bit_order": "MSB",
+      "shared_bus_qualification_required": true
+    },
+    "sd": {
+      "mode": 0,
+      "hz_init": 400000,
+      "hz_start": 4000000,
+      "bit_order": "MSB"
+    },
+    "pn532": {
+      "mode": 0,
+      "hz_start": 1000000,
+      "bit_order": "LSB"
+    }
+  },
+  "printer": {
+    "supply_v": 12,
+    "baud": null,
+    "format": null,
+    "cts_polarity_verified": false,
+    "peak_current_a": null,
+    "power_on_wait_ms": null,
+    "power_off_wait_ms": null,
+    "command_manual": "待取得该批次TTL串口协议；厂家公开下载包仅Windows驱动"
+  },
+  "i2c_7bit": {
+    "management": {
+      "tca9555": 32,
+      "ina226": 64,
+      "ds3231": 104
+    },
+    "sensors": {
+      "vl53l1x": 41,
+      "sht40_expected": 68
+    }
+  },
+  "camera": {
+    "module": "AN5642",
+    "connector": "AX7010 J10",
+    "actual_fps": null,
+    "mode": null,
+    "calibration_id": null
+  },
+  "measurement": {
+    "axis": null,
+    "scale_mm_per_px": null,
+    "calibrated_band_hz": null,
+    "alarm_threshold": null
+  },
+  "power_policy_proposal": {
+    "warn_input_a": 4.2,
+    "deny_new_heavy_load_a": 4.5,
+    "print_with_lights_off": true
+  }
+}

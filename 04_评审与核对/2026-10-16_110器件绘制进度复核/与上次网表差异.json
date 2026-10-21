@@ -1,0 +1,347 @@
+{
+  "ok": true,
+  "drcCheckPassed": true,
+  "componentCount": 110,
+  "perSheet": {
+    "$1": 19,
+    "$2": 51,
+    "$3": 40
+  },
+  "added": [
+    {
+      "ref": "U302",
+      "part": "UCC27517DBVR",
+      "code": "C99395",
+      "value": null,
+      "channel": "$3I32",
+      "pins": [
+        "1:VDD=5V_AUX",
+        "2:GND=GND",
+        "3:IN+=$3N20",
+        "4:IN-=LED_EN",
+        "5:OUT=$3N24"
+      ]
+    },
+    {
+      "ref": "Q307",
+      "part": "AOD4184A",
+      "code": "C99124",
+      "value": null,
+      "channel": "$3I33",
+      "pins": [
+        "1:G=$3N25",
+        "2:D=$3N28",
+        "3:S=GND"
+      ]
+    },
+    {
+      "ref": "D302",
+      "part": "SK54B-LTP",
+      "code": "C669018",
+      "value": null,
+      "channel": "$3I34",
+      "pins": [
+        "1:K=$3N29",
+        "2:A=$3N28"
+      ]
+    },
+    {
+      "ref": "F302",
+      "part": "MF-MSMF110/24X-2",
+      "code": "C210835",
+      "value": null,
+      "channel": "$3I35",
+      "pins": [
+        "1:1=$3N29",
+        "2:2=12V_MAIN"
+      ]
+    },
+    {
+      "ref": "J304",
+      "part": "JL128-50802G01",
+      "code": "C415422",
+      "value": null,
+      "channel": "$3I36",
+      "pins": [
+        "1:1=$3N29",
+        "2:2=$3N28"
+      ]
+    },
+    {
+      "ref": "R305",
+      "part": "RC0603FR-07100RL",
+      "code": "C105588",
+      "value": "100Ω",
+      "channel": "$3I37",
+      "pins": [
+        "1:1=LED2_PWM",
+        "2:2=$3N20"
+      ]
+    },
+    {
+      "ref": "R306",
+      "part": "RC0603FR-072K2L",
+      "code": "C114662",
+      "value": "2.2kΩ",
+      "channel": "$3I39",
+      "pins": [
+        "1:1=GND",
+        "2:2=$3N20"
+      ]
+    },
+    {
+      "ref": "R307",
+      "part": "RC0603FR-0710RL",
+      "code": "C109318",
+      "value": "10Ω",
+      "channel": "$3I40",
+      "pins": [
+        "1:1=$3N25",
+        "2:2=$3N24"
+      ]
+    },
+    {
+      "ref": "R308",
+      "part": "RC0603FR-07100KL",
+      "code": "C14675",
+      "value": "100kΩ",
+      "channel": "$3I41",
+      "pins": [
+        "1:1=$3N25",
+        "2:2=GND"
+      ]
+    },
+    {
+      "ref": "C303",
+      "part": "CL21B105KAFNNNE",
+      "code": "C116352",
+      "value": "1uF",
+      "channel": "$3I42",
+      "pins": [
+        "1:1=5V_AUX",
+        "2:2=GND"
+      ]
+    },
+    {
+      "ref": "C304",
+      "part": "CL10B104KB8NNNC",
+      "code": "C1591",
+      "value": "100nF",
+      "channel": "$3I43",
+      "pins": [
+        "1:1=5V_AUX",
+        "2:2=GND"
+      ]
+    },
+    {
+      "ref": "J305",
+      "part": "SM02B-GHS-TB(LF)(SN)",
+      "code": "C189893",
+      "value": null,
+      "channel": "$3I44",
+      "pins": [
+        "1:1=LED_EN",
+        "2:2=GND",
+        "3:3=GND",
+        "4:4=GND"
+      ]
+    },
+    {
+      "ref": "R309",
+      "part": "RC0603FR-0710KL",
+      "code": "C98220",
+      "value": "10kΩ",
+      "channel": "$3I45",
+      "pins": [
+        "1:1=LED_EN",
+        "2:2=5V_AUX"
+      ]
+    },
+    {
+      "ref": "C305",
+      "part": "CL10B104KB8NNNC",
+      "code": "C1591",
+      "value": "100nF",
+      "channel": "$3I46",
+      "pins": [
+        "1:1=LED_EN",
+        "2:2=GND"
+      ]
+    },
+    {
+      "ref": "Q306",
+      "part": "2N7002",
+      "code": "C8545",
+      "value": null,
+      "channel": "$3I47",
+      "pins": [
+        "1:G=LED_EN",
+        "2:S=GND",
+        "3:D=LIGHT_OK"
+      ]
+    },
+    {
+      "ref": "R310",
+      "part": "RC0603FR-0710KL",
+      "code": "C98220",
+      "value": "10kΩ",
+      "channel": "$3I48",
+      "pins": [
+        "1:1=LIGHT_OK",
+        "2:2=AX_3V3"
+      ]
+    },
+    {
+      "ref": "Q302",
+      "part": "AO4407A",
+      "code": "C16072",
+      "value": null,
+      "channel": "$3I58",
+      "pins": [
+        "1:S=$3N42",
+        "2:S=$3N42",
+        "3:S=$3N42",
+        "4:G=$3N47",
+        "5:D=12V_PRN",
+        "6:D=12V_PRN",
+        "7:D=12V_PRN",
+        "8:D=12V_PRN"
+      ]
+    },
+    {
+      "ref": "Q303",
+      "part": "AO3400A",
+      "code": "C20917",
+      "value": null,
+      "channel": "$3I59",
+      "pins": [
+        "1:G=$3N52",
+        "2:S=GND",
+        "3:D=$3N50"
+      ]
+    },
+    {
+      "ref": "DZ301",
+      "part": "BZT52C12-TP",
+      "code": "C668891",
+      "value": null,
+      "channel": "$3I60",
+      "pins": [
+        "1:K=$3N42",
+        "2:A=$3N47"
+      ]
+    },
+    {
+      "ref": "F303",
+      "part": "MF-MSMF250/16X-2",
+      "code": "C210838",
+      "value": null,
+      "channel": "$3I61",
+      "pins": [
+        "1:1=12V_MAIN",
+        "2:2=$3N42"
+      ]
+    },
+    {
+      "ref": "R311",
+      "part": "RC0603FR-07100KL",
+      "code": "C14675",
+      "value": "100kΩ",
+      "channel": "$3I62",
+      "pins": [
+        "1:1=$3N42",
+        "2:2=$3N47"
+      ]
+    },
+    {
+      "ref": "R312",
+      "part": "RC0603FR-0747KL",
+      "code": "C105579",
+      "value": "47kΩ",
+      "channel": "$3I63",
+      "pins": [
+        "1:1=$3N47",
+        "2:2=$3N50"
+      ]
+    },
+    {
+      "ref": "R313",
+      "part": "RC0603FR-07100RL",
+      "code": "C105588",
+      "value": "100Ω",
+      "channel": "$3I64",
+      "pins": [
+        "1:1=$3N52",
+        "2:2=PRN_PWR_EN"
+      ]
+    },
+    {
+      "ref": "R314",
+      "part": "RC0603FR-071KL",
+      "code": "C22548",
+      "value": "1kΩ",
+      "channel": "$3I65",
+      "pins": [
+        "1:1=GND",
+        "2:2=PRN_PWR_EN"
+      ]
+    },
+    {
+      "ref": "C309",
+      "part": "CL10B104KB8NNNC",
+      "code": "C1591",
+      "value": "100nF",
+      "channel": "$3I66",
+      "pins": [
+        "1:1=12V_PRN",
+        "2:2=$3N47"
+      ]
+    },
+    {
+      "ref": "C310",
+      "part": "CL31B225KAHNNNE",
+      "code": "C170102",
+      "value": "2.2uF",
+      "channel": "$3I67",
+      "pins": [
+        "1:1=$3N42",
+        "2:2=$3N47"
+      ]
+    },
+    {
+      "ref": "C306",
+      "part": "EEUFR1V471",
+      "code": "C178715",
+      "value": "470uF",
+      "channel": "$3I68",
+      "pins": [
+        "1:1=12V_PRN",
+        "2:2=GND"
+      ]
+    },
+    {
+      "ref": "C307",
+      "part": "CL21B105KAFNNNE",
+      "code": "C116352",
+      "value": "1uF",
+      "channel": "$3I69",
+      "pins": [
+        "1:1=12V_PRN",
+        "2:2=GND"
+      ]
+    },
+    {
+      "ref": "C308",
+      "part": "CL10B104KB8NNNC",
+      "code": "C1591",
+      "value": "100nF",
+      "channel": "$3I70",
+      "pins": [
+        "1:1=12V_PRN",
+        "2:2=GND"
+      ]
+    }
+  ],
+  "removed": [],
+  "changed": []
+}

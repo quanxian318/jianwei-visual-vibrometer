@@ -1,0 +1,431 @@
+
+--- PDF PAGE 1 ---
+                                                                                                                        JIANGSU CHANGJING ELECTRONICS TECHNOLOGY CO., LTD.
+                                                                                                                                          SOT-23 Plastic-Encapsulate MOSFETS
+
+            2N7002   MOSFET (N-Channel)
+
+                                     V(BR)DSS                                                                                                                                                                                                                                            RDS(on)MAX                                                                                                                                                                                                                                                              ID
+                                                                                                                                                                       2.5 Ω@10V                                                                                                                                                                                                                                                 SOT-23
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     3
+                                                60             V                                                                                                                                                                                                                                              115m                                  A
+                                                                                                                                                                               3Ω@5V
+                                                                                                                                                                                                                                                                                                                                                                                                                             1. GATE
+                                                                                                                                                                                                                                                                                                                                                                                                                             2. SOURCE                                                           1
+                                                                                                                                                                                                                                                                                                                                                                                                                             3. DRAIN                                                                                                2
+
+
+
+
+
+
+
+
+
+                FEATURE                                                                                                                                                                                                                                                                                                                                                    APPLICATION
+                                  z                                                High density cell design for low RDS(ON)                                                                                                                                                                                                                                                                                                                                           Load Switch for Portable Devicesz
+
+                                  z                                                Voltage controlled small signal switch                                                                                                                                                                                                                                                                                                                                                                DC/DC Converter   z
+
+                                  z                                                Rugged and reliable
+
+                                  z                                                High saturation current capability
+
+                MARKING                                                                                                                                                                                                                                                                                                                                                    Equivalent Circuit
+
+
+
+
+
+                                                                                                                                     7002=Device        code
+                                                                                                                                     Solid dot = Green    molding compound device.
+
+
+
+
+
+
+
+
+
+                 MAXIMUM RATINGS (Ta=25℃ unless otherwise noted)
+                                                                                                                  Parameter       Symbol Value Unit
+
+                     Drain-Source Voltage                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             VDS                                                                                                                                                  60                                                                                                                                                           V
+                     Gate-Source Voltage                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            VGS                                                                                                            ±20                                                                                                                                                        V
+                     Continuous Drain Current                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             ID        0.115        A
+                     Power Dissipation                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  PD        0.225        W
+                     Thermal Resistance from Junction to Ambient                                                                                                                                                                                                                                                                            RθJA         556                                                                                                                                             ℃/W
+                     Operation Junction and Storage Temperature Range                                                                                                                                                                                                                                                 TJ,Tstg                                                                                     -50~+150                                                                                                                              ℃
+
+
+
+
+
+www.jscj-elec.com                                                                                                                                                                                                                                                                                         1                                                                                                                                                                                                                                                                  Rev. - 2.1
+
+--- PDF PAGE 2 ---
+    MOSFET  ELECTRICAL CHARACTERISTICS
+
+              T =25   ℃                       unless otherwise specified a
+
+
+
+                                                              Parameter        Symbol                                                                         Test   conditions                                                                           Min                                                           Typ                           Max      Unit
+
+          Drain-Source Breakdown Voltage                                                                                                                   V(BR)DSS                                                 VGS=0 V, ID=250                                                       µA                 60                                                                                                                                                                                                               V
+          Gate-Threshold Voltage                                                                                                                                                                                                                                                                                    Vth(GS)                                                     VDS=VGS, ID=250 µA                1                1.6  2.5
+          Gate-body Leakage                                                                                                                                                                                                                                                                                                                                                                   lGSS                                                                      VDS=0 V, VGS=±20 V                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        ±80          nA
+
+          Zero Gate Voltage Drain Current                                                                                                                                                                 IDSS VDS=60 V, VGS=0 V                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  80                                                                                               nA
+          On-state Drain Current                                                                                                                                                                                                                                                                                                        ID(ON) VGS=10 V, VDS=7 V                                                                                                                                                                                                                                             500                                                                                                                                                                                                                                                                                                                                                                                             mA
+                                                                                                                                                                                                                                          VGS=10 V, ID=500mA                          0.9 2.5
+          Drain-Source On-Resistance                                                                                                                                                                                                            RDS(on)                                                     VGS=5 V, ID=50mA                         1.1                                                                                                                                3                                    Ω
+
+          Forward Trans conductance                                                                                                                                                                                                                                       gfs                                                                               VDS=10 V, ID=200mA                  80                      ms
+                                                                                                                                                                                                                                          VGS=10V, ID=500mA                 0.5                 3.75 V
+          Drain-source on-voltage                                                                                                                                                                                                                                                                       VDS(on)                                                   VGS=5V, ID=50mA                      0.05                 0.375 V
+
+          Diode Forward Voltage                                                                                                                                                                                                                                                                                                                 VSD IS=115mA, VGS=0 V                 0.55                  1.2  V
+          Input Capacitance                                                                                                                                                                                                                                                                                                                                                                                          Ciss         50*
+          Output Capacitance                                                                                                                                                                                                                                                                                                                                                    *C        oss  VDS=25V, VGS=0V, f=1MHz                                                             25                                      pF
+          Reverse Transfer Capacitance                                                                                                                                                                                             *C         rss                                                                                                                                                                                                                                     5
+ SWITCHING TIME
+          Turn-on Time                                                                                                                                                                                                                                                                                                                                                                                                                                                            td(on)                                                       20*VDD=25 V, RL=50  Ω,
+                                                                                                                                                                                                                                               ID=500mA,VGEN=10 V                                                                                                                                                                                                                                                  ns
+          Turn-off Time                                                                                                                                                                                                                                                                                                                                                                                                                                                     td(off) *RG=25                                                                          40Ω
+
+         *These parameters have no way to verify.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+www.jscj-elec.com                                                                                                                                                                                                                                                         2                                                                                                                                                                                                                                        Rev. - 2.1
+
+--- PDF PAGE 3 ---
+   Typical Characteristics
+
+
+
+
+
+
+
+                                                                                         Output Characteristics                                                                                                                                                                                       Transfer Characteristics
+                                      1.4                                                                                                                                                                                                            1.0
+                                                 Ta=25℃              VGS=10V,9V,8V,7V,6V                                                                                                                                                                                                                                                                                                              Ta=25℃
+                                                 Pulsed                                                                                                                                VGS=5V                                                                                                                                                                                                         Pulsed
+                                      1.2
+                                                                                                                                                                                                                                                     0.8
+
+
+                                      1.0
+
+
+                                                                                                                                                                                                                                                     0.6
+                                      0.8
+                                                                                                                                                                                       VGS=4V
+
+                                      0.6
+                                                                                                                                                                                                                                                     0.4
+
+
+                                      0.4
+
+                                                                                                                                                                                                                                                     0.2
+                                      0.2                                                                                                                                              VGS=3V
+
+
+
+
+                                      0.0                                                                                                                                                                                                            0.0
+                                             012345                                                                                                                                                                                                         0246
+                                                                               DRAIN TO SOURCE VOLTAGE    VDS    (V)                                                                                                                                                                            GATE TO SOURCE VOLTAGE    VGS    (V)
+
+
+
+                                                                                                       RDS(ON)    ——                            ID                                                                                                                                                                RDS(ON)    ——                              VGS
+
+                                          3                                                                                                                                                                                                              6
+                                                                                                                                                                                      Ta=25℃                                                                                                                                                                                                         Ta=25℃
+                                                                                                                                                                                      Pulsed                                                                                                                                                                                                         Pulsed
+
+
+
+
+
+
+                                          2                                                                                                                                                                                                              4
+
+
+
+
+                                                                                                                     VGS=5V
+                                                                                                                                                                                                                                                                                                             ID=500mA
+
+                                          1                                                                                                                                                                                                              2
+                                                                                                                    V      =10V                                                                                                                                                                           ID=50mA
+                                                                                                                       GS
+
+
+
+
+
+
+
+                                          0                                                                                                                                                                                                              0
+                                           0.0                                                                                                                   0.2                                                                                                                  0.4                                                                                                                   0.6                                                                                                                  0.8                                                                                                                   1.0061218
+
+                                                                                                DRAIN CURRENT    ID    (A)                                                                                                                                                                    GATE TO SOURCE VOLTAGE    VGS    (V)
+
+
+
+                                                                                                               IS   ——    VSD
+
+                                          2
+                                                                                                                                                                                      Ta=25℃
+                                          1                                                                                                                                           Pulsed
+
+
+
+
+                                       0.3
+
+
+
+                                      0.1
+
+
+
+
+                                    0.03
+
+
+
+                                    0.01
+
+
+
+
+                                    3E-3
+
+
+
+                                    1E-3
+                                           0.2                                                                                           0.4                                                                                           0.6                                                                                           0.8                                                                                           1.0                                                                                           1.2                                                                                           1.4
+                                                                              SOURCE TO DRAIN VOLTAGE    VSD                  (V)
+
+
+www.jscj-elec.com                                                                                                                                                                                                                   3                                                                                                                                                                             Rev. - 2.1
+
+--- PDF PAGE 4 ---
+              SOT-23 Package Outline Dimensions
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                Symbol                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     Dimensions In InchesDimensions In Millimeters
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  Mi n                                                                                                                                                                                                                                          Ma  x                                                                                                                                                                                                                                              Mi n                                                                                                                                                                                                                                          Ma x
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          A                                                                                                                                                                                               0.900                                                                                                                                                                    1.150                                                                                                                                                                   0.035                                                                                                                                                                   0.045
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     A1                                                                                                                                                                                                    0.000                                                                                                                                                                                 0.100                                                                                                                                                                               0.000                                                                                                                                                                              0.004
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     A2                                                                                                                                                                                                    0.900                                                                                                                                                                                 1.050                                                                                                                                                                               0.035                                                                                                                                                                              0.041
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           b                                                                                                                                                                                                 0.300                                                                                                                                                                 0.500                                                                                                                                                                   0.012                                                                                                                                                                   0.020
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           c                                                                                                                                                                                                  0.080                                                                                                                                                                 0.150                                                                                                                                                                   0.003                                                                                                                                                                   0.006
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         D                                                                                                                                                                                              2.800                                                                                                                                                                 3.000                                                                                                                                                                   0.110                                                                                                                                                                   0.118
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          E                                                                                                                                                                                               1.200                                                                                                                                                                 1.400                                                                                                                                                                   0.047                                                                                                                                                                   0.055
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     E1                                                                                                                                                                                                    2.250                                                                                                                                                                                 2.550                                                                                                                                                                               0.089                                                                                                                                                                              0.100
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           e                                                                                                                                                                                     0 . 9 5 0  TYP                                                                                                                                                                                                                                                                                                                                                                              0 . 0 3 7  TYP
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      e1                                                                                                                                                                                                        1.800                                                                                                                                                                                 2.000                                                                                                                                                                               0.071                                                                                                                                                                              0.079
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           L                                                                                                                                                                                    0.550 REF                                                                                                                                                                                                                                                                                                                                           0.022 REF
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      L1                                                                                                                                                                                                        0.300                                                                                                                                                                                 0.500                                                                                                                                                                               0.012                                                                                                                                                                              0.020
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           θ                                                                                                                                                                                                                                        0°                                                                                                                                                                                                                                  8°                                                                                                                                                                                                                                    0°                                                                                                                                                                                                                                                8°
+
+
+
+
+            SOT-23         Suggested Pad Layout
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    NOTICE
+                                                                                                                                  JSCJ reserves        the right to make modifications,enhancements,improvements,corrections or other
+                                                                                                                                  changes without further notice to any product herein. JSCJ does not assume any liability arising
+                                                                                                                                  out of the application or use of any product described herein.
+
+
+
+
+www.jscj-elec.com                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         4                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     Rev. - 2.     1
+
+--- PDF PAGE 5 ---
+ SOT-23 Tape and Reel
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+www.jscj-elec.com                                                     5                                                           Rev. - 2.     1

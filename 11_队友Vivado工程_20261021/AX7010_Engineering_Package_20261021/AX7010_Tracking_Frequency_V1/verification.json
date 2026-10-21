@@ -1,0 +1,110 @@
+{
+  "board": {
+    "processing": "AX7010 Cortex-A9 CPU1 FFT; PC decodes and plots only",
+    "selftest": "passed",
+    "track_end_sequence": 7616,
+    "lock_sequence": 234,
+    "updates": 116,
+    "board_time_s": 179.1978203242632,
+    "baseline_state": 2,
+    "baseline_elapsed_s": 31.013,
+    "command_ack": 22068,
+    "command_token": 22068,
+    "fft_ms": 0.7095119794241526,
+    "maximum_fft_ms": 0.9442619726164028
+  },
+  "tracking": {
+    "records": 512,
+    "board_sample_fps": 45.0,
+    "copy_rejections_total": 0,
+    "self_test": "passed",
+    "coordinate_units": "native sensor pixels, NOT mm or microns",
+    "timestamps": "CPU observation/copy-start times, NOT verified sensor exposure synchronization",
+    "seed_left": [
+      596,
+      514
+    ],
+    "seed_right": [
+      712,
+      486
+    ],
+    "reference_seed": [
+      204,
+      540,
+      250,
+      524
+    ],
+    "time_span_s": 11.344139968019931,
+    "observed_rate_hz": 45.04528341862418,
+    "interval_min_ms": 22.199360356239595,
+    "interval_max_ms": 22.200359356190802,
+    "interval_std_ms": 0.00021955859787443815,
+    "camera1_valid_fraction": 1.0,
+    "camera1_x_std_px": 0.035548922402418415,
+    "camera1_x_detrended_rms_px": 0.03547368023320103,
+    "camera1_y_std_px": 0.058736122195317125,
+    "camera1_y_detrended_rms_px": 0.05854762995133194,
+    "camera1_buffer_means": {
+      "0": {
+        "x": 596.0588143331963,
+        "y": 513.9129003335161
+      },
+      "1": {
+        "x": 596.0603817210477,
+        "y": 513.9127721449908
+      },
+      "2": {
+        "x": 596.0583560341283,
+        "y": 513.9071055629797
+      }
+    },
+    "camera1_reference_valid_fraction": 1.0,
+    "camera1_relative_x_std_px": 0.11100539631390062,
+    "camera1_relative_x_detrended_rms_px": 0.11082129953561722,
+    "camera1_relative_y_std_px": 0.1668575751764948,
+    "camera1_relative_y_detrended_rms_px": 0.16678740717923995,
+    "camera2_valid_fraction": 1.0,
+    "camera2_x_std_px": 0.03796967361289836,
+    "camera2_x_detrended_rms_px": 0.03782367243768498,
+    "camera2_y_std_px": 0.06015659564312661,
+    "camera2_y_detrended_rms_px": 0.06006132551515573,
+    "camera2_buffer_means": {
+      "0": {
+        "x": 712.0190623563878,
+        "y": 485.8780201631434
+      },
+      "1": {
+        "x": 712.0239318490726,
+        "y": 485.86778428819446
+      },
+      "2": {
+        "x": 712.0179314864309,
+        "y": 485.87309916535315
+      }
+    },
+    "camera2_reference_valid_fraction": 1.0,
+    "camera2_relative_x_std_px": 0.08903117280286837,
+    "camera2_relative_x_detrended_rms_px": 0.08902284106805619,
+    "camera2_relative_y_std_px": 0.12183152280208755,
+    "camera2_relative_y_detrended_rms_px": 0.12183077235410628
+  },
+  "comparison": {
+    "dx0": {
+      "maximum_absolute_spectral_difference_px": 2.3273374081768036e-06,
+      "passed": true
+    },
+    "dy0": {
+      "maximum_absolute_spectral_difference_px": 9.562527016919106e-07,
+      "passed": true
+    },
+    "dx1": {
+      "maximum_absolute_spectral_difference_px": 2.9339036738823543e-06,
+      "passed": true
+    },
+    "dy1": {
+      "maximum_absolute_spectral_difference_px": 3.940696224872045e-06,
+      "passed": true
+    }
+  },
+  "passed": true
+}

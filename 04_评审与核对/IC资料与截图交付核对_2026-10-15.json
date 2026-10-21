@@ -1,0 +1,138 @@
+{
+  "checked_at": "2026-10-15",
+  "main_board_unique_ics": 14,
+  "main_board_U_instances": 17,
+  "front_panel_led_type": "WS2812B-V6",
+  "covered": [
+    {
+      "refs": "U101",
+      "mpn": "INA226AIDGSR",
+      "source": "INA226",
+      "package": "VSSOP-10",
+      "pages": 41,
+      "sha256": "c9b67f886d4a5241a5e070723f7b61867409eeb27eed768b9cdd9cb17e03ca2d"
+    },
+    {
+      "refs": "U102",
+      "mpn": "TLV3011BIDBVR",
+      "source": "TLV3011B",
+      "package": "DBV / SOT-23-6",
+      "pages": 43,
+      "sha256": "02993c016420887ee4f1ab2fa640e7596c9c1324a73f4f72bee3b32adec38df3"
+    },
+    {
+      "refs": "U201/U202/U203",
+      "mpn": "TPS5430DDAR",
+      "source": "TPS5430",
+      "package": "DDA / SO-PowerPAD-8",
+      "pages": 41,
+      "sha256": "88c98e6e51851285fbbfc17837d002b29af7cd3fe30442fa7e4612c5179985da"
+    },
+    {
+      "refs": "U204",
+      "mpn": "TLV1117LV33DCYR",
+      "source": "TLV1117LV",
+      "package": "DCY / SOT-223",
+      "pages": 25,
+      "sha256": "84091b2a9521014cf80b72dca4cf6edf4dba2773d4aaec0d5716dbd1ff412bb8"
+    },
+    {
+      "refs": "U205",
+      "mpn": "TPS7A2033PDBVR",
+      "source": "TPS7A20",
+      "package": "DBV / SOT-23-5",
+      "pages": 63,
+      "sha256": "b6c487d79ebed6dd43bf220b07fc5b3ecb9ee55d87e6daa2312acda6546046c0"
+    },
+    {
+      "refs": "U301/U302",
+      "mpn": "UCC27517DBVR",
+      "source": "UCC27517",
+      "package": "DBV / SOT-23-5",
+      "pages": 37,
+      "sha256": "6b7b8c088746010dfbce36367a03de3e971a91bd6fb705adad0c6258d44bf90c"
+    },
+    {
+      "refs": "U401",
+      "mpn": "74LVC244APW,118",
+      "source": "74LVC244A",
+      "package": "PW / TSSOP-20",
+      "pages": 16,
+      "sha256": "abea8549745ed160cbe8256e596d9a382a9c53e025862ed307ba340fd1a9bfc9"
+    },
+    {
+      "refs": "U402",
+      "mpn": "SN74LVC1G125DBVR",
+      "source": "SN74LVC1G125",
+      "package": "DBV / SOT-23-5",
+      "pages": 52,
+      "sha256": "1098d46e4565695e9823a08309bc581e2c9ead26b19e99a43a011a38642b27ca"
+    },
+    {
+      "refs": "U501",
+      "mpn": "SN74LVC2G17DBVR",
+      "source": "SN74LVC2G17",
+      "package": "DBV / SOT-23-6",
+      "pages": 36,
+      "sha256": "624dbe55679d2fed4123b0d7708cd0d295efcc78de395e71a0caf5cd13cbc216"
+    },
+    {
+      "refs": "U502",
+      "mpn": "SN74AHCT1G125DBVR",
+      "source": "SN74AHCT1G125",
+      "package": "DBV / SOT-23-5",
+      "pages": 26,
+      "sha256": "386389b623620d89a260b11d272af5625e387e0b24d0981cb4f7d66a4e1bc9fa"
+    },
+    {
+      "refs": "U601",
+      "mpn": "SN74LVC2G125DCUT",
+      "source": "SN74LVC2G125",
+      "package": "DCU / VSSOP-8",
+      "pages": 30,
+      "sha256": "15dab14095892f561bc7407dde6c7fb2fb75d92c6bdafc34e949e5dca1fed340"
+    },
+    {
+      "refs": "U602",
+      "mpn": "MAX98357AETE+T",
+      "source": "MAX98357A",
+      "package": "ETE / TQFN-16",
+      "pages": 38,
+      "sha256": "dea228ad619901d34c2f5f106243bdb9b9e95e38989d4d66fd6c6c489bfa6f1c"
+    },
+    {
+      "refs": "U801",
+      "mpn": "TCA9555PWR",
+      "source": "TCA9555",
+      "package": "PW / TSSOP-24",
+      "pages": 49,
+      "sha256": "9706a3ccbf0bc915387949ab82bc0020a1a5bfdd67d8f51c4605a8d4b16bb231"
+    },
+    {
+      "refs": "U802",
+      "mpn": "DS3231SN#T&R",
+      "source": "DS3231",
+      "package": "SO-16W",
+      "pages": 20,
+      "sha256": "dc81cd89bee82d0c57b654d6315e03dec913fb8fe753cc80b2a3f1cca71cbb34"
+    },
+    {
+      "refs": "小板HL101–HL105",
+      "mpn": "WS2812B-V6",
+      "source": "WS2812B-V6",
+      "package": "5050 LED",
+      "pages": 8,
+      "sha256": "f6ee89835465bc6eabd52c039017abde30e2e04a062e465c12d7ada4c7b30a65"
+    }
+  ],
+  "local_pdf_count": 36,
+  "shopping_csv_rows": 44,
+  "note": "Documentation collection only; no EDA/ERC/DRC or hardware validation claimed.",
+  "pdf_validation": "all 36 PDFs readable; page counts and SHA256 match",
+  "bom_coverage": "all 17 U references match final V1.10 BOM",
+  "screenshot_pages": 20,
+  "screenshot_crops": 9,
+  "local_links": "passed",
+  "visual_qa": "full-page contact sheet and all 9 final crops inspected; selected DBV and TQFN packages confirmed",
+  "limitation": "74LVC244A local PDF is Nexperia Rev.9; current Rev.14 direct download blocked by remote 403"
+}

@@ -1,0 +1,18 @@
+[
+  {
+    "source": "power_service.cpp",
+    "sha256": "2a10c5b0433983765397098e2f349a1d125b395edcdef97885d70d0287bd5017",
+    "returncode": 0,
+    "seconds": 265.42,
+    "object_bytes": 322572,
+    "elf_machine": 94
+  },
+  {
+    "source": "audio_service.cpp",
+    "sha256": "fd77e6946d48a2ba86089e474023be89b92cf80cd65dec9c2238d0b149fdcc59",
+    "returncode": 0,
+    "seconds": 288.55,
+    "object_bytes": 830888,
+    "elf_machine": 94
+  }
+]

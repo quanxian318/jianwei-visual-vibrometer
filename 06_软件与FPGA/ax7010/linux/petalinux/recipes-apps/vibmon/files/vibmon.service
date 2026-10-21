@@ -1,0 +1,12 @@
+[Unit]
+Description=Vision vibration meter (vibmond)
+After=local-fs.target
+
+[Service]
+ExecStart=/usr/bin/vibmond -c /etc/vibmon/vibmon.json
+Restart=on-failure
+RestartSec=3
+KillSignal=SIGTERM
+
+[Install]
+WantedBy=multi-user.target

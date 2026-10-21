@@ -1,0 +1,1301 @@
+[
+  {
+    "board": "MAIN",
+    "ref": "J101",
+    "title": "12V IN",
+    "width_mm": 16.42,
+    "height_mm": 14.9,
+    "notes": [
+      "DC5525 CENTER +"
+    ],
+    "rows": [
+      {
+        "pin": 1,
+        "net": "$1N1",
+        "label": "12V+"
+      },
+      {
+        "pin": 2,
+        "net": "GND",
+        "label": "GND"
+      },
+      {
+        "pin": 3,
+        "net": "GND",
+        "label": "GND"
+      }
+    ],
+    "file": "MAIN_J101_12V_IN.svg"
+  },
+  {
+    "board": "MAIN",
+    "ref": "J102",
+    "title": "POWER SW",
+    "width_mm": 18.63,
+    "height_mm": 14.8,
+    "notes": [
+      "SW CONTACT ONLY",
+      "NOT A GND PAIR"
+    ],
+    "rows": [
+      {
+        "pin": 1,
+        "net": "$1N3",
+        "label": "FUSED IN"
+      },
+      {
+        "pin": 2,
+        "net": "12V_PROTECTED",
+        "label": "SWITCHED OUT"
+      }
+    ],
+    "file": "MAIN_J102_POWER_SW.svg"
+  },
+  {
+    "board": "MAIN",
+    "ref": "J201",
+    "title": "AX 5V OUT",
+    "width_mm": 18.64,
+    "height_mm": 16.85,
+    "notes": [
+      "POWER ONLY"
+    ],
+    "rows": [
+      {
+        "pin": 1,
+        "net": "5V_AX",
+        "label": "5V_AX"
+      },
+      {
+        "pin": 2,
+        "net": "",
+        "label": "NC"
+      },
+      {
+        "pin": 3,
+        "net": "",
+        "label": "NC"
+      },
+      {
+        "pin": 4,
+        "net": "GND",
+        "label": "GND"
+      }
+    ],
+    "file": "MAIN_J201_AX_5V_OUT.svg"
+  },
+  {
+    "board": "MAIN",
+    "ref": "J501",
+    "title": "LCD 5V OUT",
+    "width_mm": 19.85,
+    "height_mm": 16.85,
+    "notes": [
+      "POWER ONLY"
+    ],
+    "rows": [
+      {
+        "pin": 1,
+        "net": "$5N1",
+        "label": "5V_LCD FUSED"
+      },
+      {
+        "pin": 2,
+        "net": "",
+        "label": "NC"
+      },
+      {
+        "pin": 3,
+        "net": "",
+        "label": "NC"
+      },
+      {
+        "pin": 4,
+        "net": "GND",
+        "label": "GND"
+      }
+    ],
+    "file": "MAIN_J501_LCD_5V_OUT.svg"
+  },
+  {
+    "board": "MAIN",
+    "ref": "J301",
+    "title": "SIDE LIGHT",
+    "width_mm": 19.85,
+    "height_mm": 14.8,
+    "notes": [
+      "12V LOAD",
+      "LED- IS NOT GND"
+    ],
+    "rows": [
+      {
+        "pin": 1,
+        "net": "$3N16",
+        "label": "12V+"
+      },
+      {
+        "pin": 2,
+        "net": "$3N14",
+        "label": "LED-"
+      }
+    ],
+    "file": "MAIN_J301_SIDE_LIGHT.svg"
+  },
+  {
+    "board": "MAIN",
+    "ref": "J304",
+    "title": "AUX LIGHT",
+    "width_mm": 18.64,
+    "height_mm": 14.8,
+    "notes": [
+      "12V LOAD",
+      "LED- IS NOT GND"
+    ],
+    "rows": [
+      {
+        "pin": 1,
+        "net": "$3N29",
+        "label": "12V+"
+      },
+      {
+        "pin": 2,
+        "net": "$3N28",
+        "label": "LED-"
+      }
+    ],
+    "file": "MAIN_J304_AUX_LIGHT.svg"
+  },
+  {
+    "board": "MAIN",
+    "ref": "J302",
+    "title": "ALARM FAN",
+    "width_mm": 18.64,
+    "height_mm": 20.75,
+    "notes": [
+      "COMMON +12V"
+    ],
+    "rows": [
+      {
+        "pin": 1,
+        "net": "12V_ALM",
+        "label": "12V+"
+      },
+      {
+        "pin": 2,
+        "net": "ALM_R_N",
+        "label": "RED-"
+      },
+      {
+        "pin": 3,
+        "net": "ALM_Y_N",
+        "label": "YELLOW-"
+      },
+      {
+        "pin": 4,
+        "net": "ALM_G_N",
+        "label": "GREEN-"
+      },
+      {
+        "pin": 5,
+        "net": "BZ_N",
+        "label": "BUZZ-"
+      },
+      {
+        "pin": 6,
+        "net": "FAN_N",
+        "label": "FAN-"
+      }
+    ],
+    "file": "MAIN_J302_ALARM_FAN.svg"
+  },
+  {
+    "board": "MAIN",
+    "ref": "J305",
+    "title": "LIGHT SW",
+    "width_mm": 17.43,
+    "height_mm": 14.8,
+    "notes": [
+      "CLOSE TO ENABLE",
+      "NO 12V INPUT"
+    ],
+    "rows": [
+      {
+        "pin": 1,
+        "net": "LED_EN",
+        "label": "LED_EN"
+      },
+      {
+        "pin": 2,
+        "net": "GND",
+        "label": "GND"
+      }
+    ],
+    "file": "MAIN_J305_LIGHT_SW.svg"
+  },
+  {
+    "board": "MAIN",
+    "ref": "J306",
+    "title": "LAMP AUX",
+    "width_mm": 17.43,
+    "height_mm": 12.95,
+    "notes": [
+      "5V OUT"
+    ],
+    "rows": [
+      {
+        "pin": 1,
+        "net": "5V_AUX",
+        "label": "5V_AUX"
+      },
+      {
+        "pin": 2,
+        "net": "GND",
+        "label": "GND"
+      }
+    ],
+    "file": "MAIN_J306_LAMP_AUX.svg"
+  },
+  {
+    "board": "MAIN",
+    "ref": "J401",
+    "title": "PRINTER",
+    "width_mm": 18.38,
+    "height_mm": 18.8,
+    "notes": [
+      "HOST = CONTROLLER"
+    ],
+    "rows": [
+      {
+        "pin": 1,
+        "net": "12V_PRN",
+        "label": "12V_PRN"
+      },
+      {
+        "pin": 2,
+        "net": "PRN_HOST_CTS",
+        "label": "HOST_CTS"
+      },
+      {
+        "pin": 3,
+        "net": "PRN_HOST_TX",
+        "label": "HOST_TX"
+      },
+      {
+        "pin": 4,
+        "net": "PRN_HOST_RX",
+        "label": "HOST_RX"
+      },
+      {
+        "pin": 5,
+        "net": "GND",
+        "label": "GND"
+      }
+    ],
+    "file": "MAIN_J401_PRINTER.svg"
+  },
+  {
+    "board": "MAIN",
+    "ref": "J502",
+    "title": "FRONT PANEL",
+    "width_mm": 21.07,
+    "height_mm": 30.4,
+    "notes": [
+      "TO PANEL J101",
+      "1 TO 1 CABLE"
+    ],
+    "rows": [
+      {
+        "pin": 1,
+        "net": "5V_AUX",
+        "label": "5V_AUX"
+      },
+      {
+        "pin": 2,
+        "net": "GND",
+        "label": "GND"
+      },
+      {
+        "pin": 3,
+        "net": "AX_3V3",
+        "label": "AX_3V3"
+      },
+      {
+        "pin": 4,
+        "net": "GND",
+        "label": "GND"
+      },
+      {
+        "pin": 5,
+        "net": "ENC_A_RAW",
+        "label": "ENC_A_RAW"
+      },
+      {
+        "pin": 6,
+        "net": "ENC_B_RAW",
+        "label": "ENC_B_RAW"
+      },
+      {
+        "pin": 7,
+        "net": "ENC_SW_RAW",
+        "label": "ENC_SW_RAW"
+      },
+      {
+        "pin": 8,
+        "net": "KEY_K1_RAW",
+        "label": "KEY_K1_RAW"
+      },
+      {
+        "pin": 9,
+        "net": "WS_DATA_5V",
+        "label": "WS_DATA_5V"
+      },
+      {
+        "pin": 10,
+        "net": "GND",
+        "label": "GND"
+      }
+    ],
+    "file": "MAIN_J502_FRONT_PANEL.svg"
+  },
+  {
+    "board": "MAIN",
+    "ref": "J601",
+    "title": "SPEAKER",
+    "width_mm": 19.36,
+    "height_mm": 14.8,
+    "notes": [
+      "8 OHM",
+      "NEITHER PIN IS GND"
+    ],
+    "rows": [
+      {
+        "pin": 1,
+        "net": "SPK_P",
+        "label": "SPK+"
+      },
+      {
+        "pin": 2,
+        "net": "SPK_N",
+        "label": "SPK-"
+      }
+    ],
+    "file": "MAIN_J601_SPEAKER.svg"
+  },
+  {
+    "board": "MAIN",
+    "ref": "J602",
+    "title": "PN532 SPI",
+    "width_mm": 18.64,
+    "height_mm": 24.65,
+    "notes": [
+      "3V3 LOGIC"
+    ],
+    "rows": [
+      {
+        "pin": 1,
+        "net": "5V_AUX",
+        "label": "5V_AUX"
+      },
+      {
+        "pin": 2,
+        "net": "GND",
+        "label": "GND"
+      },
+      {
+        "pin": 3,
+        "net": "SPI_SCLK_BUS",
+        "label": "SCK"
+      },
+      {
+        "pin": 4,
+        "net": "SPI_MOSI_BUS",
+        "label": "MOSI"
+      },
+      {
+        "pin": 5,
+        "net": "PN_MISO",
+        "label": "MISO"
+      },
+      {
+        "pin": 6,
+        "net": "PN_CS",
+        "label": "CS"
+      },
+      {
+        "pin": 7,
+        "net": "PN_IRQ",
+        "label": "IRQ"
+      },
+      {
+        "pin": 8,
+        "net": "",
+        "label": "NC"
+      }
+    ],
+    "file": "MAIN_J602_PN532_SPI.svg"
+  },
+  {
+    "board": "MAIN",
+    "ref": "J701",
+    "title": "TOF",
+    "width_mm": 15.8,
+    "height_mm": 20.75,
+    "notes": [
+      "3V3 LOGIC"
+    ],
+    "rows": [
+      {
+        "pin": 1,
+        "net": "3V3_SENS",
+        "label": "3V3_SENS"
+      },
+      {
+        "pin": 2,
+        "net": "GND",
+        "label": "GND"
+      },
+      {
+        "pin": 3,
+        "net": "I2C1_SCL",
+        "label": "SCL"
+      },
+      {
+        "pin": 4,
+        "net": "I2C1_SDA",
+        "label": "SDA"
+      },
+      {
+        "pin": 5,
+        "net": "TOF_INT",
+        "label": "GPIO1 INT"
+      },
+      {
+        "pin": 6,
+        "net": "XSHUT_OD",
+        "label": "XSHUT"
+      }
+    ],
+    "file": "MAIN_J701_TOF.svg"
+  },
+  {
+    "board": "MAIN",
+    "ref": "J702",
+    "title": "IMU SPI",
+    "width_mm": 16.21,
+    "height_mm": 24.65,
+    "notes": [
+      "3V3 LOGIC"
+    ],
+    "rows": [
+      {
+        "pin": 1,
+        "net": "3V3_SENS",
+        "label": "3V3_SENS"
+      },
+      {
+        "pin": 2,
+        "net": "GND",
+        "label": "GND"
+      },
+      {
+        "pin": 3,
+        "net": "SENS_SPI_SCLK",
+        "label": "SCK"
+      },
+      {
+        "pin": 4,
+        "net": "SENS_SPI_MOSI",
+        "label": "MOSI"
+      },
+      {
+        "pin": 5,
+        "net": "SENS_SPI_MISO",
+        "label": "MISO"
+      },
+      {
+        "pin": 6,
+        "net": "IMU_CS",
+        "label": "CS"
+      },
+      {
+        "pin": 7,
+        "net": "IMU_INT1_RAW",
+        "label": "INT1"
+      },
+      {
+        "pin": 8,
+        "net": "IMU_INT2_RAW",
+        "label": "INT2"
+      }
+    ],
+    "file": "MAIN_J702_IMU_SPI.svg"
+  },
+  {
+    "board": "MAIN",
+    "ref": "J703",
+    "title": "ACC SPI",
+    "width_mm": 16.21,
+    "height_mm": 24.65,
+    "notes": [
+      "3V3 LOGIC"
+    ],
+    "rows": [
+      {
+        "pin": 1,
+        "net": "3V3_SENS",
+        "label": "3V3_SENS"
+      },
+      {
+        "pin": 2,
+        "net": "GND",
+        "label": "GND"
+      },
+      {
+        "pin": 3,
+        "net": "SENS_SPI_SCLK",
+        "label": "SCK"
+      },
+      {
+        "pin": 4,
+        "net": "SENS_SPI_MOSI",
+        "label": "MOSI"
+      },
+      {
+        "pin": 5,
+        "net": "SENS_SPI_MISO",
+        "label": "MISO"
+      },
+      {
+        "pin": 6,
+        "net": "ADXL_CS",
+        "label": "CS"
+      },
+      {
+        "pin": 7,
+        "net": "ADXL_DRDY_RAW",
+        "label": "DRDY"
+      },
+      {
+        "pin": 8,
+        "net": "",
+        "label": "NC"
+      }
+    ],
+    "file": "MAIN_J703_ACC_SPI.svg"
+  },
+  {
+    "board": "MAIN",
+    "ref": "J704",
+    "title": "SHT40",
+    "width_mm": 15.8,
+    "height_mm": 16.85,
+    "notes": [
+      "3V3 LOGIC"
+    ],
+    "rows": [
+      {
+        "pin": 1,
+        "net": "3V3_SENS",
+        "label": "3V3_SENS"
+      },
+      {
+        "pin": 2,
+        "net": "GND",
+        "label": "GND"
+      },
+      {
+        "pin": 3,
+        "net": "I2C1_SCL",
+        "label": "SCL"
+      },
+      {
+        "pin": 4,
+        "net": "I2C1_SDA",
+        "label": "SDA"
+      }
+    ],
+    "file": "MAIN_J704_SHT40.svg"
+  },
+  {
+    "board": "MAIN",
+    "ref": "J705",
+    "title": "TACH",
+    "width_mm": 15.8,
+    "height_mm": 13.05,
+    "notes": [],
+    "rows": [
+      {
+        "pin": 1,
+        "net": "5V_AUX",
+        "label": "5V_AUX"
+      },
+      {
+        "pin": 2,
+        "net": "GND",
+        "label": "GND"
+      },
+      {
+        "pin": 3,
+        "net": "$7N56",
+        "label": "SIGNAL"
+      }
+    ],
+    "file": "MAIN_J705_TACH.svg"
+  },
+  {
+    "board": "MAIN",
+    "ref": "J706",
+    "title": "I2C2",
+    "width_mm": 15.8,
+    "height_mm": 16.85,
+    "notes": [
+      "3V3 LOGIC"
+    ],
+    "rows": [
+      {
+        "pin": 1,
+        "net": "3V3_SENS",
+        "label": "3V3_SENS"
+      },
+      {
+        "pin": 2,
+        "net": "GND",
+        "label": "GND"
+      },
+      {
+        "pin": 3,
+        "net": "I2C2_SCL",
+        "label": "SCL"
+      },
+      {
+        "pin": 4,
+        "net": "I2C2_SDA",
+        "label": "SDA"
+      }
+    ],
+    "file": "MAIN_J706_I2C2.svg"
+  },
+  {
+    "board": "MAIN",
+    "ref": "J605",
+    "title": "NANO UART",
+    "width_mm": 18.64,
+    "height_mm": 16.75,
+    "notes": [
+      "3V3 LOGIC",
+      "NO TTL POWER PIN"
+    ],
+    "rows": [
+      {
+        "pin": 1,
+        "net": "GND",
+        "label": "GND"
+      },
+      {
+        "pin": 2,
+        "net": "NANO_TX",
+        "label": "NANO_TX"
+      },
+      {
+        "pin": 3,
+        "net": "NANO_RX",
+        "label": "NANO_RX"
+      }
+    ],
+    "file": "MAIN_J605_NANO_UART.svg"
+  },
+  {
+    "board": "MAIN",
+    "ref": "J802",
+    "title": "I2C0",
+    "width_mm": 15.8,
+    "height_mm": 16.85,
+    "notes": [
+      "AX 3V3 DOMAIN"
+    ],
+    "rows": [
+      {
+        "pin": 1,
+        "net": "AX_3V3",
+        "label": "AX_3V3"
+      },
+      {
+        "pin": 2,
+        "net": "GND",
+        "label": "GND"
+      },
+      {
+        "pin": 3,
+        "net": "I2C0_SCL",
+        "label": "SCL"
+      },
+      {
+        "pin": 4,
+        "net": "I2C0_SDA",
+        "label": "SDA"
+      }
+    ],
+    "file": "MAIN_J802_I2C0.svg"
+  },
+  {
+    "board": "MAIN",
+    "ref": "BT801",
+    "title": "RTC BATTERY",
+    "width_mm": 22.28,
+    "height_mm": 14.8,
+    "notes": [
+      "CR1220 3V",
+      "PRIMARY CELL ONLY"
+    ],
+    "rows": [
+      {
+        "pin": 1,
+        "net": "$8N25",
+        "label": "VBAT+"
+      },
+      {
+        "pin": 2,
+        "net": "GND",
+        "label": "GND"
+      }
+    ],
+    "file": "MAIN_BT801_RTC_BATTERY.svg"
+  },
+  {
+    "board": "MAIN",
+    "ref": "J604",
+    "title": "NANO JP1",
+    "width_mm": 19.36,
+    "height_mm": 38.3,
+    "notes": [
+      "PIN 1 AT USB-C END"
+    ],
+    "rows": [
+      {
+        "pin": 1,
+        "net": "NANO_SCLK",
+        "label": "D13 SCK"
+      },
+      {
+        "pin": 2,
+        "net": "",
+        "label": "3V3 NC"
+      },
+      {
+        "pin": 3,
+        "net": "",
+        "label": "B0 NC"
+      },
+      {
+        "pin": 4,
+        "net": "NANO_A0_IRQ",
+        "label": "A0 NFC_IRQ"
+      },
+      {
+        "pin": 5,
+        "net": "SD_CD",
+        "label": "A1 SD_CD"
+      },
+      {
+        "pin": 6,
+        "net": "",
+        "label": "A2 NC"
+      },
+      {
+        "pin": 7,
+        "net": "PN_CS",
+        "label": "A3 PN_CS"
+      },
+      {
+        "pin": 8,
+        "net": "",
+        "label": "A4 NC"
+      },
+      {
+        "pin": 9,
+        "net": "",
+        "label": "A5 NC"
+      },
+      {
+        "pin": 10,
+        "net": "NANO_A6_PFAIL",
+        "label": "A6 PFAIL"
+      },
+      {
+        "pin": 11,
+        "net": "AMP_EN",
+        "label": "A7 AMP_EN"
+      },
+      {
+        "pin": 12,
+        "net": "",
+        "label": "VBUS NC"
+      },
+      {
+        "pin": 13,
+        "net": "",
+        "label": "B1 NC"
+      },
+      {
+        "pin": 14,
+        "net": "GND",
+        "label": "GND"
+      },
+      {
+        "pin": 15,
+        "net": "NANO_VIN",
+        "label": "VIN 12V"
+      }
+    ],
+    "file": "MAIN_J604_NANO_JP1.svg"
+  },
+  {
+    "board": "MAIN",
+    "ref": "J606",
+    "title": "NANO JP2",
+    "width_mm": 19.36,
+    "height_mm": 38.3,
+    "notes": [
+      "PIN 1 AT USB-C END"
+    ],
+    "rows": [
+      {
+        "pin": 1,
+        "net": "NANO_MISO",
+        "label": "D12 MISO"
+      },
+      {
+        "pin": 2,
+        "net": "NANO_MOSI",
+        "label": "D11 MOSI"
+      },
+      {
+        "pin": 3,
+        "net": "SD_CS",
+        "label": "D10 SD_CS"
+      },
+      {
+        "pin": 4,
+        "net": "NANO_D9_DIN",
+        "label": "D9 I2S DIN"
+      },
+      {
+        "pin": 5,
+        "net": "NANO_D8_LRCLK",
+        "label": "D8 LRCLK"
+      },
+      {
+        "pin": 6,
+        "net": "NANO_D7_BCLK",
+        "label": "D7 BCLK"
+      },
+      {
+        "pin": 7,
+        "net": "NANO_D6_IRQ",
+        "label": "D6 IRQ"
+      },
+      {
+        "pin": 8,
+        "net": "NANO_D5_CTS",
+        "label": "D5 CTS"
+      },
+      {
+        "pin": 9,
+        "net": "NANO_D4_RTS",
+        "label": "D4 RTS"
+      },
+      {
+        "pin": 10,
+        "net": "NANO_D3_RX",
+        "label": "D3 RX"
+      },
+      {
+        "pin": 11,
+        "net": "NANO_D2_TX",
+        "label": "D2 TX"
+      },
+      {
+        "pin": 12,
+        "net": "GND",
+        "label": "GND"
+      },
+      {
+        "pin": 13,
+        "net": "NANO_RST",
+        "label": "RST"
+      },
+      {
+        "pin": 14,
+        "net": "NANO_RX",
+        "label": "D0 DEBUG_RX"
+      },
+      {
+        "pin": 15,
+        "net": "NANO_TX",
+        "label": "D1 DEBUG_TX"
+      }
+    ],
+    "file": "MAIN_J606_NANO_JP2.svg"
+  },
+  {
+    "board": "MAIN",
+    "ref": "J603",
+    "title": "MICRO SD",
+    "width_mm": 17.43,
+    "height_mm": 36.35,
+    "notes": [
+      "PAD NUMBER TABLE"
+    ],
+    "rows": [
+      {
+        "pin": 1,
+        "net": "SD_DAT2",
+        "label": "SD_DAT2"
+      },
+      {
+        "pin": 2,
+        "net": "SD_CS",
+        "label": "SD_CS"
+      },
+      {
+        "pin": 3,
+        "net": "SPI_MOSI_BUS",
+        "label": "MOSI"
+      },
+      {
+        "pin": 4,
+        "net": "3V3_D",
+        "label": "3V3_D"
+      },
+      {
+        "pin": 5,
+        "net": "SPI_SCLK_BUS",
+        "label": "SCK"
+      },
+      {
+        "pin": 6,
+        "net": "GND",
+        "label": "GND"
+      },
+      {
+        "pin": 7,
+        "net": "SD_DAT0",
+        "label": "SD_DAT0"
+      },
+      {
+        "pin": 8,
+        "net": "SD_DAT1",
+        "label": "SD_DAT1"
+      },
+      {
+        "pin": 9,
+        "net": "GND",
+        "label": "GND CD_B"
+      },
+      {
+        "pin": 10,
+        "net": "GND",
+        "label": "GND SHELL"
+      },
+      {
+        "pin": 11,
+        "net": "SD_CD",
+        "label": "SD_CD"
+      },
+      {
+        "pin": 12,
+        "net": "GND",
+        "label": "GND SHELL"
+      },
+      {
+        "pin": 13,
+        "net": "GND",
+        "label": "GND SHELL"
+      },
+      {
+        "pin": 14,
+        "net": "GND",
+        "label": "GND SHELL"
+      }
+    ],
+    "file": "MAIN_J603_MICRO_SD.svg"
+  },
+  {
+    "board": "MAIN",
+    "ref": "J801",
+    "title": "AX7010 J11",
+    "width_mm": 31.35,
+    "height_mm": 49.9,
+    "notes": [
+      "PIN NUMBER TABLE",
+      "40P CABLE 1 TO 1"
+    ],
+    "rows": [
+      {
+        "pin": 1,
+        "net": "GND",
+        "label": "GND"
+      },
+      {
+        "pin": 2,
+        "net": "",
+        "label": "NC"
+      },
+      {
+        "pin": 3,
+        "net": "LED1_PWM",
+        "label": "LED1_PWM"
+      },
+      {
+        "pin": 4,
+        "net": "LED2_PWM",
+        "label": "LED2_PWM"
+      },
+      {
+        "pin": 5,
+        "net": "FP_KEY",
+        "label": "FP_KEY"
+      },
+      {
+        "pin": 6,
+        "net": "WS_DATA",
+        "label": "WS_DATA"
+      },
+      {
+        "pin": 7,
+        "net": "TOF_INT",
+        "label": "TOF_INT"
+      },
+      {
+        "pin": 8,
+        "net": "RTC_1HZ",
+        "label": "RTC_1HZ"
+      },
+      {
+        "pin": 9,
+        "net": "AX_PFAIL_N",
+        "label": "AX_PFAIL_N"
+      },
+      {
+        "pin": 10,
+        "net": "EXP_INT_N",
+        "label": "EXP_INT_N"
+      },
+      {
+        "pin": 11,
+        "net": "I2C0_SCL",
+        "label": "I2C0_SCL"
+      },
+      {
+        "pin": 12,
+        "net": "I2C0_SDA",
+        "label": "I2C0_SDA"
+      },
+      {
+        "pin": 13,
+        "net": "I2C1_SCL",
+        "label": "I2C1_SCL"
+      },
+      {
+        "pin": 14,
+        "net": "I2C1_SDA",
+        "label": "I2C1_SDA"
+      },
+      {
+        "pin": 15,
+        "net": "TACH_IN",
+        "label": "TACH_IN"
+      },
+      {
+        "pin": 16,
+        "net": "ENC_SW",
+        "label": "ENC_SW"
+      },
+      {
+        "pin": 17,
+        "net": "ENC_A",
+        "label": "ENC_A"
+      },
+      {
+        "pin": 18,
+        "net": "ENC_B",
+        "label": "ENC_B"
+      },
+      {
+        "pin": 19,
+        "net": "ESP_TXD",
+        "label": "ESP_TXD"
+      },
+      {
+        "pin": 20,
+        "net": "ESP_RXD",
+        "label": "ESP_RXD"
+      },
+      {
+        "pin": 21,
+        "net": "ESP_RTS",
+        "label": "ESP_RTS"
+      },
+      {
+        "pin": 22,
+        "net": "ESP_CTS",
+        "label": "ESP_CTS"
+      },
+      {
+        "pin": 23,
+        "net": "ESP_IRQ",
+        "label": "ESP_IRQ"
+      },
+      {
+        "pin": 24,
+        "net": "PRN_TXD",
+        "label": "PRN_TXD"
+      },
+      {
+        "pin": 25,
+        "net": "PRN_RXD",
+        "label": "PRN_RXD"
+      },
+      {
+        "pin": 26,
+        "net": "PRN_CTS",
+        "label": "PRN_CTS"
+      },
+      {
+        "pin": 27,
+        "net": "ADXL_CS",
+        "label": "ADXL_CS"
+      },
+      {
+        "pin": 28,
+        "net": "ADXL_DRDY",
+        "label": "ADXL_DRDY"
+      },
+      {
+        "pin": 29,
+        "net": "IMU_CS",
+        "label": "IMU_CS"
+      },
+      {
+        "pin": 30,
+        "net": "IMU_INT1",
+        "label": "IMU_INT1"
+      },
+      {
+        "pin": 31,
+        "net": "IMU_INT2",
+        "label": "IMU_INT2"
+      },
+      {
+        "pin": 32,
+        "net": "I2C2_SCL",
+        "label": "I2C2_SCL"
+      },
+      {
+        "pin": 33,
+        "net": "I2C2_SDA",
+        "label": "I2C2_SDA"
+      },
+      {
+        "pin": 34,
+        "net": "SPI_MISO",
+        "label": "SPI_MISO"
+      },
+      {
+        "pin": 35,
+        "net": "SPI_SCLK",
+        "label": "SPI_SCLK"
+      },
+      {
+        "pin": 36,
+        "net": "SPI_MOSI",
+        "label": "SPI_MOSI"
+      },
+      {
+        "pin": 37,
+        "net": "GND",
+        "label": "GND"
+      },
+      {
+        "pin": 38,
+        "net": "GND",
+        "label": "GND"
+      },
+      {
+        "pin": 39,
+        "net": "AX_3V3_RAW",
+        "label": "AX_3V3_RAW"
+      },
+      {
+        "pin": 40,
+        "net": "AX_3V3_RAW",
+        "label": "AX_3V3_RAW"
+      }
+    ],
+    "file": "MAIN_J801_AX7010_J11.svg"
+  },
+  {
+    "board": "PANEL",
+    "ref": "J101",
+    "title": "FROM MAIN",
+    "width_mm": 20.34,
+    "height_mm": 30.4,
+    "notes": [
+      "TO MAIN J502",
+      "PIN 3 NOT CONNECTED"
+    ],
+    "rows": [
+      {
+        "pin": 1,
+        "net": "5V_AUX",
+        "label": "5V_AUX"
+      },
+      {
+        "pin": 2,
+        "net": "GND",
+        "label": "GND"
+      },
+      {
+        "pin": 3,
+        "net": "",
+        "label": "NC"
+      },
+      {
+        "pin": 4,
+        "net": "GND",
+        "label": "GND"
+      },
+      {
+        "pin": 5,
+        "net": "ENC_A",
+        "label": "ENC_A"
+      },
+      {
+        "pin": 6,
+        "net": "ENC_B",
+        "label": "ENC_B"
+      },
+      {
+        "pin": 7,
+        "net": "ENC_SW",
+        "label": "ENC_SW"
+      },
+      {
+        "pin": 8,
+        "net": "KEY_K1",
+        "label": "KEY_K1"
+      },
+      {
+        "pin": 9,
+        "net": "WS_DATA_5V",
+        "label": "WS_DATA_5V"
+      },
+      {
+        "pin": 10,
+        "net": "GND",
+        "label": "GND"
+      }
+    ],
+    "file": "PANEL_J101_FROM_MAIN.svg"
+  }
+]

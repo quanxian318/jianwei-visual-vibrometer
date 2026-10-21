@@ -1,0 +1,62 @@
+[
+  {
+    "name": "C101_KNSCHA_RVE470UF35V167RV084",
+    "url": "https://atta.szlcsc.com/upload/public/pdf/source/20220901/92BE0FCF058AFC57313ABEC00F956092.pdf",
+    "pages": 17,
+    "sha256": "af7144a21be07371172b8ef3e5f95d4343e7214ef11c92eb74c911229ac3630b",
+    "status": "downloaded"
+  },
+  {
+    "name": "C10uF_Murata_GRM21BR61H106KE43L",
+    "url": "https://datasheet.lcsc.com/datasheet/pdf/8cca754305bc7d881114d4ba10b82bf2.pdf?productCode=C440198",
+    "status": "downloaded",
+    "sha256": "ff8de8901544f5f40e46e0b801bb28caac254650efdf906e3a49aa4d4b8d3d09",
+    "pages": 31,
+    "excerpts": [
+      "GRM21BR61H106KE43_(2012M(0805), X5R(EIA), 10uF, DC 50V)",
+      "-15 to 15 % -55 to 85℃ 25℃ DC 50V 10uF",
+      "GRM21BR61H106KE43-01A 1",
+      "GRM21BR61H106KE43-01A 2",
+      "GRM21BR61H106KE43-01A 3",
+      "GRM21BR61H106KE43-01A 4",
+      "GRM21BR61H106KE43-01A 5",
+      "GRM21BR61H106KE43-01A 6",
+      "GRM21BR61H106KE43-01A 7",
+      "GRM21BR61H106KE43-01A 8",
+      "GRM21BR61H106KE43-01A 9",
+      "Sample: 0.1μF, Rated Voltage 50VDC Sample: 22μF, Rated Voltage 4VDC",
+      "GRM21BR61H106KE43-01A 10",
+      "GRM21BR61H106KE43-01A 11",
+      "GRM21BR61H106KE43-01A 12"
+    ]
+  },
+  {
+    "name": "D201_MCC_SK54B",
+    "url": "https://datasheet.lcsc.com/datasheet/pdf/4d0999a99bc7d8d4461c8ae0bf1c41fd.pdf?productCode=C669018",
+    "status": "downloaded",
+    "sha256": "e37f6f6b6bb3ac3f4ed0314290738fe1c9efdc6a36302a0bc3f3bafdb68cf475",
+    "pages": 4,
+    "excerpts": [
+      "SK54B-L SK54B 40V 28V",
+      "SK55B-L SK55B 50V 35V",
+      "150V",
+      "50V",
+      "150V",
+      "Cathode Mark"
+    ]
+  },
+  {
+    "name": "D101_PTTC_SMBJ13A",
+    "url": "https://atta.szlcsc.com/upload/public/pdf/source/20180316/61F1F594260F09CB5F97D24AE6DD904B.pdf",
+    "pages": 6,
+    "sha256": "2358966d3b02cc65e12e59c6028578b9d3438d68e5eb0d6aa16caf93d373a1c9",
+    "status": "downloaded"
+  },
+  {
+    "name": "DZ301_MCC_BZT52C12",
+    "url": "https://datasheet.lcsc.com/datasheet/pdf/07049adcee5ed532415cf3d889a9702a.pdf?productCode=C668891",
+    "status": "downloaded",
+    "pages": 4,
+    "sha256": "88bd7d57654d427d83b61d79ee3f6f62b82a4d0671b87ce5392713ebca38d35b"
+  }
+]

@@ -1,0 +1,119 @@
+﻿分类,项目内路径,来源,保存方式,字节数,SHA256,校验结果
+此前工作方案,03_原始方案存档/其他工作版本/2026-10-14/见微_AX7010外围载板原理图设计方案_V1.10.md,D:\codex\2026-10-13\pcb-12v-5a-5-5-2\deliverables\见微_AX7010外围载板原理图设计方案_V1.10.md,原文件复制,57902,ccb91dcb35ab36de4d5bd428c74808819542b594668c29d1b08765cf03c5a34b,通过
+当前方案,00_当前设计方案/AX7010_carrier_V1.10.xdc,D:\codex\2026-10-13\pcb-12v-5a-5-5-2\deliverables\AX7010_carrier_V1.10.xdc,项目内当前内容更新（来源列保留最初出处）,3508,11c9f7f362b4beaf38775727aef7d9c58bccb5fd83c0fc97e1008cbf0588e744,当前文件SHA256通过
+用户提供的数据手册,01_数据手册/AX7010/AX7010_UG.pdf,C:\Users\LENOVO\Downloads\AX7010_UG.pdf,原文件复制,2582866,f996fd2296076766f9107de5b91ab7dd2e1419577f40b0bf034cf3764bfae8d6,通过
+用户提供的数据手册,01_数据手册/AX7010/开发板简介 — ZYNQ 7000开发平台FPGA教程 1.0 文档.pdf,C:\Users\LENOVO\Downloads\开发板简介 — ZYNQ 7000开发平台FPGA教程 1.0 文档.pdf,原文件复制,12092721,d30e9a4bfbdb092bccd52c044b11a7bd9c30f8c2a9fbf7028770fac050b63821,通过
+用户提供的数据手册,01_数据手册/Arduino_Nano_ESP32/ABX00083-datasheet.pdf,D:\Smart_Sleeve\4_ESP32_Firmware\ABX00083-datasheet.pdf,原文件复制,3418412,0e6d15f5c9ac412e800c2efc2a12ddeb7efc7169f3c551cfb8c6abcdb7a545dd,通过
+用户原始方案,03_原始方案存档/V1.1/见微_主控载板原理图设计方案_V1.1.md,C:\Users\LENOVO\Downloads\见微_主控载板原理图设计方案_V1.1.md,原文件复制,50597,70c0b1e76a5ec47aed8659479495dc3dfaca45cbf90af733ad68f08e54d7eda6,通过
+用户原始方案,03_原始方案存档/V1.1/见微_主控载板原理图设计方案_V1.1.pdf,C:\Users\LENOVO\Downloads\见微_主控载板原理图设计方案_V1.1.pdf,原文件复制,3080369,28f1000eee926bb2e387e7ab27a58d5a5bb1e58b9581e93d755e6397359a35ef,通过
+用户原始方案,03_原始方案存档/V1.1/见微_主控载板原理图设计方案_V1.1_md含图.zip,C:\Users\LENOVO\Downloads\见微_主控载板原理图设计方案_V1.1_md含图.zip,原文件复制,2028076,a3cd190fe1a73b5ec2b6d5ac270f2ab381ed3b723867998db47a699f0d38d30f,通过
+原方案配图及压缩包内容,03_原始方案存档/V1.1/images/f_sens.png,见微_主控载板原理图设计方案_V1.1_md含图.zip::images/f_sens.png,ZIP 解包,173337,b9d03558c985fa1312dd248198d90fc38c64b11ffe52c88ae397c7995a9106fa,通过
+原方案配图及压缩包内容,03_原始方案存档/V1.1/images/f_load.png,见微_主控载板原理图设计方案_V1.1_md含图.zip::images/f_load.png,ZIP 解包,288273,370b1166a282edb506c90bd05c88ffbb680a06b5be5c63d4b4959f2ab5dc0737,通过
+原方案配图及压缩包内容,03_原始方案存档/V1.1/images/f_sys.png,见微_主控载板原理图设计方案_V1.1_md含图.zip::images/f_sys.png,ZIP 解包,355515,d703d3395fd9ee111e3b1a07b2262a25a44dfb5a204d89654e200754c7210c73,通过
+原方案配图及压缩包内容,03_原始方案存档/V1.1/images/f_dist.png,见微_主控载板原理图设计方案_V1.1_md含图.zip::images/f_dist.png,ZIP 解包,252209,e7949a59ede3048e9ed495c78b32da1ce212de222e166e00f77e78a0c270bad4,通过
+原方案配图及压缩包内容,03_原始方案存档/V1.1/images/f_if.png,见微_主控载板原理图设计方案_V1.1_md含图.zip::images/f_if.png,ZIP 解包,274133,65e43538e7a56212c18716a73c27568c5129b093ae3849dc9249f93918e0b36e,通过
+原方案配图及压缩包内容,03_原始方案存档/V1.1/images/f_pwr_in.png,见微_主控载板原理图设计方案_V1.1_md含图.zip::images/f_pwr_in.png,ZIP 解包,220897,5809cd8b6d4c93db21bb5d4956baf3a5471b693d33b4bc08838bd9e5377ddff5,通过
+原方案配图及压缩包内容,03_原始方案存档/V1.1/images/f_buck.png,见微_主控载板原理图设计方案_V1.1_md含图.zip::images/f_buck.png,ZIP 解包,240509,4ca2a85948146abfe5ceb7539366f331ff8814576cd7aa06a743705bd27640c7,通过
+原方案配图及压缩包内容,03_原始方案存档/V1.1/images/f_ptree.png,见微_主控载板原理图设计方案_V1.1_md含图.zip::images/f_ptree.png,ZIP 解包,146465,84b49ceb2dbe7ed3919e51ceebbd5a8a5ff0189a1e1c65e40750c3b65c5fc2c0,通过
+原方案配图及压缩包内容,03_原始方案存档/V1.1/images/f_floor.png,见微_主控载板原理图设计方案_V1.1_md含图.zip::images/f_floor.png,ZIP 解包,239955,1e3eb89a35d1ed0bc8fee518acb796b1dc65a406cecf32c2fcade5a6ae9f9c58,通过
+用户原始方案,03_原始方案存档/V1.3/见微_AX7010外围载板原理图设计方案_V1.3.md,C:\Users\LENOVO\Downloads\见微_AX7010外围载板原理图设计方案_V1.3.md,原文件复制,50307,f510064f849e12162eefbbeb43f5ed21d9e9eae4261b5c02b2419ffeb12caec8,通过
+用户原始方案,03_原始方案存档/V1.3/见微_AX7010外围载板原理图设计方案_V1.3.pdf,C:\Users\LENOVO\Downloads\见微_AX7010外围载板原理图设计方案_V1.3.pdf,原文件复制,3429997,2d61d4a53802361e4f1673571605aefb59af541e21a0314fdc2a29075e46df52,通过
+用户原始方案,03_原始方案存档/V1.3/见微_AX7010外围载板原理图设计方案_V1.3_md含图.zip,C:\Users\LENOVO\Downloads\见微_AX7010外围载板原理图设计方案_V1.3_md含图.zip,原文件复制,2581859,86f9c9d7b441e59709fc77bfad5fca140c6af4cb1d846d5a154db299f091982b,通过
+原方案配图及压缩包内容,03_原始方案存档/V1.3/images/f_sens.png,见微_AX7010外围载板原理图设计方案_V1.3_md含图.zip::images/f_sens.png,ZIP 解包,229678,b4178c7086f8f3a87dee92bb56b54f3a1a95a2b6eb0f0bd3666595287747c1ca,通过
+原方案配图及压缩包内容,03_原始方案存档/V1.3/images/f_wire.png,见微_AX7010外围载板原理图设计方案_V1.3_md含图.zip::images/f_wire.png,ZIP 解包,307377,44859c95e82cf209cb417905f4f8e32fb68f24db6f68dc639e9730c6cacec13d,通过
+原方案配图及压缩包内容,03_原始方案存档/V1.3/images/f_if1.png,见微_AX7010外围载板原理图设计方案_V1.3_md含图.zip::images/f_if1.png,ZIP 解包,263086,5a90a3fbfdf81366817065ffdbb6a2e80cda90bde1197c02d925c69ee538761e,通过
+原方案配图及压缩包内容,03_原始方案存档/V1.3/images/f_if2.png,见微_AX7010外围载板原理图设计方案_V1.3_md含图.zip::images/f_if2.png,ZIP 解包,263773,2a7e80420a36fabab86b5d8362e35c4ec9b76b672646b41aeef16ff8f9d7aa8c,通过
+原方案配图及压缩包内容,03_原始方案存档/V1.3/images/f_load.png,见微_AX7010外围载板原理图设计方案_V1.3_md含图.zip::images/f_load.png,ZIP 解包,303246,b5a9f083e2755a028cd8ecf2f6dd494d2f9f0acdc05248ecf93cb90692023d21,通过
+原方案配图及压缩包内容,03_原始方案存档/V1.3/images/f_sys.png,见微_AX7010外围载板原理图设计方案_V1.3_md含图.zip::images/f_sys.png,ZIP 解包,354738,854273e1980341d0a767a66f0465005e54ff0653a42df7d7b24a8943d18eae1c,通过
+原方案配图及压缩包内容,03_原始方案存档/V1.3/images/f_dist.png,见微_AX7010外围载板原理图设计方案_V1.3_md含图.zip::images/f_dist.png,ZIP 解包,204903,0577e0fd76babfaab54c45b00a72f8016d706c2e97161d39f41668b4f78fc781,通过
+原方案配图及压缩包内容,03_原始方案存档/V1.3/images/f_pwr_in.png,见微_AX7010外围载板原理图设计方案_V1.3_md含图.zip::images/f_pwr_in.png,ZIP 解包,217926,77cc87bcc5177eb1c97546319f0976eef783ed348559cf05bdcaabd5b287fd73,通过
+原方案配图及压缩包内容,03_原始方案存档/V1.3/images/f_buck.png,见微_AX7010外围载板原理图设计方案_V1.3_md含图.zip::images/f_buck.png,ZIP 解包,254826,ad36b0911226280c2e4374abc6c16b74f3b1242298e205b110070e966c1721e5,通过
+原方案配图及压缩包内容,03_原始方案存档/V1.3/images/f_ptree.png,见微_AX7010外围载板原理图设计方案_V1.3_md含图.zip::images/f_ptree.png,ZIP 解包,151276,1f7ded61fcaa20ef515a3ec79356b48e6a671f1cb198b776ec9b4a4283dd2860,通过
+原方案配图及压缩包内容,03_原始方案存档/V1.3/images/f_floor.png,见微_AX7010外围载板原理图设计方案_V1.3_md含图.zip::images/f_floor.png,ZIP 解包,242813,8bf8dcd287aa4d64bcc5fbfe3baac78b031dae61474969daf72ac7dd615c6d86,通过
+用户原始方案,03_原始方案存档/V1.8/见微_AX7010外围载板原理图设计方案_V1.8.md,C:\Users\LENOVO\Downloads\见微_AX7010外围载板原理图设计方案_V1.8.md,原文件复制,52597,fa1c8af082a2c8542f7b82fc08f364c2a87dc180b08fbc2f40515ed4e6cb46a7,通过
+用户原始方案,03_原始方案存档/V1.8/见微_AX7010外围载板原理图设计方案_V1.8.pdf,C:\Users\LENOVO\Downloads\见微_AX7010外围载板原理图设计方案_V1.8.pdf,原文件复制,3742111,59ef2ed07f909627c31b0ff86f540e0b50ee7a1fd97b2ffb7977cf2b6797743c,通过
+用户原始方案,03_原始方案存档/V1.8/见微_AX7010外围载板原理图设计方案_V1.8_md含图.zip,C:\Users\LENOVO\Downloads\见微_AX7010外围载板原理图设计方案_V1.8_md含图.zip,原文件复制,2919459,74ee6bdefb04be1dc57549fe580a29fe8bcb0b0c545dd9cee086191d2ccb41cd,通过
+用户原始管脚约束,03_原始方案存档/V1.8/AX7010_carrier_V1.8.xdc,C:\Users\LENOVO\Downloads\AX7010_carrier_V1.8.xdc,原文件复制,3294,32e75727558064fc49242b35549d7a579c45f8c31e4bcb11df7a8176702fabe6,通过
+原方案配图及压缩包内容,03_原始方案存档/V1.8/images/f_sens.png,见微_AX7010外围载板原理图设计方案_V1.8_md含图.zip::images/f_sens.png,ZIP 解包,191655,bda1ad16534bce524c180775d3d8ab10d0586212578b30b8a1d7f7a8c1a69333,通过
+原方案配图及压缩包内容,03_原始方案存档/V1.8/images/f_wire.png,见微_AX7010外围载板原理图设计方案_V1.8_md含图.zip::images/f_wire.png,ZIP 解包,291983,a3415028dd6e0c7a9502aa1e9e856131e541dbb719bb05d9e9f229bfde328920,通过
+原方案配图及压缩包内容,03_原始方案存档/V1.8/images/f_load.png,见微_AX7010外围载板原理图设计方案_V1.8_md含图.zip::images/f_load.png,ZIP 解包,298914,f216229978c0033034b77f1ec85af3a1a71a7a60df86797ff6a3c0c3f482c275,通过
+原方案配图及压缩包内容,03_原始方案存档/V1.8/images/f_mgmt.png,见微_AX7010外围载板原理图设计方案_V1.8_md含图.zip::images/f_mgmt.png,ZIP 解包,252521,ac46546ade4105b3843adf0a95a47684c87712c43f245702e62e9fdbe9b1890e,通过
+原方案配图及压缩包内容,03_原始方案存档/V1.8/images/f_sys.png,见微_AX7010外围载板原理图设计方案_V1.8_md含图.zip::images/f_sys.png,ZIP 解包,349088,995282ca3ae7485b4872d4bf9767117c06bf313abe5eba521f2a0c4f610ec137,通过
+原方案配图及压缩包内容,03_原始方案存档/V1.8/images/f_dist.png,见微_AX7010外围载板原理图设计方案_V1.8_md含图.zip::images/f_dist.png,ZIP 解包,202898,a86462d7c81c8f43b0251461b55dfb69fedae668562428e1e1d72b6edc91d853,通过
+原方案配图及压缩包内容,03_原始方案存档/V1.8/images/f_if.png,见微_AX7010外围载板原理图设计方案_V1.8_md含图.zip::images/f_if.png,ZIP 解包,226826,1021fc350edbac449f9d21ab5fbe56af7db66116ad6258348ac8b1abbb5783c0,通过
+原方案配图及压缩包内容,03_原始方案存档/V1.8/images/f_hmi.png,见微_AX7010外围载板原理图设计方案_V1.8_md含图.zip::images/f_hmi.png,ZIP 解包,162762,f156404ea7be0633e2ad56cb0108ebd71ef4832eae272af980431d0ae5980ab8,通过
+原方案配图及压缩包内容,03_原始方案存档/V1.8/images/f_nano.png,见微_AX7010外围载板原理图设计方案_V1.8_md含图.zip::images/f_nano.png,ZIP 解包,319303,383249cf4cd3658ef6ee73c82c4b5bf4465e3a415c2951bcf7dd262aa49b3259,通过
+原方案配图及压缩包内容,03_原始方案存档/V1.8/images/f_pwr_in.png,见微_AX7010外围载板原理图设计方案_V1.8_md含图.zip::images/f_pwr_in.png,ZIP 解包,215363,93b78c5a1c6dd719dc682c6004267b2ff12238dbd99602f71f0021c7cb5a837c,通过
+原方案配图及压缩包内容,03_原始方案存档/V1.8/images/f_buck.png,见微_AX7010外围载板原理图设计方案_V1.8_md含图.zip::images/f_buck.png,ZIP 解包,251848,df8ccec2fd14c2d70b626612428e6d7078af234732c30c2eefc6aed3c8d156be,通过
+原方案配图及压缩包内容,03_原始方案存档/V1.8/images/f_ptree.png,见微_AX7010外围载板原理图设计方案_V1.8_md含图.zip::images/f_ptree.png,ZIP 解包,151554,3e6cd882745458150d688f01ddbc50b6281783adc595665960231617c5284298,通过
+原方案配图及压缩包内容,03_原始方案存档/V1.8/images/f_floor.png,见微_AX7010外围载板原理图设计方案_V1.8_md含图.zip::images/f_floor.png,ZIP 解包,240424,2412e39eb00b1393f5a36e5e87b7fa14fc6713ef900e797a60789d368e658490,通过
+用户原始方案,03_原始方案存档/V1.9/见微_AX7010外围载板原理图设计方案_V1.9.md,C:\Users\LENOVO\Downloads\见微_AX7010外围载板原理图设计方案_V1.9.md,原文件复制,58345,512eb021b334d0626affc095582cf1be25dfd481d8f1c1aaff8bd72469365c4b,通过
+用户原始方案,03_原始方案存档/V1.9/见微_AX7010外围载板原理图设计方案_V1.9.pdf,C:\Users\LENOVO\Downloads\见微_AX7010外围载板原理图设计方案_V1.9.pdf,原文件复制,3851242,4a4f492d9ac3064560e1ef2630f4772c1ceae6d9b801a302ef1d814a35667443,通过
+用户原始方案,03_原始方案存档/V1.9/见微_AX7010外围载板原理图设计方案_V1.9_md含图.zip,C:\Users\LENOVO\Downloads\见微_AX7010外围载板原理图设计方案_V1.9_md含图.zip,原文件复制,2970556,ad0ef9fbcd3720028bef757aaf41f1750d512109454a85e0552b042e3c8edc29,通过
+用户原始管脚约束,03_原始方案存档/V1.9/AX7010_carrier_V1.9.xdc,C:\Users\LENOVO\Downloads\AX7010_carrier_V1.9.xdc,原文件复制,3418,a5393035b8640a2acd5a84b7cb57a1bcbb1e38612560ea6a81959158034f9aa7,通过
+原方案配图及压缩包内容,03_原始方案存档/V1.9/images/f_sens.png,见微_AX7010外围载板原理图设计方案_V1.9_md含图.zip::images/f_sens.png,ZIP 解包,191655,bda1ad16534bce524c180775d3d8ab10d0586212578b30b8a1d7f7a8c1a69333,通过
+原方案配图及压缩包内容,03_原始方案存档/V1.9/images/f_wire.png,见微_AX7010外围载板原理图设计方案_V1.9_md含图.zip::images/f_wire.png,ZIP 解包,291983,a3415028dd6e0c7a9502aa1e9e856131e541dbb719bb05d9e9f229bfde328920,通过
+原方案配图及压缩包内容,03_原始方案存档/V1.9/images/f_load.png,见微_AX7010外围载板原理图设计方案_V1.9_md含图.zip::images/f_load.png,ZIP 解包,310877,f5f3952be3b149eae151c6d21b7fd0fd6396e61cf99b81f7b87623cfa041ccc2,通过
+原方案配图及压缩包内容,03_原始方案存档/V1.9/images/f_mgmt.png,见微_AX7010外围载板原理图设计方案_V1.9_md含图.zip::images/f_mgmt.png,ZIP 解包,256835,a4fe3d858c6c8b3cae4e972036d0700d0eff252c696a418d95e4ff93036797a7,通过
+原方案配图及压缩包内容,03_原始方案存档/V1.9/images/f_sys.png,见微_AX7010外围载板原理图设计方案_V1.9_md含图.zip::images/f_sys.png,ZIP 解包,349065,50d0e563f9cc8b5038318f135702911180c60b66bf6fedc1a322722c4a828b30,通过
+原方案配图及压缩包内容,03_原始方案存档/V1.9/images/f_dist.png,见微_AX7010外围载板原理图设计方案_V1.9_md含图.zip::images/f_dist.png,ZIP 解包,203841,e3ffba8db92de072c438fa52b6279e930451225bd7240790cb695a929f3d3720,通过
+原方案配图及压缩包内容,03_原始方案存档/V1.9/images/f_if.png,见微_AX7010外围载板原理图设计方案_V1.9_md含图.zip::images/f_if.png,ZIP 解包,239173,689a14b45a189cd83977277f800bf46109db787b2dfa9f8ecc24712d85b0c99a,通过
+原方案配图及压缩包内容,03_原始方案存档/V1.9/images/f_hmi.png,见微_AX7010外围载板原理图设计方案_V1.9_md含图.zip::images/f_hmi.png,ZIP 解包,168021,544aa10c4cde9c4c4bf7560231c25fe15f5c60cb1ac89edd0954a4416ce1bf35,通过
+原方案配图及压缩包内容,03_原始方案存档/V1.9/images/f_nano.png,见微_AX7010外围载板原理图设计方案_V1.9_md含图.zip::images/f_nano.png,ZIP 解包,319303,383249cf4cd3658ef6ee73c82c4b5bf4465e3a415c2951bcf7dd262aa49b3259,通过
+原方案配图及压缩包内容,03_原始方案存档/V1.9/images/f_pwr_in.png,见微_AX7010外围载板原理图设计方案_V1.9_md含图.zip::images/f_pwr_in.png,ZIP 解包,217714,5c93400f537c3db1398d8bb9193a4c83d29a150dc1b84fc13b1938decaf28870,通过
+原方案配图及压缩包内容,03_原始方案存档/V1.9/images/f_buck.png,见微_AX7010外围载板原理图设计方案_V1.9_md含图.zip::images/f_buck.png,ZIP 解包,260955,88a1ffc5ee068ef25bd326836ada127c4a5b3e6d14c2e91ce94eaa4e6d695831,通过
+原方案配图及压缩包内容,03_原始方案存档/V1.9/images/f_ptree.png,见微_AX7010外围载板原理图设计方案_V1.9_md含图.zip::images/f_ptree.png,ZIP 解包,154216,f2ee6011533d01ed5a831e6b28d4bc0fd3c41da66a1714e5f59d3ba34c2cf8e0,通过
+原方案配图及压缩包内容,03_原始方案存档/V1.9/images/f_floor.png,见微_AX7010外围载板原理图设计方案_V1.9_md含图.zip::images/f_floor.png,ZIP 解包,241709,f2216d697f1db3de1961f3ce115ea904bfb26b57ed51e131ca30a63529453367,通过
+先前工作方案,03_原始方案存档/其他工作版本/AX7010_carrier_V1.4.xdc,D:\codex\2026-10-13\pcb-12v-5a-5-5-2\deliverables\AX7010_carrier_V1.4.xdc,原文件复制,3253,8e89bbcc5c70c6339f04cc828914ee4936d487caacf3c7faabd2b44b763b59e8,通过
+先前工作方案,03_原始方案存档/其他工作版本/AX7010_carrier_V1.6.xdc,D:\codex\2026-10-13\pcb-12v-5a-5-5-2\deliverables\AX7010_carrier_V1.6.xdc,原文件复制,3253,8e89bbcc5c70c6339f04cc828914ee4936d487caacf3c7faabd2b44b763b59e8,通过
+先前工作方案,03_原始方案存档/其他工作版本/AX7010_carrier_V1.7.xdc,D:\codex\2026-10-13\pcb-12v-5a-5-5-2\deliverables\AX7010_carrier_V1.7.xdc,原文件复制,3253,8e89bbcc5c70c6339f04cc828914ee4936d487caacf3c7faabd2b44b763b59e8,通过
+评审资料,04_评审与核对/V1.4.1_打印机接口设计.md,D:\codex\2026-10-13\pcb-12v-5a-5-5-2\deliverables\V1.4.1_打印机接口设计.md,原文件复制,6269,17d98cd565ac4e04ee73b5e2a2cb6b349588506b51a3ab28386bed0a602e89aa,通过
+评审资料,04_评审与核对/V1.4.2_补光硬件控制设计.md,D:\codex\2026-10-13\pcb-12v-5a-5-5-2\deliverables\V1.4.2_补光硬件控制设计.md,原文件复制,6635,9fd588e17da73fe4c3813fdb19c65074687e99433fd9b1c8a1a947786a851b0b,通过
+评审资料,04_评审与核对/V1.4_datasheet_checks.md,D:\codex\2026-10-13\pcb-12v-5a-5-5-2\deliverables\V1.4_datasheet_checks.md,原文件复制,10561,eaa4d95190e05125b93556ab5f7c4b0c0de4f87ba7d648cf5332779475c5ef11,通过
+评审资料,04_评审与核对/V1.4_design_checks.json,D:\codex\2026-10-13\pcb-12v-5a-5-5-2\deliverables\V1.4_design_checks.json,原文件复制,741,e798143edc31a9781b4d609a8ad574ac3893be0953915f5bc804160ffe5e3321,通过
+评审资料,04_评审与核对/V1.8_简化方案评审.md,D:\codex\2026-10-13\pcb-12v-5a-5-5-2\deliverables\V1.8_简化方案评审.md,原文件复制,7724,fc534ff7491b11225b8981f396e6ba63044cd7e4e3bc7fd670c526519f9d456e,通过
+评审资料,04_评审与核对/V1.9_绘图确认与修订清单.md,D:\codex\2026-10-13\pcb-12v-5a-5-5-2\deliverables\V1.9_绘图确认与修订清单.md,原文件复制,3387,22e2e7710488655c59260d0c27cde3174744f1634897f8b30e4bfa7398a659d9,通过
+先前工作方案,03_原始方案存档/其他工作版本/见微_AX7010外围载板原理图设计方案_V1.5.md,D:\codex\2026-10-13\pcb-12v-5a-5-5-2\deliverables\见微_AX7010外围载板原理图设计方案_V1.5.md,原文件复制,195,c9332c94775a6dde1f677ad9c30010ddc2f6cc49948e7662e0a2edab88adc077,通过
+先前工作方案,03_原始方案存档/其他工作版本/见微_AX7010外围载板原理图设计方案_V1.6.md,D:\codex\2026-10-13\pcb-12v-5a-5-5-2\deliverables\见微_AX7010外围载板原理图设计方案_V1.6.md,原文件复制,195,c9332c94775a6dde1f677ad9c30010ddc2f6cc49948e7662e0a2edab88adc077,通过
+先前工作方案,03_原始方案存档/其他工作版本/见微_AX7010外围载板原理图设计方案_V1.7.md,D:\codex\2026-10-13\pcb-12v-5a-5-5-2\deliverables\见微_AX7010外围载板原理图设计方案_V1.7.md,原文件复制,32974,4b3f7bb1328c042886ed24cda2184926448c68fbc2492032f9ef77e9e02e688a,通过
+已使用的手册关键页,04_评审与核对/手册关键页/ax_power.png,D:\codex\2026-10-13\pcb-12v-5a-5-5-2\work\review-v18\ax_power.png,原文件复制,337481,a198e2eeee59a49f1148f9f882be74794fc41e7b5dbb562089c451c71047c53f,通过
+已使用的手册关键页,04_评审与核对/手册关键页/ax_j11_actual.png,D:\codex\2026-10-13\pcb-12v-5a-5-5-2\work\review-v18\ax_j11_actual.png,原文件复制,460601,7024173865d3250adaa9f3394c974c7c4a254a9a9ba649b97b785e770b6f08cd,通过
+用户资料图片,02_模块与接口图片/01_TOF模块早期图片__4bfc723bdf8549882703e2b211d3ac97.png,本次对话附件缓存；原文件名=4bfc723bdf8549882703e2b211d3ac97.png；消息时间=2026-10-13T08:11:41.848Z,附件缓存恢复,845876,e5b48f5705b3f9d1281c8cafb50c56fc21e513c616637a72b8aa2e1341dfd99c,通过
+用户资料图片,02_模块与接口图片/02_PN532模块__1a535ca724089ea59e4ae6d44715c91d.png,本次对话附件缓存；原文件名=1a535ca724089ea59e4ae6d44715c91d.png；消息时间=2026-10-13T08:11:41.848Z,附件缓存恢复,1019964,b556b853069a715a95f7b9f2448c165d52718edd58b5967e0e37f0da3bd52b71,通过
+用户资料图片,02_模块与接口图片/03_打印机外观及供电版本__435fbe4091f7843d07f0ff69ecb3f70e.jpg,本次对话附件缓存；原文件名=435fbe4091f7843d07f0ff69ecb3f70e.jpg；消息时间=2026-10-13T08:11:41.848Z,附件缓存恢复,169247,f6a849e69d22d58f38c92bcec74dbbe5a3b7f5276e273b08951b9f96166e661a,通过
+用户资料图片,02_模块与接口图片/04_LSM6DSV模块及引脚__aeecbbad4e9c8849b75b28344e6e5fe5.jpg,本次对话附件缓存；原文件名=aeecbbad4e9c8849b75b28344e6e5fe5.jpg；消息时间=2026-10-13T08:11:41.848Z,附件缓存恢复,513976,99e1bfb009013bde74ac483ba7e525dc59bceffb799bff957d9be3146ccbfc18,通过
+用户资料图片,02_模块与接口图片/05_热成像模块参考_首版不装__a4034315c6f46f4279a950c386b1ea76.png,本次对话附件缓存；原文件名=a4034315c6f46f4279a950c386b1ea76.png；消息时间=2026-10-13T08:11:41.848Z,附件缓存恢复,208644,75f15e162c9110f2d63d08f58afea68459ce66812f8f449b2147d53d9fed62d5,通过
+用户资料图片,02_模块与接口图片/06_HDMI屏规格__d8867248205ddc06c9cd69bf70868289.png,本次对话附件缓存；原文件名=d8867248205ddc06c9cd69bf70868289.png；消息时间=2026-10-13T08:32:48.662Z,附件缓存恢复,344097,320d7792f2f8e8f201691286e55b2ba5d4d2757db1506f0fc99c30beef00206f,通过
+用户资料图片,02_模块与接口图片/07_打印机TTL五针定义__aa1f68b325e5f7b64e40d743049ef1d4.jpg,本次对话附件缓存；原文件名=aa1f68b325e5f7b64e40d743049ef1d4.jpg；消息时间=2026-10-14T04:31:39.742Z,附件缓存恢复,60802,ad680701167dfd1db1e0aa5345e389ef4982c41ae8b029bd5063a9c63df92526,通过
+用户资料图片,02_模块与接口图片/08_TOF商品页__bdaf0a1262bb6442cf6c3b8f75b41e97.jpg,本次对话附件缓存；原文件名=bdaf0a1262bb6442cf6c3b8f75b41e97.jpg；消息时间=2026-10-14T05:59:25.261Z,附件缓存恢复,317012,6ec4354a047de18cf2f2b212723bf9625524364cf28c94bb2c74504a3f775145,通过
+用户资料图片,02_模块与接口图片/09_TOF规格及尺寸__d1b04c29de79b42bbe0c54baf69c23e7.jpg,本次对话附件缓存；原文件名=d1b04c29de79b42bbe0c54baf69c23e7.jpg；消息时间=2026-10-14T05:59:25.261Z,附件缓存恢复,268032,89c529cf8f6661c32c6fb126ff9dc2a654bb74ba899d963fef24711f11e94e42,通过
+用户资料图片,02_模块与接口图片/10_TOF模块参考电路__80bb49c32f8b586a080745d9c0a48508.jpg,本次对话附件缓存；原文件名=80bb49c32f8b586a080745d9c0a48508.jpg；消息时间=2026-10-14T05:59:25.261Z,附件缓存恢复,258523,1d5a1aabcb4f7a81a23338e6a82cccfa3a05b64ae9a56296343f6e4e7b883e1f,通过
+用户资料图片,02_模块与接口图片/11_TOF最终选定模块__aebb84c46a9b4f33759d4381ee087f67.jpg,本次对话附件缓存；原文件名=aebb84c46a9b4f33759d4381ee087f67.jpg；消息时间=2026-10-14T06:01:35.405Z,附件缓存恢复,85617,b4ac2808c2dad5976e59471fbe317243680ac3d5882e98b92a00451578531a5d,通过
+位号重编号前工作文件,03_原始方案存档/其他工作版本/2026-10-15_位号重编号前/见微_AX7010外围载板原理图设计方案_V1.10.md,当前方案按 2026-10-15 评审核验编制,项目内修订,63664,68c25b46a83a3a93470978462638001419f16c5cafcfdeebbf310db582cb9139,通过
+位号重编号前工作文件,03_原始方案存档/其他工作版本/2026-10-15_位号重编号前/绘图元件清单_V1.10.csv,当前方案按 2026-10-15 评审核验编制,项目内修订,19943,57485f286eaac88b14b571729884f222f1cb36f8ed658054ae16470a566438b9,通过
+当前方案,00_当前设计方案/见微_AX7010外围载板原理图设计方案_V1.10.md,当前有效方案与元件清单,项目内当前内容更新（来源列保留最初出处）,1911,de5bbbcd5d3753d10018c0eaeb0f2a154caafdb2328a75e2bb7cfef89ee1f78e,当前文件SHA256通过
+当前方案,00_当前设计方案/绘图元件清单_V1.10.csv,当前有效方案与元件清单,项目内当前内容更新（来源列保留最初出处）,44192,55e7dbe28e5811e93f56d052e97d4f532cdb9b10a6271d34330497f18af56a12,当前文件SHA256通过
+当前方案,00_当前设计方案/原理图分页与位号规则.md,当前有效方案与元件清单,项目内当前内容更新（来源列保留最初出处）,1560,009b7c5c145819a29238ffdfbf93953b292447b290e559b636796cec33e2f46d,当前文件SHA256通过
+当前方案,00_当前设计方案/位号对照_V1.10.csv,当前有效方案与元件清单,项目内当前内容更新（来源列保留最初出处）,11395,80f2483ac8dfd6343c7126844d30b2f341395b35b36c9ce118d561d29e611572,当前文件SHA256通过
+工程目录说明,.agents/mcp_config.json,本项目当前设计与2026-10-15核对结果,项目内生成,555,beb7f3383da6a8e4b42fcc779b328e1fb25a6593ce5642451a52f4ca74598d70,当前文件SHA256通过
+工程目录说明,.claude/settings.local.json,本项目当前设计与2026-10-15核对结果,项目内生成,42,32bd124c9e411e53681ca9f3090b8696885c3f06dc290a95efee6cc326721fb7,当前文件SHA256通过
+工程目录说明,.mcp.json.bak,本项目当前设计与2026-10-15核对结果,项目内生成,555,830ca84e7fe8ac2be013d396537f021e601932d5ce426bf5e4542ef2c34a74a8,当前文件SHA256通过
+当前分板方案,00_当前设计方案/主板与前面板接口.csv,本项目当前设计与2026-10-15核对结果,项目内生成,284,fc38c60784695f13121fc20a701bf3170ebd3cd35401bfed049042a4de455462,当前文件SHA256通过
+当前分板方案,00_当前设计方案/主载板_BOM_V1.10.csv,本项目当前设计与2026-10-15核对结果,项目内生成,40930,2a0a7bd454e26188dc6d93203f4ae77815baf6e3fd854dbb1bef4f2a3d9055b2,当前文件SHA256通过
+当前分板方案,00_当前设计方案/主载板原理图设计方案_V1.10.md,本项目当前设计与2026-10-15核对结果,项目内生成,69810,67a4e2fdaf1bec6b8100ed54ec02c41883813631a037e66ecb863a2f1228c7d7,当前文件SHA256通过
+当前分板方案,00_当前设计方案/前面板分板位号对照.csv,本项目当前设计与2026-10-15核对结果,项目内生成,649,3cc151121fd06614a687d12f408460150ccf70ce4383715e45cc9243cfb0a188,当前文件SHA256通过
+当前分板方案,00_当前设计方案/前面板小板_BOM_V1.10.csv,本项目当前设计与2026-10-15核对结果,项目内生成,2998,14e5905eb92000ab351ece195252c1e99177eb8ad8a5f162b1d814be2ab2b00b,当前文件SHA256通过
+当前分板方案,00_当前设计方案/前面板小板原理图设计方案_V1.10.md,本项目当前设计与2026-10-15核对结果,项目内生成,7714,7d4227155ebb325cd45f244ed64159ef367ead354a026787897314ed844df2c3,当前文件SHA256通过
+当前分板方案,00_当前设计方案/机壳开关_BOM_V1.10.csv,本项目当前设计与2026-10-15核对结果,项目内生成,642,d839f877537f94b78b32f9cd733d98cf4206a514a23d70b85790c7f4b28ee4f7,当前文件SHA256通过
+当前分板方案,00_当前设计方案/机壳开关与线束装配.md,本项目当前设计与2026-10-15核对结果,项目内生成,3729,0c65af6624488684e39b85c2c86468d003d57ffb5c17bfa9d9f9801b4d3f885f,当前文件SHA256通过
+当前分板方案,00_当前设计方案/线束配套件现货.csv,本项目当前设计与2026-10-15核对结果,项目内生成,1299,c2c1d4aca2922f7a5739df5f91a0930086084f181ebae87403cada52464c7190,当前文件SHA256通过
+工程目录说明,01_数据手册/厂家资料链接.md,本项目当前设计与2026-10-15核对结果,项目内生成,863,49dbad0c984a0be6dc842fd217a5a3aa04dde48b419a7b4d0548b996731beb49,当前文件SHA256通过
+工程目录说明,02_模块与接口图片/图片索引.md,本项目当前设计与2026-10-15核对结果,项目内生成,2225,418572b7162e2355220eab8cd3afd347451d7091270e91078ffdea615ab8a193,当前文件SHA256通过
+选型核对,04_评审与核对/V1.10_外部评审意见核验_2026-10-15.md,本项目当前设计与2026-10-15核对结果,项目内生成,5919,51a077065bab1c61b627b701e2b37f9b6e956ed5615261c224e414ead549ba71,当前文件SHA256通过
+选型核对,04_评审与核对/分板与BOM一致性检查_2026-10-15.json,本项目当前设计与2026-10-15核对结果,项目内生成,511,f7f0499865c326427a75976f5962b8731e7b8a6a08ecc2cd0a355e9269d46253,当前文件SHA256通过
+选型核对,04_评审与核对/立创现货快照_2026-10-15.tsv,本项目当前设计与2026-10-15核对结果,项目内生成,5567,cbbf3db821ab71cd20780ed2eaeea16273dc8023ff00fae50efb15d23671f6dd,当前文件SHA256通过
+选型核对,04_评审与核对/立创选型核对报告_2026-10-15.md,本项目当前设计与2026-10-15核对结果,项目内生成,13773,a88ac7cd36a180aa01c67720e635864b3bdcca9f47251ff484e1a177c83c7051,当前文件SHA256通过
+工程目录说明,05_原理图与PCB/主载板/README.md,本项目当前设计与2026-10-15核对结果,项目内生成,276,3cf293b7a00d53da519f40e3a916930ad9357c81c5357793bac0bba80378ea7e,当前文件SHA256通过
+工程目录说明,05_原理图与PCB/前面板小板/README.md,本项目当前设计与2026-10-15核对结果,项目内生成,300,28730b80c82b83b0a0184223d8a161e162cf612ce68b50d5c6c209aee1f2ed32,当前文件SHA256通过
+工程目录说明,AGENTS.md,本项目当前设计与2026-10-15核对结果,项目内生成,2512,e3d48a2d73f082d2514ea70a2766c9098806f2170e221c93492e71c736819a44,当前文件SHA256通过
+工程目录说明,README.md,本项目当前设计与2026-10-15核对结果,项目内生成,3830,acf7be57512acc01a307d0fe63112cef2629c2bd9ce027317fc0feee5ae81a8a,当前文件SHA256通过

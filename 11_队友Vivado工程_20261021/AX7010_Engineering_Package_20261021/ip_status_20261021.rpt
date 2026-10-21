@@ -1,0 +1,173 @@
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
+---------------------------------------------------------------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2025.2 (win64) Build 6299465 Fri Nov 14 19:35:11 GMT 2025
+| Date         : Wed Oct 21 10:13:08 2026
+| Host         : LAPTOP-T5AMSP3P running 64-bit major release  (build 9200)
+| Command      : report_ip_status
+---------------------------------------------------------------------------------------------------------------------------------------------
+
+IP Status Summary
+
+1. Project IP Status
+--------------------
+Your project uses 31 IP. Some of these IP may have undergone changes in this release of the software. Please review the recommended actions.
+
+More information on the Xilinx versioning policy is available at www.xilinx.com.
+
+Project IP Instances
++--------------------------------------------+--------------------------------+--------------------------+-----------+--------------------+---------+----------------+------------+----------------------+
+| Instance Name                              | Status                         | Recommendation           | Change    | IP Name            | IP      | New Version    | New        | Original Part        |
+|                                            |                                |                          | Log       |                    | Version |                | License    |                      |
++--------------------------------------------+--------------------------------+--------------------------+-----------+--------------------+---------+----------------+------------+----------------------+
+| bm_calc_dly                                | Up-to-date                     | No changes required      |  *(1)     | FIFO Generator     | 13.2    | 13.2 (Rev. 14) | Included   | xc7z010clg400-1      |
+|                                            |                                |                          |           |                    | (Rev.   |                |            |                      |
+|                                            |                                |                          |           |                    | 14)     |                |            |                      |
++--------------------------------------------+--------------------------------+--------------------------+-----------+--------------------+---------+----------------+------------+----------------------+
+| bm_obuf_fifo                               | Up-to-date                     | No changes required      |  *(2)     | FIFO Generator     | 13.2    | 13.2 (Rev. 14) | Included   | xc7z010clg400-1      |
+|                                            |                                |                          |           |                    | (Rev.   |                |            |                      |
+|                                            |                                |                          |           |                    | 14)     |                |            |                      |
++--------------------------------------------+--------------------------------+--------------------------+-----------+--------------------+---------+----------------+------------+----------------------+
+| design_1_alinx_ov5640_0_0                  | Up-to-date                     | No changes required      | Change    | alinx ov5640       | 5.4     | 5.4 (Rev. 1)   | Included   | xc7z010clg400-1      |
+|                                            |                                |                          | Log not   |                    | (Rev.   |                |            |                      |
+|                                            |                                |                          | available |                    | 1)      |                |            |                      |
++--------------------------------------------+--------------------------------+--------------------------+-----------+--------------------+---------+----------------+------------+----------------------+
+| design_1_alinx_ov5640_1_0                  | Up-to-date                     | No changes required      | Change    | alinx ov5640       | 5.4     | 5.4 (Rev. 1)   | Included   | xc7z010clg400-1      |
+|                                            |                                |                          | Log not   |                    | (Rev.   |                |            |                      |
+|                                            |                                |                          | available |                    | 1)      |                |            |                      |
++--------------------------------------------+--------------------------------+--------------------------+-----------+--------------------+---------+----------------+------------+----------------------+
+| design_1_axi_dynclk_0_0                    | Up-to-date                     | No changes required      | Change    | Dynamic Clock      | 1.0     | 1.0 (Rev. 3)   | Included   | xc7z010clg400-1      |
+|                                            |                                |                          | Log not   | Generator          | (Rev.   |                |            |                      |
+|                                            |                                |                          | available |                    | 3)      |                |            |                      |
++--------------------------------------------+--------------------------------+--------------------------+-----------+--------------------+---------+----------------+------------+----------------------+
+| design_1_axi_mem_intercon_0                | Up-to-date (discontinued)      | No changes required      |  *(3)     | AXI Interconnect   | 2.1     | 2.1 (Rev. 38)  | Included   | xc7z010clg400-1      |
+|                                            |                                |                          |           |                    | (Rev.   |                |            |                      |
+|                                            |                                |                          |           |                    | 38)     |                |            |                      |
++--------------------------------------------+--------------------------------+--------------------------+-----------+--------------------+---------+----------------+------------+----------------------+
+| design_1_axi_vdma_0_0                      | Up-to-date                     | No changes required      |  *(4)     | AXI Video Direct   | 6.3     | 6.3 (Rev. 24)  | Included   | xc7z010clg400-1      |
+|                                            |                                |                          |           | Memory Access      | (Rev.   |                |            |                      |
+|                                            |                                |                          |           |                    | 24)     |                |            |                      |
++--------------------------------------------+--------------------------------+--------------------------+-----------+--------------------+---------+----------------+------------+----------------------+
+| design_1_axi_vdma_1_0                      | Up-to-date                     | No changes required      |  *(5)     | AXI Video Direct   | 6.3     | 6.3 (Rev. 24)  | Included   | xc7z010clg400-1      |
+|                                            |                                |                          |           | Memory Access      | (Rev.   |                |            |                      |
+|                                            |                                |                          |           |                    | 24)     |                |            |                      |
++--------------------------------------------+--------------------------------+--------------------------+-----------+--------------------+---------+----------------+------------+----------------------+
+| design_1_axi_vdma_2_0                      | Up-to-date                     | No changes required      |  *(6)     | AXI Video Direct   | 6.3     | 6.3 (Rev. 24)  | Included   | xc7z010clg400-1      |
+|                                            |                                |                          |           | Memory Access      | (Rev.   |                |            |                      |
+|                                            |                                |                          |           |                    | 24)     |                |            |                      |
++--------------------------------------------+--------------------------------+--------------------------+-----------+--------------------+---------+----------------+------------+----------------------+
+| design_1_axis_subset_converter_0_0         | Up-to-date                     | No changes required      |  *(7)     | AXI4-Stream Subset | 1.1     | 1.1 (Rev. 36)  | Included   | xc7z010clg400-1      |
+|                                            |                                |                          |           | Converter          | (Rev.   |                |            |                      |
+|                                            |                                |                          |           |                    | 36)     |                |            |                      |
++--------------------------------------------+--------------------------------+--------------------------+-----------+--------------------+---------+----------------+------------+----------------------+
+| design_1_axis_subset_converter_1_0         | Up-to-date                     | No changes required      |  *(8)     | AXI4-Stream Subset | 1.1     | 1.1 (Rev. 36)  | Included   | xc7z010clg400-1      |
+|                                            |                                |                          |           | Converter          | (Rev.   |                |            |                      |
+|                                            |                                |                          |           |                    | 36)     |                |            |                      |
++--------------------------------------------+--------------------------------+--------------------------+-----------+--------------------+---------+----------------+------------+----------------------+
+| design_1_bm_mem_intercon_0                 | Up-to-date (discontinued)      | No changes required      |  *(9)     | AXI Interconnect   | 2.1     | 2.1 (Rev. 38)  | Included   | xc7z010clg400-1      |
+|                                            |                                |                          |           |                    | (Rev.   |                |            |                      |
+|                                            |                                |                          |           |                    | 38)     |                |            |                      |
++--------------------------------------------+--------------------------------+--------------------------+-----------+--------------------+---------+----------------+------------+----------------------+
+| design_1_bm_zero_0                         | Up-to-date (discontinued)      | No changes required      |  *(10)    | Constant           | 1.1     | 1.1 (Rev. 10)  | Included   | xc7z010clg400-1      |
+|                                            |                                |                          |           |                    | (Rev.   |                |            |                      |
+|                                            |                                |                          |           |                    | 10)     |                |            |                      |
++--------------------------------------------+--------------------------------+--------------------------+-----------+--------------------+---------+----------------+------------+----------------------+
+| design_1_bm_zero_bit_0                     | Up-to-date (discontinued)      | No changes required      |  *(11)    | Constant           | 1.1     | 1.1 (Rev. 10)  | Included   | xc7z010clg400-1      |
+|                                            |                                |                          |           |                    | (Rev.   |                |            |                      |
+|                                            |                                |                          |           |                    | 10)     |                |            |                      |
++--------------------------------------------+--------------------------------+--------------------------+-----------+--------------------+---------+----------------+------------+----------------------+
+| design_1_cmos_rst_0                        | Up-to-date                     | No changes required      |  *(12)    | AXI GPIO           | 2.0     | 2.0 (Rev. 37)  | Included   | xc7z010clg400-1      |
+|                                            |                                |                          |           |                    | (Rev.   |                |            |                      |
+|                                            |                                |                          |           |                    | 37)     |                |            |                      |
++--------------------------------------------+--------------------------------+--------------------------+-----------+--------------------+---------+----------------+------------+----------------------+
+| design_1_processing_system7_0_0            | Up-to-date                     | No changes required      |  *(13)    | ZYNQ7 Processing   | 5.5     | 5.5 (Rev. 8)   | Included   | xc7z010clg400-1      |
+|                                            |                                |                          |           | System             | (Rev.   |                |            |                      |
+|                                            |                                |                          |           |                    | 8)      |                |            |                      |
++--------------------------------------------+--------------------------------+--------------------------+-----------+--------------------+---------+----------------+------------+----------------------+
+| design_1_processing_system7_0_axi_periph_0 | Up-to-date (discontinued)      | No changes required      |  *(14)    | AXI Interconnect   | 2.1     | 2.1 (Rev. 38)  | Included   | xc7z010clg400-1      |
+|                                            |                                |                          |           |                    | (Rev.   |                |            |                      |
+|                                            |                                |                          |           |                    | 38)     |                |            |                      |
++--------------------------------------------+--------------------------------+--------------------------+-----------+--------------------+---------+----------------+------------+----------------------+
+| design_1_rgb2dvi_0_0                       | Up-to-date                     | No changes required      | Change    | RGB to DVI Video   | 1.3     | 1.3 (Rev. 3)   | Included   | xc7z010clg400-1      |
+|                                            |                                |                          | Log not   | Encoder (Source)   | (Rev.   |                |            |                      |
+|                                            |                                |                          | available |                    | 3)      |                |            |                      |
++--------------------------------------------+--------------------------------+--------------------------+-----------+--------------------+---------+----------------+------------+----------------------+
+| design_1_rst_processing_system7_0_100M_0   | Up-to-date                     | No changes required      |  *(15)    | Processor System   | 5.0     | 5.0 (Rev. 17)  | Included   | xc7z010clg400-1      |
+|                                            |                                |                          |           | Reset              | (Rev.   |                |            |                      |
+|                                            |                                |                          |           |                    | 17)     |                |            |                      |
++--------------------------------------------+--------------------------------+--------------------------+-----------+--------------------+---------+----------------+------------+----------------------+
+| design_1_rst_processing_system7_0_150M_0   | Up-to-date                     | No changes required      |  *(16)    | Processor System   | 5.0     | 5.0 (Rev. 17)  | Included   | xc7z010clg400-1      |
+|                                            |                                |                          |           | Reset              | (Rev.   |                |            |                      |
+|                                            |                                |                          |           |                    | 17)     |                |            |                      |
++--------------------------------------------+--------------------------------+--------------------------+-----------+--------------------+---------+----------------+------------+----------------------+
+| design_1_sdoira_bm_axi_0_0                 | Module reference is unresolved | Resolve module reference | Change    | sdoira_bm_axi_v1_0 | 1.0     | 1.0 (Rev. 1)   | Included   | xc7z010clg400-1      |
+|                                            |                                |                          | Log not   |                    | (Rev.   |                |            |                      |
+|                                            |                                |                          | available |                    | 1)      |                |            |                      |
++--------------------------------------------+--------------------------------+--------------------------+-----------+--------------------+---------+----------------+------------+----------------------+
+| design_1_v_axi4s_vid_out_0_0               | Up-to-date                     | No changes required      |  *(17)    | AXI4-Stream to     | 4.0     | 4.0 (Rev. 20)  | Included   | xc7z010clg400-1      |
+|                                            |                                |                          |           | Video Out          | (Rev.   |                |            |                      |
+|                                            |                                |                          |           |                    | 20)     |                |            |                      |
++--------------------------------------------+--------------------------------+--------------------------+-----------+--------------------+---------+----------------+------------+----------------------+
+| design_1_v_tc_0_0                          | Up-to-date                     | No changes required      |  *(18)    | Video Timing       | 6.2     | 6.2 (Rev. 11)  | Included   | xc7z010clg400-1      |
+|                                            |                                |                          |           | Controller         | (Rev.   |                |            |                      |
+|                                            |                                |                          |           |                    | 11)     |                |            |                      |
++--------------------------------------------+--------------------------------+--------------------------+-----------+--------------------+---------+----------------+------------+----------------------+
+| design_1_xlconcat_0_0                      | Up-to-date (discontinued)      | No changes required      |  *(19)    | Concat             | 2.1     | 2.1 (Rev. 7)   | Included   | xc7z010clg400-1      |
+|                                            |                                |                          |           |                    | (Rev.   |                |            |                      |
+|                                            |                                |                          |           |                    | 7)      |                |            |                      |
++--------------------------------------------+--------------------------------+--------------------------+-----------+--------------------+---------+----------------+------------+----------------------+
+| design_1_xlconstant_1_0                    | Up-to-date (discontinued)      | No changes required      |  *(20)    | Constant           | 1.1     | 1.1 (Rev. 10)  | Included   | xc7z010clg400-1      |
+|                                            |                                |                          |           |                    | (Rev.   |                |            |                      |
+|                                            |                                |                          |           |                    | 10)     |                |            |                      |
++--------------------------------------------+--------------------------------+--------------------------+-----------+--------------------+---------+----------------+------------+----------------------+
+| dpram_32_512                               | Up-to-date                     | No changes required      |  *(21)    | Block Memory       | 8.4     | 8.4 (Rev. 12)  | Included   | xc7z010clg400-1      |
+|                                            |                                |                          |           | Generator          | (Rev.   |                |            |                      |
+|                                            |                                |                          |           |                    | 12)     |                |            |                      |
++--------------------------------------------+--------------------------------+--------------------------+-----------+--------------------+---------+----------------+------------+----------------------+
+| dpram_64_1024                              | Up-to-date                     | No changes required      |  *(22)    | Block Memory       | 8.4     | 8.4 (Rev. 12)  | Included   | xc7z010clg400-1      |
+|                                            |                                |                          |           | Generator          | (Rev.   |                |            |                      |
+|                                            |                                |                          |           |                    | 12)     |                |            |                      |
++--------------------------------------------+--------------------------------+--------------------------+-----------+--------------------+---------+----------------+------------+----------------------+
+| fifo_frm                                   | Up-to-date                     | No changes required      |  *(23)    | FIFO Generator     | 13.2    | 13.2 (Rev. 14) | Included   | xc7z010clg400-1      |
+|                                            |                                |                          |           |                    | (Rev.   |                |            |                      |
+|                                            |                                |                          |           |                    | 14)     |                |            |                      |
++--------------------------------------------+--------------------------------+--------------------------+-----------+--------------------+---------+----------------+------------+----------------------+
+| tdpram_340_1024                            | Up-to-date                     | No changes required      |  *(24)    | Block Memory       | 8.4     | 8.4 (Rev. 12)  | Included   | xc7z010clg400-1      |
+|                                            |                                |                          |           | Generator          | (Rev.   |                |            |                      |
+|                                            |                                |                          |           |                    | 12)     |                |            |                      |
++--------------------------------------------+--------------------------------+--------------------------+-----------+--------------------+---------+----------------+------------+----------------------+
+| ila_0                                      | Up-to-date                     | No changes required      |  *(25)    | ILA (Integrated    | 6.2     | 6.2 (Rev. 19)  | Included   | xc7z010clg400-1      |
+|                                            |                                |                          |           | Logic Analyzer)    | (Rev.   |                |            |                      |
+|                                            |                                |                          |           |                    | 19)     |                |            |                      |
++--------------------------------------------+--------------------------------+--------------------------+-----------+--------------------+---------+----------------+------------+----------------------+
+| ila_0                                      | Up-to-date                     | No changes required      |  *(26)    | ILA (Integrated    | 6.2     | 6.2 (Rev. 19)  | Included   | xc7z010clg400-1      |
+|                                            |                                |                          |           | Logic Analyzer)    | (Rev.   |                |            |                      |
+|                                            |                                |                          |           |                    | 19)     |                |            |                      |
++--------------------------------------------+--------------------------------+--------------------------+-----------+--------------------+---------+----------------+------------+----------------------+
+*(1) g:/Xilinx2025/2025.2/Vivado/data/ip/xilinx/fifo_generator_v13_2/doc/fifo_generator_v13_2_changelog.txt
+*(2) g:/Xilinx2025/2025.2/Vivado/data/ip/xilinx/fifo_generator_v13_2/doc/fifo_generator_v13_2_changelog.txt
+*(3) g:/Xilinx2025/2025.2/Vivado/data/ip/xilinx/axi_interconnect_v2_1/doc/axi_interconnect_v2_1_changelog.txt
+*(4) g:/Xilinx2025/2025.2/Vivado/data/ip/xilinx/axi_vdma_v6_3/doc/axi_vdma_v6_3_changelog.txt
+*(5) g:/Xilinx2025/2025.2/Vivado/data/ip/xilinx/axi_vdma_v6_3/doc/axi_vdma_v6_3_changelog.txt
+*(6) g:/Xilinx2025/2025.2/Vivado/data/ip/xilinx/axi_vdma_v6_3/doc/axi_vdma_v6_3_changelog.txt
+*(7) g:/Xilinx2025/2025.2/Vivado/data/ip/xilinx/axis_subset_converter_v1_1/doc/axis_subset_converter_v1_1_changelog.txt
+*(8) g:/Xilinx2025/2025.2/Vivado/data/ip/xilinx/axis_subset_converter_v1_1/doc/axis_subset_converter_v1_1_changelog.txt
+*(9) g:/Xilinx2025/2025.2/Vivado/data/ip/xilinx/axi_interconnect_v2_1/doc/axi_interconnect_v2_1_changelog.txt
+*(10) g:/Xilinx2025/2025.2/Vivado/data/ip/xilinx/xlconstant_v1_1/doc/xlconstant_v1_1_changelog.txt
+*(11) g:/Xilinx2025/2025.2/Vivado/data/ip/xilinx/xlconstant_v1_1/doc/xlconstant_v1_1_changelog.txt
+*(12) g:/Xilinx2025/2025.2/Vivado/data/ip/xilinx/axi_gpio_v2_0/doc/axi_gpio_v2_0_changelog.txt
+*(13) g:/Xilinx2025/2025.2/Vivado/data/ip/xilinx/processing_system7_v5_5/doc/processing_system7_v5_5_changelog.txt
+*(14) g:/Xilinx2025/2025.2/Vivado/data/ip/xilinx/axi_interconnect_v2_1/doc/axi_interconnect_v2_1_changelog.txt
+*(15) g:/Xilinx2025/2025.2/Vivado/data/ip/xilinx/proc_sys_reset_v5_0/doc/proc_sys_reset_v5_0_changelog.txt
+*(16) g:/Xilinx2025/2025.2/Vivado/data/ip/xilinx/proc_sys_reset_v5_0/doc/proc_sys_reset_v5_0_changelog.txt
+*(17) g:/Xilinx2025/2025.2/Vivado/data/ip/xilinx/v_axi4s_vid_out_v4_0/doc/v_axi4s_vid_out_v4_0_changelog.txt
+*(18) g:/Xilinx2025/2025.2/Vivado/data/ip/xilinx/v_tc_v6_2/doc/v_tc_v6_2_changelog.txt
+*(19) g:/Xilinx2025/2025.2/Vivado/data/ip/xilinx/xlconcat_v2_1/doc/xlconcat_v2_1_changelog.txt
+*(20) g:/Xilinx2025/2025.2/Vivado/data/ip/xilinx/xlconstant_v1_1/doc/xlconstant_v1_1_changelog.txt
+*(21) g:/Xilinx2025/2025.2/Vivado/data/ip/xilinx/blk_mem_gen_v8_4/doc/blk_mem_gen_v8_4_changelog.txt
+*(22) g:/Xilinx2025/2025.2/Vivado/data/ip/xilinx/blk_mem_gen_v8_4/doc/blk_mem_gen_v8_4_changelog.txt
+*(23) g:/Xilinx2025/2025.2/Vivado/data/ip/xilinx/fifo_generator_v13_2/doc/fifo_generator_v13_2_changelog.txt
+*(24) g:/Xilinx2025/2025.2/Vivado/data/ip/xilinx/blk_mem_gen_v8_4/doc/blk_mem_gen_v8_4_changelog.txt
+*(25) g:/Xilinx2025/2025.2/Vivado/data/ip/xilinx/ila_v6_2/doc/ila_v6_2_changelog.txt
+*(26) g:/Xilinx2025/2025.2/Vivado/data/ip/xilinx/ila_v6_2/doc/ila_v6_2_changelog.txt
+
+

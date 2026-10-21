@@ -1,0 +1,195 @@
+#include "app/config.h"
+
+#include <cctype>
+
+#include "util/json_util.h"
+
+namespace vm {
+
+namespace {
+
+std::string upper(std::string s) {
+  for (auto& c : s) c = static_cast<char>(std::toupper(static_cast<unsigned char>(c)));
+  return s;
+}
+
+int i32(const JsonValue& o, const char* k, int def) { return static_cast<int>(jInt(o, k, def)); }
+
+}  // namespace
+
+bool loadConfig(const std::string& path, AppConfig& c, std::string& err) {
+  JsonValue root;
+  if (!loadJsonFile(path, root, &err)) return false;
+  if (!root.isObject()) {
+    err = path + ": top level must be an object";
+    return false;
+  }
+  c.deviceId = jStr(root, "device_id", c.deviceId);
+  c.tzOffsetMin = i32(root, "timezone_offset_min", c.tzOffsetMin);
+
+  const JsonValue& hw = jObj(root, "hardware");
+  c.carrierBase = jAddr(hw, "carrier_ctrl_base", c.carrierBase);
+  c.i2cMgmtBase = jAddr(hw, "i2c_management_base", c.i2cMgmtBase);
+  c.i2cSensBase = jAddr(hw, "i2c_sensors_base", c.i2cSensBase);
+  c.uartNanoBase = jAddr(hw, "uart_nano_base", c.uartNanoBase);
+  c.uartPrnBase = jAddr(hw, "uart_printer_base", c.uartPrnBase);
+  c.spiSensBase = jAddr(hw, "spi_sensors_base", c.spiSensBase);
+  const JsonValue& dev = jObj(hw, "devices");
+  c.carrierDev = jStr(dev, "carrier_uio", c.carrierDev);
+  c.i2cMgmtDev = jStr(dev, "i2c_management", c.i2cMgmtDev);
+  c.i2cSensDev = jStr(dev, "i2c_sensors", c.i2cSensDev);
+  c.uartNanoDev = jStr(dev, "uart_nano", c.uartNanoDev);
+  c.uartPrnDev = jStr(dev, "uart_printer", c.uartPrnDev);
+  c.spiImuDev = jStr(dev, "spi_imu", c.spiImuDev);
+  c.spiAdxlDev = jStr(dev, "spi_adxl345", c.spiAdxlDev);
+
+  const JsonValue& n = jObj(root, "nano");
+  c.nano.baud = static_cast<uint32_t>(jInt(n, "baud", c.nano.baud));
+  c.nano.flowControl = jBool(n, "flow_control", c.nano.flowControl);
+  c.nano.timeoutMs = i32(n, "request_timeout_ms", c.nano.timeoutMs);
+  c.nano.statusPeriodMs = i32(n, "status_period_ms", c.nano.statusPeriodMs);
+  c.nano.offlineResetMs = i32(n, "offline_reset_ms", c.nano.offlineResetMs);
+  c.nano.resetPulseMs = i32(n, "reset_pulse_ms", c.nano.resetPulseMs);
+
+  const JsonValue& p = jObj(root, "panel");
+  c.panel.brightness = i32(p, "brightness", c.panel.brightness);
+  c.panel.countsPerDetent = i32(p, "encoder_counts_per_detent", c.panel.countsPerDetent);
+  c.panel.reverse = jBool(p, "encoder_reverse", c.panel.reverse);
+  c.panel.debounceMs = i32(p, "debounce_ms", c.panel.debounceMs);
+  c.panel.longPressMs = i32(p, "long_press_ms", c.panel.longPressMs);
+  c.panel.encFilterUs = i32(p, "encoder_filter_us", c.panel.encFilterUs);
+  c.panel.watchdogMs = i32(p, "watchdog_ms", c.panel.watchdogMs);
+
+  const JsonValue& l = jObj(root, "light");
+  c.light.pwmHz = static_cast<uint32_t>(jInt(l, "pwm_hz", c.light.pwmHz));
+  c.light.percent = jNum(l, "percent", c.light.percent);
+  c.light.autoOnMeasure = jBool(l, "auto_on_measure", c.light.autoOnMeasure);
+  c.laser.offDuringMeasure = jBool(jObj(root, "laser"), "off_during_measurement", c.laser.offDuringMeasure);
+
+  const JsonValue& pw = jObj(root, "power");
+  c.power.warnA = jNum(pw, "warn_current_a", c.power.warnA);
+  c.power.denyA = jNum(pw, "deny_current_a", c.power.denyA);
+  c.power.alertA = jNum(pw, "alert_current_a", c.power.alertA);
+
+  const JsonValue& s = jObj(root, "sensors");
+  const JsonValue& imu = jObj(s, "imu");
+  c.imu.enabled = jBool(imu, "enabled", c.imu.enabled);
+  c.imu.spiHz = static_cast<uint32_t>(jInt(imu, "spi_hz", c.imu.spiHz));
+  c.imu.odrHz = i32(imu, "odr_hz", c.imu.odrHz);
+  c.imu.accelG = i32(imu, "accel_range_g", c.imu.accelG);
+  c.imu.gyroDps = i32(imu, "gyro_range_dps", c.imu.gyroDps);
+  const JsonValue& ad = jObj(s, "adxl345");
+  c.adxl.enabled = jBool(ad, "enabled", c.adxl.enabled);
+  c.adxl.spiHz = static_cast<uint32_t>(jInt(ad, "spi_hz", c.adxl.spiHz));
+  c.adxl.rateCode = i32(ad, "rate_code", c.adxl.rateCode);
+  c.adxl.rangeG = i32(ad, "range_g", c.adxl.rangeG);
+  const JsonValue& tof = jObj(s, "tof");
+  c.tof.enabled = jBool(tof, "enabled", c.tof.enabled);
+  c.tof.timingBudgetMs = i32(tof, "timing_budget_ms", c.tof.timingBudgetMs);
+  c.tof.periodMs = i32(tof, "period_ms", c.tof.periodMs);
+  c.tof.longRange = jStr(tof, "distance_mode", "long") == "long";
+  const JsonValue& sht = jObj(s, "sht40");
+  c.sht.enabled = jBool(sht, "enabled", c.sht.enabled);
+  c.sht.periodMs = i32(sht, "period_ms", c.sht.periodMs);
+
+  const JsonValue& pr = jObj(root, "printer");
+  c.printer.enabled = jBool(pr, "enabled", c.printer.enabled);
+  c.printer.baud = static_cast<uint32_t>(jInt(pr, "baud", c.printer.baud));
+  c.printer.ctsFlow = jBool(pr, "cts_flow_control", c.printer.ctsFlow);
+  c.printer.powerOnWaitMs = i32(pr, "power_on_wait_ms", c.printer.powerOnWaitMs);
+  c.printer.readyTimeoutMs = i32(pr, "ready_timeout_ms", c.printer.readyTimeoutMs);
+  c.printer.busyTimeoutMs = i32(pr, "cts_busy_timeout_ms", c.printer.busyTimeoutMs);
+  c.printer.minOffMs = i32(pr, "min_off_ms", c.printer.minOffMs);
+  c.printer.statusQuery = jStr(pr, "status_query", c.printer.statusQuery);
+  c.printer.msPerRow = i32(pr, "ms_per_raster_row", c.printer.msPerRow);
+  c.printer.finishMarginMs = i32(pr, "finish_margin_ms", c.printer.finishMarginMs);
+  c.printer.stripRows = i32(pr, "raster_strip_rows", c.printer.stripRows);
+  c.printer.widthDots = i32(pr, "width_dots", c.printer.widthDots);
+  c.printer.feedLines = i32(pr, "feed_lines", c.printer.feedLines);
+
+  const JsonValue& cam = jObj(root, "camera");
+  c.camera.source = jStr(cam, "source", c.camera.source);
+  c.camera.v4l2.device = jStr(cam, "device", c.camera.v4l2.device);
+  c.camera.v4l2.width = i32(cam, "width", c.camera.v4l2.width);
+  c.camera.v4l2.height = i32(cam, "height", c.camera.v4l2.height);
+  c.camera.v4l2.pixelFormat = jStr(cam, "pixel_format", c.camera.v4l2.pixelFormat);
+  c.camera.v4l2.fps = i32(cam, "fps", c.camera.v4l2.fps);
+  const JsonValue& syn = jObj(cam, "synthetic");
+  c.camera.synthetic.freqHz = jNum(syn, "freq_hz", c.camera.synthetic.freqHz);
+  c.camera.synthetic.amplitudePx = jNum(syn, "amplitude_px", c.camera.synthetic.amplitudePx);
+  c.camera.synthetic.fps = jNum(syn, "fps", c.camera.synthetic.fps);
+
+  const JsonValue& m = jObj(root, "measurement");
+  c.measure.roiSize = i32(m, "roi_size_px", c.measure.roiSize);
+  c.measure.searchRadius = i32(m, "search_radius_px", c.measure.searchRadius);
+  c.measure.durationS = jNum(m, "duration_s", c.measure.durationS);
+  const std::string axis = jStr(m, "axis", std::string(1, c.measure.axis));
+  c.measure.axis = axis == "x" ? 'x' : 'y';
+  c.measure.minScore = jNum(m, "min_ncc", c.measure.minScore);
+  c.measure.fMinHz = jNum(m, "min_freq_hz", c.measure.fMinHz);
+  c.roiCenterX = jNum(m, "roi_center_x", c.roiCenterX);
+  c.roiCenterY = jNum(m, "roi_center_y", c.roiCenterY);
+  c.calibrationFile = jStr(m, "calibration_file", c.calibrationFile);
+
+  const JsonValue& a = jObj(root, "alarm");
+  c.alarm.warnPp = jNum(a, "warn_peak_to_peak", c.alarm.warnPp);
+  c.alarm.alarmPp = jNum(a, "alarm_peak_to_peak", c.alarm.alarmPp);
+  c.alarm.buzzer = jBool(a, "buzzer", c.alarm.buzzer);
+
+  const JsonValue& v = jObj(root, "voice");
+  c.voice.enabled = jBool(v, "enabled", c.voice.enabled);
+  c.voice.volume = i32(v, "volume", c.voice.volume);
+
+  const JsonValue& f = jObj(root, "fan");
+  c.fan.mode = jStr(f, "mode", c.fan.mode);
+  c.fan.onTempC = jNum(f, "on_temp_c", c.fan.onTempC);
+  c.fan.offTempC = jNum(f, "off_temp_c", c.fan.offTempC);
+  c.fan.pauseDuringMeasure = jBool(f, "pause_during_measurement", c.fan.pauseDuringMeasure);
+
+  const JsonValue& vis = jObj(root, "vision");
+  c.vision.enabled = jBool(vis, "enabled", c.vision.enabled);
+  c.vision.levels = i32(vis, "levels", c.vision.levels);  // 0 = automatic
+  c.vision.lowHz = jNum(vis, "low_hz", c.vision.lowHz);
+  c.vision.highHz = jNum(vis, "high_hz", c.vision.highHz);
+  c.vision.gain = i32(vis, "gain", c.vision.gain);
+
+  c.recordsDir = jStr(jObj(root, "storage"), "records_dir", c.recordsDir);
+  c.settingsFile = jStr(jObj(root, "storage"), "settings_file", c.settingsFile);
+
+  const JsonValue& ui = jObj(root, "ui");
+  c.ui.enabled = jBool(ui, "enabled", c.ui.enabled);
+  c.ui.fbdev = jStr(ui, "fbdev", c.ui.fbdev);
+  c.ui.touchDev = jStr(ui, "touch_device", c.ui.touchDev);
+  c.ui.swapXY = jBool(ui, "swap_xy", c.ui.swapXY);
+  c.ui.invertX = jBool(ui, "invert_x", c.ui.invertX);
+  c.ui.invertY = jBool(ui, "invert_y", c.ui.invertY);
+
+  c.controlSocket = jStr(root, "control_socket", c.controlSocket);
+  c.poweroffOnShutdown = jBool(root, "poweroff_on_shutdown", c.poweroffOnShutdown);
+
+  const JsonValue& pts = jObj(root, "points");
+  for (const auto& mm : pts.members()) {
+    PointInfo pi;
+    pi.id = jStr(mm.value, "id", mm.key);
+    pi.name = jStr(mm.value, "name", "");
+    c.points[upper(mm.key)] = pi;
+  }
+  return true;
+}
+
+bool loadCalibration(const std::string& path, MeasureConfig& m, std::string& err) {
+  JsonValue root;
+  if (!loadJsonFile(path, root, &err)) return false;
+  const double mmPerPx = jNum(root, "mm_per_px", 0);
+  if (mmPerPx <= 0) {
+    err = path + ": mm_per_px missing or not positive";
+    return false;
+  }
+  m.mmPerPx = mmPerPx;
+  m.calibrationId = jStr(root, "id", "");
+  const std::string axis = jStr(root, "axis", "");
+  if (axis == "x" || axis == "y") m.axis = axis[0];
+  return true;
+}
+
+}  // namespace vm

@@ -1,0 +1,24 @@
+{
+  "checks": [
+    {
+      "board": "前面板",
+      "component_count": 15,
+      "physical_pads": 57,
+      "unique_component_pins": 57,
+      "schematic_export_date": "2026-10-19",
+      "pcb_project_date": "2026-10-20",
+      "connectivity_differences": []
+    },
+    {
+      "board": "主载板",
+      "component_count": 245,
+      "physical_pads": 808,
+      "unique_component_pins": 806,
+      "schematic_export_date": "2026-10-19",
+      "pcb_project_date": "2026-10-20",
+      "connectivity_differences": []
+    }
+  ],
+  "bom_components_checked": 260,
+  "note": "连接关系静态对照；没有执行EDA ERC/PCB DRC，也没有进行首板实测。不同PCB的同名网络和位号不自动互连。"
+}

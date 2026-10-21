@@ -1,0 +1,4 @@
+FAIL: zero strobe cannot change PWM period (t=735000)
+FAIL: PWM period byte strobe (t=885000)
+FATAL: /mnt/d/codex/见微_AX7010视觉测振仪/06_软件与FPGA/ax7010/pl/sim/tb_carrier_ctrl.v:409: tb_carrier_ctrl: 2 check(s) failed
+       Time: 15151945000  Scope: tb_carrier_ctrl

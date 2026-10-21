@@ -1,0 +1,6 @@
+asset_id,文件相对路径,用途,格式,状态
+measure_done,voice/measure_done.wav,测量完成,PCM16LE mono 16000Hz,待录制
+vibration_warn,voice/vibration_warn.wav,振动预警,PCM16LE mono 16000Hz,待录制
+vibration_alarm,voice/vibration_alarm.wav,振动报警,PCM16LE mono 16000Hz,待录制
+print_failed,voice/print_failed.wav,打印失败,PCM16LE mono 16000Hz,待录制
+storage_error,voice/storage_error.wav,存储异常,PCM16LE mono 16000Hz,待录制

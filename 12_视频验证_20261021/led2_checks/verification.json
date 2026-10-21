@@ -1,0 +1,30 @@
+{
+  "date": "2026-10-21",
+  "unit_suites_passed": 6,
+  "app_checks_passed": 36,
+  "new_regressions_failed_before_fix": 3,
+  "new_regressions_passed_after_fix": 3,
+  "compiler_warnings": 0,
+  "physical_hardware_test": false,
+  "source_sha256": {
+    "ax7010\\linux\\vibmon\\src\\app\\app.cpp": "12c8419438a0cdd45eb3d76ed069e504f251e3734624d42f6c1ad89a45906cad",
+    "ax7010\\linux\\vibmon\\src\\app\\config.h": "d8d6f7806424fb738a98b331cf33a77fca23e397b34050c4300bd5b2e95a2e34",
+    "ax7010\\linux\\vibmon\\src\\app\\state.h": "39952ebdbbc0cabbae045a169c1234f7a35113a5c0da32679714626b8def2b64",
+    "ax7010\\linux\\vibmon\\src\\ui\\ui_pages.cpp": "8deefaee15070986b6a0762c237335e3f458f7b6f98dfadb07f3b024f560a6f0",
+    "ax7010\\linux\\vibmon\\src\\ui\\ui_pages2.cpp": "eed918bbb669121c10eaea945b19c0d2c598b72666c26f8c5a4239869744d605",
+    "ax7010\\linux\\vibmon\\src\\ui\\ui_vision.cpp": "96fde9708b6be3f30b0457e1c227dafe04c64a1e5e2be7fb0e4a44cdcd7d6b26",
+    "ax7010\\linux\\vibmon\\src\\gfx\\font_data.inc": "96726c2d7eb4cb18fd6f3812be4a1ded46f77e8bd45b1c92461cc349339ffa39",
+    "ax7010\\linux\\vibmon\\tests\\test_app_host.py": "64ef5a609d50eca8a78bafce799a9cf0bf8e51c9c612992574f6d24054749c6b",
+    "ax7010\\linux\\vibmon\\tests\\test_render.cpp": "5260ca97bc78f3c7e46ebb626d5ff2b1a53a790715289447bda4289898687b5d"
+  },
+  "smoke_test_passed": true,
+  "comparison_video_frames": {
+    "video1": 300,
+    "video2": 266
+  },
+  "comparison_videos_full_decode_passed": true,
+  "python_cpp_video_checks": {
+    "video1": 4,
+    "video2": 4
+  }
+}

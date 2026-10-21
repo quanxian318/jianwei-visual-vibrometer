@@ -1,0 +1,305 @@
+// Vision page: motion magnification, vibration heat map and stereo depth.
+#include <algorithm>
+#include <cmath>
+#include <cstdio>
+
+#include "gfx/draw.h"
+#include "ui/ui_core.h"
+
+namespace vm {
+
+using namespace theme;
+
+namespace {
+
+struct DepthLut {
+  uint32_t v[256];
+  DepthLut() {
+    const uint32_t* heat = heatLut();
+    v[0] = 0x14181D;  // invalid depth
+    for (int i = 1; i < 256; ++i) v[i] = heat[i];
+  }
+};
+
+const uint32_t* depthLut() {
+  static const DepthLut lut;  // thread-safe initialisation
+  return lut.v;
+}
+
+// 2nd..98th percentile of the valid depths (sub-sampled).
+bool autoDepthRange(const DepthMap& m, double& lo, double& hi, int& validPct) {
+  std::vector<uint16_t> v;
+  v.reserve(m.mm.size() / 4 + 1);
+  for (size_t i = 0; i < m.mm.size(); i += 4) {
+    if (m.mm[i]) v.push_back(m.mm[i]);
+  }
+  const size_t sampled = (m.mm.size() + 3) / 4;
+  validPct = sampled ? static_cast<int>(100 * v.size() / sampled) : 0;
+  if (v.size() < 8) return false;
+  const size_t k0 = v.size() * 2 / 100, k1 = v.size() * 98 / 100;
+  std::nth_element(v.begin(), v.begin() + k0, v.end());
+  lo = v[k0];
+  std::nth_element(v.begin(), v.begin() + k1, v.end());
+  hi = v[k1];
+  if (hi - lo < 20) hi = lo + 20;
+  return true;
+}
+
+// Near = warm colours, far = cool colours, invalid = index 0.
+void depthIndex(const DepthMap& m, double lo, double hi, std::vector<uint8_t>& out) {
+  out.resize(m.mm.size());
+  for (size_t i = 0; i < m.mm.size(); ++i) {
+    const uint16_t z = m.mm[i];
+    if (!z) {
+      out[i] = 0;
+      continue;
+    }
+    const double t = std::max(0.0, std::min(1.0, (z - lo) / (hi - lo)));
+    out[i] = static_cast<uint8_t>(1 + (1.0 - t) * 254.0 + 0.5);
+  }
+}
+
+std::string distanceText(double mm) {
+  char b[32];
+  if (mm >= 1000) {
+    snprintf(b, sizeof(b), "%.2f m", mm / 1000);
+  } else {
+    snprintf(b, sizeof(b), "%.0f mm", mm);
+  }
+  return b;
+}
+
+void colourBar(Canvas& c, const Rect& img, const std::string& lo, const std::string& hi, bool nearHot) {
+  const uint32_t* lut = heatLut();
+  const FontFace& f = fontFace(14);
+  const int bw = 120, wl = textWidth(f, lo), wh = textWidth(f, hi);
+  const int total = wl + 8 + bw + 8 + wh + 20;
+  const int x0 = img.x + img.w - total - 8, y0 = img.y + img.h - 34;
+  fillRoundRect(c, x0, y0, total, 26, 8, 0x05080C, 205);
+  drawText(c, f, x0 + 10, y0 + 3, lo, kText);
+  const int bx = x0 + 10 + wl + 8;
+  for (int i = 0; i < bw; ++i) {
+    const int k = i * 255 / (bw - 1);
+    c.fillRect(bx + i, y0 + 9, 1, 8, lut[nearHot ? 255 - k : k]);
+  }
+  drawText(c, f, bx + bw + 8, y0 + 3, hi, kText);
+}
+
+void placeholder(Canvas& c, const Rect& t, Icon icon, const std::string& title, const std::string& hint) {
+  drawIcon(c, icon, t.x + t.w / 2.f, t.y + t.h / 2.f - 34, 52, kText3);
+  drawTextCentered(c, fontFace(18), t.x + t.w / 2, t.y + t.h / 2 + 2, title, kText2);
+  if (!hint.empty()) drawTextCentered(c, fontFace(14), t.x + t.w / 2, t.y + t.h / 2 + 32, hint, kText3);
+}
+
+void probeMarker(Canvas& c, const Rect& img, double nx, double ny, uint32_t col, const std::string& label) {
+  const float px = static_cast<float>(img.x + nx * img.w), py = static_cast<float>(img.y + ny * img.h);
+  strokeCircle(c, px, py, 10, 2, col);
+  fillCircle(c, px, py, 3, col);
+  const FontFace& f = fontFace(14);
+  const int tw = textWidth(f, label) + 14;
+  const int bx = std::max(img.x, std::min(static_cast<int>(px) + 14, img.x + img.w - tw));
+  const int by = std::max(img.y, static_cast<int>(py) - 32);
+  fillRoundRect(c, bx, by, tw, 22, 6, 0x05080C, 215);
+  drawText(c, f, bx + 7, by + 2, label, col);
+}
+
+}  // namespace
+
+void renderVisionPage(Ui& ui, const UiData& d) {
+  Canvas& c = ui.c;
+  const SystemState& s = d.s;
+  const VisionLive& v = d.live.vision;
+  const int view = ui.st.visionView;
+  const bool haveVision = v.w > 0 && v.source.size() == static_cast<size_t>(v.w) * v.h;
+  const DepthMap* dm = d.depth.get();
+  const bool haveDepth = dm && dm->w > 0 && dm->mm.size() == static_cast<size_t>(dm->w) * dm->h;
+  char buf[160];
+  const int cw = (kCw - 8) / 2, ch = 344;
+  const Rect left{kCx, kCy, cw, ch}, right{kCx + cw + 8, kCy, cw, ch};
+  ui.card(left, 0x05080C);
+  ui.card(right, 0x05080C);
+
+  // Image areas follow the aspect of what is shown.
+  int aw = 4, ah = 3;
+  if (view == 2 && haveDepth) {
+    aw = dm->w;
+    ah = dm->h;
+  } else if (view != 2 && haveVision) {
+    aw = v.w;
+    ah = v.h;
+  }
+  const Rect li = fitAspect(Rect{left.x + 6, left.y + 38, left.w - 12, left.h - 44}, aw, ah);
+  const Rect ri = fitAspect(Rect{right.x + 6, right.y + 38, right.w - 12, right.h - 44}, aw, ah);
+  const std::string band = fmtNum(s.settings.visionLowHz, 3) + "–" + fmtNum(s.settings.visionHighHz, 3) + " Hz";
+
+  if (view == 2) {
+    drawText(c, fontFace(18), left.x + 14, left.y + 8, "左目画面", kText2);
+    drawText(c, fontFace(18), right.x + 14, right.y + 8, "双目深度", kText2);
+    if (haveDepth && dm->left.size() == dm->mm.size()) {
+      blitGray(c, li.x, li.y, li.w, li.h, dm->left.data(), dm->w, dm->h, 0, 0, dm->w, dm->h);
+    } else if (!d.live.preview.empty() && d.live.previewW > 0) {
+      blitGray(c, li.x, li.y, li.w, li.h, d.live.preview.data(), d.live.previewW, d.live.previewH, 0, 0,
+               d.live.previewW, d.live.previewH);
+    } else {
+      placeholder(c, li, Icon::kCamera, "无画面", "");
+    }
+    if (haveDepth) {
+      double lo = 0, hi = 0;
+      int validPct = 0;
+      static const double kRanges[4][2] = {{0, 0}, {200, 1000}, {500, 2000}, {1000, 5000}};
+      const bool autoOk = autoDepthRange(*dm, lo, hi, validPct);
+      if (ui.st.depthRange > 0 && ui.st.depthRange < 4) {
+        lo = kRanges[ui.st.depthRange][0];
+        hi = kRanges[ui.st.depthRange][1];
+      }
+      if (autoOk || ui.st.depthRange > 0) {
+        std::vector<uint8_t> idx;
+        depthIndex(*dm, lo, hi, idx);
+        blitGray(c, ri.x, ri.y, ri.w, ri.h, idx.data(), dm->w, dm->h, 0, 0, dm->w, dm->h, depthLut(), 255, true);
+        colourBar(c, ri, "近 " + distanceText(lo), distanceText(hi) + " 远", true);
+      } else {
+        placeholder(c, ri, Icon::kLayers, "有效深度太少", "检查双目标定、纹理和照明");
+      }
+      const uint16_t roiZ = dm->at(s.roiCx, s.roiCy);
+      probeMarker(c, ri, s.roiCx, s.roiCy, kGreen, roiZ ? "测点 " + distanceText(roiZ) : std::string("测点 无效"));
+      if (ui.st.probeX >= 0) {
+        const uint16_t z = dm->at(ui.st.probeX, ui.st.probeY);
+        probeMarker(c, ri, ui.st.probeX, ui.st.probeY, kAmber, z ? distanceText(z) : std::string("无效"));
+      }
+      ui.hit(ri, uiAction("depth_probe"));
+    } else {
+      placeholder(c, ri, Icon::kLayers, "双目深度未接入", "双目算法接入后在此显示深度热力图");
+    }
+  } else {
+    drawText(c, fontFace(18), left.x + 14, left.y + 8, "原始画面", kText2);
+    if (view == 0) {
+      snprintf(buf, sizeof(buf), "运动放大 ×%d · %s", s.settings.visionGain, band.c_str());
+    } else {
+      snprintf(buf, sizeof(buf), "振动能量 · %s", band.c_str());
+    }
+    drawText(c, fontFace(18), right.x + 14, right.y + 8, buf, kText2);
+    if (haveVision) {
+      blitGray(c, li.x, li.y, li.w, li.h, v.source.data(), v.w, v.h, 0, 0, v.w, v.h);
+      if (view == 0 && v.magnified.size() == v.source.size()) {
+        blitGray(c, ri.x, ri.y, ri.w, ri.h, v.magnified.data(), v.w, v.h, 0, 0, v.w, v.h);
+      } else if (view == 1 && v.ew > 0 && v.energy.size() == static_cast<size_t>(v.ew) * v.eh) {
+        blitGray(c, ri.x, ri.y, ri.w, ri.h, v.source.data(), v.w, v.h, 0, 0, v.w, v.h);
+        blitGray(c, ri.x, ri.y, ri.w, ri.h, v.energy.data(), v.ew, v.eh, 0, 0, v.ew, v.eh, heatLut(), 150);
+        colourBar(c, ri, "弱", "强", false);
+      }
+      if (v.peakX >= 0 && v.peakY >= 0) {
+        for (const Rect& t : {li, ri}) {
+          const float px = t.x + (v.peakX + 0.5f) * t.w / v.w, py = t.y + (v.peakY + 0.5f) * t.h / v.h;
+          strokeCircle(c, px, py, 14, 2, kAmber);
+          lineAA(c, px - 22, py, px - 14, py, 2, kAmber);
+          lineAA(c, px + 14, py, px + 22, py, 2, kAmber);
+        }
+      }
+      if (v.paused || !v.settled) {
+        const char* note = v.paused ? "测量期间暂停" : "滤波器预热中";
+        const int w = textWidth(fontFace(18), note) + 24;
+        fillRoundRect(c, ri.x + 10, ri.y + 10, w, 32, 16, 0x05080C, 200);
+        drawText(c, fontFace(18), ri.x + 22, ri.y + 14, note, kAmber);
+      }
+      // Tapping a vibrating spot moves the measuring ROI there.
+      ui.hit(ri, uiAction("roi"), s.measureState == "preview");
+      ui.hit(li, uiAction("roi"), s.measureState == "preview");
+    } else {
+      const std::string why = d.live.cameraOk ? "视觉处理未运行" : "相机未就绪";
+      placeholder(c, li, Icon::kCamera, why, "");
+      placeholder(c, ri, Icon::kVision, why, "");
+    }
+  }
+
+  // Controls.
+  const Rect cr{kCx, kCy + ch + 8, kCw, kCh - ch - 8};
+  ui.card(cr);
+  const int lx = cr.x + 16, cx0 = cr.x + 96;
+  auto label = [&](int y, const char* t) { drawText(c, fontFace(18), lx, y + 6, t, kText2); };
+  label(cr.y + 14, "显示");
+  ui.chip(Rect{cx0, cr.y + 14, 120, 36}, "运动放大", view == 0, true, uiAction("vision_view", 0));
+  ui.chip(Rect{cx0 + 128, cr.y + 14, 120, 36}, "振动热力", view == 1, true, uiAction("vision_view", 1));
+  ui.chip(Rect{cx0 + 256, cr.y + 14, 120, 36}, "双目深度", view == 2, true, uiAction("vision_view", 2));
+  if (view == 2) {
+    label(cr.y + 64, "范围");
+    static const char* kNames[4] = {"自动", "0.2–1 m", "0.5–2 m", "1–5 m"};
+    for (int i = 0; i < 4; ++i) {
+      ui.chip(Rect{cx0 + i * 118, cr.y + 64, 110, 36}, kNames[i], ui.st.depthRange == i, haveDepth,
+              uiAction("depth_range", i));
+    }
+    label(cr.y + 114, "投影");
+    JsonValue lz = JsonValue::makeObject();
+    lz.set("cmd", "laser");
+    lz.set("on", !s.laserOn);
+    const bool laserLocked = s.settings.laserOffDuringMeasure &&
+                             (s.measureState == "capturing" || s.measureState == "analyzing");
+    ui.toggle(Rect{cx0, cr.y + 115, 64, 34}, s.laserOn,
+              (s.laserOn || (s.lightAllowed && !laserLocked)) && s.printerState == "idle" && !s.pfail,
+              cmdAction(lz));
+    drawText(c, fontFace(14), cx0 + 80, cr.y + 116, "650nm 十字投影：辅助定位与局部深度匹配", kText2);
+    drawText(c, fontFace(14), cx0 + 80, cr.y + 136, "点按深度图查看该点距离", kText3);
+  } else {
+    label(cr.y + 64, "频带");
+    static const double kBands[4][2] = {{0.5, 2}, {2, 5}, {5, 10}, {10, 20}};
+    for (int i = 0; i < 4; ++i) {
+      snprintf(buf, sizeof(buf), "%s–%s Hz", fmtNum(kBands[i][0], 2).c_str(), fmtNum(kBands[i][1], 2).c_str());
+      JsonValue j = JsonValue::makeObject();
+      j.set("cmd", "set");
+      j.set("vision_low_hz", kBands[i][0]);
+      j.set("vision_high_hz", kBands[i][1]);
+      const bool sel = std::fabs(s.settings.visionLowHz - kBands[i][0]) < 1e-6 &&
+                       std::fabs(s.settings.visionHighHz - kBands[i][1]) < 1e-6;
+      ui.chip(Rect{cx0 + i * 118, cr.y + 64, 110, 36}, buf, sel, true, cmdAction(j));
+    }
+    const bool follow = s.last.have && s.last.valid && s.last.dominantHz > 0;
+    JsonValue j = JsonValue::makeObject();
+    j.set("cmd", "set");
+    if (follow) {
+      j.set("vision_low_hz", std::max(0.2, s.last.dominantHz * 0.7));
+      j.set("vision_high_hz", s.last.dominantHz * 1.4);
+    }
+    ui.chip(Rect{cx0 + 4 * 118, cr.y + 64, 110, 36}, "跟随主频", false, follow, cmdAction(j));
+    label(cr.y + 114, "放大");
+    static const int kGains[4] = {5, 10, 20, 50};
+    for (int i = 0; i < 4; ++i) {
+      snprintf(buf, sizeof(buf), "×%d", kGains[i]);
+      JsonValue g = JsonValue::makeObject();
+      g.set("cmd", "set");
+      g.set("vision_gain", kGains[i]);
+      ui.chip(Rect{cx0 + i * 90, cr.y + 114, 82, 36}, buf, s.settings.visionGain == kGains[i], view == 0,
+              cmdAction(g));
+    }
+  }
+
+  // Processing status.
+  const int sx = cr.x + cr.w - 236;
+  c.fillRect(sx - 16, cr.y + 14, 1, cr.h - 28, kBorder);
+  drawText(c, fontFace(14), sx, cr.y + 14, "处理端", kText2);
+  const bool have = view == 2 ? haveDepth : haveVision;
+  if (!have) {
+    drawText(c, fontFace(18), sx, cr.y + 44, view == 2 ? "未接入" : "未运行", kText2);
+    drawText(c, fontFace(14), sx, cr.y + 76, view == 2 ? "等待双目模块输出深度图" : "需要相机画面", kText3);
+    return;
+  }
+  const std::string backend = view == 2 ? dm->backend : v.backend;
+  ui.badge(sx + 52, cr.y + 10, backend == "PL" ? "PL 硬件" : "PS 软件", backend == "PL" ? kViolet : kAccent, true, 14);
+  const int w = view == 2 ? dm->w : v.w, h = view == 2 ? dm->h : v.h;
+  snprintf(buf, sizeof(buf), "%d×%d · %.1f fps", w, h, view == 2 ? dm->fps : v.fps);
+  drawText(c, fontFace(18), sx, cr.y + 44, buf, kText);
+  snprintf(buf, sizeof(buf), "每帧处理 %.2f ms", view == 2 ? dm->procMs : v.procMs);
+  drawText(c, fontFace(18), sx, cr.y + 72, buf, kText);
+  if (view == 2) {
+    double lo = 0, hi = 0;
+    int validPct = 0;
+    autoDepthRange(*dm, lo, hi, validPct);
+    snprintf(buf, sizeof(buf), "有效像素 %d%%", validPct);
+    drawText(c, fontFace(14), sx, cr.y + 106, buf, validPct >= 50 ? kGreen : kAmber);
+    drawText(c, fontFace(14), sx, cr.y + 128, "深度作尺度参考，不替代标定", kText3);
+  } else {
+    drawText(c, fontFace(14), sx, cr.y + 106, v.settled ? "时间滤波已稳定" : "时间滤波预热中",
+             v.settled ? kGreen : kAmber);
+    drawText(c, fontFace(14), sx, cr.y + 128, "放大画面只用于显示，不参与计量", kText3);
+  }
+}
+
+}  // namespace vm

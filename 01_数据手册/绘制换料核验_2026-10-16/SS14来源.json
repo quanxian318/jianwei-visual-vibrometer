@@ -1,0 +1,14 @@
+[
+  {
+    "file": "SS14_onsemi_SS19-D.pdf",
+    "url": "https://www.onsemi.com/pdf/datasheet/ss19-d.pdf",
+    "error": "HTTP Error 403: Forbidden"
+  },
+  {
+    "file": "SS14_C83852_厂家资料.pdf",
+    "url": "https://atta.szlcsc.com/upload/public/pdf/source/20181222/C83852_041FE29A925F1DAA7D9CB1F1C69076C2.pdf",
+    "pages": 7,
+    "sha256": "d101687171177a29ac4651bfada9b462ffffc464952de011cc6bc5d47931272f",
+    "retrievedAt": "2026-10-16T16:31:31.200882+08:00"
+  }
+]

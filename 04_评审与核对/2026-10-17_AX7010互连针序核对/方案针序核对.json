@@ -1,0 +1,13 @@
+{
+  "checkedAt": "2026-10-17T18:18:55.416479+08:00",
+  "officialPages": [
+    39,
+    40
+  ],
+  "pins": 40,
+  "signalPins": 34,
+  "xdcUniqueBalls": 34,
+  "planMatchesOfficial": true,
+  "J801CurrentlyPlaced": false,
+  "limits": "当前工具读取未找到J801；确认的是方案和XDC针序，不是已经完成的40针实际接线。IDC线1对1及PCB焊盘方向仍需核实。"
+}
