@@ -291,10 +291,13 @@ std::string reasonText(const std::string& reason) {
       {"bad_timestamps", "帧时间戳无效"},       {"irregular_sampling", "采样间隔不均匀"},
       {"no_spectrum", "无法计算频谱"},          {"roi_not_trackable", "测点纹理不足"},
       {"camera_timeout", "相机无画面"},         {"roi_outside_frame", "测点超出画面"},
+      {"not_converged", "位移计算不稳定"},       {"reference_not_trackable", "参考点纹理不足"},
+      {"reference_invalid", "参考点无效"},
   };
   for (const auto& m : kMap) {
     if (reason == m.key) return m.text;
   }
+  if (reason.compare(0, 10, "reference_") == 0) return "参考点: " + reasonText(reason.substr(10));
   return reason.empty() ? std::string("未知原因") : reason;
 }
 

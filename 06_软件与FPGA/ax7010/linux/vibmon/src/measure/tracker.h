@@ -10,18 +10,21 @@ struct Roi {
   int x = 0, y = 0, w = 0, h = 0;
 };
 
+// Per-frame output shared by the displacement trackers.
+struct TrackResult {
+  bool ok = false;
+  bool atEdge = false;   // best match on the search border: displacement may be larger
+  double dx = 0, dy = 0; // pixels relative to the reference position
+  double score = 0;      // NCC at the peak, -1..1
+  bool saturated = false;
+};
+
 // Normalised cross-correlation template tracker with parabolic sub-pixel
 // refinement. The template is taken once from the reference frame and never
 // updated, so displacement stays relative to the start (no drift).
 class NccTracker {
  public:
-  struct Result {
-    bool ok = false;
-    bool atEdge = false;   // best match on the search border: displacement may be larger
-    double dx = 0, dy = 0; // pixels relative to the reference position
-    double score = 0;      // NCC at the peak, -1..1
-    bool saturated = false;
-  };
+  using Result = TrackResult;
 
   bool init(const GrayFrame& ref, const Roi& roi, int searchRadius);
   Result track(const GrayFrame& frame);

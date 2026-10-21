@@ -148,6 +148,44 @@ bool saveRecord(const std::string& dir, const RecordMeta& m, const MeasureResult
   res.set("definitions", "peak_to_peak and rms of the linearly detrended displacement; spectral_peak is the 0-peak "
                          "amplitude at the dominant frequency (Hann window, coherent gain corrected, single-sided)");
   res.set("window", "hann");
+  res.set("tracker", r.tracker.empty() ? JsonValue() : JsonValue(r.tracker));
+  res.set("peak_snr", numOrNull(r.peakSnr, r.valid));
+  res.set("peak_clear", r.valid && r.peakClear);
+  JsonValue bg = JsonValue::makeObject();
+  bg.set("used", r.reference.used);
+  if (r.reference.used) {
+    bg.set("valid", r.reference.valid);
+    bg.set("reason", r.reference.valid ? JsonValue() : JsonValue(r.reference.reason));
+    JsonValue br = JsonValue::makeObject();
+    br.set("x", r.reference.roi.x);
+    br.set("y", r.reference.roi.y);
+    br.set("w", r.reference.roi.w);
+    br.set("h", r.reference.roi.h);
+    bg.set("roi", br);
+    bg.set("peak_to_peak_px", numOrNull(r.reference.ppPx, r.reference.valid));
+    bg.set("dominant_frequency_hz", numOrNull(r.reference.dominantHz, r.reference.valid));
+    bg.set("raw_target_peak_to_peak_px", numOrNull(r.rawPpPx, r.rawPpPx > 0));
+    bg.set("raw_target_dominant_frequency_hz", numOrNull(r.rawDominantHz, r.rawDominantHz > 0));
+    bg.set("definition", "result = target minus background reference, translation only");
+  }
+  res.set("background_reference", bg);
+  JsonValue fld = JsonValue::makeObject();
+  fld.set("valid", r.field.valid);
+  fld.set("reason", r.field.valid ? JsonValue() : JsonValue(r.field.reason));
+  fld.set("peak_hz", numOrNull(r.field.peakHz, r.field.peakHz > 0));
+  fld.set("fraction", r.field.fraction);
+  fld.set("resolution_hz", r.field.resolutionHz);
+  JsonValue lines = JsonValue::makeArray();
+  for (const auto& l : r.field.lines) {
+    JsonValue jl = JsonValue::makeObject();
+    jl.set("hz", l.hz);
+    jl.set("fraction", l.fraction);
+    jl.set("harmonic_of_strongest", l.harmonicOf);
+    lines.push(jl);
+  }
+  fld.set("lines", lines);
+  fld.set("definition", "whole-field brightness spectral lines; frequency indicator only, no displacement unit");
+  res.set("field_spectrum", fld);
   res.set("level", levelKey(m.level));
   JsonValue th = JsonValue::makeObject();
   th.set("unit", "mm");
@@ -161,6 +199,7 @@ bool saveRecord(const std::string& dir, const RecordMeta& m, const MeasureResult
   JsonValue q = JsonValue::makeObject();
   q.set("bad_frames", static_cast<unsigned long>(r.badFrames));
   q.set("search_edge_hits", static_cast<unsigned long>(r.edgeHits));
+  q.set("unconverged_frames", static_cast<unsigned long>(r.unconvergedFrames));
   q.set("saturated_frames", static_cast<unsigned long>(r.saturatedFrames));
   q.set("min_ncc", numOrNull(r.minScore, r.frames > 0));
   rec.set("quality", q);

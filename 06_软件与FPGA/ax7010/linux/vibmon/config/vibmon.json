@@ -66,6 +66,11 @@
     "search_radius_px": 8,
     "min_ncc": 0.6,
     "min_freq_hz": 0.5,
+    "tracker": "ncc",
+    "min_peak_snr": 5,
+    "lk_max_final_step_px": 0.05,
+    "field_spectrum": true,
+    "reference_roi": {"enabled": false, "x": 0.1, "y": 0.9},
     "roi_center_x": 0.5,
     "roi_center_y": 0.5,
     "calibration_file": "/etc/vibmon/calibration.json"

@@ -127,6 +127,15 @@ bool loadConfig(const std::string& path, AppConfig& c, std::string& err) {
   c.measure.axis = axis == "x" ? 'x' : 'y';
   c.measure.minScore = jNum(m, "min_ncc", c.measure.minScore);
   c.measure.fMinHz = jNum(m, "min_freq_hz", c.measure.fMinHz);
+  const std::string tracker = jStr(m, "tracker", c.measure.tracker);
+  c.measure.tracker = tracker == "lk" ? "lk" : "ncc";
+  c.measure.minPeakSnr = jNum(m, "min_peak_snr", c.measure.minPeakSnr);
+  c.measure.maxFinalStepPx = jNum(m, "lk_max_final_step_px", c.measure.maxFinalStepPx);
+  c.measure.fieldSpectrum = jBool(m, "field_spectrum", c.measure.fieldSpectrum);
+  const JsonValue& ref = jObj(m, "reference_roi");
+  c.measure.referenceEnabled = jBool(ref, "enabled", c.measure.referenceEnabled);
+  c.measure.refCx = jNum(ref, "x", c.measure.refCx);
+  c.measure.refCy = jNum(ref, "y", c.measure.refCy);
   c.roiCenterX = jNum(m, "roi_center_x", c.roiCenterX);
   c.roiCenterY = jNum(m, "roi_center_y", c.roiCenterY);
   c.calibrationFile = jStr(m, "calibration_file", c.calibrationFile);

@@ -8,7 +8,7 @@
 
 [屏幕、触屏和编码器操作说明](docs/UI与触屏编码器说明_20261021.md)；电脑摄像头仿真见 [pc_sim](pc_sim/README.md)。
 
-最新 LED2 互锁修正与用户视频结果见 [视频验证报告](../12_视频验证_20261021/README.md)。
+最新 LED2 互锁修正与用户视频结果见 [视频验证报告](../12_视频验证_20261021/README.md)。测振算法推进（逆组合 LK 位移核、PL `lk_accum` 累加核 RTL、背景参考补偿、谱峰置信度、全视场谱线）见 [测振算法推进](../13_测振算法推进_20261021/README.md)。
 
 ## 目录与验证状态
 
@@ -17,9 +17,10 @@
 | shared/vibproto | 协议 V1 编解码 | 资料包 4 个测试向量逐字节一致；Python 参考实现生成的 300 个随机帧编码/解码/再序列化一致 | — |
 | nano_esp32/vibmon_nano | Nano ESP32 固件：AX 链路与会话、事件队列/IRQ、PN532、SD、I2S 语音、Wi-Fi/NTP、掉电、USB 调试命令 | 本轮修改的 power_service/audio_service 已用真实 Xtensa 板包参数编译无警告；WAV 解析主机测试通过 | 修改后整包重新链接、上板；bin 保留旧固件 |
 | ax7010/pl | carrier_ctrl RTL、Vivado 集成脚本、约束、自检测试平台 | WSL Icarus 行为仿真通过：AXI 分离握手/背压/WSTRB、PWM、按键、事件 FIFO、WS2812、看门狗 | Vivado 综合、实现、上板 |
+| ax7010/pl/displacement | 位移引擎 `lk_accum`：双线性插值＋5 路 48 位乘加，整数 ZNCC 搜索与 LK 亚像素更新共用；自检测试平台与黄金向量 | 与 C++ 位精确模型 `lkAccumulate()` 逐位一致（合成纹理 8 例＋用户视频帧 8 例，Icarus 12，`sh pl/displacement/sim/run_tests.sh`） | 搜索序列器、窗口装载（roi_capture）、AXI 封装、综合、上板 |
 | ax7010/pl/vision | 视觉处理 RTL：`vp_reduce` 流式降采样、`vp_core` 时间带通/运动放大/振动能量；测试平台 | 与 Python 模型逐位一致（合成帧和电脑摄像头实拍帧，含奇数高度、随机输入间隔） | AXI 接口封装、接入厂家工程、综合、上板 |
 | pc_sim | 电脑摄像头实验台、位精确模型、Python/C++/RTL 比对脚本 | 摄像头实拍和合成数据下三方逐位一致；实验台自检运行 | — |
-| ax7010/linux/vibmon | AX7010 Linux 程序 vibmond（六页触摸界面、PS 视觉处理线程、运行时设置）、命令行 vibmonctl、联调工具 carrier_test、视觉参考工具 vision_ref | WSL x86-64（g++ 13）编译无警告；6 组单元测试（含界面各页渲染与点按、视觉处理）、36 项应用集成检查（含设置保存与重启生效）、端到端冒烟测试 | ARM 交叉编译、上板 |
+| ax7010/linux/vibmon | AX7010 Linux 程序 vibmond（六页触摸界面、PS 视觉处理线程、运行时设置）、命令行 vibmonctl、联调工具 carrier_test、视觉参考工具 vision_ref | WSL x86-64（g++ 13）编译无警告；7 组单元测试（含界面各页渲染与点按、视觉处理、LK 位移核）、36 项应用集成检查（含设置保存与重启生效）、端到端冒烟测试 | ARM 交叉编译、上板 |
 | ax7010/linux/petalinux | 设备树片段、内核配置、Yocto 配方、开机自启 | 源码包可独立编译 | 在 PetaLinux 工程中构建 |
 
 ## Nano ESP32 固件
