@@ -7,6 +7,7 @@
 
 #include "app/app.h"
 #include "app/storage.h"
+#include "ui/pl_display.h"
 #include "util/clock.h"
 #include "util/log.h"
 
@@ -19,13 +20,26 @@ FbUi::~FbUi() {
 
 bool FbUi::start() {
   const AppConfig& cfg = app_.config();
-  if (!display_.open(cfg.ui.fbdev)) {
-    LOGW("ui", "no framebuffer; touch UI disabled (vibmonctl still works)");
-    return false;
+  if (cfg.ui.display == "pl_vdma") {
+    std::unique_ptr<PlDisplay> pl(new PlDisplay);
+    std::string err;
+    if (!pl->open(cfg.ui.pl, err)) {
+      LOGW("ui", "PL video output: %s; touch UI disabled (vibmonctl still works)", err.c_str());
+      return false;
+    }
+    display_ = std::move(pl);
+  } else {
+    std::unique_ptr<FbDisplay> fb(new FbDisplay);
+    if (!fb->open(cfg.ui.fbdev)) {
+      LOGW("ui", "no framebuffer; touch UI disabled (vibmonctl still works)");
+      return false;
+    }
+    display_ = std::move(fb);
   }
-  canvas_.resize(display_.width(), display_.height(), theme::kBg);
+  console_.reset(new TextConsoleOff);
+  canvas_.resize(display_->width(), display_->height(), theme::kBg);
   if (touch_.open(cfg.ui.touchDev)) {
-    touch_.setScreen(display_.width(), display_.height(), cfg.ui.swapXY, cfg.ui.invertX, cfg.ui.invertY);
+    touch_.setScreen(display_->width(), display_->height(), cfg.ui.swapXY, cfg.ui.invertX, cfg.ui.invertY);
   } else {
     LOGW("ui", "no touch input device found");
   }
@@ -61,8 +75,8 @@ JsonValue FbUi::applyAction(UiState& st, const UiAction& a, const Rect& region, 
     }
     JsonValue cmd = JsonValue::makeObject();
     cmd.set("cmd", "roi");
-    cmd.set("x", nx);
-    cmd.set("y", ny);
+    cmd.set(st.refEdit && a.kind == "roi_box" ? "ref_x" : "x", nx);
+    cmd.set(st.refEdit && a.kind == "roi_box" ? "ref_y" : "y", ny);
     return cmd;
   } else if (a.kind == "hist_page") {
     st.historyPage = std::max(0, st.historyPage + a.arg);
@@ -78,6 +92,8 @@ JsonValue FbUi::applyAction(UiState& st, const UiAction& a, const Rect& region, 
     st.depthRange = a.arg;
   } else if (a.kind == "live_heat") {
     st.liveHeat = !st.liveHeat;
+  } else if (a.kind == "ref_edit") {
+    st.refEdit = !st.refEdit;
   } else if (a.kind == "dialog") {
     st.dialog = static_cast<Dialog>(a.arg);
     if (st.dialog == Dialog::kWifi) {
@@ -130,7 +146,7 @@ void FbUi::perform(const UiAction& a, const Rect& region, int x, int y, const Ui
   } else if (name == "shutdown") {
     st_.dialog = Dialog::kNone;
   } else if (name == "roi") {
-    toast("测点框已更新");
+    toast(cmd.find("ref_x") ? "参考点已更新" : "测点框已更新");
   }
 }
 
@@ -147,13 +163,17 @@ void FbUi::handleTouch(const TouchEvent& e, const UiData& d) {
       st_.pressed = r;
       st_.roiGrab = 0;
       if (a.kind == "roi_box" && d.live.frameW > 0 && d.live.frameH > 0) {
-        dragStart_ = roiBox(d.s, d.live.frameW, d.live.frameH);
+        // The reference group keeps its size: it is only moved.
+        dragStart_ = st_.refEdit ? refGroupBox(d.s, d.live.frameW, d.live.frameH, d.multipoint.refPitchPx)
+                                 : roiBox(d.s, d.live.frameW, d.live.frameH);
         st_.roiGrab = roiGrabAt(roiScreenRect(dragStart_, a, r), e.x, e.y);
+        if (st_.refEdit && st_.roiGrab) st_.roiGrab = kGrabMove;
         st_.roiDrag = dragStart_;
         dragAction_ = a;
         dragRegion_ = r;
         dragFw_ = d.live.frameW;
         dragFh_ = d.live.frameH;
+        dragMaxPx_ = d.s.settings.roiMaxPx;
       }
       dirty_ = true;
       break;
@@ -172,7 +192,7 @@ void FbUi::handleTouch(const TouchEvent& e, const UiData& d) {
         dragging_ = true;
         const double dx = static_cast<double>(e.x - downX_) / std::max(1, dragRegion_.w) * dragAction_.nw;
         const double dy = static_cast<double>(e.y - downY_) / std::max(1, dragRegion_.h) * dragAction_.nh;
-        st_.roiDrag = roiDragged(dragStart_, st_.roiGrab, dx, dy, dragFw_, dragFh_);
+        st_.roiDrag = roiDragged(dragStart_, st_.roiGrab, dx, dy, dragFw_, dragFh_, dragMaxPx_);
         dirty_ = true;
       }
       break;
@@ -184,7 +204,15 @@ void FbUi::handleTouch(const TouchEvent& e, const UiData& d) {
       if (st_.roiGrab) {
         // Releasing a dragged box places it; a tap on the box keeps it as it is.
         st_.roiGrab = 0;
-        if (dragging_) perform(cmdAction(roiCommand(st_.roiDrag, dragFw_, dragFh_)), Rect(), 0, 0, d);
+        if (dragging_ && st_.refEdit) {
+          JsonValue ref = JsonValue::makeObject();
+          ref.set("cmd", "roi");
+          ref.set("ref_x", 0.5 * (st_.roiDrag.x0 + st_.roiDrag.x1));
+          ref.set("ref_y", 0.5 * (st_.roiDrag.y0 + st_.roiDrag.y1));
+          perform(cmdAction(ref), Rect(), 0, 0, d);
+        } else if (dragging_) {
+          perform(cmdAction(roiCommand(st_.roiDrag, dragFw_, dragFh_)), Rect(), 0, 0, d);
+        }
         break;
       }
       const int dx = e.x - downX_, dy = e.y - downY_;
@@ -244,6 +272,7 @@ void FbUi::gather(UiData& d) {
   d.nowMs = monoMs();
   d.wallMs = realtimeMs();
   d.tzOffsetMin = cfg.tzOffsetMin;
+  d.multipoint = cfg.measure.multipoint;
   if (st_.page == Page::kHistory &&
       (d.nowMs - recordsMs_ > 3000 || recordsKey_ != d.s.last.measurementId)) {
     records_ = listRecords(cfg.recordsDir, 200);
@@ -271,7 +300,7 @@ void FbUi::run() {
       gather(d);
       handleEncoder();
       renderUi(canvas_, st_, d, hits_);
-      display_.present(canvas_);
+      display_->present(canvas_);
       dirty_ = false;
       if (now >= nextFrame) nextFrame = now + 125;  // ~8 fps; touch feedback draws in between
     }

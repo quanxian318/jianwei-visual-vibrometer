@@ -1,6 +1,7 @@
 #pragma once
 
 #include <atomic>
+#include <memory>
 #include <mutex>
 #include <string>
 #include <thread>
@@ -49,7 +50,8 @@ class FbUi {
   void toast(const std::string& text);
 
   Application& app_;
-  FbDisplay display_;
+  std::unique_ptr<Display> display_;
+  std::unique_ptr<TextConsoleOff> console_;
   TouchInput touch_;
   Canvas canvas_;
   UiState st_;
@@ -61,7 +63,7 @@ class FbUi {
   UiAction dragAction_;
   Rect dragRegion_;
   NormBox dragStart_;
-  int dragFw_ = 0, dragFh_ = 0;
+  int dragFw_ = 0, dragFh_ = 0, dragMaxPx_ = 0;
   bool dragging_ = false;
 
   std::mutex encMutex_;

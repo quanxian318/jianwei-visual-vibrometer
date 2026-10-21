@@ -5,6 +5,8 @@
 #include <string>
 
 #include "measure/frame_source.h"
+#include "drv/pl_camera.h"
+#include "ui/pl_display.h"
 #include "measure/session.h"
 #include "stereo/stereo_service.h"
 
@@ -110,8 +112,9 @@ struct AppConfig {
   } printer;
 
   struct Camera {
-    std::string source = "v4l2";  // v4l2 | synthetic
+    std::string source = "v4l2";  // v4l2 | pl_vdma | synthetic
     V4l2Config v4l2;
+    PlCameraConfig pl;
     SyntheticConfig synthetic;
   } camera;
 
@@ -159,7 +162,9 @@ struct AppConfig {
 
   struct Ui {
     bool enabled = true;
+    std::string display = "fb";  // fb (fbdev) | pl_vdma (video path of the camera PL)
     std::string fbdev = "/dev/fb0";
+    PlDisplayConfig pl;
     std::string touchDev = "auto";
     bool swapXY = false, invertX = false, invertY = false;
   } ui;

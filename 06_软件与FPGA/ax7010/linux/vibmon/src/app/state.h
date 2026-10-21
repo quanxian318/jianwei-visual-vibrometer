@@ -19,6 +19,9 @@ struct ResultSummary {
   std::string unit = "px";  // mm when calibrated
   double dominantHz = 0, peakToPeak = 0, rms = 0, peak = 0;
   double fps = 0;
+  std::string method = "roi";
+  int points = 0, passedPoints = 0;  // multipoint: grid points, points above the baseline
+  double pointRmsPx = 0;             // multipoint: median RMS of the points above the baseline
   uint32_t dropped = 0;
   AlarmLevel level = AlarmLevel::kUnknown;
   bool saved = false;
@@ -31,6 +34,7 @@ struct ResultSummary {
 struct UserSettings {
   double durationS = 10;
   int roiW = 64, roiH = 64;  // measuring box (pixels)
+  int roiMaxPx = 256;        // largest box side the configured tracker takes (not a setting)
   char axis = 'y';
   bool autoLight = true;
   double warnPp = 2.0, alarmPp = 5.0;  // mm
@@ -92,6 +96,13 @@ struct SystemState {
   double zoom = 1.0;
   double zoomCx = 0.5, zoomCy = 0.5;
   double roiCx = 0.5, roiCy = 0.5;
+  // Multi-point measurement (measurement.method "multipoint").
+  std::string method = "roi";
+  double refCx = 0.1, refCy = 0.9;  // centre of the reference group (normalised)
+  bool baselineValid = false;       // a baseline exists for the current layout
+  int baselineWindows = 0;
+  std::string layoutError;          // the box or the references cannot be used
+  bool baselineCapture = false;     // the running capture collects a baseline
 
   std::string message;  // latest user-facing message
   int64_t messageMs = 0;

@@ -12,6 +12,7 @@
 #include <thread>
 
 #include "drv/stereo_regs.h"
+#include "hw/phys_window.h"
 #include "hw/sysfs_find.h"
 #include "util/log.h"
 
@@ -104,11 +105,51 @@ class UioStereoPlIo : public StereoPlIo {
   std::unique_ptr<MappedRegs> dmaRegs_;
 };
 
+class PhysStereoPlIo : public StereoPlIo {
+ public:
+  bool open(uint64_t coreBase, uint64_t dmaBase, uint64_t bufBase, size_t bufSize, std::string& err) {
+    // Register accesses to an unconfigured PL hang the bus.
+    std::ifstream done("/sys/class/xdevcfg/xdevcfg/device/prog_done");
+    int configured = 1;
+    if (done && (done >> configured) && configured != 1) {
+      err = "PL not configured";
+      return false;
+    }
+    if (!reservedForDevices(bufBase, bufSize)) {
+      err = "stereo DMA buffer is not reserved DDR";
+      return false;
+    }
+    if (!core_.open(coreBase, 0x1000) || !dma_.open(dmaBase, 0x10000) || !buf_.open(bufBase, bufSize)) {
+      err = "cannot map the stereo core, DMA or buffer through /dev/mem";
+      return false;
+    }
+    bufPhys_ = static_cast<uint32_t>(bufBase);
+    return true;
+  }
+  RegIo& core() override { return core_; }
+  RegIo& dma() override { return dma_; }
+  volatile uint32_t* buffer() override { return reinterpret_cast<volatile uint32_t*>(buf_.data()); }
+  uint32_t bufferPhys() const override { return bufPhys_; }
+  size_t bufferSize() const override { return buf_.size(); }
+  bool waitIrq(int) override { return false; }
+
+ private:
+  PhysWindow core_, dma_, buf_;
+  uint32_t bufPhys_ = 0;
+};
+
 }  // namespace
 
 std::unique_ptr<StereoPlIo> openStereoUio(uint64_t coreBase, std::string& err) {
   std::unique_ptr<UioStereoPlIo> io(new UioStereoPlIo);
   if (!io->open(coreBase, err)) return nullptr;
+  return std::unique_ptr<StereoPlIo>(io.release());
+}
+
+std::unique_ptr<StereoPlIo> openStereoPhys(uint64_t coreBase, uint64_t dmaBase, uint64_t bufferBase,
+                                           size_t bufferSize, std::string& err) {
+  std::unique_ptr<PhysStereoPlIo> io(new PhysStereoPlIo);
+  if (!io->open(coreBase, dmaBase, bufferBase, bufferSize, err)) return nullptr;
   return std::unique_ptr<StereoPlIo>(io.release());
 }
 
@@ -173,6 +214,11 @@ bool PlStereo::match(const StereoImage& l, const StereoImage& r, DisparityMap& r
   for (size_t i = 0; i < n; i += 2)
     buf[i / 2] = static_cast<uint32_t>(r.px[i]) | (static_cast<uint32_t>(l.px[i]) << 8) |
                  (static_cast<uint32_t>(r.px[i + 1]) << 16) | (static_cast<uint32_t>(l.px[i + 1]) << 24);
+
+  // The buffer may be write-combined (/dev/mem): drain it before the DMA reads.
+#if defined(__arm__)
+  asm volatile("dsb sy" ::: "memory");
+#endif
 
   // Core first (its input stream waits for START), then S2MM, then MM2S.
   c.write32(kStatus, kStDone | kStOverflow | kStBadSize);

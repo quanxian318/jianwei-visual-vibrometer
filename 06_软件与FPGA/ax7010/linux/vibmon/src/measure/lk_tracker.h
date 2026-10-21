@@ -46,7 +46,7 @@ class LkTracker {
     int passes = 0;       // lk_accum passes used for this frame (PL cycle budget)
   };
 
-  enum class InitStatus { kOk, kOutside, kFlat, kWeakGradient, kAperture };
+  enum class InitStatus { kOk, kOutside, kTooLarge, kFlat, kWeakGradient, kAperture };
 
   LkTracker() = default;
   explicit LkTracker(const Options& o) : opt_(o) {}

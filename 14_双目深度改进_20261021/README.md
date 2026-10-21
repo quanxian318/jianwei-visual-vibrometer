@@ -1,6 +1,6 @@
 # 双目深度改进：PL 双目核（Census＋SGM＋左右校验）、标定校正与 PS 后处理
 
-日期：2026/10/21。按[分工文档](../00_当前设计方案/PL_PS_ESP32职责与接口分工.md)的"双目空间信息"一行：**PL 做双目匹配，输出视差及有效性；PS 做标定、校正配置、视差到深度换算**。对照对象为队友工程 `11_队友Vivado工程_20261021` 里的 sdoira PL BM（原包未改动）。没有上板，没有 Vivado 综合，没有用 AN5642 实拍双目图验证。
+日期：2026/10/21。按[分工文档](../00_当前设计方案/PL_PS_ESP32职责与接口分工.md)的"双目空间信息"一行：**PL 做双目匹配，输出视差及有效性；PS 做标定、校正配置、视差到深度换算**。对照对象为队友工程 `11_队友Vivado工程_20261021` 里的 sdoira PL BM（原包未改动）。没有上板，没有用 AN5642 实拍双目图验证；Vivado 综合实现在 2026/10/22 补做，见“还没做的”第 1 条。
 
 ## 结论
 
@@ -106,7 +106,7 @@ python3 06_软件与FPGA/pc_sim/stereo_benchmark.py <build>/stereo_eval <数据�
 ## 还没做的
 
 1. **PL 上板**：
-   - 在厂家工程里执行 `carrier::add` 和 `stereo::add`，再综合实现，核对时序与资源（AXI DMA IP 约需 1.5–2k LUT，本次未估）。
+   - 2026/10/22 已在队友 AN5642 工程里用 `ax7010/pl/bd/team_bm_to_stereo.tcl` 去掉 BM、接入本核与 AXI DMA（HP1，核 0x43C2_0000、DMA 0x4040_0000）并综合实现（Vivado 2025.2）：13.8k LUT（78%）、32.5 BRAM36（54%）、3 DSP；全设计 WNS +0.51 ns、WHS +0.012 ns，无失败端点；位流与报告在 `06_软件与FPGA/ax7010/pl/stereo/bitstream/`（`an5642_stereo_sgm40.bit.bin` 由 `prepare_an5642_runtime.py` 加载，该脚本同时把 FCLK2 设为 40 MHz）。100 MHz 时 SGM 扫描（路径代价读出→最小值与比较→右视差缓冲写使能，22 级逻辑）约 19.4 ns，WNS −10.2 ns，所以本核和 DMA 改用 FCLK2 40 MHz，256×144 约 61 ms/对；回到 100 MHz 需要给扫描加流水并重做逐位比对。载板 `carrier::add` 尚未合入同一工程。
    - 导出 XSA、构建 PetaLinux，用 `pl_verify_every` 观察 `pl_mismatch_frames` 是否为 0。
    - 与采集、显示、`lk_accum`、视觉显示链一起排 BRAM 预算：基础视频工程约 22.5 个 BRAM36（队友工程总 39.5 减去 BM 的 17），本核 5.5，位移核按 32×32 模板约 4–5，显示链 160×90 约 22，合计接近 60 的上限。去掉 BM 后才放得下。
 2. **AN5642 实拍标定**：

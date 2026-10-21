@@ -291,8 +291,13 @@ std::string reasonText(const std::string& reason) {
       {"bad_timestamps", "帧时间戳无效"},       {"irregular_sampling", "采样间隔不均匀"},
       {"no_spectrum", "无法计算频谱"},          {"roi_not_trackable", "测点纹理不足"},
       {"camera_timeout", "相机无画面"},         {"roi_outside_frame", "测点超出画面"},
-      {"not_converged", "位移计算不稳定"},       {"reference_not_trackable", "参考点纹理不足"},
-      {"reference_invalid", "参考点无效"},
+      {"roi_too_large", "测点框超过跟踪上限"},  {"roi_flat", "测点处没有纹理"},
+      {"roi_weak_texture", "测点纹理太弱"},     {"roi_single_edge", "测点只有单方向纹理"},
+      {"not_converged", "位移计算不稳定"},       {"reference_invalid", "参考点无效"},
+      {"no_signal", "未超过停机基线"},          {"baseline_required", "请先采集停机基线"},
+      {"baseline_mismatch", "帧率与基线不一致"},  {"invalid_windows", "分析窗口无效"},
+      {"baseline_too_short", "基线时长不足"},    {"baseline_not_saved", "基线未能保存"},
+      {"reference_outside_frame", "参考点超出画面"}, {"reference_in_box", "参考点落在测点框内"},
   };
   for (const auto& m : kMap) {
     if (reason == m.key) return m.text;
@@ -315,6 +320,9 @@ std::string errorText(const std::string& code) {
       {"lights_on", "照明或激光开启中"},            {"nano_offline", "协处理器离线"},
       {"shutting_down", "正在关机"},          {"busy", "打印机忙"},
       {"invalid_value", "设置值无效"},        {"save_failed", "设置未能保存"},
+      {"baseline_required", "请先采集停机基线"}, {"baseline_not_used", "当前测量方式不用基线"},
+      {"storage", "存储不可用"},              {"roi_outside_frame", "测点超出画面"},
+      {"reference_outside_frame", "参考点超出画面"}, {"reference_in_box", "参考点落在测点框内"},
   };
   for (const auto& m : kMap) {
     if (code == m.key) return m.text;
@@ -352,6 +360,11 @@ NormBox roiBox(const SystemState& s, int fw, int fh) {
   return NormBox{s.roiCx - hw, s.roiCy - hh, s.roiCx + hw, s.roiCy + hh};
 }
 
+NormBox refGroupBox(const SystemState& s, int fw, int fh, int refPitchPx) {
+  const double hw = (0.5 * refPitchPx + 12.5) / std::max(1, fw), hh = (0.5 * refPitchPx + 12.5) / std::max(1, fh);
+  return NormBox{s.refCx - hw, s.refCy - hh, s.refCx + hw, s.refCy + hh};
+}
+
 Rect roiScreenRect(const NormBox& b, const UiAction& a, const Rect& region) {
   const auto sx = [&](double nx) { return static_cast<int>(std::lround(region.x + (nx - a.nx0) / a.nw * region.w)); };
   const auto sy = [&](double ny) { return static_cast<int>(std::lround(region.y + (ny - a.ny0) / a.nh * region.h)); };
@@ -379,7 +392,7 @@ int roiGrabAt(const Rect& b, int x, int y) {
   return g ? g : kGrabMove;
 }
 
-NormBox roiDragged(const NormBox& b, int grab, double dx, double dy, int fw, int fh) {
+NormBox roiDragged(const NormBox& b, int grab, double dx, double dy, int fw, int fh, int maxPx) {
   // The lower bound wins when the range is empty (box larger than the image).
   const auto clamp = [](double v, double lo, double hi) { return std::max(lo, std::min(hi, v)); };
   NormBox r = b;
@@ -391,8 +404,8 @@ NormBox roiDragged(const NormBox& b, int grab, double dx, double dy, int fw, int
     r.y1 = r.y0 + h;
     return r;
   }
-  const double minW = static_cast<double>(kRoiMinPx) / fw, maxW = static_cast<double>(kRoiMaxPx) / fw;
-  const double minH = static_cast<double>(kRoiMinPx) / fh, maxH = static_cast<double>(kRoiMaxPx) / fh;
+  const double minW = static_cast<double>(kRoiMinPx) / fw, maxW = static_cast<double>(maxPx) / fw;
+  const double minH = static_cast<double>(kRoiMinPx) / fh, maxH = static_cast<double>(maxPx) / fh;
   if (grab & kGrabLeft) r.x0 = clamp(b.x0 + dx, std::max(0.0, b.x1 - maxW), b.x1 - minW);
   if (grab & kGrabRight) r.x1 = clamp(b.x1 + dx, b.x0 + minW, std::min(1.0, b.x0 + maxW));
   if (grab & kGrabTop) r.y0 = clamp(b.y0 + dy, std::max(0.0, b.y1 - maxH), b.y1 - minH);

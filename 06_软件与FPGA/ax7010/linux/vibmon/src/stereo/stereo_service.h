@@ -2,7 +2,6 @@
 
 #include <atomic>
 #include <condition_variable>
-#include <deque>
 #include <functional>
 #include <memory>
 #include <mutex>
@@ -42,6 +41,11 @@ struct StereoConfig {
   // "ps": software SGM with the configurable SgmParams (e.g. 4/8 paths).
   std::string backend = "pl";
   uint64_t plCoreBase = 0x44070000;  // stereo_0 in add_stereo.tcl
+  // Designs without a UIO node (plDmaBase != 0): core, AXI DMA and a
+  // reserved DDR buffer through /dev/mem.
+  uint64_t plDmaBase = 0;
+  uint64_t plBufferBase = 0;
+  uint32_t plBufferSize = 0x100000;
   int plVerifyEvery = 0;             // >0: every N-th PL frame is recomputed on the PS and compared
   bool temporal = true;  // TemporalDisparityFilter on the published map
   std::string calibrationFile = "/etc/vibmon/stereo_calibration.json";
@@ -56,8 +60,9 @@ struct StereoConfig {
 };
 
 // Rectified depth from the left camera (frames offered by the measurement
-// engine) and the right camera (own FrameSource). Runs on the PS today; the
-// matcher is the reference model for a PL port. Publishes only metric depth,
+// engine) and the right camera (own FrameSource, read once per pair).
+// Matching runs on the PL stereo core when present, otherwise on its
+// bit-exact model (or the software SGM) on the PS. Publishes only metric depth,
 // i.e. with a valid stereo calibration; without one it keeps statistics but
 // publishes nothing, so the UI never shows unscaled disparity as millimetres.
 class StereoService {
@@ -90,7 +95,6 @@ class StereoService {
   std::shared_ptr<DepthMap> process(const GrayFrame& left, const GrayFrame& right);
 
  private:
-  void rightLoop();
   void workLoop();
 
   StereoConfig cfg_;
@@ -102,10 +106,10 @@ class StereoService {
   TemporalDisparityFilter temporal_;
   int mapSrcW_ = 0, mapSrcH_ = 0;
   std::atomic<bool> running_{false}, paused_{false};
-  std::thread rightThread_, workThread_;
+  std::atomic<bool> busy_{false};  // a pair is taken or being processed
+  std::thread workThread_;
   std::mutex mutex_;
   std::condition_variable cv_;
-  std::deque<GrayFrame> rightFrames_;  // most recent few
   GrayFrame pendingLeft_;
   bool havePending_ = false;
   int64_t lastOfferNs_ = 0;

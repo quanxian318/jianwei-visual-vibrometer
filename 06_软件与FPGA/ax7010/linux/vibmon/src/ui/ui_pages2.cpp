@@ -307,7 +307,7 @@ void renderSettingsPage(Ui& ui, const UiData& d) {
       JsonValue square = setCmd("roi_width_px", JsonValue(kRoi[i]));
       square.set("roi_height_px", kRoi[i]);
       ui.chip(Rect{r.x + r.w - 4 * 64 - 8 + i * 64, r.y + 12, 58, 36}, buf, u.roiW == kRoi[i] && u.roiH == kRoi[i],
-              !busy, cmdAction(square));
+              !busy && kRoi[i] <= u.roiMaxPx, cmdAction(square));
     }
   }
   {

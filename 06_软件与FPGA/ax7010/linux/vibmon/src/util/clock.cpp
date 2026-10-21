@@ -1,7 +1,10 @@
 #include "util/clock.h"
 
+#include <sys/resource.h>
+#include <sys/syscall.h>
 #include <sys/time.h>
 #include <time.h>
+#include <unistd.h>
 
 #include <cstdio>
 
@@ -32,6 +35,10 @@ void sleepMs(int ms) {
   ts.tv_nsec = static_cast<long>(ms % 1000) * 1000000L;
   while (nanosleep(&ts, &ts) != 0) {
   }
+}
+
+void setThreadNice(int nice) {
+  setpriority(PRIO_PROCESS, static_cast<id_t>(syscall(SYS_gettid)), nice);
 }
 
 // Algorithms from H. Hinnant, "chrono-Compatible Low-Level Date Algorithms".

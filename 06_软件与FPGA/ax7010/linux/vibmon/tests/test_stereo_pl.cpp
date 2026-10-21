@@ -227,6 +227,12 @@ void testRegisterMapMatchesRtl() {
   const std::string here = __FILE__;
   const std::string path = here.substr(0, here.rfind('/') + 1) + "../../../pl/stereo/rtl/stereo_axi.v";
   std::ifstream f(path);
+#if defined(__arm__)
+  if (!f.good()) {  // the source tree is normally not on the target board
+    std::printf("  register map check skipped: %s not found\n", path.c_str());
+    return;
+  }
+#endif
   CHECK(f.good());
   std::stringstream ss;
   ss << f.rdbuf();

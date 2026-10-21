@@ -4,6 +4,7 @@
 #include <fcntl.h>
 #include <linux/fb.h>
 #include <linux/input.h>
+#include <linux/kd.h>
 #include <sys/ioctl.h>
 #include <sys/mman.h>
 #include <unistd.h>
@@ -15,6 +16,21 @@
 #include "util/log.h"
 
 namespace vm {
+
+TextConsoleOff::TextConsoleOff() {
+  fd_ = ::open("/dev/tty0", O_RDWR | O_CLOEXEC);
+  if (fd_ < 0 || ioctl(fd_, KDSETMODE, KD_GRAPHICS) != 0) {
+    LOGW("ui", "text console not switched off: %s", strerror(errno));
+    if (fd_ >= 0) ::close(fd_);
+    fd_ = -1;
+  }
+}
+
+TextConsoleOff::~TextConsoleOff() {
+  if (fd_ < 0) return;
+  ioctl(fd_, KDSETMODE, KD_TEXT);
+  ::close(fd_);
+}
 
 FbDisplay::~FbDisplay() {
   if (mem_) munmap(mem_, size_);

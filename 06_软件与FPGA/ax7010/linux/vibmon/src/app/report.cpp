@@ -41,6 +41,16 @@ Canvas renderReport(const ReportData& d, int width) {
     drawText(c, big, 2, y, "结果无效", black);
     y += big.lineHeight + 2;
     line("原因: " + r.reason);
+  } else if (r.method == "multipoint") {
+    snprintf(buf, sizeof(buf), "主频 %.2f Hz", r.dominantHz);
+    drawText(c, big, 2, y, buf, black);
+    y += big.lineHeight + 2;
+    snprintf(buf, sizeof(buf), "超过停机基线 %d/%d 测点", r.passedPoints, r.points);
+    drawText(c, big, 2, y, buf, black);
+    y += big.lineHeight + 2;
+    snprintf(buf, sizeof(buf), "测点 RMS %.4g px (图像平面)", r.pointRmsPx);
+    line(buf);
+    line("多点测振: 与停机基线比较, 不判级");
   } else {
     snprintf(buf, sizeof(buf), "主频 %.2f Hz", r.dominantHz);
     drawText(c, big, 2, y, buf, black);
@@ -62,7 +72,8 @@ Canvas renderReport(const ReportData& d, int width) {
   PlotStyle st;
   st.symmetric = true;
   if (!d.t.empty()) {
-    drawLinePlot(c, 0, y, width, 150, d.t, d.disp, "位移波形 (s)", r.unit, st);
+    drawLinePlot(c, 0, y, width, 150, d.t, d.disp, r.method == "multipoint" ? "代表测点位移 (s)" : "位移波形 (s)",
+                 r.unit, st);
     y += 154;
   }
   if (!d.f.empty()) {

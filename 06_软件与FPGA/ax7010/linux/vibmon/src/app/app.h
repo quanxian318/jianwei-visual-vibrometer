@@ -58,7 +58,8 @@ class Application {
   MeasurementEngine::Live cameraLive();
   const AppConfig& config() const { return cfg_; }
   // Stereo depth: the stereo module publishes, the UI reads (any thread).
-  // A map older than 3 s is reported as missing.
+  // The last map stays until no new one came for max(3 s, 2.5 x the recent
+  // publish interval); then depth is reported as missing.
   void publishDepth(std::shared_ptr<const DepthMap> depth);
   void applyStereoScale(MeasureConfig& mc);
   std::shared_ptr<const DepthMap> depthLive();
@@ -75,7 +76,12 @@ class Application {
   void applyTime(int64_t unixMs, const char* source);
   void loadRtcTime();
 
-  bool startMeasurement(double durationS, std::string& err);
+  // baseline: collect a motor-off multi-point baseline instead of measuring.
+  bool startMeasurement(double durationS, bool baseline, std::string& err);
+  bool prepareMultiPoint(MeasureConfig& mc, const SystemState& s, bool baseline, std::string& err);
+  MultiPointLayout currentLayout(const SystemState& s, int frameW, int frameH) const;
+  // Looks up the baseline of the current multi-point layout (when it changed).
+  void refreshBaseline();
   void stopMeasurement();
   void onMeasureDone(const MeasureResult& r);
   bool printRecord(const std::string& id, std::string& err);
@@ -143,12 +149,15 @@ class Application {
   int64_t lastTachMs_ = 0;
   std::deque<double> tachPeriods_;
   std::string lastRecordId_;
+  uint32_t baselineHash_ = 0;     // layout of the last baseline lookup
+  bool baselineScanned_ = false;  // false: look up again
   std::string lastVoiceJob_;
   int64_t lastTimeSyncMs_ = -1000000000;
   int64_t cameraRetryMs_ = 0;
   int64_t nanoOfflineSinceMs_ = 0;
   std::mutex depthMutex_;
   std::shared_ptr<const DepthMap> depth_;
+  int64_t depthPublishedNs_ = 0, depthIntervalNs_ = 0;
 };
 
 }  // namespace vm

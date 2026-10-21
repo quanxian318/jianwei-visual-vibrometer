@@ -1,5 +1,6 @@
 #pragma once
 
+#include <array>
 #include <atomic>
 #include <cstdint>
 #include <functional>
@@ -12,6 +13,7 @@
 #include "measure/field_spectrum.h"
 #include "measure/frame_source.h"
 #include "measure/lk_tracker.h"
+#include "measure/multipoint.h"
 #include "measure/spectrum.h"
 #include "measure/tracker.h"
 #include "measure/vision.h"
@@ -19,8 +21,13 @@
 namespace vm {
 
 // Measuring box size limits (pixels): smaller boxes hold too little texture,
-// larger ones make the per-frame NCC search too slow.
-constexpr int kRoiMinPx = 16, kRoiMaxPx = 256;
+// larger ones make the per-frame NCC search too slow. The LK tracker takes at
+// most kLkMaxPixels (64 x 64).
+constexpr int kRoiMinPx = 16, kRoiMaxPx = 256, kRoiMaxPxLk = 64;
+// The measuring box of size w x h centred at (cx, cy) (normalised) in a width x height frame.
+inline Roi boxAt(int width, int height, double cx, double cy, int w, int h) {
+  return Roi{static_cast<int>(cx * width) - w / 2, static_cast<int>(cy * height) - h / 2, w, h};
+}
 
 struct MeasureConfig {
   int roiW = 64, roiH = 64;  // measuring box (pixels)
@@ -39,7 +46,21 @@ struct MeasureConfig {
   double minPeakSnr = 5;            // peak / median of the searched band; below: no clear dominant line
   double maxFinalStepPx = 0.05;     // LK: last update larger than this counts as not converged
   bool fieldSpectrum = true;        // whole-field brightness line detection (independent cross-check)
+  // "roi": the box tracked by `tracker`; "multipoint": the team's multi-point
+  // plate measurement (measure/multipoint.h): grid in the box, references
+  // around (refCx, refCy), motor-off baseline.
+  std::string method = "roi";
+  MultiPointConfig multipoint;
+  // Per capture, set by the application for "multipoint": collect a baseline
+  // instead of measuring; the baseline file to read, or to create.
+  bool baselineCapture = false;
+  std::string baselineFile;
 };
+
+// Largest box side the configured method and tracker take.
+inline int roiMaxPx(const MeasureConfig& m) {
+  return m.method == "roi" && m.tracker == "lk" ? kRoiMaxPxLk : kRoiMaxPx;
+}
 
 struct CaptureSample {
   int64_t tNs = 0;
@@ -80,7 +101,39 @@ struct MeasureResult {
   } reference;
   double rawPpPx = 0, rawRmsPx = 0, rawDominantHz = 0;
   FieldSpectrumResult field;  // brightness-based source frequency, not a displacement
+  std::string method = "roi";
+  // method "multipoint". t/disp/spectrum and the pixel metrics above describe
+  // the representative point (largest gate ratio), dominantHz is the core's.
+  struct MultiPoint {
+    bool baseline = false;  // this capture collected a baseline
+    std::string baselineFile;
+    int baselineWindows = 0;
+    uint32_t layoutHash = 0;
+    int windows = 0, signalWindows = 0, quietWindows = 0, rejectedWindows = 0, mismatchWindows = 0;
+    double frequencyHz = 0, frequencyMinHz = 0, frequencyMaxHz = 0, fs = 0;
+    std::vector<std::array<float, 2>> points, refs;
+    // Last signal window (else the last window), per point.
+    std::vector<float> rmsPx, gateRatio;
+    std::vector<uint8_t> valid, gate;
+    int passed = 0;
+    int representative = -1;
+  } multipoint;
 };
+
+// One multi-point capture: per-frame tracking and the analysed windows.
+struct MultiPointCapture {
+  MultiPointLayout layout;
+  std::vector<int64_t> tNs;
+  std::vector<uint32_t> seq;
+  std::vector<uint8_t> timestampValid;
+  std::vector<std::vector<float>> u, v;     // [point][frame], reference motion removed
+  std::vector<std::vector<uint8_t>> ok;     // [point][frame]
+  std::vector<MultiPointWindow> windows;
+  void reset(const MultiPointLayout& l);
+  void add(const GrayFrame& f, const MultiPointTracker& t, bool tracked);
+};
+// Result of a multi-point measurement (not a baseline) from its windows.
+MeasureResult analyzeMultiPoint(const MultiPointCapture& c, const MeasureConfig& cfg, double nominalFps);
 
 // Target minus reference sample by sample (same frames); a frame is good only if both are.
 std::vector<CaptureSample> relativeSamples(const std::vector<CaptureSample>& target,
@@ -109,6 +162,11 @@ class MeasurementEngine {
     Roi roi;
     uint64_t frameCount = 0;
     VisionLive vision;
+    // Running multi-point capture: layout, baseline or measurement, last window.
+    std::vector<std::array<float, 2>> mpPoints, mpRefs;
+    bool mpBaseline = false;
+    MultiPointWindow mpWindow;
+    int mpWindows = 0;
   };
   using DoneFn = std::function<void(const MeasureResult&)>;
 
@@ -145,6 +203,7 @@ class MeasurementEngine {
   DoneFn done_;
   bool startRequested_ = false, endRequested_ = false, cancelRequested_ = false;
   std::vector<CaptureSample> samples_, refSamples_;
+  MultiPointCapture mp_;
   FieldSpectrum field_;
   int64_t lastPreviewNs_ = 0;
   VisionPipeline vision_;

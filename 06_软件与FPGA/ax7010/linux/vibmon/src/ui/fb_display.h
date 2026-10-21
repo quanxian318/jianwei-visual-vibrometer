@@ -9,15 +9,37 @@
 
 namespace vm {
 
+// Where the UI frames go: /dev/fb0 (FbDisplay) or the PL video path of the
+// camera design (PlDisplay).
+class Display {
+ public:
+  virtual ~Display() = default;
+  virtual int width() const = 0;
+  virtual int height() const = 0;
+  virtual void present(const Canvas& c) = 0;
+};
+
+// Puts the active virtual terminal in graphics mode while the UI runs, so the
+// text console (login prompt, kernel messages, cursor, blanking) stays off
+// the screen; restores text mode on destruction.
+class TextConsoleOff {
+ public:
+  TextConsoleOff();
+  ~TextConsoleOff();
+
+ private:
+  int fd_ = -1;
+};
+
 // Linux framebuffer output (16/24/32 bpp). The HDMI path of the vendor base
 // design exposes /dev/fb0 through DRM fbdev emulation.
-class FbDisplay {
+class FbDisplay : public Display {
  public:
-  ~FbDisplay();
+  ~FbDisplay() override;
   bool open(const std::string& device);
-  int width() const { return w_; }
-  int height() const { return h_; }
-  void present(const Canvas& c);
+  int width() const override { return w_; }
+  int height() const override { return h_; }
+  void present(const Canvas& c) override;
 
  private:
   int fd_ = -1;

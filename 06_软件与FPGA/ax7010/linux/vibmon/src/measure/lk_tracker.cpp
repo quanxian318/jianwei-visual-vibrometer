@@ -18,7 +18,11 @@ bool LkTracker::init(const GrayFrame& ref, const Roi& roi, int searchRadius) {
   px_ = py_ = 0;
   status_ = InitStatus::kOutside;
   const int margin = radius_ + 3;
-  if (roi_.w < 8 || roi_.h < 8 || roi_.w * roi_.h > kLkMaxPixels) return false;
+  if (roi_.w * roi_.h > kLkMaxPixels) {
+    status_ = InitStatus::kTooLarge;
+    return false;
+  }
+  if (roi_.w < 8 || roi_.h < 8) return false;
   if (roi_.x < margin) roi_.x = margin;
   if (roi_.y < margin) roi_.y = margin;
   if (roi_.x + roi_.w + margin > ref.width) roi_.x = ref.width - roi_.w - margin;

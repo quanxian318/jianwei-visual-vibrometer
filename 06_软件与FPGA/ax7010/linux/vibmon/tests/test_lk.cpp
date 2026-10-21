@@ -97,6 +97,9 @@ void testDegenerateRejected() {
   GrayFrame flat = render(stripes, 0, 0, 0);
   CHECK(!tr.init(flat, Roi{64, 44, 32, 32}, 6));
   CHECK(tr.initStatus() == LkTracker::InitStatus::kFlat);
+  Texture tex(7);
+  CHECK(!tr.init(render(tex, 0, 0), Roi{40, 20, 80, 64}, 6));  // more pixels than the engine holds
+  CHECK(tr.initStatus() == LkTracker::InitStatus::kTooLarge);
 }
 
 void testEdgeAndLoss() {

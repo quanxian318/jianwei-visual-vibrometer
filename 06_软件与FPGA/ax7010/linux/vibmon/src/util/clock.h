@@ -10,6 +10,8 @@ inline int64_t monoMs() { return monoNs() / 1000000; }
 int64_t realtimeMs();  // UTC
 bool setRealtimeMs(int64_t unixMs);
 void sleepMs(int ms);
+// Lowers (positive nice) the calling thread's CPU priority, e.g. for display-only work.
+void setThreadNice(int nice);
 
 struct CivilTime {
   int year = 1970, month = 1, day = 1;

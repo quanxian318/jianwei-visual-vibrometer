@@ -52,6 +52,10 @@ bool loadRecord(const std::string& dir, const std::string& id, JsonValue& record
 std::string latestRecordId(const std::string& dir);
 
 // One line of the record list (history page).
+// Method and multi-point figures of a record's "result" object into s
+// (points, points above the baseline, their median RMS).
+void readMultiPointSummary(const JsonValue& result, ResultSummary& s);
+
 struct RecordSummary {
   std::string id, startLocal, pointId, pointName, reason, unit;
   bool valid = false;

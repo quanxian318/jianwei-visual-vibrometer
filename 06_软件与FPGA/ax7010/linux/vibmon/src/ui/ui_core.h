@@ -76,6 +76,7 @@ struct UiState {
   bool liveHeat = false;     // heat-map overlay on the live preview
   int roiGrab = 0;           // measuring box being dragged on the live preview (RoiGrab bits, 0 = none)
   NormBox roiDrag;           // its position while dragging
+  bool refEdit = false;      // multi-point: drags and taps place the reference group, not the box
   std::string toast;
   int64_t toastUntilMs = 0;
   // Wi-Fi dialog
@@ -94,6 +95,7 @@ struct UiData {
   int64_t nowMs = 0;   // CLOCK_MONOTONIC
   int64_t wallMs = 0;  // CLOCK_REALTIME
   int tzOffsetMin = 480;
+  MultiPointConfig multipoint;  // grid and reference layout of the multi-point method
 };
 
 // Immediate-mode painter: widgets draw themselves and register their touch
@@ -155,6 +157,8 @@ Rect fitAspect(const Rect& box, int fw, int fh);
 // Measuring box editing on the live preview ("roi_box" region).
 // Box of the current settings (centre and pixel size) for a fw x fh frame.
 NormBox roiBox(const SystemState& s, int fw, int fh);
+// The multi-point reference group: its 2 x 2 templates around (refCx, refCy).
+NormBox refGroupBox(const SystemState& s, int fw, int fh, int refPitchPx);
 // The box on screen, through the image window that action a shows in region.
 Rect roiScreenRect(const NormBox& b, const UiAction& a, const Rect& region);
 // Part of the on-screen box b that a touch at (x, y) grabs, 0 = none. Edges
@@ -162,8 +166,8 @@ Rect roiScreenRect(const NormBox& b, const UiAction& a, const Rect& region);
 // size inside; the rest of the inside moves the whole box.
 int roiGrabAt(const Rect& b, int x, int y);
 // b with the grabbed part moved by (dx, dy) (normalised), kept inside the
-// image and within kRoiMinPx..kRoiMaxPx for a fw x fh frame.
-NormBox roiDragged(const NormBox& b, int grab, double dx, double dy, int fw, int fh);
+// image and within kRoiMinPx..maxPx (the tracker's limit) for a fw x fh frame.
+NormBox roiDragged(const NormBox& b, int grab, double dx, double dy, int fw, int fh, int maxPx);
 // "roi" command that places the box b (centre and pixel size).
 JsonValue roiCommand(const NormBox& b, int fw, int fh);
 

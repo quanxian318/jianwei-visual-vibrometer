@@ -310,7 +310,8 @@ void testEngineLkWithReference() {
   std::atomic<int> done{0};
   MeasureResult result;
   CHECK(engine.beginCapture(cfg, 0.5, 0.5, [&](const MeasureResult& r) { result = r; ++done; }));
-  for (int i = 0; i < 3000 && done.load() == 0; ++i) std::this_thread::sleep_for(std::chrono::milliseconds(10));
+  // Up to 3 min: on the Cortex-A9 the synthetic source alone needs ~0.1 s per 640x480 frame.
+  for (int i = 0; i < 18000 && done.load() == 0; ++i) std::this_thread::sleep_for(std::chrono::milliseconds(10));
   CHECK(done.load() == 1);
   std::printf("  engine result: %s\n", result.valid ? "valid" : result.reason.c_str());
   engine.stopCamera();

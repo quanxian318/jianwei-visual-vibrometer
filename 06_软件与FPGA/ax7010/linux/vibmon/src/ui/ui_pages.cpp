@@ -71,6 +71,47 @@ void measureBox(Canvas& c, const Rect& clip, const Rect& b, uint32_t color, bool
   }
 }
 
+// Multi-point layout on the preview: grid templates (green), reference
+// templates (amber), the reference group outline while it is being edited,
+// a layout problem, and the chip that switches dragging to the references.
+void drawMultiPoint(Ui& ui, const UiData& d, const Rect& img, const UiAction& roi, bool editable) {
+  Canvas& c = ui.c;
+  const SystemState& s = d.s;
+  const MeasurementEngine::Live& live = d.live;
+  const int fw = live.frameW, fh = live.frameH;
+  std::vector<std::array<float, 2>> pts = live.mpPoints, refs = live.mpRefs;
+  const bool dragRef = editable && ui.st.refEdit && ui.st.roiGrab != 0;
+  if (editable) {
+    const bool dragBox = ui.st.roiGrab != 0 && !ui.st.refEdit;
+    const NormBox nb = dragBox ? ui.st.roiDrag : roiBox(s, fw, fh);
+    const Roi box{static_cast<int>(std::lround(nb.x0 * fw)), static_cast<int>(std::lround(nb.y0 * fh)),
+                  static_cast<int>(std::lround((nb.x1 - nb.x0) * fw)), static_cast<int>(std::lround((nb.y1 - nb.y0) * fh))};
+    const double rcx = dragRef ? 0.5 * (ui.st.roiDrag.x0 + ui.st.roiDrag.x1) : s.refCx;
+    const double rcy = dragRef ? 0.5 * (ui.st.roiDrag.y0 + ui.st.roiDrag.y1) : s.refCy;
+    const MultiPointLayout l = multiPointLayout(fw, fh, box, rcx, rcy, d.multipoint);
+    pts = l.points;
+    refs = l.refs;
+  }
+  const auto patch = [&](const std::array<float, 2>& p, uint32_t col) {
+    const NormBox pb{(p[0] - 12.5) / fw, (p[1] - 12.5) / fh, (p[0] + 12.5) / fw, (p[1] + 12.5) / fh};
+    measureBox(c, img, roiScreenRect(pb, roi, img), col, false, 0, false);
+  };
+  for (const auto& p : pts) patch(p, kGreen);
+  for (const auto& p : refs) patch(p, kAmber);
+  if (!editable) return;
+  if (ui.st.refEdit) {
+    const NormBox rb = dragRef ? ui.st.roiDrag : refGroupBox(s, fw, fh, d.multipoint.refPitchPx);
+    measureBox(c, img, roiScreenRect(rb, roi, img), kAmber, !dragRef, dragRef ? 40 : 0, false);
+  }
+  if (!s.layoutError.empty() && s.layoutError != "camera_not_ready") {
+    const std::string text = reasonText(s.layoutError);
+    const FontFace& f = fontFace(18);
+    const int tw = textWidth(f, text) + 28;
+    fillRoundRect(c, img.x + img.w / 2 - tw / 2, img.y + 56, tw, 32, 16, kRed, 220);
+    drawTextCentered(c, f, img.x + img.w / 2, img.y + 59, text, 0xFFFFFF);
+  }
+}
+
 JsonValue setCmd(const char* key, const JsonValue& v) {
   JsonValue j = JsonValue::makeObject();
   j.set("cmd", "set");
@@ -82,6 +123,9 @@ JsonValue setCmd(const char* key, const JsonValue& v) {
 struct ResultInfo {
   bool have = false, valid = false, saved = false;
   std::string id, reason, unit = "px", timeText, point, calibration;
+  std::string method = "roi";
+  int points = 0, passed = 0;  // multipoint
+  double pointRms = 0;
   double freq = 0, pp = 0, rms = 0, peak = 0, fps = 0, jitterMs = 0, minNcc = 0;
   unsigned long dropped = 0;
   AlarmLevel level = AlarmLevel::kUnknown;
@@ -126,6 +170,12 @@ ResultInfo fromRecord(const RecordView& v) {
   r.jitterMs = jNum(cam, "frame_interval_jitter_ms", 0);
   r.minNcc = jNum(jObj(rec, "quality"), "min_ncc", 0);
   r.calibration = mm ? jStr(jObj(rec, "calibration"), "id", "已标定") : std::string("未标定");
+  ResultSummary mp;
+  readMultiPointSummary(res, mp);
+  r.method = mp.method;
+  r.points = mp.points;
+  r.passed = mp.passedPoints;
+  r.pointRms = mp.pointRmsPx;
   return r;
 }
 
@@ -150,6 +200,10 @@ ResultInfo fromState(const SystemState& s) {
   r.warnPp = s.settings.warnPp;
   r.alarmPp = s.settings.alarmPp;
   r.calibration = l.unit == "mm" ? s.calibrationId : std::string("未标定");
+  r.method = l.method;
+  r.points = l.points;
+  r.passed = l.passedPoints;
+  r.pointRms = l.pointRmsPx;
   return r;
 }
 
@@ -165,6 +219,7 @@ void renderLivePage(Ui& ui, const UiData& d) {
   const MeasurementEngine::Live& live = d.live;
   const bool capturing = s.measureState == "capturing";
   const bool analyzing = s.measureState == "analyzing";
+  const bool multipoint = s.method == "multipoint";
   char buf[160];
 
   // Camera preview.
@@ -173,7 +228,7 @@ void renderLivePage(Ui& ui, const UiData& d) {
   const Rect img = fitAspect(Rect{pc.x + 4, pc.y + 4, pc.w - 8, pc.h - 8}, live.frameW, live.frameH);
   double zx, zy, zw, zh;
   zoomWindow(s, zx, zy, zw, zh);
-  if (!live.preview.empty() && live.previewW > 0) {
+  if (live.cameraOk && !live.preview.empty() && live.previewW > 0) {
     blitGray(c, img.x, img.y, img.w, img.h, live.preview.data(), live.previewW, live.previewH, zx * live.previewW,
              zy * live.previewH, zw * live.previewW, zh * live.previewH);
     const VisionLive& v = live.vision;
@@ -196,11 +251,11 @@ void renderLivePage(Ui& ui, const UiData& d) {
                             static_cast<double>(live.roi.y + live.roi.h) / live.frameH};
       measureBox(c, img, roiScreenRect(tracked, roi, img), kAmber, false, 0, false);
     } else if (live.frameW > 0) {
-      const bool dragging = editable && ui.st.roiGrab != 0;
+      const bool dragging = editable && ui.st.roiGrab != 0 && !ui.st.refEdit;
       const NormBox nb = dragging ? ui.st.roiDrag : roiBox(s, live.frameW, live.frameH);
       const Rect b = roiScreenRect(nb, roi, img);
       const uint32_t col = dragging ? kAccent : kGreen;
-      measureBox(c, img, b, col, !dragging, dragging ? 40 : 0, editable);
+      measureBox(c, img, b, col, !dragging, dragging ? 40 : 0, editable && !ui.st.refEdit);
       const float px = b.x + b.w / 2.f, py = b.y + b.h / 2.f;
       if (img.contains(static_cast<int>(px), static_cast<int>(py))) {
         lineAA(c, px - 16, py, px - 5, py, 2, col);
@@ -221,7 +276,13 @@ void renderLivePage(Ui& ui, const UiData& d) {
         drawTextCentered(c, f, lx + tw / 2, ly + 3, buf, kText);
       }
     }
+    if (multipoint && live.frameW > 0) drawMultiPoint(ui, d, img, roi, editable);
     ui.hit(img, roi, editable);
+    // After the image's own hit region, so a tap on it switches what is dragged.
+    if (multipoint && editable && live.frameW > 0) {
+      ui.chip(Rect{img.x + img.w - 128, img.y + img.h - 44, 120, 34}, "移动参考点", ui.st.refEdit, true,
+              uiAction("ref_edit"));
+    }
   } else {
     drawIcon(c, Icon::kCamera, pc.x + pc.w / 2.f, pc.y + pc.h / 2.f - 30, 56, kText3);
     drawTextCentered(c, fontFace(22, true), pc.x + pc.w / 2, pc.y + pc.h / 2 + 10,
@@ -236,7 +297,8 @@ void renderLivePage(Ui& ui, const UiData& d) {
     std::string text = "预览";
     if (capturing) {
       col = kRed;
-      snprintf(buf, sizeof(buf), "采集中 %.1f / %.0f s", s.measureElapsedS, s.measureDurationS);
+      snprintf(buf, sizeof(buf), "%s %.1f / %.0f s", s.baselineCapture ? "基线采集" : "采集中", s.measureElapsedS,
+               s.measureDurationS);
       text = buf;
     } else if (analyzing) {
       col = kAccent;
@@ -307,7 +369,7 @@ void renderLivePage(Ui& ui, const UiData& d) {
     const Rect r{rx, kCy, rw, 228};
     ui.card(r);
     ui.cardTitle(r, "测量控制", Icon::kTimer);
-    const bool enabled = measureEnabled(s);
+    const bool enabled = measureEnabled(s) && (!multipoint || capturing || s.baselineValid);
     const float cx = r.x + 82.f, cy = r.y + 118.f;
     strokeCircle(c, cx, cy, 66, 6, kNeutral);
     if (capturing && s.measureDurationS > 0) {
@@ -324,7 +386,8 @@ void renderLivePage(Ui& ui, const UiData& d) {
     drawIcon(c, capturing ? Icon::kStop : Icon::kPlay, cx + (capturing ? 0 : 4), cy, 46, enabled ? 0xFFFFFF : kText3);
     ui.hit(btn, cmdAction(capturing ? "measure_stop" : "measure_start"), enabled);
     const int tx = r.x + 162;
-    drawText(c, fontFace(22, true), tx, r.y + 58, capturing ? "停止测量" : "开始测量", enabled ? kText : kText3);
+    drawText(c, fontFace(22, true), tx, r.y + 58,
+             capturing ? (s.baselineCapture ? "停止采集" : "停止测量") : "开始测量", enabled ? kText : kText3);
     if (capturing) {
       snprintf(buf, sizeof(buf), "%.1f / %.0f s", s.measureElapsedS, s.measureDurationS);
     } else if (analyzing) {
@@ -333,17 +396,36 @@ void renderLivePage(Ui& ui, const UiData& d) {
       snprintf(buf, sizeof(buf), "时长 %s s", fmtNum(s.settings.durationS, 3).c_str());
     }
     drawText(c, fontFace(18), tx, r.y + 94, buf, capturing ? kAccent : kText2);
-    snprintf(buf, sizeof(buf), "测点框 %d×%d · %c 向", s.settings.roiW, s.settings.roiH,
-             static_cast<char>(std::toupper(static_cast<unsigned char>(s.settings.axis))));
-    drawText(c, fontFace(14), tx, r.y + 124, buf, kText2);
-    drawText(c, fontFace(14), tx, r.y + 146, s.calibrated ? "已标定 · 毫米结果" : "未标定 · 像素结果",
-             s.calibrated ? kGreen : kAmber);
-    static const int kDur[4] = {5, 10, 30, 60};
-    for (int i = 0; i < 4; ++i) {
-      const Rect cr{r.x + 14 + i * 72, r.y + r.h - 46, 66, 34};
-      snprintf(buf, sizeof(buf), "%d s", kDur[i]);
-      ui.chip(cr, buf, std::fabs(s.settings.durationS - kDur[i]) < 0.01, !capturing && !analyzing,
-              cmdAction(setCmd("duration_s", JsonValue(kDur[i]))));
+    if (multipoint) {
+      // Motor-off baseline first; it belongs to this box and reference group.
+      snprintf(buf, sizeof(buf), "多点测振 · 测点框 %d×%d", s.settings.roiW, s.settings.roiH);
+      drawText(c, fontFace(14), tx, r.y + 124, buf, kText2);
+      if (s.baselineValid) snprintf(buf, sizeof(buf), "停机基线已采集 · %d 窗口", s.baselineWindows);
+      drawText(c, fontFace(14), tx, r.y + 146, s.baselineValid ? buf : "需先停机采集基线",
+               s.baselineValid ? kGreen : kAmber);
+      static const int kDur[2] = {10, 30};
+      for (int i = 0; i < 2; ++i) {
+        const Rect cr{r.x + 14 + i * 72, r.y + r.h - 46, 66, 34};
+        snprintf(buf, sizeof(buf), "%d s", kDur[i]);
+        ui.chip(cr, buf, std::fabs(s.settings.durationS - kDur[i]) < 0.01, !capturing && !analyzing,
+                cmdAction(setCmd("duration_s", JsonValue(kDur[i]))));
+      }
+      const bool baseOk = measureEnabled(s) && !capturing && s.layoutError.empty();
+      ui.chip(Rect{r.x + 14 + 2 * 72, r.y + r.h - 46, 138, 34}, "采集停机基线", false, baseOk,
+              cmdAction("baseline_start"));
+    } else {
+      snprintf(buf, sizeof(buf), "测点框 %d×%d · %c 向", s.settings.roiW, s.settings.roiH,
+               static_cast<char>(std::toupper(static_cast<unsigned char>(s.settings.axis))));
+      drawText(c, fontFace(14), tx, r.y + 124, buf, kText2);
+      drawText(c, fontFace(14), tx, r.y + 146, s.calibrated ? "已标定 · 毫米结果" : "未标定 · 像素结果",
+               s.calibrated ? kGreen : kAmber);
+      static const int kDur[4] = {5, 10, 30, 60};
+      for (int i = 0; i < 4; ++i) {
+        const Rect cr{r.x + 14 + i * 72, r.y + r.h - 46, 66, 34};
+        snprintf(buf, sizeof(buf), "%d s", kDur[i]);
+        ui.chip(cr, buf, std::fabs(s.settings.durationS - kDur[i]) < 0.01, !capturing && !analyzing,
+                cmdAction(setCmd("duration_s", JsonValue(kDur[i]))));
+      }
     }
   }
 
@@ -353,11 +435,22 @@ void renderLivePage(Ui& ui, const UiData& d) {
     ui.card(r);
     ui.cardTitle(r, "实时数据", Icon::kGauge);
     const bool track = capturing && live.frameCount > 0;
-    snprintf(buf, sizeof(buf), "%+.3f", live.lastDisp);
-    ui.metric(r.x + 16, r.y + 36, "位移", track ? buf : "--", "px");
-    snprintf(buf, sizeof(buf), "%.3f", live.lastScore);
-    ui.metric(r.x + 160, r.y + 36, "相关度", track ? buf : "--", "",
-              track && live.lastScore < 0.6 ? kAmber : kText);
+    if (multipoint) {
+      // Latest 128-frame window of the running capture.
+      const MultiPointWindow& w = live.mpWindow;
+      const bool sig = track && w.status == 1;
+      snprintf(buf, sizeof(buf), "%.2f", w.frequencyHz);
+      ui.metric(r.x + 16, r.y + 36, "窗口主频", sig ? buf : "--", sig ? "Hz" : "");
+      snprintf(buf, sizeof(buf), "%d/%zu", w.passed, live.mpPoints.size());
+      ui.metric(r.x + 160, r.y + 36, "超过基线", track && w.status >= 0 ? buf : "--", "",
+                sig ? kGreen : kText);
+    } else {
+      snprintf(buf, sizeof(buf), "%+.3f", live.lastDisp);
+      ui.metric(r.x + 16, r.y + 36, "位移", track ? buf : "--", "px");
+      snprintf(buf, sizeof(buf), "%.3f", live.lastScore);
+      ui.metric(r.x + 160, r.y + 36, "相关度", track ? buf : "--", "",
+                track && live.lastScore < 0.6 ? kAmber : kText);
+    }
     snprintf(buf, sizeof(buf), "%.1f", live.fps);
     ui.metric(r.x + 16, r.y + 92, "帧率", live.fps > 0 ? buf : "--", "fps");
     if (s.distanceValid) {
@@ -428,14 +521,19 @@ void renderResultPage(Ui& ui, const UiData& d) {
   // KPI row.
   const int kw = (kCw - 3 * 8) / 4, kh = 104;
   if (r.valid) {
-    const char* labels[3] = {"主频", "峰峰值", "有效值"};
-    const double vals[3] = {r.freq, r.pp, r.rms};
-    const std::string units[3] = {"Hz", r.unit, r.unit};
+    // Multi-point: points above the motor-off baseline and their median RMS
+    // (image-plane pixels) instead of the single box's peak-to-peak and RMS.
+    const bool mp = r.method == "multipoint";
+    const char* labels[3] = {"主频", mp ? "超过基线测点" : "峰峰值", mp ? "测点 RMS" : "有效值"};
+    snprintf(buf, sizeof(buf), "%d/%d", r.passed, r.points);
+    const std::string values[3] = {fmtNum(r.freq, 4), mp ? std::string(buf) : fmtNum(r.pp, 3),
+                                   fmtNum(mp ? r.pointRms : r.rms, 3)};
+    const std::string units[3] = {"Hz", mp ? "" : r.unit, r.unit};
     for (int i = 0; i < 3; ++i) {
       const Rect k{kCx + i * (kw + 8), kCy, kw, kh};
       ui.card(k);
       drawText(c, fontFace(18), k.x + 16, k.y + 10, labels[i], kText2);
-      const int vx = drawText(c, fontFace(44, true), k.x + 14, k.y + 38, fmtNum(vals[i], i == 0 ? 4 : 3), kText);
+      const int vx = drawText(c, fontFace(44, true), k.x + 14, k.y + 38, values[i], kText);
       drawText(c, fontFace(18), vx + 6, k.y + 64, units[i], kText2);
     }
   } else {
@@ -491,7 +589,7 @@ void renderResultPage(Ui& ui, const UiData& d) {
     const Rect w{kCx, kCy + kh + 34, kCw, 196};
     ui.card(w);
     ChartOptions o;
-    o.title = "位移波形";
+    o.title = r.method == "multipoint" ? "代表测点位移" : "位移波形";
     o.unitY = r.unit;
     o.unitX = "s";
     o.line = kGreen;

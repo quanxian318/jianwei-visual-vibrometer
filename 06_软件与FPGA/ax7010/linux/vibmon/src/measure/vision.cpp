@@ -201,6 +201,7 @@ VisionLive VisionPipeline::live() {
 }
 
 void VisionPipeline::run() {
+  setThreadNice(5);  // display processing yields to tracking
   std::vector<uint8_t> frame;
   while (true) {
     int w = 0, h = 0;

@@ -26,6 +26,10 @@ class FrameSource {
   virtual bool start() = 0;
   virtual void stop() = 0;
   virtual bool next(GrayFrame& out, int timeoutMs) = 0;
+  // The most recently completed frame without waiting for a new one (it may
+  // be one next() returned before); for readers that sample a running camera
+  // now and then. Sources that cannot tell when a frame completed use next().
+  virtual bool latest(GrayFrame& out, int timeoutMs) { return next(out, timeoutMs); }
   virtual std::string describe() const = 0;
   virtual double nominalFps() const = 0;
 };

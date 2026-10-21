@@ -18,7 +18,7 @@ def check(ok, message):
         failures.append(message)
 
 class Daemon:
-    def __init__(self, directory, calibrated=True, carrier=False):
+    def __init__(self, directory, calibrated=True, carrier=False, extra=()):
         self.dir = pathlib.Path(directory)
         self.sock = self.dir / 'ctl.sock'
         cfg = {
@@ -40,6 +40,9 @@ class Daemon:
                 struct.pack_into('<I', regs, 0x20, 1 << 6)
                 (self.dir / 'carrier').write_bytes(regs)
             cfg['hardware'] = {'devices': {'carrier_uio': str(self.dir / 'carrier')}}
+        for e in extra:  # merged one level deep
+            for k, v in e.items():
+                cfg[k] = {**cfg.get(k, {}), **v} if isinstance(v, dict) else v
         (self.dir / 'cfg.json').write_text(json.dumps(cfg))
         self.log = (self.dir / 'daemon.log').open('w')
         self.p = subprocess.Popen([str(binary), '-c', str(self.dir / 'cfg.json')], stdout=self.log, stderr=self.log)
@@ -63,8 +66,8 @@ class Daemon:
                 data += s.recv(65536)
             return json.loads(data)
 
-    def result(self):
-        for _ in range(200):
+    def result(self, polls=200):
+        for _ in range(polls):
             st = self.cmd('status')['data']
             last = st['measurement'].get('last')
             if last:
@@ -159,5 +162,51 @@ with tempfile.TemporaryDirectory(prefix='vibmon-regression-') as temp:
         finally:
             app.close()
             check(app.p.returncode == 0, name + ': SIGTERM follows orderly exit')
+
+    # Multi-point method: motor-off baseline, then the same layout with 7 Hz motion.
+    d = root / 'multipoint'
+    d.mkdir()
+    mp = {'measurement': {'method': 'multipoint', 'duration_s': 4,
+                          'multipoint': {'baseline_dir': str(d / 'baselines'), 'baseline_s': 5.5}}}
+    app = Daemon(d, extra=[mp, {'camera': {'synthetic': {'fps': 60, 'amplitude_px': 0}}}])
+    try:
+        check(app.ready(), 'multipoint: starts')
+        time.sleep(1.5)  # frame size known, baseline looked up
+        st = app.cmd('status')['data']['measurement']['multipoint']
+        check(not st['baseline_valid'] and st['layout_error'] == '', 'multipoint: valid layout, no baseline yet')
+        r = app.cmd('measure_start')
+        check(not r['ok'] and r['error'] == 'baseline_required', 'multipoint: measuring needs a baseline')
+        check(app.cmd('baseline_start')['ok'], 'multipoint: baseline capture starts')
+        for _ in range(300):
+            st = app.cmd('status')['data']['measurement']['multipoint']
+            if st['baseline_valid']:
+                break
+            time.sleep(.05)
+        check(st['baseline_valid'] and st['baseline_windows'] >= 5, 'multipoint: baseline saved for this layout')
+        check(len(list((d / 'baselines').glob('*.vbb'))) == 1, 'multipoint: one baseline file')
+        check(not list((d / 'records').glob('*/record.json')), 'multipoint: a baseline is not a measurement record')
+    finally:
+        app.close()
+    app = Daemon(d, extra=[mp, {'camera': {'synthetic': {'fps': 60, 'amplitude_px': 1.5, 'freq_hz': 7}}}])
+    try:
+        check(app.ready(), 'multipoint: restarts')
+        time.sleep(1.5)
+        check(app.cmd('status')['data']['measurement']['multipoint']['baseline_valid'],
+              'multipoint: baseline found again after a restart')
+        check(app.cmd('measure_start')['ok'], 'multipoint: measurement starts')
+        last = app.result(polls=400)
+        check(last['valid'] and abs(last['dominant_hz'] - 7) < 0.3, 'multipoint: 7 Hz found above the baseline')
+        rec = json.loads((d / 'records' / last['measurement_id'] / 'record.json').read_text())
+        res = rec['result']
+        check(res['method'] == 'multipoint' and 0 < res['multipoint']['passed_points'] == len(res['multipoint']['points']),
+              'multipoint: record lists the points above the baseline')
+        check(res['unit'] == 'px' and res['level'] == 'unknown', 'multipoint: pixels, no mm alarm level')
+        app.cmd('roi', x=0.45)
+        time.sleep(1.5)
+        check(not app.cmd('status')['data']['measurement']['multipoint']['baseline_valid'],
+              'multipoint: moving the box needs a new baseline')
+    finally:
+        app.close()
+        check(app.p.returncode == 0, 'multipoint: SIGTERM follows orderly exit')
 
 sys.exit(bool(failures))

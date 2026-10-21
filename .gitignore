@@ -6,3 +6,6 @@
 *.pyc
 Thumbs.db
 Desktop.ini
+# Local build outputs of the Linux program.
+**/vibmon/build/
+**/vibmon/build_arm/

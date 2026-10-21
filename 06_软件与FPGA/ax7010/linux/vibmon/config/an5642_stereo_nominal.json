@@ -1,0 +1,100 @@
+{
+ "id": "an5642-nominal-20261021",
+ "note": "Nominal AN5642 values, not a checkerboard calibration: 3.6 mm lens on 1.4 um pixels binned to 1280x720 (f about 1260 px), 40 mm baseline, right camera rows 29 px lower (measured on one static pair). Depth in mm is approximate; replace with pc_sim/stereo_calibrate.py output before using it for scale.",
+ "image_size": [
+  1280,
+  720
+ ],
+ "rms_px": 0,
+ "baseline_mm": 40.0,
+ "left": {
+  "K": [
+   1260.0,
+   0,
+   640.0,
+   0,
+   1260.0,
+   360.0,
+   0,
+   0,
+   1
+  ],
+  "D": [
+   0,
+   0,
+   0,
+   0,
+   0
+  ],
+  "R": [
+   1,
+   0,
+   0,
+   0,
+   1,
+   0,
+   0,
+   0,
+   1
+  ],
+  "P": [
+   1260.0,
+   0,
+   640.0,
+   0,
+   0,
+   1260.0,
+   360.0,
+   0,
+   0,
+   0,
+   1,
+   0
+  ]
+ },
+ "right": {
+  "K": [
+   1260.0,
+   0,
+   640.0,
+   0,
+   1260.0,
+   389.0,
+   0,
+   0,
+   1
+  ],
+  "D": [
+   0,
+   0,
+   0,
+   0,
+   0
+  ],
+  "R": [
+   1,
+   0,
+   0,
+   0,
+   1,
+   0,
+   0,
+   0,
+   1
+  ],
+  "P": [
+   1260.0,
+   0,
+   640.0,
+   -50400.0,
+   0,
+   1260.0,
+   360.0,
+   0,
+   0,
+   0,
+   1,
+   0
+  ]
+ }
+}

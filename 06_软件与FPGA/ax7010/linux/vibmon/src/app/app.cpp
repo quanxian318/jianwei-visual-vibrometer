@@ -13,6 +13,7 @@
 #include "app/report.h"
 #include "app/storage.h"
 #include "hw/sysfs_find.h"
+#include "measure/pl_camera_source.h"
 #include "ui/fb_ui.h"
 #include "util/clock.h"
 #include "util/log.h"
@@ -126,6 +127,9 @@ bool Application::init() {
     s.lightPercent = cfg_.light.percent;
     s.roiCx = cfg_.roiCenterX;
     s.roiCy = cfg_.roiCenterY;
+    s.method = cfg_.measure.method;
+    s.refCx = cfg_.measure.refCx;
+    s.refCy = cfg_.measure.refCy;
     s.deviceId = cfg_.deviceId;
     s.appVersion = std::string("vibmon ") + VIBMON_APP_VERSION;
     s.calibrated = cfg_.measure.mmPerPx > 0;
@@ -244,8 +248,13 @@ bool Application::init() {
 
   // Camera.
   std::unique_ptr<FrameSource> src;
+  std::unique_ptr<FrameSource> right;
   if (cfg_.camera.source == "synthetic") {
     src = makeSyntheticSource(cfg_.camera.synthetic);
+  } else if (cfg_.camera.source == "pl_vdma") {
+    auto sources = makePlCameraSources(cfg_.camera.pl);
+    src = std::move(sources[0]);
+    right = std::move(sources[1]);
   } else {
     src = makeV4l2Source(cfg_.camera.v4l2);
   }
@@ -258,9 +267,12 @@ bool Application::init() {
   if (cfg_.stereo.enabled) {
     // PL stereo core (add_stereo.tcl); without it the bit-exact model runs on the PS.
     std::unique_ptr<PlStereo> pl;
-    if (cfg_.stereo.service.backend == "pl") {
+    const StereoConfig& sc = cfg_.stereo.service;
+    if (sc.backend == "pl") {
       std::string perr;
-      std::unique_ptr<StereoPlIo> io = openStereoUio(cfg_.stereo.service.plCoreBase, perr);
+      std::unique_ptr<StereoPlIo> io =
+          sc.plDmaBase ? openStereoPhys(sc.plCoreBase, sc.plDmaBase, sc.plBufferBase, sc.plBufferSize, perr)
+                       : openStereoUio(sc.plCoreBase, perr);
       if (io) {
         pl.reset(new PlStereo(std::move(io)));
         if (!pl->probe(perr)) pl.reset();
@@ -268,7 +280,8 @@ bool Application::init() {
       if (pl) LOGI(kTag, "stereo: PL core found (max width %d)", pl->maxWidth());
       else LOGW(kTag, "stereo: PL core not available (%s); using the bit-exact model on the PS", perr.c_str());
     }
-    stereo_.reset(new StereoService(cfg_.stereo.service, makeV4l2Source(cfg_.stereo.right),
+    if (!right) right = makeV4l2Source(cfg_.stereo.right);
+    stereo_.reset(new StereoService(cfg_.stereo.service, std::move(right),
                                     [this](std::shared_ptr<const DepthMap> d) { publishDepth(std::move(d)); },
                                     std::move(pl)));
     if (stereo_->start()) {
@@ -574,7 +587,7 @@ std::string Application::makeMeasurementId() {
   return id;
 }
 
-bool Application::startMeasurement(double durationS, std::string& err) {
+bool Application::startMeasurement(double durationS, bool baseline, std::string& err) {
   if (shutdown_ || pfail_) {
     err = "power";
     return false;
@@ -593,8 +606,15 @@ bool Application::startMeasurement(double durationS, std::string& err) {
   }
   MeasureConfig mc = cfg_.measure;
   if (durationS > 0) mc.durationS = durationS;
-  applyStereoScale(mc);
   const SystemState s = state_.snapshot();
+  if (mc.method == "multipoint") {
+    if (!prepareMultiPoint(mc, s, baseline, err)) return false;
+  } else if (baseline) {
+    err = "baseline_not_used";
+    return false;
+  } else {
+    applyStereoScale(mc);
+  }
   lightAuto_ = false;
   if (cfg_.light.autoOnMeasure && !s.lightOn) {
     std::string lerr;
@@ -623,11 +643,12 @@ bool Application::startMeasurement(double durationS, std::string& err) {
     return false;
   }
   measuring_ = true;
+  state_.update([baseline](SystemState& st) { st.baselineCapture = baseline; });
   if (cfg_.fan.pauseDuringMeasure && fanOn_) {
     board_->setFan(false);
     fanOn_ = false;
   }
-  setMessage("测量中...");
+  setMessage(baseline ? "采集停机基线..." : "测量中...");
   return true;
 }
 
@@ -670,6 +691,66 @@ void Application::stopMeasurement() {
   if (measuring_ && engine_) engine_->endCapture();
 }
 
+// Multi-point captures: the layout of the current box and reference group,
+// and the baseline to compare with, or a new file to collect one into.
+bool Application::prepareMultiPoint(MeasureConfig& mc, const SystemState& s, bool baseline, std::string& err) {
+  const MeasurementEngine::Live l = engine_->live();
+  const MultiPointLayout layout = currentLayout(s, l.frameW, l.frameH);
+  if (!layout.error.empty()) {
+    err = layout.error;
+    return false;
+  }
+  mc.refCx = s.refCx;
+  mc.refCy = s.refCy;
+  const std::string& dir = mc.multipoint.baselineDir;
+  if (baseline) {
+    if (!makeDirs(dir)) {
+      err = "storage";
+      return false;
+    }
+    mc.baselineCapture = true;
+    mc.durationS = mc.multipoint.baselineS;
+    const std::string tag =
+        s.timeValid ? formatLocal(realtimeMs(), cfg_.tzOffsetMin, "%Y%m%d-%H%M%S") : "M" + std::to_string(monoMs());
+    mc.baselineFile = multiPointBaselinePath(dir, multiPointHash(layout), tag);
+  } else {
+    mc.baselineFile = findMultiPointBaseline(dir, layout);
+    if (mc.baselineFile.empty()) {
+      err = "baseline_required";
+      return false;
+    }
+  }
+  return true;
+}
+
+MultiPointLayout Application::currentLayout(const SystemState& s, int frameW, int frameH) const {
+  if (frameW <= 0 || frameH <= 0) {
+    MultiPointLayout l;
+    l.error = "camera_not_ready";
+    return l;
+  }
+  return multiPointLayout(frameW, frameH, boxAt(frameW, frameH, s.roiCx, s.roiCy, cfg_.measure.roiW, cfg_.measure.roiH),
+                          s.refCx, s.refCy, cfg_.measure.multipoint);
+}
+
+void Application::refreshBaseline() {
+  if (cfg_.measure.method != "multipoint" || !engine_) return;
+  const MeasurementEngine::Live l = engine_->live();
+  const MultiPointLayout layout = currentLayout(state_.snapshot(), l.frameW, l.frameH);
+  const uint32_t hash = layout.error.empty() ? multiPointHash(layout) : 0;
+  if (baselineScanned_ && hash == baselineHash_) return;
+  int windows = 0;
+  const std::string file =
+      hash ? findMultiPointBaseline(cfg_.measure.multipoint.baselineDir, layout, &windows) : std::string();
+  baselineHash_ = hash;
+  baselineScanned_ = true;
+  state_.update([&](SystemState& st) {
+    st.layoutError = layout.error;
+    st.baselineValid = !file.empty();
+    st.baselineWindows = windows;
+  });
+}
+
 void Application::onMeasureDone(const MeasureResult& r) {
   measuring_ = false;
   const int64_t now = monoMs();
@@ -677,6 +758,19 @@ void Application::onMeasureDone(const MeasureResult& r) {
   lightAuto_ = false;
   if (laserRestore_) setLaser(true, nullptr);
   laserRestore_ = false;
+  state_.update([](SystemState& st) { st.baselineCapture = false; });
+  if (r.method == "multipoint" && r.multipoint.baseline) {
+    baselineScanned_ = false;
+    refreshBaseline();
+    if (r.valid) {
+      setMessage("停机基线已保存 (" + std::to_string(r.multipoint.baselineWindows) + " 个窗口)");
+      if (panel_) panel_->flash(PanelService::Flash::kSuccess, now);
+      playVoice("measure_done");
+    } else {
+      setMessage("基线未保存: " + r.reason);
+    }
+    return;
+  }
   const SystemState s = state_.snapshot();
   const bool cal = r.mmPerPx > 0;
   const double k = cal ? r.mmPerPx : 1.0;
@@ -692,6 +786,18 @@ void Application::onMeasureDone(const MeasureResult& r) {
   sum.peak = r.peakAmpPx * k;
   sum.fps = r.fpsMeasured;
   sum.dropped = r.dropped;
+  sum.method = r.method;
+  if (r.method == "multipoint") {
+    const MeasureResult::MultiPoint& mp = r.multipoint;
+    sum.points = static_cast<int>(mp.points.size());
+    sum.passedPoints = mp.passed;
+    std::vector<double> rms;
+    for (size_t i = 0; i < mp.gate.size(); ++i)
+      if (mp.gate[i]) rms.push_back(mp.rmsPx[i]);
+    std::sort(rms.begin(), rms.end());
+    const size_t n = rms.size();
+    if (n) sum.pointRmsPx = n % 2 ? rms[n / 2] : 0.5 * (rms[n / 2 - 1] + rms[n / 2]);
+  }
   sum.pointId = captureContext_.pointId;
   sum.utcMs = realtimeMs();
   sum.level = r.valid && cal ? AlarmService::classify(sum.peakToPeak, cfg_.alarm.warnPp, cfg_.alarm.alarmPp)
@@ -753,8 +859,12 @@ void Application::onMeasureDone(const MeasureResult& r) {
 
   if (r.valid) {
     char buf[128];
-    snprintf(buf, sizeof(buf), "主频 %.2f Hz, 峰峰值 %.4g %s, %s", sum.dominantHz, sum.peakToPeak, sum.unit.c_str(),
-             levelText(sum.level));
+    if (r.method == "multipoint") {
+      snprintf(buf, sizeof(buf), "主频 %.2f Hz, %d/%d 测点超过停机基线", sum.dominantHz, sum.passedPoints, sum.points);
+    } else {
+      snprintf(buf, sizeof(buf), "主频 %.2f Hz, 峰峰值 %.4g %s, %s", sum.dominantHz, sum.peakToPeak, sum.unit.c_str(),
+               levelText(sum.level));
+    }
     setMessage(buf);
     if (sum.saved || pfail_) {
       playVoice(sum.level == AlarmLevel::kAlarm ? "vibration_alarm"
@@ -827,6 +937,7 @@ bool Application::printRecord(const std::string& idIn, std::string& err) {
   const JsonValue& cam = jObj(rec, "camera");
   d.fps = jNum(cam, "fps_measured", 0);
   d.dropped = static_cast<uint32_t>(jInt(cam, "frames_dropped", 0));
+  readMultiPointSummary(res, d.summary);
   const JsonValue& cal = jObj(rec, "calibration");
   d.calibrationText = mm ? jStr(cal, "id", "已标定") : std::string("未标定 (像素)");
   const JsonValue& env = jObj(rec, "environment");
@@ -1044,6 +1155,7 @@ void Application::every200ms() {
 
 void Application::every1s() {
   const int64_t now = monoMs();
+  refreshBaseline();
   updateFromNanoStatus();
   if (nano_->online() && now - lastTimeSyncMs_ > 600000 && jBool(nano_->lastStatus(), "time_valid", false)) {
     lastTimeSyncMs_ = now;
@@ -1104,12 +1216,18 @@ MeasurementEngine::Live Application::cameraLive() {
 
 void Application::publishDepth(std::shared_ptr<const DepthMap> depth) {
   std::lock_guard<std::mutex> lock(depthMutex_);
+  const int64_t now = monoNs();
+  // Measured from publishing, not from the frame time: on the PS a pair can
+  // take seconds, which would make every map stale on arrival.
+  if (depthPublishedNs_ > 0) depthIntervalNs_ = now - depthPublishedNs_;
+  depthPublishedNs_ = now;
   depth_ = std::move(depth);
 }
 
 std::shared_ptr<const DepthMap> Application::depthLive() {
   std::lock_guard<std::mutex> lock(depthMutex_);
-  if (depth_ && monoNs() - depth_->monoNs > 3000000000LL) return nullptr;
+  const int64_t limit = std::max<int64_t>(3000000000LL, depthIntervalNs_ * 5 / 2);
+  if (depth_ && monoNs() - depthPublishedNs_ > limit) return nullptr;
   return depth_;
 }
 
@@ -1122,6 +1240,7 @@ void Application::publishSettings() {
   u.durationS = cfg_.measure.durationS;
   u.roiW = cfg_.measure.roiW;
   u.roiH = cfg_.measure.roiH;
+  u.roiMaxPx = roiMaxPx(cfg_.measure);
   u.axis = cfg_.measure.axis;
   u.autoLight = cfg_.light.autoOnMeasure;
   u.warnPp = cfg_.alarm.warnPp;
@@ -1183,7 +1302,8 @@ bool Application::applySettings(const JsonValue& c, std::string& err) {
   }
   if (c.find("roi_width_px")) roiW = static_cast<int>(jInt(c, "roi_width_px", -1));
   if (c.find("roi_height_px")) roiH = static_cast<int>(jInt(c, "roi_height_px", -1));
-  ok = ok && roiW >= kRoiMinPx && roiW <= kRoiMaxPx && roiH >= kRoiMinPx && roiH <= kRoiMaxPx;
+  const int maxPx = roiMaxPx(cfg_.measure);
+  ok = ok && roiW >= kRoiMinPx && roiW <= maxPx && roiH >= kRoiMinPx && roiH <= maxPx;
   if (c.find("axis")) {
     const std::string a = jStr(c, "axis", "");
     // A loaded calibration fixes the axis its scale belongs to.
@@ -1262,7 +1382,13 @@ bool Application::saveSettings() {
   m.set("duration_s", cfg_.measure.durationS);
   m.set("roi_width_px", cfg_.measure.roiW);
   m.set("roi_height_px", cfg_.measure.roiH);
+  m.set("roi_center_x", cfg_.roiCenterX);
+  m.set("roi_center_y", cfg_.roiCenterY);
   m.set("axis", std::string(1, cfg_.measure.axis));
+  JsonValue ref = JsonValue::makeObject();  // multi-point reference group: a baseline belongs to the layout
+  ref.set("x", cfg_.measure.refCx);
+  ref.set("y", cfg_.measure.refCy);
+  m.set("reference_roi", ref);
   root.set("measurement", m);
   JsonValue l = JsonValue::makeObject();
   l.set("auto_on_measure", cfg_.light.autoOnMeasure);
@@ -1368,6 +1494,23 @@ JsonValue Application::stateJson() {
   m.set("state", s.measureState);
   m.set("elapsed_s", s.measureElapsedS);
   m.set("camera_ok", s.cameraOk);
+  if (engine_) {
+    const auto live = engine_->live();
+    m.set("camera_source", live.source);
+    m.set("frame_width", live.frameW);
+    m.set("frame_height", live.frameH);
+    m.set("frames", static_cast<unsigned long>(live.frameCount));
+    m.set("fps", live.fps);
+    JsonValue vision = JsonValue::makeObject();
+    vision.set("backend", live.vision.backend);
+    vision.set("width", live.vision.w);
+    vision.set("height", live.vision.h);
+    vision.set("fps", live.vision.fps);
+    vision.set("proc_ms", live.vision.procMs);
+    vision.set("settled", live.vision.settled);
+    vision.set("paused", live.vision.paused);
+    m.set("vision", vision);
+  }
   JsonValue sj = JsonValue::makeObject();
   sj.set("enabled", stereo_ != nullptr);
   if (stereo_) {
@@ -1393,6 +1536,24 @@ JsonValue Application::stateJson() {
   m.set("stereo", sj);
   m.set("roi_center_x", s.roiCx);
   m.set("roi_center_y", s.roiCy);
+  m.set("method", s.method);
+  if (s.method == "multipoint") {
+    JsonValue mp = JsonValue::makeObject();
+    mp.set("reference_center_x", s.refCx);
+    mp.set("reference_center_y", s.refCy);
+    mp.set("layout_error", s.layoutError);
+    mp.set("baseline_valid", s.baselineValid);
+    mp.set("baseline_windows", s.baselineWindows);
+    mp.set("baseline_capture", s.baselineCapture);
+    if (engine_) {
+      const MeasurementEngine::Live live = engine_->live();
+      mp.set("windows", live.mpWindows);
+      mp.set("window_status", multiPointStatusName(live.mpWindow.status));
+      mp.set("window_frequency_hz", live.mpWindow.status == 1 ? JsonValue(live.mpWindow.frequencyHz) : JsonValue());
+      mp.set("window_passed", live.mpWindow.passed);
+    }
+    m.set("multipoint", mp);
+  }
   if (s.last.have) {
     JsonValue r = JsonValue::makeObject();
     r.set("measurement_id", s.last.measurementId);
@@ -1427,7 +1588,11 @@ JsonValue Application::handleCommand(const JsonValue& c) {
     return okReply(settingsJson());
   }
   if (cmd == "measure_start") {
-    if (!startMeasurement(jNum(c, "duration_s", 0), err)) return errReply(err);
+    if (!startMeasurement(jNum(c, "duration_s", 0), false, err)) return errReply(err);
+    return okReply();
+  }
+  if (cmd == "baseline_start") {
+    if (!startMeasurement(0, true, err)) return errReply(err);
     return okReply();
   }
   if (cmd == "measure_stop") {
@@ -1467,10 +1632,20 @@ JsonValue Application::handleCommand(const JsonValue& c) {
       size.set("roi_height_px", static_cast<int>(jInt(c, "h", cfg_.measure.roiH)));
       if (!applySettings(size, err)) return errReply(err);
     }
+    // ref_x/ref_y place the multi-point reference group.
     state_.update([&c](SystemState& s) {
       s.roiCx = std::max(0.0, std::min(1.0, jNum(c, "x", s.roiCx)));
       s.roiCy = std::max(0.0, std::min(1.0, jNum(c, "y", s.roiCy)));
+      s.refCx = std::max(0.0, std::min(1.0, jNum(c, "ref_x", s.refCx)));
+      s.refCy = std::max(0.0, std::min(1.0, jNum(c, "ref_y", s.refCy)));
     });
+    const SystemState s = state_.snapshot();
+    cfg_.roiCenterX = s.roiCx;
+    cfg_.roiCenterY = s.roiCy;
+    cfg_.measure.refCx = s.refCx;
+    cfg_.measure.refCy = s.refCy;
+    if (!saveSettings()) LOGW(kTag, "settings not saved to %s", cfg_.settingsFile.c_str());
+    refreshBaseline();
     return okReply();
   }
   if (cmd == "zoom") {

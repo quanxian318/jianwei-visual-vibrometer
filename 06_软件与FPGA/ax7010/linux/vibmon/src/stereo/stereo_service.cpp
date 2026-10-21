@@ -4,6 +4,7 @@
 #include <chrono>
 #include <cmath>
 
+#include "util/clock.h"
 #include "util/log.h"
 
 namespace vm {
@@ -37,7 +38,6 @@ bool StereoService::start() {
     return false;
   }
   running_ = true;
-  rightThread_ = std::thread(&StereoService::rightLoop, this);
   workThread_ = std::thread(&StereoService::workLoop, this);
   return true;
 }
@@ -46,69 +46,63 @@ void StereoService::stop() {
   if (!running_) return;
   running_ = false;
   cv_.notify_all();
-  if (rightThread_.joinable()) rightThread_.join();
   if (workThread_.joinable()) workThread_.join();
   right_->stop();
 }
 
-void StereoService::rightLoop() {
-  GrayFrame f;
-  while (running_) {
-    if (!right_->next(f, 200)) continue;
-    std::lock_guard<std::mutex> lock(mutex_);
-    rightFrames_.push_back(f);
-    while (rightFrames_.size() > 4) rightFrames_.pop_front();
-  }
-}
-
 void StereoService::offerLeft(const GrayFrame& f) {
-  if (!running_ || paused_) return;
+  // While a pair is processed no frame is copied, so the next pair starts
+  // from a fresh left frame (its right frame is read when the pair starts).
+  if (!running_ || paused_ || busy_) return;
   if (cfg_.rateHz > 0 && f.timestampNs - lastOfferNs_ < static_cast<int64_t>(1e9 / cfg_.rateHz)) return;
   lastOfferNs_ = f.timestampNs;
   {
     std::lock_guard<std::mutex> lock(mutex_);
     pendingLeft_ = f;
     havePending_ = true;
+    busy_ = true;
   }
   cv_.notify_one();
 }
 
 void StereoService::workLoop() {
+  // Depth is display work: it yields the CPU to tracking.
+  setThreadNice(10);
+  const int64_t periodNs = static_cast<int64_t>(1e9 / std::max(1.0, right_->nominalFps()));
   while (running_) {
     GrayFrame left, right;
     {
       std::unique_lock<std::mutex> lock(mutex_);
       cv_.wait_for(lock, std::chrono::milliseconds(200), [this] { return havePending_ || !running_; });
       if (!havePending_) continue;
-      left = pendingLeft_;
+      left = std::move(pendingLeft_);
       havePending_ = false;
-      // Software pairing: nearest right frame in time. Not a hardware exposure sync.
-      int best = -1;
-      int64_t bestDt = 0;
-      for (size_t i = 0; i < rightFrames_.size(); ++i) {
-        const int64_t dt = std::llabs(rightFrames_[i].timestampNs - left.timestampNs);
-        if (best < 0 || dt < bestDt) {
-          best = static_cast<int>(i);
-          bestDt = dt;
-        }
-      }
+    }
+    // Software pairing, no hardware exposure sync: the right frame completed
+    // last, or the next one when that is nearer to the left frame's time.
+    // Only the right frames of the pairs are converted.
+    bool ok = right_->latest(right, 200);
+    if (ok && left.timestampNs - right.timestampNs > periodNs / 2) ok = right_->next(right, 200);
+    const double skewMs = ok ? std::llabs(right.timestampNs - left.timestampNs) * 1e-6 : 0;
+    bool pairOk;
+    {
+      std::lock_guard<std::mutex> lock(mutex_);
       stats_.pairs++;
-      if (best < 0 || bestDt * 1e-6 > cfg_.maxSkewMs || !left.timestampValid || !rightFrames_[best].timestampValid) {
-        stats_.skewRejected++;
-        if (best >= 0) stats_.lastSkewMs = bestDt * 1e-6;
-        continue;
+      if (ok) stats_.lastSkewMs = skewMs;
+      pairOk = ok && skewMs <= cfg_.maxSkewMs && left.timestampValid && right.timestampValid;
+      if (!pairOk) stats_.skewRejected++;
+    }
+    if (pairOk) {
+      std::shared_ptr<DepthMap> d = process(left, right);
+      std::lock_guard<std::mutex> lock(mutex_);
+      stats_.lastProcMs = d->procMs;
+      stats_.lastValid = d->validFraction;
+      if (calib_.valid && publish_) {
+        stats_.published++;
+        publish_(d);
       }
-      right = rightFrames_[best];
-      stats_.lastSkewMs = bestDt * 1e-6;
     }
-    std::shared_ptr<DepthMap> d = process(left, right);
-    std::lock_guard<std::mutex> lock(mutex_);
-    stats_.lastProcMs = d->procMs;
-    stats_.lastValid = d->validFraction;
-    if (calib_.valid && publish_) {
-      stats_.published++;
-      publish_(d);
-    }
+    busy_ = false;
   }
 }
 

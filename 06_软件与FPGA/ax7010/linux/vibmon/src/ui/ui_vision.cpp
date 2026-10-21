@@ -110,7 +110,7 @@ void renderVisionPage(Ui& ui, const UiData& d) {
   const SystemState& s = d.s;
   const VisionLive& v = d.live.vision;
   const int view = ui.st.visionView;
-  const bool haveVision = v.w > 0 && v.source.size() == static_cast<size_t>(v.w) * v.h;
+  const bool haveVision = d.live.cameraOk && v.w > 0 && v.source.size() == static_cast<size_t>(v.w) * v.h;
   const DepthMap* dm = d.depth.get();
   const bool haveDepth = dm && dm->w > 0 && dm->mm.size() == static_cast<size_t>(dm->w) * dm->h;
   char buf[160];
@@ -144,7 +144,7 @@ void renderVisionPage(Ui& ui, const UiData& d) {
     }
     if (haveDepth && dm->left.size() == dm->mm.size()) {
       blitGray(c, li.x, li.y, li.w, li.h, dm->left.data(), dm->w, dm->h, 0, 0, dm->w, dm->h);
-    } else if (!d.live.preview.empty() && d.live.previewW > 0) {
+    } else if (d.live.cameraOk && !d.live.preview.empty() && d.live.previewW > 0) {
       blitGray(c, li.x, li.y, li.w, li.h, d.live.preview.data(), d.live.previewW, d.live.previewH, 0, 0,
                d.live.previewW, d.live.previewH);
     } else {

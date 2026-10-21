@@ -31,6 +31,25 @@ const char* levelKey(AlarmLevel l) {
 
 }  // namespace
 
+void readMultiPointSummary(const JsonValue& result, ResultSummary& s) {
+  s.method = jStr(result, "method", "roi");
+  s.points = s.passedPoints = 0;
+  s.pointRmsPx = 0;
+  if (s.method != "multipoint") return;
+  const JsonValue& mp = jObj(result, "multipoint");
+  s.passedPoints = static_cast<int>(jInt(mp, "passed_points", 0));
+  std::vector<double> rms;
+  if (const JsonValue* pts = mp.find("points")) {
+    for (const JsonValue& p : pts->items()) {
+      ++s.points;
+      if (jBool(p, "above_baseline", false)) rms.push_back(jNum(p, "rms_px", 0));
+    }
+  }
+  std::sort(rms.begin(), rms.end());
+  const size_t n = rms.size();
+  if (n) s.pointRmsPx = n % 2 ? rms[n / 2] : 0.5 * (rms[n / 2 - 1] + rms[n / 2]);
+}
+
 bool saveRecord(const std::string& dir, const RecordMeta& m, const MeasureResult& r,
                 const std::vector<ImuSample>& imu, const std::vector<AdxlSample>& adxl, std::string& err) {
   const std::string path = dir + "/" + m.measurementId;
@@ -186,6 +205,55 @@ bool saveRecord(const std::string& dir, const RecordMeta& m, const MeasureResult
   fld.set("lines", lines);
   fld.set("definition", "whole-field brightness spectral lines; frequency indicator only, no displacement unit");
   res.set("field_spectrum", fld);
+  res.set("method", r.method);
+  if (r.method == "multipoint") {
+    const MeasureResult::MultiPoint& mp = r.multipoint;
+    JsonValue j = JsonValue::makeObject();
+    j.set("core", "AX7010_Vibration_Linux_20261021 (third_party/axvibration)");
+    char hash[16];
+    snprintf(hash, sizeof(hash), "%08x", mp.layoutHash);
+    j.set("layout_hash", hash);
+    j.set("baseline_file", mp.baselineFile.empty() ? JsonValue() : JsonValue(mp.baselineFile));
+    j.set("unit", "projected_pixel_rms");
+    const bool sig = mp.signalWindows > 0;
+    j.set("frequency_hz", numOrNull(mp.frequencyHz, sig));
+    j.set("frequency_min_hz", numOrNull(mp.frequencyMinHz, sig));
+    j.set("frequency_max_hz", numOrNull(mp.frequencyMaxHz, sig));
+    j.set("sample_rate_hz", numOrNull(mp.fs, mp.fs > 0));
+    j.set("windows", mp.windows);
+    j.set("signal_windows", mp.signalWindows);
+    j.set("below_baseline_windows", mp.quietWindows);
+    j.set("rejected_windows", mp.rejectedWindows);
+    j.set("baseline_mismatch_windows", mp.mismatchWindows);
+    j.set("passed_points", mp.passed);
+    JsonValue pts = JsonValue::makeArray();
+    for (size_t i = 0; i < mp.points.size(); ++i) {
+      JsonValue p = JsonValue::makeObject();
+      p.set("x", static_cast<double>(mp.points[i][0]));
+      p.set("y", static_cast<double>(mp.points[i][1]));
+      const bool gate = i < mp.gate.size() && mp.gate[i];
+      p.set("valid", i < mp.valid.size() && mp.valid[i]);
+      p.set("above_baseline", gate);
+      p.set("gate_ratio", numOrNull(i < mp.gateRatio.size() ? mp.gateRatio[i] : 0, i < mp.gateRatio.size()));
+      p.set("rms_px", numOrNull(gate ? mp.rmsPx[i] : 0, gate));
+      pts.push(p);
+    }
+    j.set("points", pts);
+    JsonValue refs = JsonValue::makeArray();
+    for (const auto& q : mp.refs) {
+      JsonValue p = JsonValue::makeObject();
+      p.set("x", static_cast<double>(q[0]));
+      p.set("y", static_cast<double>(q[1]));
+      refs.push(p);
+    }
+    j.set("references", refs);
+    j.set("waveform_point", mp.representative);
+    j.set("definition",
+          "team multi-point core: 25x25 templates, background translation removed, 128-frame windows gated "
+          "against a motor-off baseline (3x); rms_px is the 2D image-plane harmonic RMS, not mm; the waveform and "
+          "spectrum files and the px metrics above describe waveform_point");
+    res.set("multipoint", j);
+  }
   res.set("level", levelKey(m.level));
   JsonValue th = JsonValue::makeObject();
   th.set("unit", "mm");

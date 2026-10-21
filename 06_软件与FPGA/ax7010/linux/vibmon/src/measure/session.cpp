@@ -19,6 +19,17 @@ class PointTracker {
     maxStep_ = cfg.maxFinalStepPx;
     return lk_ ? lkt_.init(f, roi, cfg.searchRadius) : ncc_.init(f, roi, cfg.searchRadius);
   }
+  // Result reason when init() failed.
+  const char* initFailure() const {
+    if (!lk_) return "roi_not_trackable";
+    switch (lkt_.initStatus()) {
+      case LkTracker::InitStatus::kTooLarge: return "roi_too_large";
+      case LkTracker::InitStatus::kFlat: return "roi_flat";
+      case LkTracker::InitStatus::kWeakGradient: return "roi_weak_texture";
+      case LkTracker::InitStatus::kAperture: return "roi_single_edge";
+      default: return "roi_outside_frame";
+    }
+  }
   CaptureSample track(const GrayFrame& f) {
     CaptureSample s;
     s.tNs = f.timestampNs;
@@ -215,6 +226,108 @@ MeasureResult analyzeWithReference(const std::vector<CaptureSample>& target, con
   return r;
 }
 
+void MultiPointCapture::reset(const MultiPointLayout& l) {
+  layout = l;
+  tNs.clear();
+  seq.clear();
+  timestampValid.clear();
+  windows.clear();
+  u.assign(l.points.size(), std::vector<float>());
+  v.assign(l.points.size(), std::vector<float>());
+  ok.assign(l.points.size(), std::vector<uint8_t>());
+}
+
+void MultiPointCapture::add(const GrayFrame& f, const MultiPointTracker& t, bool tracked) {
+  tNs.push_back(f.timestampNs);
+  seq.push_back(f.sequence);
+  timestampValid.push_back(f.timestampValid);
+  for (size_t i = 0; i < u.size(); ++i) {
+    u[i].push_back(t.pointU(static_cast<int>(i)));
+    v[i].push_back(t.pointV(static_cast<int>(i)));
+    ok[i].push_back(tracked && t.pointValid(static_cast<int>(i)));
+  }
+}
+
+MeasureResult analyzeMultiPoint(const MultiPointCapture& c, const MeasureConfig& cfg, double nominalFps) {
+  MeasureResult::MultiPoint m;
+  m.baselineFile = cfg.baselineFile;
+  m.layoutHash = multiPointHash(c.layout);
+  m.points = c.layout.points;
+  m.refs = c.layout.refs;
+  m.windows = static_cast<int>(c.windows.size());
+  std::vector<double> freqs;
+  const MultiPointWindow* summary = nullptr;
+  for (const MultiPointWindow& w : c.windows) {
+    if (w.status == 1) {
+      ++m.signalWindows;
+      freqs.push_back(w.frequencyHz);
+      summary = &w;
+    } else if (w.status == 0) {
+      ++m.quietWindows;
+    } else if (w.status == -2) {
+      ++m.mismatchWindows;
+    } else {
+      ++m.rejectedWindows;
+    }
+    if (w.fs > 0) m.fs = w.fs;
+  }
+  if (!summary && !c.windows.empty()) summary = &c.windows.back();
+  if (!freqs.empty()) {
+    std::sort(freqs.begin(), freqs.end());
+    const size_t n = freqs.size();
+    m.frequencyHz = n % 2 ? freqs[n / 2] : 0.5 * (freqs[n / 2 - 1] + freqs[n / 2]);
+    m.frequencyMinHz = freqs.front();
+    m.frequencyMaxHz = freqs.back();
+  }
+  if (summary) {
+    m.rmsPx = summary->rmsPx;
+    m.gateRatio = summary->gateRatio;
+    m.valid = summary->valid;
+    m.gate = summary->gate;
+    m.passed = summary->passed;
+  }
+  float best = -1;
+  for (size_t i = 0; i < m.valid.size(); ++i) {
+    if (m.valid[i] && m.gateRatio[i] > best) {
+      best = m.gateRatio[i];
+      m.representative = static_cast<int>(i);
+    }
+  }
+  if (m.representative < 0 && !c.u.empty()) m.representative = 0;
+
+  // The representative point through the single-point analysis: waveform,
+  // spectrum and timing checks; the core's amplitudes are projected pixels.
+  std::vector<CaptureSample> s(c.tNs.size());
+  for (size_t k = 0; k < s.size(); ++k) {
+    s[k].tNs = c.tNs[k];
+    s[k].seq = c.seq[k];
+    s[k].timestampValid = c.timestampValid[k] != 0;
+    s[k].score = 1;
+    if (m.representative >= 0) {
+      s[k].dx = c.u[m.representative][k];
+      s[k].dy = c.v[m.representative][k];
+      s[k].ok = c.ok[m.representative][k] != 0;
+    }
+  }
+  MeasureConfig pc = cfg;
+  pc.mmPerPx = 0;
+  pc.calibrationId.clear();
+  MeasureResult r = analyzeCapture(s, pc, nominalFps);
+  r.method = "multipoint";
+  r.tracker = "multipoint";
+  r.valid = m.signalWindows > 0;
+  if (r.valid) {
+    r.reason.clear();
+    r.dominantHz = m.frequencyHz;
+  } else {
+    r.dominantHz = 0;
+    r.reason = c.windows.empty() ? "too_few_frames"
+                                 : (m.quietWindows ? "no_signal" : (m.mismatchWindows ? "baseline_mismatch" : "invalid_windows"));
+  }
+  r.multipoint = m;
+  return r;
+}
+
 MeasurementEngine::MeasurementEngine(std::unique_ptr<FrameSource> source, int previewWidth)
     : src_(std::move(source)), previewWidth_(previewWidth) {}
 
@@ -307,7 +420,9 @@ void MeasurementEngine::updatePreview(const GrayFrame& f) {
 void MeasurementEngine::run() {
   GrayFrame frame;
   PointTracker tracker, refTracker;
-  bool refActive = false;
+  MultiPointTracker mpt;
+  bool refActive = false, mpActive = false;
+  Roi box;
   int64_t captureStartNs = 0;
   int64_t fpsWindowStart = monoNs();
   int fpsFrames = 0;
@@ -320,6 +435,7 @@ void MeasurementEngine::run() {
         cancelRequested_ = startRequested_ = endRequested_ = false;
         samples_.clear();
         refSamples_.clear();
+        mpActive = false;
         done_ = nullptr;
         state_ = State::kPreview;
       }
@@ -336,6 +452,7 @@ void MeasurementEngine::run() {
             done_ = nullptr;
             startRequested_ = endRequested_ = false;
             samples_.clear();
+            mpActive = false;
             state_ = State::kPreview;
           }
         }
@@ -393,11 +510,12 @@ void MeasurementEngine::run() {
     }
     if (cancel) {
       samples_.clear();
+      mpActive = false;
       state_ = State::kPreview;
       continue;
     }
     if (start) {
-      auto refuse = [&](const char* reason) {
+      auto refuse = [&](const std::string& reason) {
         MeasureResult r;
         r.reason = reason;
         state_ = State::kPreview;
@@ -408,16 +526,40 @@ void MeasurementEngine::run() {
         }
         if (done) done(r);
       };
-      Roi roi;
-      roi.w = cfg.roiW;
-      roi.h = cfg.roiH;
-      roi.x = static_cast<int>(cx_ * frame.width) - roi.w / 2;
-      roi.y = static_cast<int>(cy_ * frame.height) - roi.h / 2;
+      const Roi roi = boxAt(frame.width, frame.height, cx_, cy_, cfg.roiW, cfg.roiH);
       samples_.clear();
       refSamples_.clear();
+      if (cfg.method == "multipoint") {
+        const MultiPointLayout layout =
+            multiPointLayout(frame.width, frame.height, roi, cfg.refCx, cfg.refCy, cfg.multipoint);
+        std::string err;
+        if (!mpt.start(layout, cfg.baselineCapture, cfg.baselineFile, err)) {
+          LOGW(kTag, "multi-point capture refused: %s", err.c_str());
+          refuse(err);
+          continue;
+        }
+        mp_.reset(layout);
+        mpActive = true;
+        box = roi;
+        const bool analysed = mpt.push(frame);
+        mp_.add(frame, mpt, mpt.frames() > 0);
+        if (analysed) mp_.windows.push_back(mpt.lastWindow());
+        captureStartNs = frame.timestampNs;
+        state_ = State::kCapturing;
+        std::lock_guard<std::mutex> lock(mutex_);
+        live_.roi = roi;
+        live_.durationS = cfg.durationS;
+        live_.recent.clear();
+        live_.mpPoints = layout.points;
+        live_.mpRefs = layout.refs;
+        live_.mpBaseline = cfg.baselineCapture;
+        live_.mpWindow = MultiPointWindow();
+        live_.mpWindows = 0;
+        continue;
+      }
       if (!tracker.init(frame, roi, cfg)) {
-        LOGW(kTag, "ROI has too little texture or lies outside the image");
-        refuse("roi_not_trackable");
+        LOGW(kTag, "ROI %dx%d not trackable: %s", roi.w, roi.h, tracker.initFailure());
+        refuse(tracker.initFailure());
         continue;
       }
       refActive = cfg.referenceEnabled;
@@ -426,8 +568,8 @@ void MeasurementEngine::run() {
         rr.x = static_cast<int>(cfg.refCx * frame.width) - rr.w / 2;
         rr.y = static_cast<int>(cfg.refCy * frame.height) - rr.h / 2;
         if (!refTracker.init(frame, rr, cfg)) {
-          LOGW(kTag, "reference ROI has too little texture or lies outside the image");
-          refuse("reference_not_trackable");
+          LOGW(kTag, "reference ROI not trackable: %s", refTracker.initFailure());
+          refuse(std::string("reference_") + refTracker.initFailure());
           continue;
         }
         refSamples_.push_back(firstSample(frame));
@@ -446,6 +588,65 @@ void MeasurementEngine::run() {
       continue;
     }
     if (state_ != State::kCapturing) continue;
+    if (mpActive) {
+      const uint32_t before = mpt.frames();
+      const bool analysed = mpt.push(frame);
+      mp_.add(frame, mpt, mpt.frames() != before);
+      if (analysed) mp_.windows.push_back(mpt.lastWindow());
+      const double elapsed = (frame.timestampNs - captureStartNs) * 1e-9;
+      {
+        int tracked = 0;
+        for (size_t i = 0; i < mp_.u.size(); ++i) tracked += mpt.pointValid(static_cast<int>(i));
+        std::lock_guard<std::mutex> lock(mutex_);
+        live_.elapsedS = elapsed;
+        live_.lastDisp = cfg.axis == 'x' ? mpt.pointU(0) : mpt.pointV(0);
+        live_.lastScore = mp_.u.empty() ? 0 : static_cast<double>(tracked) / mp_.u.size();
+        live_.recent.push_back(static_cast<float>(live_.lastDisp));
+        if (live_.recent.size() > 600) live_.recent.erase(live_.recent.begin(), live_.recent.begin() + 100);
+        if (analysed) {
+          live_.mpWindow = mpt.lastWindow();
+          live_.mpWindows = static_cast<int>(mp_.windows.size());
+        }
+      }
+      if (end || elapsed >= cfg.durationS) {
+        state_ = State::kAnalyzing;
+        MeasureResult r;
+        if (cfg.baselineCapture) {
+          MeasureResult::MultiPoint& m = r.multipoint;
+          m.baseline = true;
+          m.layoutHash = multiPointHash(mp_.layout);
+          m.points = mp_.layout.points;
+          m.refs = mp_.layout.refs;
+          m.baselineWindows = mpt.baselineWindows();
+          m.windows = static_cast<int>(mp_.windows.size());
+          for (const MultiPointWindow& w : mp_.windows) m.rejectedWindows += w.status != 2;
+          r.method = "multipoint";
+          r.frames = static_cast<uint32_t>(mp_.tNs.size());
+          r.startMonoNs = mp_.tNs.front();
+          r.durationS = (mp_.tNs.back() - mp_.tNs.front()) * 1e-9;
+          r.fpsMeasured = r.durationS > 0 ? (r.frames - 1) / r.durationS : 0;
+          r.fpsNominal = src_->nominalFps();
+          r.valid = mpt.saveBaseline(cfg.baselineFile);
+          if (r.valid) m.baselineFile = cfg.baselineFile;
+          else r.reason = m.baselineWindows < 5 || r.durationS < 5 ? "baseline_too_short" : "baseline_not_saved";
+        } else {
+          r = analyzeMultiPoint(mp_, cfg, src_->nominalFps());
+        }
+        r.roi = box;
+        r.frameWidth = frame.width;
+        r.frameHeight = frame.height;
+        mpActive = false;
+        mp_ = MultiPointCapture();
+        DoneFn done;
+        {
+          std::lock_guard<std::mutex> lock(mutex_);
+          done = done_;
+        }
+        state_ = State::kPreview;
+        if (done) done(r);
+      }
+      continue;
+    }
     const CaptureSample s = tracker.track(frame);
     samples_.push_back(s);
     if (refActive) refSamples_.push_back(refTracker.track(frame));

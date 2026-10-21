@@ -26,6 +26,10 @@ class StereoPlIo {
 
 // UIO node from stereo_generated.dtsi: map0 core, map1 DMA, map2 buffer.
 std::unique_ptr<StereoPlIo> openStereoUio(uint64_t coreBase, std::string& err);
+// Designs without UIO nodes (the team's camera PL): registers and a reserved
+// DDR window through /dev/mem; DONE is polled.
+std::unique_ptr<StereoPlIo> openStereoPhys(uint64_t coreBase, uint64_t dmaBase, uint64_t bufferBase,
+                                           size_t bufferSize, std::string& err);
 
 // Driver of ax7010/pl/stereo (stereo_axi + AXI DMA). match() returns the raw
 // disparity of the PL core, identical to sgmRaw() with plCoreParams(); the

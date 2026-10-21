@@ -258,19 +258,21 @@ int main(int argc, char** argv) {
     CHECK(roiGrabAt(b, b.x + b.w / 2, b.y + b.h - 3) == kGrabBottom);
     CHECK(roiGrabAt(b, b.x - 40, b.y + b.h / 2) == 0);
     // Moving keeps the size and stops at the image border.
-    const NormBox m = roiDragged(nb, kGrabMove, 0.1, -2, 640, 480);
+    const NormBox m = roiDragged(nb, kGrabMove, 0.1, -2, 640, 480, kRoiMaxPx);
     CHECK_NEAR(m.x0, nb.x0 + 0.1, 1e-9);
     CHECK_NEAR(m.y0, 0, 1e-9);
     CHECK_NEAR(m.y1 - m.y0, nb.y1 - nb.y0, 1e-9);
-    // Resizing keeps the opposite edges and stays within 16..256 px.
-    const NormBox g = roiDragged(nb, kGrabRight | kGrabBottom, 1, 0.05, 640, 480);
+    // Resizing keeps the opposite edges and stays within 16 px..the tracker's limit.
+    const NormBox g = roiDragged(nb, kGrabRight | kGrabBottom, 1, 0.05, 640, 480, kRoiMaxPx);
     CHECK_NEAR(g.x0, nb.x0, 1e-9);
     CHECK_NEAR(g.y0, nb.y0, 1e-9);
     CHECK_NEAR((g.x1 - g.x0) * 640, kRoiMaxPx, 1e-6);
     CHECK_NEAR(g.y1, nb.y1 + 0.05, 1e-9);
-    const NormBox t = roiDragged(nb, kGrabLeft, 1, 0, 640, 480);
+    const NormBox t = roiDragged(nb, kGrabLeft, 1, 0, 640, 480, kRoiMaxPx);
     CHECK_NEAR(t.x1, nb.x1, 1e-9);
     CHECK_NEAR((t.x1 - t.x0) * 640, kRoiMinPx, 1e-6);
+    const NormBox lk = roiDragged(nb, kGrabRight, 1, 0, 640, 480, kRoiMaxPxLk);
+    CHECK_NEAR((lk.x1 - lk.x0) * 640, kRoiMaxPxLk, 1e-6);
     const JsonValue cmd = roiCommand(g, 640, 480);
     CHECK(jStr(cmd, "cmd", "") == "roi" && jInt(cmd, "w", 0) == 256 && jInt(cmd, "h", 0) == 88);
     CHECK_NEAR(jNum(cmd, "x", 0), 0.5 * (g.x0 + g.x1), 1e-9);

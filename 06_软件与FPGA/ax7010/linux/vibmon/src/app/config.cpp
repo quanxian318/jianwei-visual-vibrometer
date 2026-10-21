@@ -1,5 +1,6 @@
 #include "app/config.h"
 
+#include <algorithm>
 #include <cctype>
 
 #include "util/json_util.h"
@@ -114,6 +115,11 @@ bool loadConfig(const std::string& path, AppConfig& c, std::string& err) {
   c.camera.v4l2.height = i32(cam, "height", c.camera.v4l2.height);
   c.camera.v4l2.pixelFormat = jStr(cam, "pixel_format", c.camera.v4l2.pixelFormat);
   c.camera.v4l2.fps = i32(cam, "fps", c.camera.v4l2.fps);
+  const JsonValue& pc = jObj(cam, "pl_vdma");
+  c.camera.pl.bufferBase = jAddr(pc, "buffer_base", c.camera.pl.bufferBase);
+  c.camera.pl.frameStride = jAddr(pc, "frame_stride", c.camera.pl.frameStride);
+  c.camera.pl.fps = i32(pc, "fps", c.camera.pl.fps) == 30 ? 30 : 45;
+  c.camera.pl.leftCamera = i32(pc, "left_camera", c.camera.pl.leftCamera) == 0 ? 0 : 1;
   const JsonValue& syn = jObj(cam, "synthetic");
   c.camera.synthetic.freqHz = jNum(syn, "freq_hz", c.camera.synthetic.freqHz);
   c.camera.synthetic.amplitudePx = jNum(syn, "amplitude_px", c.camera.synthetic.amplitudePx);
@@ -130,6 +136,18 @@ bool loadConfig(const std::string& path, AppConfig& c, std::string& err) {
   c.measure.fMinHz = jNum(m, "min_freq_hz", c.measure.fMinHz);
   const std::string tracker = jStr(m, "tracker", c.measure.tracker);
   c.measure.tracker = tracker == "lk" ? "lk" : "ncc";
+  const std::string method = jStr(m, "method", c.measure.method);
+  c.measure.method = method == "multipoint" ? "multipoint" : "roi";
+  const JsonValue& mpj = jObj(m, "multipoint");
+  MultiPointConfig& mp = c.measure.multipoint;
+  mp.maxPoints = std::max(1, std::min(60, i32(mpj, "max_points", mp.maxPoints)));
+  mp.pointPitchPx = std::max(25, i32(mpj, "point_pitch_px", mp.pointPitchPx));
+  mp.refPitchPx = std::max(25, i32(mpj, "ref_pitch_px", mp.refPitchPx));
+  mp.baselineS = std::max(5.0, jNum(mpj, "baseline_s", mp.baselineS));
+  mp.baselineDir = jStr(mpj, "baseline_dir", mp.baselineDir);
+  // A box saved for another method or tracker is cut to what this one takes.
+  c.measure.roiW = std::max(kRoiMinPx, std::min(c.measure.roiW, roiMaxPx(c.measure)));
+  c.measure.roiH = std::max(kRoiMinPx, std::min(c.measure.roiH, roiMaxPx(c.measure)));
   c.measure.minPeakSnr = jNum(m, "min_peak_snr", c.measure.minPeakSnr);
   c.measure.maxFinalStepPx = jNum(m, "lk_max_final_step_px", c.measure.maxFinalStepPx);
   c.measure.fieldSpectrum = jBool(m, "field_spectrum", c.measure.fieldSpectrum);
@@ -163,6 +181,9 @@ bool loadConfig(const std::string& path, AppConfig& c, std::string& err) {
   c.stereo.service.temporal = jBool(st, "temporal_filter", c.stereo.service.temporal);
   c.stereo.service.backend = jStr(st, "backend", c.stereo.service.backend) == "ps" ? "ps" : "pl";
   c.stereo.service.plCoreBase = jAddr(st, "pl_core_base", c.stereo.service.plCoreBase);
+  c.stereo.service.plDmaBase = jAddr(st, "pl_dma_base", c.stereo.service.plDmaBase);
+  c.stereo.service.plBufferBase = jAddr(st, "pl_buffer_base", c.stereo.service.plBufferBase);
+  c.stereo.service.plBufferSize = static_cast<uint32_t>(jAddr(st, "pl_buffer_size", c.stereo.service.plBufferSize));
   c.stereo.service.plVerifyEvery = i32(st, "pl_verify_every", c.stereo.service.plVerifyEvery);
 
   const JsonValue& a = jObj(root, "alarm");
@@ -192,7 +213,9 @@ bool loadConfig(const std::string& path, AppConfig& c, std::string& err) {
 
   const JsonValue& ui = jObj(root, "ui");
   c.ui.enabled = jBool(ui, "enabled", c.ui.enabled);
+  c.ui.display = jStr(ui, "display", c.ui.display);
   c.ui.fbdev = jStr(ui, "fbdev", c.ui.fbdev);
+  c.ui.pl.bufferBase = static_cast<uint32_t>(jAddr(ui, "pl_framebuffer", c.ui.pl.bufferBase));
   c.ui.touchDev = jStr(ui, "touch_device", c.ui.touchDev);
   c.ui.swapXY = jBool(ui, "swap_xy", c.ui.swapXY);
   c.ui.invertX = jBool(ui, "invert_x", c.ui.invertX);
