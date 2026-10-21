@@ -2,7 +2,7 @@
   "date": "2026-10-21",
   "project": "见微视觉测振仪",
   "files": 4141,
-  "total_bytes": 919051813,
+  "total_bytes": 919052415,
   "excluded": [
     ".git/",
     ".agents/",
@@ -20701,13 +20701,13 @@
     },
     {
       "path": "AGENTS.md",
-      "bytes": 19124,
-      "sha256": "a7ec79d32247d5d207cfe2740b0c61711dfcea56d90646b3dd63376a8e22edfb"
+      "bytes": 19585,
+      "sha256": "17dfc746490f3b055d19291d0f0d83d5c4eae56e9cbb498b1c892a4ebd089636"
     },
     {
       "path": "README.md",
-      "bytes": 7003,
-      "sha256": "90f18e87fdf8b878e1cae6ef84bcf35e19e5a8c634bde62ca3d5aa74c90c147c"
+      "bytes": 7144,
+      "sha256": "83083b1f3f1aadbf84fc727b4b0795313e12b9f2789c3aae5fc02318bf2a11e6"
     },
     {
       "path": "云端资料入口.md",
