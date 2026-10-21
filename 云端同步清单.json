@@ -2,7 +2,7 @@
   "date": "2026-10-22",
   "project": "见微视觉测振仪",
   "files": 4270,
-  "total_bytes": 958551190,
+  "total_bytes": 958537392,
   "excluded": [
     ".git/",
     ".agents/",
@@ -4798,8 +4798,8 @@
     },
     {
       "path": "06_软件与FPGA/README.md",
-      "bytes": 17583,
-      "sha256": "1753047bdf9fbd104d0e4baa38f482a63e5b6774e46c97b4bbee87294484e666"
+      "bytes": 18183,
+      "sha256": "266ae74e540d05d055bf89be39bbb87ee1c12ee42ec5e6c0fc4910ad6f09da8e"
     },
     {
       "path": "06_软件与FPGA/ax7010/linux/petalinux/recipes-apps/vibmon/files/vibmon.init",
@@ -4838,8 +4838,8 @@
     },
     {
       "path": "06_软件与FPGA/ax7010/linux/vibmon/config/an5642_stereo_nominal.json",
-      "bytes": 1053,
-      "sha256": "6809801a0e48b08c123065488ccc41661b9ad7177d5b1048fa6a2ed4cbf98182"
+      "bytes": 1341,
+      "sha256": "cce836bf0b2eced29e1d062b40305e74ea4abae5454216094da8f22c0d1359d1"
     },
     {
       "path": "06_软件与FPGA/ax7010/linux/vibmon/config/calibration.example.json",
@@ -4863,8 +4863,8 @@
     },
     {
       "path": "06_软件与FPGA/ax7010/linux/vibmon/src/app/app.cpp",
-      "bytes": 62959,
-      "sha256": "f9501ab8c0b3c9f6dbdba9a28841f0950ed3bad7198b455c84d24ff72baaf48b"
+      "bytes": 64527,
+      "sha256": "a3c19e15ae9a8740e6a11f7f3c6fb535cd762c6e0ea198babb8a87228c554945"
     },
     {
       "path": "06_软件与FPGA/ax7010/linux/vibmon/src/app/app.h",
@@ -5133,8 +5133,8 @@
     },
     {
       "path": "06_软件与FPGA/ax7010/linux/vibmon/src/gfx/font_data.inc",
-      "bytes": 3152052,
-      "sha256": "9ba25a71768949e37584dbb301ab26d9d7059b36ea95cbbd5c07415c16ee710f"
+      "bytes": 3120215,
+      "sha256": "92cb066fec2e083b6db5152ba8c2e309bd2201b10e0de6fb82499120ff88d0d0"
     },
     {
       "path": "06_软件与FPGA/ax7010/linux/vibmon/src/gfx/plot.cpp",
@@ -5328,33 +5328,33 @@
     },
     {
       "path": "06_软件与FPGA/ax7010/linux/vibmon/src/stereo/stereo_match.cpp",
-      "bytes": 17352,
-      "sha256": "eac052cfc40a1c4e19d80caa57fb7ab025b7b0c6d84d9ec5346a2df090627b07"
+      "bytes": 18281,
+      "sha256": "12103460147f6132841bad4f7c49d19affc1638a9af6b4e23e06df38ec944ee9"
     },
     {
       "path": "06_软件与FPGA/ax7010/linux/vibmon/src/stereo/stereo_match.h",
-      "bytes": 5947,
-      "sha256": "64fcec0e6bc8d0b4366c68adbe7849f8f3ed7dcf02f339831db94330d92c42c5"
+      "bytes": 6055,
+      "sha256": "259df01a0267c9a68be0a82a26fe79852d9a3ab1509d75b0cc36a9d0e7076e1d"
     },
     {
       "path": "06_软件与FPGA/ax7010/linux/vibmon/src/stereo/stereo_rectify.cpp",
-      "bytes": 5496,
-      "sha256": "39382b6aad8eb1335aa9ac71510b9863c1c696f06cbb3d37a348828b40b4a770"
+      "bytes": 7269,
+      "sha256": "62e36b9c7872ee2b021e0704ad967b3747982cd087e58bafdea576218548b829"
     },
     {
       "path": "06_软件与FPGA/ax7010/linux/vibmon/src/stereo/stereo_rectify.h",
-      "bytes": 1744,
-      "sha256": "15c192e5857240158d3176ec0609102fcae6e2fdea5a79ae101c4616c9bf7c86"
+      "bytes": 2459,
+      "sha256": "d0609ddc66930baa819755c823ac31cc34e5690d04724dfad39cb796d98cf169"
     },
     {
       "path": "06_软件与FPGA/ax7010/linux/vibmon/src/stereo/stereo_service.cpp",
-      "bytes": 9424,
-      "sha256": "063effb815d000d3c0dba01db3357a9a9ff9174d0abe0e001cd30a57289f7c97"
+      "bytes": 10752,
+      "sha256": "f1a053d8e3d2c9f9e9dd33b6072d2a02a6761a510bbbe4d95e61e68975518906"
     },
     {
       "path": "06_软件与FPGA/ax7010/linux/vibmon/src/stereo/stereo_service.h",
-      "bytes": 5185,
-      "sha256": "97d88b127100b14a23805be36d9899505b6c473f781bc144d49fbf27321e7658"
+      "bytes": 5857,
+      "sha256": "3599194d6d1498362ba8c2e9ca5dbe72a93d1d3ef01409c3ecf8972c9a6d3091"
     },
     {
       "path": "06_软件与FPGA/ax7010/linux/vibmon/src/ui/dynclk_tables.inc",
@@ -5373,13 +5373,13 @@
     },
     {
       "path": "06_软件与FPGA/ax7010/linux/vibmon/src/ui/fb_ui.cpp",
-      "bytes": 10922,
-      "sha256": "bfadb990e3a68a809c31fcb05fb5d989427fa2a07d05a26552a87385eecd8b24"
+      "bytes": 11861,
+      "sha256": "f5078853a50aae58bced135a79c8b45dae738f3903635c64f5d253eb590fa210"
     },
     {
       "path": "06_软件与FPGA/ax7010/linux/vibmon/src/ui/fb_ui.h",
-      "bytes": 2534,
-      "sha256": "4152604f6d4a869c406fb3f26ef85e68cfb3e2b81257dd035f6a448c0a893c25"
+      "bytes": 2624,
+      "sha256": "abf2ebab93acae2ad91becf8bd00872ca35e0c1e4e747f386d10114135a3c70f"
     },
     {
       "path": "06_软件与FPGA/ax7010/linux/vibmon/src/ui/icons.cpp",
@@ -5408,18 +5408,18 @@
     },
     {
       "path": "06_软件与FPGA/ax7010/linux/vibmon/src/ui/ui_core.cpp",
-      "bytes": 24513,
-      "sha256": "ae95039339e37d75ef1b1ab4ed48780d4891bb936c83ee2b18b90b148e111e2b"
+      "bytes": 25133,
+      "sha256": "d64e27868b81a479ac9eb48df85e2e38dd5c0b13a05f477420f82c5e9a9b5837"
     },
     {
       "path": "06_软件与FPGA/ax7010/linux/vibmon/src/ui/ui_core.h",
-      "bytes": 8055,
-      "sha256": "aaeb28d59b6d4e940d12ed0788ee63cd99ac41243c7135ac599c4e5a84c237ef"
+      "bytes": 8480,
+      "sha256": "863e31e67486f828b10da2fedadf6c9f2cfaff65051b9d8842b4d6d5ef4e9fa6"
     },
     {
       "path": "06_软件与FPGA/ax7010/linux/vibmon/src/ui/ui_pages.cpp",
-      "bytes": 28649,
-      "sha256": "2cdfdf4ec3d69b0747541afa31b2c22243da70ebd1dab6fdf878b2b12a8ea2b8"
+      "bytes": 29055,
+      "sha256": "10232f27cccc821690185795a74d6096cbdd74326962d6c4165efd4f85e84d66"
     },
     {
       "path": "06_软件与FPGA/ax7010/linux/vibmon/src/ui/ui_pages2.cpp",
@@ -5428,8 +5428,8 @@
     },
     {
       "path": "06_软件与FPGA/ax7010/linux/vibmon/src/ui/ui_vision.cpp",
-      "bytes": 14072,
-      "sha256": "7b2fc426c13061ca0248e9a2959cc1cef4f49c078b21698f1cb62ab9b10875ce"
+      "bytes": 14966,
+      "sha256": "7d6b81f59b178c05197a80a2a0981d0a142907b37938949018eaa20d15f9b55e"
     },
     {
       "path": "06_软件与FPGA/ax7010/linux/vibmon/src/util/clock.cpp",
@@ -5478,8 +5478,8 @@
     },
     {
       "path": "06_软件与FPGA/ax7010/linux/vibmon/tests/test_app_host.py",
-      "bytes": 11587,
-      "sha256": "210d9ec360c873fc35829eed84ef96422c7b455e19191a1b5b125aa2cb0d1d3a"
+      "bytes": 12040,
+      "sha256": "123e5baafea0b5101c7a1ffc884bf26e59298d08d55872a69b76fde518472c47"
     },
     {
       "path": "06_软件与FPGA/ax7010/linux/vibmon/tests/test_drivers.cpp",
@@ -5513,8 +5513,8 @@
     },
     {
       "path": "06_软件与FPGA/ax7010/linux/vibmon/tests/test_render.cpp",
-      "bytes": 18673,
-      "sha256": "8ac75963e6b4c7a8376ff3cd55670ebb403acea1c3b088522d39d749e4e8fcd0"
+      "bytes": 19780,
+      "sha256": "f152d92d383ee8eb387620b47e4598ba2edba04cbbf3c391f784cf25648a7ef7"
     },
     {
       "path": "06_软件与FPGA/ax7010/linux/vibmon/tests/test_serial.cpp",
@@ -5523,8 +5523,8 @@
     },
     {
       "path": "06_软件与FPGA/ax7010/linux/vibmon/tests/test_stereo.cpp",
-      "bytes": 10515,
-      "sha256": "5f20bd9c03e531594ddacccd0402b0058e47a6dd9553586edfe9dda6b8a9dff0"
+      "bytes": 13223,
+      "sha256": "8ef8c41603a65047113f0a16700a096f70df9a76928ce8c5cbfc9bea752f41a3"
     },
     {
       "path": "06_软件与FPGA/ax7010/linux/vibmon/tests/test_stereo_pl.cpp",
@@ -5838,8 +5838,8 @@
     },
     {
       "path": "06_软件与FPGA/docs/UI与触屏编码器说明_20261021.md",
-      "bytes": 8423,
-      "sha256": "96c68129c843c0933f80d429ab4bc237b4b6067571600a49d7c65e0fa09c8029"
+      "bytes": 9155,
+      "sha256": "92d9ec1e7bab87258ac451e65a9180428e491caca70f7aaf6a3036b7f2e936b2"
     },
     {
       "path": "06_软件与FPGA/docs/validation/app_final.log",
@@ -5903,8 +5903,8 @@
     },
     {
       "path": "06_软件与FPGA/docs/validation/ui_depth.png",
-      "bytes": 103005,
-      "sha256": "bab794220110bbe2e3abf843a097a5a55089c5f778dafcee7c727b75f6da9249"
+      "bytes": 103452,
+      "sha256": "293388993a2a4628fdc2e918d1f4bc7d70be7e74228eb75ca93ae0f8fb6c48ca"
     },
     {
       "path": "06_软件与FPGA/docs/validation/ui_device.png",
@@ -21313,8 +21313,8 @@
     },
     {
       "path": "14_双目深度改进_20261021/README.md",
-      "bytes": 12908,
-      "sha256": "d0138b9783978bf81772de1e26078229f4459bb9fa125928e5b379fbb3805677"
+      "bytes": 13587,
+      "sha256": "ba31dc9ef4821d47f3101529759f86738d0042f64436d470403eae54e500e394"
     },
     {
       "path": "14_双目深度改进_20261021/benchmark_log.txt",
@@ -21348,8 +21348,8 @@
     },
     {
       "path": "AGENTS.md",
-      "bytes": 26508,
-      "sha256": "565e735d9cb202c85ad40ac8d237fec859320bac2d1dc980ecf13483076455da"
+      "bytes": 27066,
+      "sha256": "ecad3956998affc491fc70f0dba9d3a2cdf609c91d2e7a13f7e2d89c23574990"
     },
     {
       "path": "README.md",

@@ -139,6 +139,13 @@ with tempfile.TemporaryDirectory(prefix='vibmon-regression-') as temp:
                       'record notes the laser switched off for the capture')
                 check(app.cmd('status')['data']['laser']['on'], 'laser is back on after the capture')
             elif name == 'settings':
+                app.cmd('zoom', steps=4)
+                check(app.cmd('pan', x=0.99, y=0.01)['ok'], 'the zoomed view can be moved')
+                m = app.cmd('status')['data']['measurement']
+                h = 0.5 / m['zoom']
+                check(m['zoom'] > 2 and abs(m['zoom_center_x'] - (1 - h)) < 1e-9 and abs(m['zoom_center_y'] - h) < 1e-9,
+                      'the zoomed view stays inside the image')
+                app.cmd('zoom_reset')
                 app.cmd('roi', w=96, h=32)
                 r = app.cmd('set', duration_s=30, warn_pp=0.5, alarm_pp=1.0)
                 check(r['ok'] and r['data']['duration_s'] == 30, 'settings are applied')

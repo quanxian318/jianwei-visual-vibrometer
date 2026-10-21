@@ -65,7 +65,9 @@ struct SgmParams {
   // Hole filling for display: invalid runs of at most fillMaxRun px along a
   // row between two measured pixels are interpolated when both ends agree
   // within 1 px, otherwise given the smaller (background) disparity, as an
-  // occlusion next to a depth step. Marked in DisparityMap::filled.
+  // occlusion next to a depth step; then column runs still empty between two
+  // measured pixels that agree within 1 px are interpolated. Marked in
+  // DisparityMap::filled.
   bool fillHoles = true;
   int fillMaxRun = 24;
 };

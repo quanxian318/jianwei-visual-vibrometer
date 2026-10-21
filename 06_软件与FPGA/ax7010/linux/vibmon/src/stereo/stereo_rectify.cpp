@@ -135,6 +135,51 @@ StereoImage rectifyImage(const GrayFrame& src, const RectifyMap& m, int factor) 
   return out;
 }
 
+bool distanceOffsetPx(const DepthMap& d, int calibWidth, double nx, double ny, double distanceMm, double& offsetPx,
+                      std::string& err) {
+  if (!(distanceMm > 0) || d.w <= 0 || d.h <= 0 || !(d.focalPx > 0) || !(d.baselineMm > 0) || calibWidth <= 0 ||
+      d.dispQ4.size() != static_cast<size_t>(d.w) * d.h) {
+    err = "no_depth";
+    return false;
+  }
+  const int cx = static_cast<int>(nx * d.w), cy = static_cast<int>(ny * d.h);
+  std::vector<int> v;
+  for (int y = cy - 4; y <= cy + 4; ++y)
+    for (int x = cx - 4; x <= cx + 4; ++x) {
+      if (x < 0 || y < 0 || x >= d.w || y >= d.h) continue;
+      const size_t i = static_cast<size_t>(y) * d.w + x;
+      if (d.dispQ4[i] > 0 && (d.filled.empty() || !d.filled[i])) v.push_back(d.dispQ4[i]);
+    }
+  if (v.size() < 10) {
+    err = "no_depth_at_point";
+    return false;
+  }
+  std::nth_element(v.begin(), v.begin() + v.size() / 2, v.end());
+  const double measured = v[v.size() / 2] / 16.0, wanted = d.focalPx * d.baselineMm / distanceMm;
+  offsetPx = (measured - wanted) * calibWidth / d.w;
+  return true;
+}
+
+bool saveRightPrincipalX(const std::string& path, double cx, const std::string& id, std::string& err) {
+  JsonValue root;
+  if (!loadJsonFile(path, root, &err)) return false;
+  JsonValue* right = root.find("right");
+  const JsonValue* k = right ? right->find("K") : nullptr;
+  if (!k || !k->isArray() || k->size() != 9) {
+    err = "calibration file has no right camera matrix";
+    return false;
+  }
+  JsonValue nk = JsonValue::makeArray();
+  for (size_t i = 0; i < 9; ++i) nk.push(i == 2 ? JsonValue(cx) : k->at(i));
+  right->set("K", nk);
+  root.set("id", id);
+  if (!writeFileAtomic(path, jsonPretty(root))) {
+    err = "cannot write " + path;
+    return false;
+  }
+  return true;
+}
+
 double rectifiedFocalPx(const StereoCalibration& c, int workW) {
   return c.valid ? c.left.P[0] * workW / c.width : 0;
 }

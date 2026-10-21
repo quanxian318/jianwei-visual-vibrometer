@@ -19,10 +19,13 @@ namespace vm {
 // Per-pixel temporal consistency for a static or slowly changing scene:
 // a measured disparity is shown once two consecutive frames agree within
 // 1 px; agreeing values are averaged (IIR, weight 1/4), a jump restarts the
-// pixel, a missing measurement holds the last value for one frame at most.
-// Suppresses frame-to-frame flicker of isolated wrong matches.
+// pixel. A confirmed pixel that is invalid in a frame keeps its value for
+// kHoldFrames frames: the first as a measurement, the others for display
+// only (marked filled). Suppresses flicker of isolated wrong matches and of
+// pixels that drop out now and then.
 class TemporalDisparityFilter {
  public:
+  static constexpr int kHoldFrames = 4;  // about 1 s at 4 depth maps per second
   void reset() { avg_.clear(); }
   DisparityMap apply(const DisparityMap& in);
 
@@ -86,10 +89,14 @@ class StereoService {
   bool start();
   void stop();
   void setPaused(bool paused) { paused_ = paused; }
+  // Moves the right image by offsetPx (calibration-size pixels, positive
+  // shrinks every disparity), saves it in the calibration file under a new
+  // id ending in "-dist<tag>" and uses it from the next pair on.
+  bool correctOffset(double offsetPx, const std::string& tag, std::string& err);
   // Called from the camera thread with every left frame; cheap when not due.
   void offerLeft(const GrayFrame& f);
   Stats stats();
-  const StereoCalibration& calibration() const { return calib_; }
+  StereoCalibration calibration();  // a copy: the work thread may replace it
 
   // Processes one pair synchronously (used by the thread and by tests).
   std::shared_ptr<DepthMap> process(const GrayFrame& left, const GrayFrame& right);
@@ -102,6 +109,9 @@ class StereoService {
   std::unique_ptr<PlStereo> pl_;
   PublishFn publish_;
   StereoCalibration calib_;
+  std::mutex calibMutex_;  // calib_ writes and reads from other threads; pending correction
+  StereoCalibration pendingCalib_;
+  bool calibChanged_ = false;
   RectifyMap mapL_, mapR_;
   TemporalDisparityFilter temporal_;
   int mapSrcW_ = 0, mapSrcH_ = 0;

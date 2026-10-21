@@ -147,6 +147,8 @@ void FbUi::perform(const UiAction& a, const Rect& region, int x, int y, const Ui
     st_.dialog = Dialog::kNone;
   } else if (name == "roi") {
     toast(cmd.find("ref_x") ? "参考点已更新" : "测点框已更新");
+  } else if (name == "stereo_distance") {
+    toast("双目深度已按该距离校正");
   }
 }
 
@@ -162,6 +164,7 @@ void FbUi::handleTouch(const TouchEvent& e, const UiData& d) {
       st_.pressing = !a.isNull();
       st_.pressed = r;
       st_.roiGrab = 0;
+      panArmed_ = false;
       if (a.kind == "roi_box" && d.live.frameW > 0 && d.live.frameH > 0) {
         // The reference group keeps its size: it is only moved.
         dragStart_ = st_.refEdit ? refGroupBox(d.s, d.live.frameW, d.live.frameH, d.multipoint.refPitchPx)
@@ -175,6 +178,11 @@ void FbUi::handleTouch(const TouchEvent& e, const UiData& d) {
         dragFh_ = d.live.frameH;
         dragMaxPx_ = d.s.settings.roiMaxPx;
       }
+      if ((a.kind == "roi_box" || a.kind == "pan_view") && !st_.roiGrab && d.s.zoom > 1.01) {
+        panArmed_ = true;
+        dragAction_ = a;
+        dragRegion_ = r;
+      }
       dirty_ = true;
       break;
     }
@@ -186,6 +194,13 @@ void FbUi::handleTouch(const TouchEvent& e, const UiData& d) {
           st_.pressing = false;
           dirty_ = true;
         }
+      }
+      // The zoomed view follows the finger; it is set on release.
+      if (panArmed_ && (dragging_ || std::abs(e.x - downX_) > 6 || std::abs(e.y - downY_) > 6)) {
+        dragging_ = true;
+        st_.panning = true;
+        pannedCentre(dragAction_, dragRegion_, e.x - downX_, e.y - downY_, st_.panCx, st_.panCy);
+        dirty_ = true;
       }
       // The box follows the finger once it has left a small dead zone.
       if (st_.roiGrab && (dragging_ || std::abs(e.x - downX_) > 6 || std::abs(e.y - downY_) > 6)) {
@@ -213,6 +228,16 @@ void FbUi::handleTouch(const TouchEvent& e, const UiData& d) {
         } else if (dragging_) {
           perform(cmdAction(roiCommand(st_.roiDrag, dragFw_, dragFh_)), Rect(), 0, 0, d);
         }
+        break;
+      }
+      panArmed_ = false;
+      if (st_.panning) {
+        st_.panning = false;
+        JsonValue pan = JsonValue::makeObject();
+        pan.set("cmd", "pan");
+        pan.set("x", st_.panCx);
+        pan.set("y", st_.panCy);
+        perform(cmdAction(pan), Rect(), 0, 0, d);
         break;
       }
       const int dx = e.x - downX_, dy = e.y - downY_;

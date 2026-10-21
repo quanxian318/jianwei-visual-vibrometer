@@ -106,8 +106,41 @@ void StereoService::workLoop() {
   }
 }
 
+StereoCalibration StereoService::calibration() {
+  std::lock_guard<std::mutex> lock(calibMutex_);
+  return calibChanged_ ? pendingCalib_ : calib_;
+}
+
+bool StereoService::correctOffset(double offsetPx, const std::string& tag, std::string& err) {
+  StereoCalibration c = calibration();
+  if (!c.valid) {
+    err = "no_calibration";
+    return false;
+  }
+  c.right.K[2] -= offsetPx;
+  const size_t at = c.id.find("-dist");
+  c.id = (at == std::string::npos ? c.id : c.id.substr(0, at)) + "-dist" + tag;
+  if (!saveRightPrincipalX(cfg_.calibrationFile, c.right.K[2], c.id, err)) return false;
+  LOGI(kTag, "right image moved by %.2f px (cx %.2f), calibration %s", offsetPx, c.right.K[2], c.id.c_str());
+  std::lock_guard<std::mutex> lock(calibMutex_);
+  pendingCalib_ = c;
+  calibChanged_ = true;
+  return true;
+}
+
 std::shared_ptr<DepthMap> StereoService::process(const GrayFrame& left, const GrayFrame& right) {
   const auto t0 = std::chrono::steady_clock::now();
+  {
+    std::lock_guard<std::mutex> lock(calibMutex_);
+    if (calibChanged_) {  // new rectification: maps and the temporal history start over
+      calib_ = pendingCalib_;
+      calibChanged_ = false;
+      mapSrcW_ = mapSrcH_ = 0;
+      temporal_.reset();
+      std::lock_guard<std::mutex> slock(mutex_);
+      stats_.calibrationId = calib_.id;
+    }
+  }
   if (left.width != mapSrcW_ || left.height != mapSrcH_) {
     mapL_ = buildRectifyMap(calib_, false, left.width, left.height, cfg_.workWidth, cfg_.workHeight);
     mapR_ = buildRectifyMap(calib_, true, left.width, left.height, cfg_.workWidth, cfg_.workHeight);
@@ -215,11 +248,13 @@ DisparityMap TemporalDisparityFilter::apply(const DisparityMap& in) {
   DisparityMap out = in;
   for (size_t i = 0; i < n; ++i) {
     if (!in.measured(i)) {
-      // Filled or invalid this frame: hold a confirmed value once, then drop it.
-      if (count_[i] >= 2 && miss_[i] == 0 && in.q4[i] < 0) {
-        miss_[i] = 1;
+      // Invalid this frame: hold a confirmed value, the first frame as a
+      // measurement, then for display only. Filled pixels keep their fill.
+      if (count_[i] >= 2 && miss_[i] < kHoldFrames && in.q4[i] < 0) {
+        ++miss_[i];
         out.q4[i] = static_cast<int16_t>((avg_[i] + 8) >> 4);
-        if (!out.filled.empty()) out.filled[i] = 0;
+        if (miss_[i] > 1 && out.filled.empty()) out.filled.assign(n, 0);
+        if (!out.filled.empty()) out.filled[i] = miss_[i] > 1;
         continue;
       }
       if (in.q4[i] < 0) count_[i] = 0;

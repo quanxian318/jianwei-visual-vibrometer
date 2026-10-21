@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 
+#include "measure/depth.h"
 #include "measure/frame_source.h"
 #include "stereo/stereo_match.h"
 
@@ -43,5 +44,15 @@ StereoImage rectifyImage(const GrayFrame& src, const RectifyMap& m, int factor);
 
 // Rectified focal length (px) at the working width.
 double rectifiedFocalPx(const StereoCalibration& c, int workW);
+
+// Known distance at (nx, ny) (normalised) of depth map d: the disparity the
+// pair has in excess there (median of the measured pixels within 4 px minus
+// focal * baseline / distance), in pixels of the calibration image size.
+// Positive: the depths are too short, as when the right lens sits off centre.
+bool distanceOffsetPx(const DepthMap& d, int calibWidth, double nx, double ny, double distanceMm, double& offsetPx,
+                      std::string& err);
+// Writes the right camera's principal point x (K[2]) and the id into a
+// calibration file, everything else as it was.
+bool saveRightPrincipalX(const std::string& path, double cx, const std::string& id, std::string& err);
 
 }  // namespace vm

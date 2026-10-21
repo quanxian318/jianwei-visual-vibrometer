@@ -660,7 +660,7 @@ void Application::applyStereoScale(MeasureConfig& mc) {
   if (!stereo_ || !engine_) return;
   const MeasurementEngine::Live l = engine_->live();
   const std::shared_ptr<const DepthMap> d = depthLive();
-  const StereoCalibration& c = stereo_->calibration();
+  const StereoCalibration c = stereo_->calibration();
   double mmPerPx = 0, z = 0;
   const SystemState s = state_.snapshot();
   const bool ok = d && c.valid && l.frameW > 0 && l.frameH > 0 &&
@@ -1536,6 +1536,9 @@ JsonValue Application::stateJson() {
   m.set("stereo", sj);
   m.set("roi_center_x", s.roiCx);
   m.set("roi_center_y", s.roiCy);
+  m.set("zoom", s.zoom);
+  m.set("zoom_center_x", s.zoomCx);
+  m.set("zoom_center_y", s.zoomCy);
   m.set("method", s.method);
   if (s.method == "multipoint") {
     JsonValue mp = JsonValue::makeObject();
@@ -1652,6 +1655,35 @@ JsonValue Application::handleCommand(const JsonValue& c) {
     const int steps = static_cast<int>(jInt(c, "steps", 0));
     state_.update([steps](SystemState& s) { s.zoom = std::max(1.0, std::min(8.0, s.zoom * std::pow(1.25, steps))); });
     return okReply();
+  }
+  if (cmd == "pan") {
+    // Centre of the zoomed live view (normalised), kept where the view fits the image.
+    state_.update([&c](SystemState& s) {
+      const double h = 0.5 / std::max(1.0, s.zoom);
+      s.zoomCx = std::max(h, std::min(1.0 - h, jNum(c, "x", s.zoomCx)));
+      s.zoomCy = std::max(h, std::min(1.0 - h, jNum(c, "y", s.zoomCy)));
+    });
+    return okReply();
+  }
+  if (cmd == "stereo_distance") {
+    // A target at a known distance at (x, y) of the depth map: the right image
+    // is moved until its disparity there gives that distance, which removes
+    // the module's lens-centring offset; kept in the stereo calibration file.
+    if (!stereo_) return errReply("stereo_off");
+    const std::shared_ptr<const DepthMap> d = depthLive();
+    if (!d) return errReply("no_depth");
+    const double mm = jNum(c, "distance_mm", 0);
+    double offset = 0;
+    if (!distanceOffsetPx(*d, stereo_->calibration().width, jNum(c, "x", 0.5), jNum(c, "y", 0.5), mm, offset, err))
+      return errReply(err);
+    if (std::fabs(offset) > 80) return errReply("offset_too_large");  // wrong point or distance
+    if (!stereo_->correctOffset(offset, std::to_string(static_cast<int>(mm)), err)) return errReply(err);
+    char buf[96];
+    snprintf(buf, sizeof(buf), "双目深度已按 %.2f m 校正 (右图平移 %.1f px)", mm / 1000, offset);
+    setMessage(buf);
+    JsonValue r = JsonValue::makeObject();
+    r.set("offset_px", offset);
+    return okReply(r);
   }
   if (cmd == "zoom_reset") {
     state_.update([](SystemState& s) {

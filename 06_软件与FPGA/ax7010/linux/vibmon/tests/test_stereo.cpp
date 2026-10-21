@@ -232,6 +232,29 @@ void testCalibrationAndService() {
   CHECK_NEAR(z, 1000, 10);
   CHECK_NEAR(mmPerPx, 1000.0 / 300, 0.04);
 
+  // A 4 px lens-centring offset reads 1000 mm as 818 mm. The distance
+  // correction at a point known to be 1000 mm away removes it from the next
+  // pair on and keeps it in the calibration file.
+  renderPair(tex, 320, 180, [](int, int) { return 22.0; }, l, r);
+  StereoService off(sc, nullptr, nullptr);
+  off.process(toFrame(l, 0), toFrame(r, 0));
+  auto o = off.process(toFrame(l, 1000), toFrame(r, 1000));
+  CHECK(stereoScaleAt(*o, 0.6, 0.5, 0.1, 0.1, 300, mmPerPx, z));
+  CHECK_NEAR(z, 300.0 * 60 / 22, 15);
+  double shift = 0;
+  CHECK(distanceOffsetPx(*o, off.calibration().width, 0.6, 0.5, 1000, shift, err));
+  CHECK_NEAR(shift, 4, 0.2);
+  CHECK(!distanceOffsetPx(*o, off.calibration().width, 0.6, 0.5, 0, shift, err));
+  CHECK(off.correctOffset(shift, "1000", err));
+  off.process(toFrame(l, 2000), toFrame(r, 2000));
+  auto fixed = off.process(toFrame(l, 3000), toFrame(r, 3000));
+  CHECK(stereoScaleAt(*fixed, 0.6, 0.5, 0.1, 0.1, 300, mmPerPx, z));
+  CHECK_NEAR(z, 1000, 15);
+  StereoCalibration saved;
+  CHECK(loadStereoCalibration(path, saved, err));
+  CHECK_NEAR(saved.right.K[2], 160 - shift, 1e-6);
+  CHECK(saved.id.size() >= 9 && saved.id.compare(saved.id.size() - 9, 9, "-dist1000") == 0);
+
   // Without calibration the service never publishes millimetres.
   StereoConfig nc;
   nc.calibrationFile = "/nonexistent.json";
@@ -241,6 +264,55 @@ void testCalibrationAndService() {
   auto u = none.process(toFrame(l, 0), toFrame(r, 0));
   CHECK(std::all_of(u->mm.begin(), u->mm.end(), [](uint16_t v) { return v == 0; }));
   CHECK(!stereoScaleAt(*u, 0.5, 0.5, 0.1, 0.1, 300, mmPerPx, z));
+}
+
+// A confirmed pixel that drops out keeps its value: one frame as a measurement, then for display.
+void testTemporalHold() {
+  DisparityMap m;
+  m.w = 4;
+  m.h = 1;
+  m.q4.assign(4, 160);
+  TemporalDisparityFilter tf;
+  tf.apply(m);
+  DisparityMap out = tf.apply(m);
+  CHECK(out.measured(1) && out.q4[1] == 160);
+  m.q4[1] = kInvalidDisparity;
+  for (int k = 1; k <= TemporalDisparityFilter::kHoldFrames + 1; ++k) {
+    out = tf.apply(m);
+    if (k == 1) {
+      CHECK(out.measured(1) && out.q4[1] == 160);
+    } else if (k <= TemporalDisparityFilter::kHoldFrames) {
+      CHECK(!out.measured(1) && out.q4[1] == 160);
+    } else {
+      CHECK(out.q4[1] < 0);
+    }
+  }
+}
+
+// Display filling also closes short column gaps between agreeing measured pixels.
+void testFillColumns() {
+  StereoImage im;
+  im.w = im.h = 10;
+  im.px.assign(100, 128);
+  DisparityMap m;
+  m.w = m.h = 10;
+  m.q4.assign(100, kInvalidDisparity);
+  m.q4[2 * 10 + 5] = 160;  // column 5: rows 3..6 empty, ends agree
+  m.q4[7 * 10 + 5] = 168;
+  m.q4[2 * 10 + 8] = 160;  // column 8: ends disagree
+  m.q4[7 * 10 + 8] = 200;
+  SgmParams p;
+  p.minContrast = 0;
+  p.refineLk = false;
+  p.median = false;
+  p.speckleSize = 0;
+  stereoPostProcess(im, im, 0, p, m);
+  for (int y = 3; y <= 6; ++y) {
+    const int v = m.q4[y * 10 + 5];
+    CHECK(v >= 160 && v <= 168 && m.filled[y * 10 + 5]);
+    CHECK(m.q4[y * 10 + 8] < 0);
+  }
+  CHECK(!m.filled[2 * 10 + 5] && !m.filled[7 * 10 + 5]);
 }
 
 // Flicker of isolated wrong matches over frames with independent sensor noise.
@@ -290,6 +362,8 @@ int main() {
   testStepAndExposure();
   testFlatRejected();
   testTemporalFilter();
+  testTemporalHold();
+  testFillColumns();
   testCalibrationAndService();
   return testSummary("stereo");
 }

@@ -12,12 +12,17 @@ using namespace theme;
 
 namespace {
 
+// Indices 0..63: the rectified left image, dimmed, where there is no depth
+// (instead of a field of dark dots); 64..255: depth colours.
 struct DepthLut {
   uint32_t v[256];
   DepthLut() {
     const uint32_t* heat = heatLut();
-    v[0] = 0x14181D;  // invalid depth
-    for (int i = 1; i < 256; ++i) v[i] = heat[i];
+    for (uint32_t i = 0; i < 64; ++i) {
+      const uint32_t g = i * 4 * 45 / 100;
+      v[i] = (g << 16) | (g << 8) | g;
+    }
+    for (int i = 64; i < 256; ++i) v[i] = heat[1 + (i - 64) * 254 / 191];
   }
 };
 
@@ -45,17 +50,18 @@ bool autoDepthRange(const DepthMap& m, double& lo, double& hi, int& validPct) {
   return true;
 }
 
-// Near = warm colours, far = cool colours, invalid = index 0.
+// Near = warm colours, far = cool colours; no depth = the dimmed left image.
 void depthIndex(const DepthMap& m, double lo, double hi, std::vector<uint8_t>& out) {
   out.resize(m.mm.size());
+  const bool image = m.left.size() == m.mm.size();
   for (size_t i = 0; i < m.mm.size(); ++i) {
     const uint16_t z = m.mm[i];
     if (!z) {
-      out[i] = 0;
+      out[i] = image ? static_cast<uint8_t>(m.left[i] >> 2) : 0;
       continue;
     }
     const double t = std::max(0.0, std::min(1.0, (z - lo) / (hi - lo)));
-    out[i] = static_cast<uint8_t>(1 + (1.0 - t) * 254.0 + 0.5);
+    out[i] = static_cast<uint8_t>(64 + (1.0 - t) * 191.0 + 0.5);
   }
 }
 
@@ -243,8 +249,20 @@ void renderVisionPage(Ui& ui, const UiData& d) {
     ui.toggle(Rect{cx0, cr.y + 115, 64, 34}, s.laserOn,
               (s.laserOn || (s.lightAllowed && !laserLocked)) && s.printerState == "idle" && !s.pfail,
               cmdAction(lz));
-    drawText(c, fontFace(14), cx0 + 80, cr.y + 116, "650nm 十字投影：辅助定位与局部深度匹配", kText2);
-    drawText(c, fontFace(14), cx0 + 80, cr.y + 136, "点按深度图查看该点距离", kText3);
+    // A target at a measured distance at the probe point (else the measuring
+    // box) corrects the depth scale offset of the module.
+    drawText(c, fontFace(14), cx0 + 80, cr.y + 124, "距离校正", kText2);
+    static const int kMm[4] = {500, 1000, 2000, 3000};
+    static const char* kNamesMm[4] = {"0.5 m", "1 m", "2 m", "3 m"};
+    const bool probe = ui.st.probeX >= 0;
+    for (int i = 0; i < 4; ++i) {
+      JsonValue j = JsonValue::makeObject();
+      j.set("cmd", "stereo_distance");
+      j.set("distance_mm", kMm[i]);
+      j.set("x", probe ? ui.st.probeX : s.roiCx);
+      j.set("y", probe ? ui.st.probeY : s.roiCy);
+      ui.chip(Rect{cx0 + 150 + i * 72, cr.y + 114, 66, 36}, kNamesMm[i], false, haveDepth, cmdAction(j));
+    }
   } else {
     label(cr.y + 64, "频带");
     static const double kBands[4][2] = {{0.5, 2}, {2, 5}, {5, 10}, {10, 20}};
@@ -301,7 +319,7 @@ void renderVisionPage(Ui& ui, const UiData& d) {
     autoDepthRange(*dm, lo, hi, validPct);
     snprintf(buf, sizeof(buf), "有效像素 %d%%", validPct);
     drawText(c, fontFace(14), sx, cr.y + 106, buf, validPct >= 50 ? kGreen : kAmber);
-    drawText(c, fontFace(14), sx, cr.y + 128, "深度作尺度参考，不替代标定", kText3);
+    drawText(c, fontFace(14), sx, cr.y + 128, "点深度图选点，再按距离校正", kText3);
   } else {
     drawText(c, fontFace(14), sx, cr.y + 106, v.settled ? "时间滤波已稳定" : "时间滤波预热中",
              v.settled ? kGreen : kAmber);

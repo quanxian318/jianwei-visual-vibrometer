@@ -228,6 +228,10 @@ void renderLivePage(Ui& ui, const UiData& d) {
   const Rect img = fitAspect(Rect{pc.x + 4, pc.y + 4, pc.w - 8, pc.h - 8}, live.frameW, live.frameH);
   double zx, zy, zw, zh;
   zoomWindow(s, zx, zy, zw, zh);
+  if (ui.st.panning) {  // the view follows the finger until the pan command is applied
+    zx = ui.st.panCx - zw / 2;
+    zy = ui.st.panCy - zh / 2;
+  }
   if (live.cameraOk && !live.preview.empty() && live.previewW > 0) {
     blitGray(c, img.x, img.y, img.w, img.h, live.preview.data(), live.previewW, live.previewH, zx * live.previewW,
              zy * live.previewH, zw * live.previewW, zh * live.previewH);
@@ -278,6 +282,14 @@ void renderLivePage(Ui& ui, const UiData& d) {
     }
     if (multipoint && live.frameW > 0) drawMultiPoint(ui, d, img, roi, editable);
     ui.hit(img, roi, editable);
+    if (!editable && s.zoom > 1.01) {  // the zoomed view can be moved while the box is locked
+      UiAction pan = uiAction("pan_view");
+      pan.nx0 = zx;
+      pan.ny0 = zy;
+      pan.nw = zw;
+      pan.nh = zh;
+      ui.hit(img, pan, true);
+    }
     // After the image's own hit region, so a tap on it switches what is dragged.
     if (multipoint && editable && live.frameW > 0) {
       ui.chip(Rect{img.x + img.w - 128, img.y + img.h - 44, 120, 34}, "移动参考点", ui.st.refEdit, true,

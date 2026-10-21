@@ -77,6 +77,8 @@ struct UiState {
   int roiGrab = 0;           // measuring box being dragged on the live preview (RoiGrab bits, 0 = none)
   NormBox roiDrag;           // its position while dragging
   bool refEdit = false;      // multi-point: drags and taps place the reference group, not the box
+  bool panning = false;      // zoomed live view being dragged by the finger
+  double panCx = 0.5, panCy = 0.5;  // its centre meanwhile (normalised)
   std::string toast;
   int64_t toastUntilMs = 0;
   // Wi-Fi dialog
@@ -170,6 +172,10 @@ int roiGrabAt(const Rect& b, int x, int y);
 NormBox roiDragged(const NormBox& b, int grab, double dx, double dy, int fw, int fh, int maxPx);
 // "roi" command that places the box b (centre and pixel size).
 JsonValue roiCommand(const NormBox& b, int fw, int fh);
+// Centre of the zoomed view after the finger moved (dx, dy) screen pixels on
+// region, whose action a holds the window shown at the press; the view keeps
+// inside the image.
+void pannedCentre(const UiAction& a, const Rect& region, int dx, int dy, double& cx, double& cy);
 
 void renderUi(Canvas& c, const UiState& st, const UiData& d, std::vector<HitRegion>& hits);
 // Topmost region at (x, y); disabled and blocking regions return a null action.

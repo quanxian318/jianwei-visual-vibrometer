@@ -290,8 +290,37 @@ int main(int argc, char** argv) {
     CHECK(cv.get(gb.x + gb.w / 4, gb.y) == theme::kAccent);
     CHECK(cv.get(gb.x + gb.w / 4, gb.y + gb.h - 1) == theme::kAccent);
   }
-  // No ROI changes during a capture.
-  CHECK(tap(st, d, 400, 230).isNull());
+  // No ROI changes during a capture: zoomed in, a tap only reaches the view panning, which sends nothing.
+  {
+    const UiAction a = tap(st, d, 400, 230);
+    UiState s2;
+    CHECK(a.isNull() || (a.kind == "pan_view" && FbUi::applyAction(s2, a, Rect(), 400, 230, d, 0).isNull()));
+  }
+  // Zoomed in, the view can be moved (also during a capture) and stays inside the image.
+  {
+    UiData zd = d;
+    zd.s.zoom = 2;
+    Rect r;
+    const UiAction a = tap(st, zd, 400, 230, &r);
+    CHECK(a.kind == "pan_view");
+    CHECK_NEAR(a.nx0, 0.25, 1e-9);
+    CHECK_NEAR(a.nw, 0.5, 1e-9);
+    double cx = 0, cy = 0;
+    pannedCentre(a, r, r.w / 4, 0, cx, cy);  // finger to the right: the view moves left
+    CHECK_NEAR(cx, 0.5 - static_cast<double>(r.w / 4) / r.w * 0.5, 1e-9);
+    CHECK_NEAR(cy, 0.5, 1e-9);
+    pannedCentre(a, r, -10 * r.w, 10 * r.h, cx, cy);
+    CHECK_NEAR(cx, 0.75, 1e-9);
+    CHECK_NEAR(cy, 0.25, 1e-9);
+    // While the finger is down the page shows the dragged window.
+    UiState ps;
+    ps.panning = true;
+    ps.panCx = 0.3;
+    ps.panCy = 0.6;
+    const UiAction b = tap(ps, zd, 400, 230);
+    CHECK_NEAR(b.nx0, 0.05, 1e-9);
+    CHECK_NEAR(b.ny0, 0.35, 1e-9);
+  }
   // Lighting (LED1) and the laser projector (LED2) are separate switches.
   {
     const UiAction a = tap(st, d, 708 + 158 + 40, 56 + 396 + 20);

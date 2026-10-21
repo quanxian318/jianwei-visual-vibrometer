@@ -65,6 +65,7 @@ class FbUi {
   NormBox dragStart_;
   int dragFw_ = 0, dragFh_ = 0, dragMaxPx_ = 0;
   bool dragging_ = false;
+  bool panArmed_ = false;  // zoomed in: a drag that does not take the box moves the view
 
   std::mutex encMutex_;
   int encSteps_ = 0, encShort_ = 0, encLong_ = 0;

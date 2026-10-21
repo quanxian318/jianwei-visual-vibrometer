@@ -233,6 +233,29 @@ void fillHoles(DisparityMap& m, int maxRun) {
       }
     }
   }
+  // Columns: runs still empty between two measured pixels that agree within
+  // 1 px (vertically there is no occlusion side to prefer).
+  for (int x = 0; x < m.w; ++x) {
+    int y = 0;
+    while (y < m.h) {
+      if (m.q4[static_cast<size_t>(y) * m.w + x] >= 0) {
+        ++y;
+        continue;
+      }
+      const int a = y;
+      while (y < m.h && m.q4[static_cast<size_t>(y) * m.w + x] < 0) ++y;
+      const int b = y - 1;
+      if (a == 0 || y == m.h || b - a + 1 > maxRun) continue;
+      const size_t ia = static_cast<size_t>(a - 1) * m.w + x, ib = static_cast<size_t>(y) * m.w + x;
+      const int t = m.q4[ia], u = m.q4[ib];
+      if (m.filled[ia] || m.filled[ib] || std::abs(t - u) > 16) continue;
+      for (int k = a; k <= b; ++k) {
+        const size_t j = static_cast<size_t>(k) * m.w + x;
+        m.q4[j] = static_cast<int16_t>(t + (u - t) * (k - a + 1) / (b - a + 2));
+        m.filled[j] = 1;
+      }
+    }
+  }
 }
 }  // namespace
 

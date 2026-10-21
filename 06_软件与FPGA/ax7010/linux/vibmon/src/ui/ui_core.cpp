@@ -317,6 +317,9 @@ std::string errorText(const std::string& code) {
       {"measuring", "测量中，请稍后"},        {"power_budget", "电源余量不足"},
       {"record_unreadable", "记录无法读取"},  {"no_printer_uart", "打印机串口不可用"},
       {"no_carrier", "载板控制不可用"},       {"power_fail", "掉电预警中"},
+      {"no_depth", "暂无深度图"},             {"no_depth_at_point", "该点没有有效深度"},
+      {"offset_too_large", "偏差过大，检查距离和选点"}, {"stereo_off", "双目未启用"},
+      {"no_calibration", "没有双目标定"},
       {"lights_on", "照明或激光开启中"},            {"nano_offline", "协处理器离线"},
       {"shutting_down", "正在关机"},          {"busy", "打印机忙"},
       {"invalid_value", "设置值无效"},        {"save_failed", "设置未能保存"},
@@ -411,6 +414,12 @@ NormBox roiDragged(const NormBox& b, int grab, double dx, double dy, int fw, int
   if (grab & kGrabTop) r.y0 = clamp(b.y0 + dy, std::max(0.0, b.y1 - maxH), b.y1 - minH);
   if (grab & kGrabBottom) r.y1 = clamp(b.y1 + dy, b.y0 + minH, std::min(1.0, b.y0 + maxH));
   return r;
+}
+
+void pannedCentre(const UiAction& a, const Rect& region, int dx, int dy, double& cx, double& cy) {
+  const double hw = 0.5 * a.nw, hh = 0.5 * a.nh;
+  cx = std::max(hw, std::min(1 - hw, a.nx0 + hw - static_cast<double>(dx) / std::max(1, region.w) * a.nw));
+  cy = std::max(hh, std::min(1 - hh, a.ny0 + hh - static_cast<double>(dy) / std::max(1, region.h) * a.nh));
 }
 
 JsonValue roiCommand(const NormBox& b, int fw, int fh) {
