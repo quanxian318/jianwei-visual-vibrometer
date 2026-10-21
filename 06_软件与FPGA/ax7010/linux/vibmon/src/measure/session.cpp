@@ -252,6 +252,11 @@ void MeasurementEngine::stopCamera() {
 
 void MeasurementEngine::setVision(const VisionConfig& cfg) { vision_.configure(cfg); }
 
+void MeasurementEngine::setFrameTap(std::function<void(const GrayFrame&)> tap) {
+  std::lock_guard<std::mutex> lock(mutex_);
+  tap_ = std::move(tap);
+}
+
 bool MeasurementEngine::beginCapture(const MeasureConfig& cfg, double cx, double cy, DoneFn done) {
   std::lock_guard<std::mutex> lock(mutex_);
   if (!running_ || state_ != State::kPreview || startRequested_ || !live_.cameraOk) return false;
@@ -367,6 +372,14 @@ void MeasurementEngine::run() {
     const State st = state_;
     vision_.setPaused(st == State::kCapturing || st == State::kAnalyzing);
     vision_.offer(frame.pixels.data(), frame.width, frame.height, frame.timestampNs);
+    if (st == State::kPreview) {
+      std::function<void(const GrayFrame&)> tap;
+      {
+        std::lock_guard<std::mutex> lock(mutex_);
+        tap = tap_;
+      }
+      if (tap) tap(frame);
+    }
 
     bool start = false, end = false, cancel = false;
     MeasureConfig cfg;

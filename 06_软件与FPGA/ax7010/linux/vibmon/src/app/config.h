@@ -6,6 +6,7 @@
 
 #include "measure/frame_source.h"
 #include "measure/session.h"
+#include "stereo/stereo_service.h"
 
 namespace vm {
 
@@ -116,6 +117,17 @@ struct AppConfig {
 
   MeasureConfig measure;
   double roiCenterX = 0.5, roiCenterY = 0.5;
+
+  // Stereo depth from the second camera of the AN5642 module. Depth is
+  // published only with a valid stereo calibration (pc_sim/stereo_calibrate.py).
+  struct Stereo {
+    bool enabled = false;
+    V4l2Config right;               // right camera; size/format as the left one by default
+    StereoConfig service;
+    // Source of mm/px for a measurement: "file" (calibration.json only),
+    // "stereo" (depth at the ROI, Z / fx), "file_or_stereo" (file first).
+    std::string scaleSource = "file";
+  } stereo;
 
   struct Alarm {
     double warnPp = 2.0;   // peak-to-peak thresholds in mm; pixels remain unclassified

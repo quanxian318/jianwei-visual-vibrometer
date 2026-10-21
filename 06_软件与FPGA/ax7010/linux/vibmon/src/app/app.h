@@ -59,6 +59,7 @@ class Application {
   // Stereo depth: the stereo module publishes, the UI reads (any thread).
   // A map older than 3 s is reported as missing.
   void publishDepth(std::shared_ptr<const DepthMap> depth);
+  void applyStereoScale(MeasureConfig& mc);
   std::shared_ptr<const DepthMap> depthLive();
 
  private:
@@ -118,6 +119,7 @@ class Application {
   std::unique_ptr<SensorService> sensors_;
   std::unique_ptr<PrinterService> printer_;
   std::unique_ptr<MeasurementEngine> engine_;
+  std::unique_ptr<StereoService> stereo_;
   std::unique_ptr<ControlServer> ctl_;
   std::unique_ptr<FbUi> ui_;
 

@@ -116,6 +116,9 @@ class MeasurementEngine {
   // roi centre in normalised image coordinates (0..1).
   // Display image processing (vision page); runs beside the tracker.
   void setVision(const VisionConfig& cfg);
+  // Called on the camera thread with every preview frame (not during a
+  // capture), e.g. to feed the stereo service the left image.
+  void setFrameTap(std::function<void(const GrayFrame&)> tap);
   bool beginCapture(const MeasureConfig& cfg, double cx, double cy, DoneFn done);
   void endCapture();  // analyse what was captured so far
   void cancel();      // drop the capture without a result
@@ -141,6 +144,7 @@ class MeasurementEngine {
   FieldSpectrum field_;
   int64_t lastPreviewNs_ = 0;
   VisionPipeline vision_;
+  std::function<void(const GrayFrame&)> tap_;
 };
 
 }  // namespace vm
