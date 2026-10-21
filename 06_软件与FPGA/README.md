@@ -69,7 +69,7 @@ SPI 时钟按 FCLK 自动选不超过 1 MHz 的分频（100 MHz 时为 781 kHz�
 
 ## AX7010 Linux 程序
 
-构建：PC 上 `make test` 编译并运行全部主机测试；目标板在 PetaLinux SDK 环境中 `make`（CXX/CXXFLAGS 由 SDK 提供）。`make integration-test` 运行应用状态机回归与合成相机端到端流程。
+构建：PC 上 `make test` 编译并运行全部主机测试；目标板在 PetaLinux SDK 环境中 `make`（CXX/CXXFLAGS 由 SDK 提供）。不用 SDK 时也可在 Ubuntu 上交叉编译静态程序（2026-10-21 已验证：全部程序和测试编译无警告，未在板上运行）：`apt install g++-arm-linux-gnueabihf` 后执行 `make BUILD=build_arm CXX=arm-linux-gnueabihf-g++ CC=arm-linux-gnueabihf-gcc AR=arm-linux-gnueabihf-ar CXXFLAGS="-O2 -mcpu=cortex-a9 -mfpu=neon -mfloat-abi=hard" LDFLAGS=-static all`。静态链接后不依赖板上 C++ 库版本，复制到任意 ARM Linux 镜像即可运行；没有载板时 vibmond 跳过载板外设。`make integration-test` 运行应用状态机回归与合成相机端到端流程。
 
 部署：把 `petalinux/recipes-apps/vibmon` 复制到 project-spec/meta-user/recipes-apps/，用 `tools/make_src_tarball.sh` 生成 `files/vibmon-src.tar.gz`，加入 rootfs。内核选项见 `petalinux/vibmon-kernel.cfg`。设备树按 `petalinux/system-user.dtsi` 合并（含 `add_carrier.tcl`、`add_stereo.tcl` 生成的两个 dtsi），并在内核命令行追加 `uio_pdrv_genirq.of_id=vibmon,uio`（载板控制与双目核两个 UIO 节点共用）。配方用 Yocto 新语法（`:${PN}`），PetaLinux 2021 及以前改为 `_${PN}`。
 

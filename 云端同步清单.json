@@ -2,7 +2,7 @@
   "date": "2026-10-21",
   "project": "见微视觉测振仪",
   "files": 4223,
-  "total_bytes": 923696254,
+  "total_bytes": 923697097,
   "excluded": [
     ".git/",
     ".agents/",
@@ -4796,8 +4796,8 @@
     },
     {
       "path": "06_软件与FPGA/README.md",
-      "bytes": 13594,
-      "sha256": "479fcc992f4d374038ef3eac293eb61907dbc110096607f81d1a380d2fede58a"
+      "bytes": 14113,
+      "sha256": "296d7f4f544fb926ab4a404fa6b0952449ae67b3d3b86aef7f4254041a942ab0"
     },
     {
       "path": "06_软件与FPGA/ax7010/linux/petalinux/recipes-apps/vibmon/files/vibmon.init",
@@ -21111,8 +21111,8 @@
     },
     {
       "path": "AGENTS.md",
-      "bytes": 23419,
-      "sha256": "8bfcb212c119d4a5196a72c4f94217698d00b44fa3ca897ea9a2a156469c3cce"
+      "bytes": 23743,
+      "sha256": "b6eab5fc22297fef2872d676d885af1c5a90734715484926dcc4de4fb5421349"
     },
     {
       "path": "README.md",
