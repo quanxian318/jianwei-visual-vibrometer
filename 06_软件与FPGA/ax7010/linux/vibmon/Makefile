@@ -20,7 +20,7 @@ override CFLAGS += -MMD -MP
 override CPPFLAGS += -Isrc -I$(PROTO_DIR) -Isrc/drv/vl53l1x_uld_port
 override LDFLAGS += -pthread
 
-LIB_DIRS := src/util src/hw src/drv src/drv/vl53l1x_uld_port src/link src/measure src/gfx src/app src/ui
+LIB_DIRS := src/util src/hw src/drv src/drv/vl53l1x_uld_port src/link src/measure src/stereo src/gfx src/app src/ui
 LIB_CPP := $(filter-out src/app/main.cpp,$(foreach d,$(LIB_DIRS),$(wildcard $(d)/*.cpp))) \
            $(PROTO_DIR)/vp_json.cpp $(PROTO_DIR)/vp_frame.cpp
 LIB_C :=
@@ -35,7 +35,7 @@ vpath %.c $(sort $(dir $(LIB_C)))
 LIB_OBJ := $(addprefix $(BUILD)/obj/,$(notdir $(LIB_CPP:.cpp=.o) $(LIB_C:.c=.o)))
 LIB := $(BUILD)/libvibmon.a
 
-APPS := $(BUILD)/vibmond $(BUILD)/vibmonctl $(BUILD)/carrier_test $(BUILD)/vision_ref
+APPS := $(BUILD)/vibmond $(BUILD)/vibmonctl $(BUILD)/carrier_test $(BUILD)/vision_ref $(BUILD)/clip_track $(BUILD)/lk_vectors $(BUILD)/stereo_eval $(BUILD)/sgm_vectors
 TEST_SRC := $(wildcard tests/test_*.cpp)
 TESTS := $(patsubst tests/%.cpp,$(BUILD)/%,$(TEST_SRC))
 
@@ -61,6 +61,18 @@ $(BUILD)/carrier_test: $(BUILD)/obj/carrier_test.o $(LIB)
 	$(CXX) $(LDFLAGS) $^ -o $@ $(LDLIBS)
 
 $(BUILD)/vision_ref: $(BUILD)/obj/vision_ref.o $(LIB)
+	$(CXX) $(LDFLAGS) $^ -o $@ $(LDLIBS)
+
+$(BUILD)/clip_track: $(BUILD)/obj/clip_track.o $(LIB)
+	$(CXX) $(LDFLAGS) $^ -o $@ $(LDLIBS)
+
+$(BUILD)/lk_vectors: $(BUILD)/obj/lk_vectors.o $(LIB)
+	$(CXX) $(LDFLAGS) $^ -o $@ $(LDLIBS)
+
+$(BUILD)/stereo_eval: $(BUILD)/obj/stereo_eval.o $(LIB)
+	$(CXX) $(LDFLAGS) $^ -o $@ $(LDLIBS)
+
+$(BUILD)/sgm_vectors: $(BUILD)/obj/sgm_vectors.o $(LIB)
 	$(CXX) $(LDFLAGS) $^ -o $@ $(LDLIBS)
 
 $(BUILD)/test_%: $(BUILD)/obj/test_%.o $(LIB)

@@ -271,7 +271,7 @@ proc carrier::write_outputs {clk_hz ratio addr_out irq_map} {
         set base $addr(carrier_ctrl_0)
         puts $f "&amba_pl \{"
         puts $f "\tcarrier_uio: carrier-ctrl@[string tolower [string range $base 2 end]] \{"
-        puts $f "\t\tcompatible = \"vibmon,carrier-ctrl\";"
+        puts $f "\t\tcompatible = \"vibmon,carrier-ctrl\", \"vibmon,uio\";"
         puts $f "\t\treg = <$base 0x1000>;"
         puts $f "\t\tinterrupt-parent = <&intc>;"
         puts $f "\t\tinterrupts = <0 [carrier::dt_irq $irq(carrier_ctrl_0)] 4>;"

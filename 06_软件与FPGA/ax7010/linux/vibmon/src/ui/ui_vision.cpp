@@ -134,7 +134,14 @@ void renderVisionPage(Ui& ui, const UiData& d) {
 
   if (view == 2) {
     drawText(c, fontFace(18), left.x + 14, left.y + 8, "左目画面", kText2);
-    drawText(c, fontFace(18), right.x + 14, right.y + 8, "双目深度", kText2);
+    if (haveDepth) {
+      // Where the matching ran: PL core, its model on the PS (no PL device), or PS software SGM.
+      const char* where = dm->backend == "PL" ? "PL" : (dm->backend == "PL-model" ? "PS 软件计算" : "PS");
+      snprintf(buf, sizeof(buf), "双目深度 · %s · 有效 %d%%", where, static_cast<int>(dm->validFraction * 100 + 0.5));
+      drawText(c, fontFace(18), right.x + 14, right.y + 8, buf, kText2);
+    } else {
+      drawText(c, fontFace(18), right.x + 14, right.y + 8, "双目深度", kText2);
+    }
     if (haveDepth && dm->left.size() == dm->mm.size()) {
       blitGray(c, li.x, li.y, li.w, li.h, dm->left.data(), dm->w, dm->h, 0, 0, dm->w, dm->h);
     } else if (!d.live.preview.empty() && d.live.previewW > 0) {

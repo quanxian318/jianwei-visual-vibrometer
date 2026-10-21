@@ -128,9 +128,42 @@ bool loadConfig(const std::string& path, AppConfig& c, std::string& err) {
   c.measure.axis = axis == "x" ? 'x' : 'y';
   c.measure.minScore = jNum(m, "min_ncc", c.measure.minScore);
   c.measure.fMinHz = jNum(m, "min_freq_hz", c.measure.fMinHz);
+  const std::string tracker = jStr(m, "tracker", c.measure.tracker);
+  c.measure.tracker = tracker == "lk" ? "lk" : "ncc";
+  c.measure.minPeakSnr = jNum(m, "min_peak_snr", c.measure.minPeakSnr);
+  c.measure.maxFinalStepPx = jNum(m, "lk_max_final_step_px", c.measure.maxFinalStepPx);
+  c.measure.fieldSpectrum = jBool(m, "field_spectrum", c.measure.fieldSpectrum);
+  const JsonValue& ref = jObj(m, "reference_roi");
+  c.measure.referenceEnabled = jBool(ref, "enabled", c.measure.referenceEnabled);
+  c.measure.refCx = jNum(ref, "x", c.measure.refCx);
+  c.measure.refCy = jNum(ref, "y", c.measure.refCy);
   c.roiCenterX = jNum(m, "roi_center_x", c.roiCenterX);
   c.roiCenterY = jNum(m, "roi_center_y", c.roiCenterY);
   c.calibrationFile = jStr(m, "calibration_file", c.calibrationFile);
+
+  c.stereo.scaleSource = jStr(m, "scale_source", c.stereo.scaleSource);
+  if (c.stereo.scaleSource != "stereo" && c.stereo.scaleSource != "file_or_stereo") c.stereo.scaleSource = "file";
+
+  const JsonValue& st = jObj(root, "stereo");
+  c.stereo.enabled = jBool(st, "enabled", c.stereo.enabled);
+  c.stereo.right = c.camera.v4l2;
+  c.stereo.right.device = jStr(st, "right_device", "/dev/video1");
+  c.stereo.service.calibrationFile = jStr(st, "calibration_file", c.stereo.service.calibrationFile);
+  c.stereo.service.workWidth = i32(st, "work_width", c.stereo.service.workWidth);
+  c.stereo.service.workHeight = i32(st, "work_height", c.stereo.service.workHeight);
+  c.stereo.service.rateHz = jNum(st, "rate_hz", c.stereo.service.rateHz);
+  c.stereo.service.maxSkewMs = jNum(st, "max_skew_ms", c.stereo.service.maxSkewMs);
+  c.stereo.service.sgm.maxDisp = i32(st, "max_disparity", c.stereo.service.sgm.maxDisp);
+  c.stereo.service.sgm.census = i32(st, "census", c.stereo.service.sgm.census);
+  c.stereo.service.sgm.paths = i32(st, "paths", c.stereo.service.sgm.paths);
+  c.stereo.service.sgm.refineLk = jBool(st, "refine_lk", c.stereo.service.sgm.refineLk);
+  c.stereo.service.sgm.refineReject = i32(st, "refine_reject", c.stereo.service.sgm.refineReject);
+  c.stereo.service.sgm.fillHoles = jBool(st, "fill_holes", c.stereo.service.sgm.fillHoles);
+  c.stereo.service.sgm.speckleSize = i32(st, "speckle_px", c.stereo.service.sgm.speckleSize);
+  c.stereo.service.temporal = jBool(st, "temporal_filter", c.stereo.service.temporal);
+  c.stereo.service.backend = jStr(st, "backend", c.stereo.service.backend) == "ps" ? "ps" : "pl";
+  c.stereo.service.plCoreBase = jAddr(st, "pl_core_base", c.stereo.service.plCoreBase);
+  c.stereo.service.plVerifyEvery = i32(st, "pl_verify_every", c.stereo.service.plVerifyEvery);
 
   const JsonValue& a = jObj(root, "alarm");
   c.alarm.warnPp = jNum(a, "warn_peak_to_peak", c.alarm.warnPp);

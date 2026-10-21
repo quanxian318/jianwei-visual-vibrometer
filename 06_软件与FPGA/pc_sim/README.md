@@ -9,6 +9,8 @@
 | `webcam_lab.py` | 实时实验台：运动放大、振动能量热力、主频分布、原图；左图点击放置测点并用与 PS 相同的 NCC 跟踪画位移和频谱；右图点击查看该像素亮度时序和亮度谱；“录制 90 帧”保存片段 |
 | `check_bitexact.py` | Python 模型与 C++ `vision_ref` 逐位比对；`--rtl` 再加 RTL |
 | `run_rtl.py` | 在 WSL 用 Icarus Verilog 跑 `tb_vp_reduce` / `tb_vp_core`，与模型逐位比对 |
+| `stereo_benchmark.py` | 双目匹配真值评测（Middlebury 场景，含曝光差与垂直错位扰动），对比队友 BM、PL 双目核、PS 后处理；需 `stereo_eval` |
+| `stereo_calibrate.py` | AN5642 双目棋盘格标定（OpenCV），输出板端 `stereo_calibration.json`；`--self-test` 用合成机位自检并导出 OpenCV 校正映射供交叉核对 |
 
 ```bash
 python webcam_lab.py

@@ -14,6 +14,7 @@
 #include "app/printer_service.h"
 #include "app/sensor_service.h"
 #include "app/state.h"
+#include "app/storage.h"
 #include "drv/carrier_ctrl.h"
 #include "hw/i2c_bus.h"
 #include "hw/serial_port.h"
@@ -59,6 +60,7 @@ class Application {
   // Stereo depth: the stereo module publishes, the UI reads (any thread).
   // A map older than 3 s is reported as missing.
   void publishDepth(std::shared_ptr<const DepthMap> depth);
+  void applyStereoScale(MeasureConfig& mc);
   std::shared_ptr<const DepthMap> depthLive();
 
  private:
@@ -118,6 +120,8 @@ class Application {
   std::unique_ptr<SensorService> sensors_;
   std::unique_ptr<PrinterService> printer_;
   std::unique_ptr<MeasurementEngine> engine_;
+  std::unique_ptr<StereoService> stereo_;
+  RecordMeta::Stereo stereoCapture_;  // stereo context frozen at capture start
   std::unique_ptr<ControlServer> ctl_;
   std::unique_ptr<FbUi> ui_;
 

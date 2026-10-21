@@ -63,6 +63,7 @@ Application::~Application() {
   ui_.reset();
   ctl_.reset();
   if (engine_) engine_->stopCamera();
+  if (stereo_) stereo_->stop();
   if (sensors_) sensors_->stop();
   printer_.reset();
 }
@@ -253,6 +254,29 @@ bool Application::init() {
   if (!engine_->startCamera()) {
     LOGW(kTag, "camera not available; retrying every 5 s");
     cameraRetryMs_ = monoMs() + 5000;
+  }
+  if (cfg_.stereo.enabled) {
+    // PL stereo core (add_stereo.tcl); without it the bit-exact model runs on the PS.
+    std::unique_ptr<PlStereo> pl;
+    if (cfg_.stereo.service.backend == "pl") {
+      std::string perr;
+      std::unique_ptr<StereoPlIo> io = openStereoUio(cfg_.stereo.service.plCoreBase, perr);
+      if (io) {
+        pl.reset(new PlStereo(std::move(io)));
+        if (!pl->probe(perr)) pl.reset();
+      }
+      if (pl) LOGI(kTag, "stereo: PL core found (max width %d)", pl->maxWidth());
+      else LOGW(kTag, "stereo: PL core not available (%s); using the bit-exact model on the PS", perr.c_str());
+    }
+    stereo_.reset(new StereoService(cfg_.stereo.service, makeV4l2Source(cfg_.stereo.right),
+                                    [this](std::shared_ptr<const DepthMap> d) { publishDepth(std::move(d)); },
+                                    std::move(pl)));
+    if (stereo_->start()) {
+      StereoService* svc = stereo_.get();
+      engine_->setFrameTap([svc](const GrayFrame& f) { svc->offerLeft(f); });
+    } else {
+      LOGW(kTag, "stereo: right camera %s not available", cfg_.stereo.right.device.c_str());
+    }
   }
 
   // Control socket and UI.
@@ -569,6 +593,7 @@ bool Application::startMeasurement(double durationS, std::string& err) {
   }
   MeasureConfig mc = cfg_.measure;
   if (durationS > 0) mc.durationS = durationS;
+  applyStereoScale(mc);
   const SystemState s = state_.snapshot();
   lightAuto_ = false;
   if (cfg_.light.autoOnMeasure && !s.lightOn) {
@@ -604,6 +629,41 @@ bool Application::startMeasurement(double durationS, std::string& err) {
   }
   setMessage("测量中...");
   return true;
+}
+
+// mm/px from stereo depth at the ROI (route proposal section 7): Z / fx of the
+// left camera at the measurement resolution. Recorded as calibration
+// "stereo:<calibration id>:z<mm>" so the record shows where the scale came from.
+void Application::applyStereoScale(MeasureConfig& mc) {
+  stereoCapture_ = RecordMeta::Stereo();
+  if (!stereo_ || !engine_) return;
+  const MeasurementEngine::Live l = engine_->live();
+  const std::shared_ptr<const DepthMap> d = depthLive();
+  const StereoCalibration& c = stereo_->calibration();
+  double mmPerPx = 0, z = 0;
+  const SystemState s = state_.snapshot();
+  const bool ok = d && c.valid && l.frameW > 0 && l.frameH > 0 &&
+                  stereoScaleAt(*d, s.roiCx, s.roiCy, 0.5 * mc.roiW / l.frameW, 0.5 * mc.roiH / l.frameH,
+                                c.left.K[0] * l.frameW / c.width, mmPerPx, z);
+  stereoCapture_.enabled = true;
+  stereoCapture_.backend = d ? d->backend : std::string();
+  stereoCapture_.calibrationId = c.valid ? c.id : std::string();
+  stereoCapture_.roiDepthValid = ok;
+  stereoCapture_.roiDepthMm = ok ? z : 0;
+  const std::string& src = cfg_.stereo.scaleSource;
+  if (src == "file" || (src == "file_or_stereo" && mc.mmPerPx > 0)) return;
+  if (ok) {
+    stereoCapture_.usedForScale = true;
+    mc.mmPerPx = mmPerPx;
+    char id[96];
+    snprintf(id, sizeof(id), "stereo:%s:z%.0f", c.id.c_str(), z);
+    mc.calibrationId = id;
+    LOGI(kTag, "stereo scale: Z %.0f mm -> %.5f mm/px", z, mmPerPx);
+  } else if (src == "stereo") {
+    mc.mmPerPx = 0;  // no valid depth at the ROI: stay in pixels rather than reuse a stale file scale
+    mc.calibrationId.clear();
+    LOGW(kTag, "stereo scale requested but no valid depth at the ROI: result stays in pixels");
+  }
 }
 
 void Application::stopMeasurement() {
@@ -658,6 +718,7 @@ void Application::onMeasureDone(const MeasureResult& r) {
     m.timeSource = captureContext_.timeSource;
     m.tzOffsetMin = cfg_.tzOffsetMin;
     m.cameraSource = engine_->live().source;
+    m.stereo = stereoCapture_;
     m.lightOn = captureContext_.lightOn;
     m.lightPercent = captureContext_.lightPercent;
     m.laserOn = captureContext_.laserOn;
@@ -1307,6 +1368,29 @@ JsonValue Application::stateJson() {
   m.set("state", s.measureState);
   m.set("elapsed_s", s.measureElapsedS);
   m.set("camera_ok", s.cameraOk);
+  JsonValue sj = JsonValue::makeObject();
+  sj.set("enabled", stereo_ != nullptr);
+  if (stereo_) {
+    const StereoService::Stats ss = stereo_->stats();
+    sj.set("calibrated", ss.calibrated);
+    sj.set("calibration_id", ss.calibrationId);
+    sj.set("error", ss.error);
+    sj.set("pairs", static_cast<unsigned long>(ss.pairs));
+    sj.set("skew_rejected", static_cast<unsigned long>(ss.skewRejected));
+    sj.set("published", static_cast<unsigned long>(ss.published));
+    sj.set("last_skew_ms", ss.lastSkewMs);
+    sj.set("last_proc_ms", ss.lastProcMs);
+    sj.set("last_valid_fraction", ss.lastValid);
+    sj.set("backend", ss.backend);
+    sj.set("pl_error", ss.plError);
+    sj.set("pl_frames", static_cast<unsigned long>(ss.plFrames));
+    sj.set("pl_failures", static_cast<unsigned long>(ss.plFailures));
+    sj.set("pl_verified", static_cast<unsigned long>(ss.plVerified));
+    sj.set("pl_mismatch_frames", static_cast<unsigned long>(ss.plMismatchFrames));
+    sj.set("pl_cycles", static_cast<unsigned long>(ss.plCycles));
+  }
+  sj.set("scale_source", cfg_.stereo.scaleSource);
+  m.set("stereo", sj);
   m.set("roi_center_x", s.roiCx);
   m.set("roi_center_y", s.roiCy);
   if (s.last.have) {

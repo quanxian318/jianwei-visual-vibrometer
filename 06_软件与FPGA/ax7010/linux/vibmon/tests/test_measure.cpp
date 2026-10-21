@@ -200,9 +200,140 @@ void testLowTextureRejected() {
   CHECK(!tr.init(f, roi, 6));
 }
 
+std::vector<CaptureSample> sineSamples(double f, double amp, double common, int n = 300, double fs = 30) {
+  std::vector<CaptureSample> v(n);
+  for (int i = 0; i < n; ++i) {
+    v[i].tNs = 1000000000LL + static_cast<int64_t>(i * 1e9 / fs);
+    v[i].seq = static_cast<uint32_t>(i);
+    v[i].ok = true;
+    v[i].score = 1;
+    // Slow "camera" drift shared with the reference plus the target's own vibration.
+    const double cam = common * std::sin(2 * M_PI * 0.7 * i / fs) + 0.02 * i;
+    v[i].dy = cam + amp * std::sin(2 * M_PI * f * i / fs);
+    v[i].dx = cam;
+  }
+  return v;
+}
+
+void testReferenceCompensation() {
+  MeasureConfig cfg;
+  auto target = sineSamples(11, 0.3, 5);
+  auto ref = sineSamples(11, 0, 5);
+  MeasureResult raw = analyzeWithReference(target, nullptr, cfg, 30);
+  CHECK(raw.valid);
+  CHECK_NEAR(raw.dominantHz, 0.7, 0.1);  // camera motion dominates the raw target
+  MeasureResult rel = analyzeWithReference(target, &ref, cfg, 30);
+  CHECK(rel.valid && rel.reference.used && rel.reference.valid);
+  CHECK_NEAR(rel.dominantHz, 11, 0.05);
+  CHECK_NEAR(rel.peakAmpPx, 0.3, 0.02);
+  CHECK(rel.peakClear && rel.peakSnr > 20);
+  CHECK_NEAR(rel.rawDominantHz, 0.7, 0.1);
+  // A lost reference invalidates the compensated result but names the cause.
+  ref[100].score = 0.1;
+  MeasureResult bad = analyzeWithReference(target, &ref, cfg, 30);
+  CHECK(!bad.valid);
+  CHECK(bad.reason == "reference_tracking_lost");
+  // Mismatched frames between target and reference are unusable.
+  ref = sineSamples(11, 0, 5);
+  ref[50].seq += 1000;
+  CHECK(!analyzeWithReference(target, &ref, cfg, 30).valid);
+}
+
+void testPeakConfidence() {
+  MeasureConfig cfg;
+  std::vector<CaptureSample> v = sineSamples(7, 0, 0);
+  unsigned seed = 1;
+  for (auto& s : v) {
+    seed = seed * 1103515245u + 12345u;
+    s.dy = ((seed >> 8) % 1000) / 1000.0 - 0.5;  // white noise, no line
+  }
+  MeasureResult r = analyzeCapture(v, cfg, 30);
+  CHECK(r.valid);
+  CHECK(!r.peakClear);
+  CHECK(r.peakSnr < cfg.minPeakSnr);
+  std::vector<CaptureSample> u = sineSamples(7, 0.5, 0);
+  CHECK(analyzeCapture(u, cfg, 30).peakClear);
+  u[40].converged = false;
+  MeasureResult nc = analyzeCapture(u, cfg, 30);
+  CHECK(!nc.valid && nc.reason == "not_converged" && nc.unconvergedFrames == 1);
+}
+
+void testFieldSpectrum() {
+  CHECK_NEAR(aliasHz(22.3, 30), 7.7, 1e-9);
+  CHECK_NEAR(aliasHz(33.4, 30), 3.4, 1e-9);
+  CHECK_NEAR(aliasHz(11.1, 30), 11.1, 1e-9);
+  SyntheticConfig sc;
+  sc.realtime = false;
+  sc.fps = 30;
+  sc.freqHz = 4.2;
+  sc.amplitudePx = 1;
+  auto src = makeSyntheticSource(sc);
+  src->start();
+  GrayFrame f;
+  FieldSpectrum fs;
+  for (int i = 0; i < 300; ++i) {
+    CHECK(src->next(f, 0));
+    if (i == 0) fs.reset(f.width, f.height);
+    fs.add(f.pixels.data(), f.width, f.height);
+  }
+  FieldSpectrumResult r = fs.analyze(30, 0.5, 0);
+  CHECK(r.valid);
+  CHECK_NEAR(r.peakHz, 4.2, 0.1);
+  std::printf("  field: %.3f Hz, fraction %.3f, grid %dx%d\n", r.peakHz, r.fraction, r.gridW, r.gridH);
+  // A static scene has no line.
+  sc.amplitudePx = 0;
+  src = makeSyntheticSource(sc);
+  src->start();
+  for (int i = 0; i < 300; ++i) {
+    src->next(f, 0);
+    if (i == 0) fs.reset(f.width, f.height);
+    fs.add(f.pixels.data(), f.width, f.height);
+  }
+  CHECK(!fs.analyze(30, 0.5, 0).valid);
+}
+
+void testEngineLkWithReference() {
+  SyntheticConfig sc;
+  sc.realtime = false;
+  sc.fps = 60;
+  sc.freqHz = 5;
+  sc.amplitudePx = 1.5;
+  MeasurementEngine engine{makeSyntheticSource(sc)};
+  CHECK(engine.startCamera());
+  MeasureConfig cfg;
+  cfg.tracker = "lk";
+  cfg.roiW = cfg.roiH = 32;
+  cfg.durationS = 4;
+  cfg.referenceEnabled = true;
+  cfg.refCx = 0.12;
+  cfg.refCy = 0.12;  // static background of the synthetic scene
+  std::atomic<int> done{0};
+  MeasureResult result;
+  CHECK(engine.beginCapture(cfg, 0.5, 0.5, [&](const MeasureResult& r) { result = r; ++done; }));
+  for (int i = 0; i < 3000 && done.load() == 0; ++i) std::this_thread::sleep_for(std::chrono::milliseconds(10));
+  CHECK(done.load() == 1);
+  std::printf("  engine result: %s\n", result.valid ? "valid" : result.reason.c_str());
+  engine.stopCamera();
+  CHECK(result.valid);
+  CHECK(result.tracker == "lk");
+  CHECK(result.reference.used && result.reference.valid);
+  CHECK(result.reference.ppPx < 0.05);
+  CHECK_NEAR(result.dominantHz, 5, 0.05);
+  CHECK_NEAR(result.peakAmpPx, 1.5, 0.08);
+  CHECK(result.peakClear);
+  CHECK(result.field.valid);
+  CHECK_NEAR(result.field.peakHz, 5, 0.3);
+  std::printf("  engine lk+ref: %.3f Hz, peak %.3f px, ref p-p %.4f px, snr %.0f, field %.2f Hz\n", result.dominantHz,
+              result.peakAmpPx, result.reference.ppPx, result.peakSnr, result.field.peakHz);
+}
+
 }  // namespace
 
 int main() {
+  testReferenceCompensation();
+  testPeakConfidence();
+  testFieldSpectrum();
+  testEngineLkWithReference();
   testSpectrumSine();
   testResample();
   testTrackingChain();

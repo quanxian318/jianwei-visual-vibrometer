@@ -1,0 +1,295 @@
+// Stereo matcher, rectification/calibration loading and the depth service on synthetic pairs.
+#include <algorithm>
+#include <cmath>
+#include <cstdio>
+#include <random>
+#include <string>
+#include <vector>
+
+#include "stereo/stereo_match.h"
+#include "stereo/stereo_rectify.h"
+#include "stereo/stereo_service.h"
+#include "test_util.h"
+#include "util/json_util.h"
+
+using namespace vm;
+
+namespace {
+
+// Band-limited random texture, exact at sub-pixel positions.
+struct Texture {
+  struct Wave { double kx, ky, ph, a; };
+  std::vector<Wave> waves;
+  explicit Texture(unsigned seed) {
+    std::mt19937 rng(seed);
+    std::uniform_real_distribution<double> u(0, 1);
+    for (int i = 0; i < 48; ++i) {
+      const double k = 0.1 + 0.9 * u(rng), th = 2 * M_PI * u(rng);
+      waves.push_back({k * std::cos(th), k * std::sin(th), 2 * M_PI * u(rng), 1.0 / (1 + 3 * k)});
+    }
+  }
+  double at(double x, double y) const {
+    double s = 0;
+    for (const auto& w : waves) s += w.a * std::sin(w.kx * x + w.ky * y + w.ph);
+    return s;
+  }
+};
+
+// Left/right rectified pair of fronto-parallel surfaces given by a piecewise
+// constant disparity(x, y) of the left image. The right pixel xr shows the
+// nearest surface whose left position xr + d has that same disparity, so
+// occlusions follow the real geometry.
+template <typename F>
+void renderPair(const Texture& t, int w, int h, F disparity, StereoImage& l, StereoImage& r, double gainR = 1,
+                double offR = 0) {
+  l.w = r.w = w;
+  l.h = r.h = h;
+  l.px.resize(static_cast<size_t>(w) * h);
+  r.px.resize(l.px.size());
+  for (int y = 0; y < h; ++y) {
+    std::vector<double> cand;
+    for (int x = 0; x < w; ++x)
+      if (std::find(cand.begin(), cand.end(), disparity(x, y)) == cand.end()) cand.push_back(disparity(x, y));
+    std::sort(cand.rbegin(), cand.rend());  // nearest first
+    for (int x = 0; x < w; ++x) {
+      const double vl = 128 + 30 * t.at(x, y);
+      double xl = x + cand.back();
+      for (double dd : cand) {
+        const int xi = static_cast<int>(std::lround(x + dd));
+        if (xi >= 0 && xi < w && disparity(xi, y) == dd) {
+          xl = x + dd;
+          break;
+        }
+      }
+      const double vr = gainR * (128 + 30 * t.at(xl, y)) + offR;
+      l.px[static_cast<size_t>(y) * w + x] = static_cast<uint8_t>(std::max(0.0, std::min(255.0, vl + 0.5)));
+      r.px[static_cast<size_t>(y) * w + x] = static_cast<uint8_t>(std::max(0.0, std::min(255.0, vr + 0.5)));
+    }
+  }
+}
+
+struct Score {
+  double density = 0, bad = 0, medianErr = 0;
+};
+template <typename F> Score score(const DisparityMap& m, F truth, int border = 12, bool measuredOnly = false) {
+  int known = 0, valid = 0, bad = 0;
+  std::vector<double> err;
+  for (int y = border; y < m.h - border; ++y)
+    for (int x = border + 64; x < m.w - border; ++x) {
+      ++known;
+      const int16_t v = m.q4[static_cast<size_t>(y) * m.w + x];
+      if (v < 0 || (measuredOnly && !m.measured(static_cast<size_t>(y) * m.w + x))) continue;
+      ++valid;
+      const double e = std::fabs(v / 16.0 - truth(x, y));
+      err.push_back(e);
+      bad += e > 1.0;
+    }
+  Score s;
+  s.density = known ? static_cast<double>(valid) / known : 0;
+  s.bad = valid ? static_cast<double>(bad) / valid : 1;
+  if (!err.empty()) {
+    std::nth_element(err.begin(), err.begin() + err.size() / 2, err.end());
+    s.medianErr = err[err.size() / 2];
+  }
+  return s;
+}
+
+void testPlane() {
+  Texture tex(3);
+  StereoImage l, r;
+  auto d = [](int, int) { return 18.25; };
+  renderPair(tex, 320, 180, d, l, r);
+  const Score s = score(matchSgm(l, r, SgmParams()), d);
+  std::printf("  plane: density %.3f, bad>1px %.4f, median err %.3f px\n", s.density, s.bad, s.medianErr);
+  CHECK(s.density > 0.95);
+  CHECK(s.bad < 0.01);
+  CHECK(s.medianErr < 0.1);
+}
+
+// Sub-pixel bias over a sweep of fractional disparities.
+void testSubpixelBias() {
+  Texture tex(11);
+  for (int mode = 0; mode <= 2; ++mode) {
+    double worst = 0, sum = 0;
+    for (int k = 0; k < 8; ++k) {
+      const double dt = 14 + k / 8.0;
+      StereoImage l, r;
+      auto d = [dt](int, int) { return dt; };
+      renderPair(tex, 240, 120, d, l, r);
+      SgmParams p;
+      p.subpixel = mode == 0 ? 0 : 1;
+      p.refineLk = mode == 2;
+      std::vector<double> e;
+      const DisparityMap m = matchSgm(l, r, p);
+      for (int y = 12; y < m.h - 12; ++y)
+        for (int x = 80; x < m.w - 12; ++x) {
+          const int16_t v = m.q4[static_cast<size_t>(y) * m.w + x];
+          if (v >= 0) e.push_back(v / 16.0 - dt);
+        }
+      double mean = 0;
+      for (double v : e) mean += v;
+      mean /= std::max<size_t>(1, e.size());
+      worst = std::max(worst, std::fabs(mean));
+      sum += std::fabs(mean);
+    }
+    const char* names[] = {"parabola", "equiangular", "equiangular + LK refine"};
+    std::printf("  sub-pixel %s: mean |bias| %.3f px, worst %.3f px\n", names[mode], sum / 8, worst);
+    if (mode == 2) CHECK(worst < 0.05);
+  }
+}
+
+void testStepAndExposure() {
+  Texture tex(8);
+  StereoImage l, r;
+  auto d = [](int x, int) { return x < 190 ? 10.0 : 31.5; };  // two planes, depth step
+  renderPair(tex, 320, 180, d, l, r, 0.8, 12);                 // right camera darker, offset
+  SgmParams p;
+  p.census = 9;
+  const DisparityMap sm = matchSgm(l, r, p);
+  const Score s = score(sm, d);
+  const Score sMeas = score(sm, d, 12, true);
+  BmParams bp;
+  const Score b = score(matchBmBaseline(l, r, bp), d);
+  std::printf("  step+exposure: sgm (measured + filled) density %.3f bad %.4f | team bm density %.3f bad %.4f\n",
+              s.density, s.bad, b.density, b.bad);
+  std::printf("  step+exposure: measured only density %.3f bad %.4f\n", sMeas.density, sMeas.bad);
+  CHECK(sMeas.density > 0.85);
+  CHECK(sMeas.bad < 0.025);
+  CHECK(s.density > 0.95);
+  CHECK(s.bad < 0.05);
+}
+
+void testFlatRejected() {
+  StereoImage l, r;
+  l.w = r.w = 160;
+  l.h = r.h = 90;
+  l.px.assign(160 * 90, 120);
+  r.px = l.px;
+  CHECK(matchSgm(l, r, SgmParams()).valid() == 0);  // no texture: nothing invented
+  CHECK(matchBmBaseline(l, r, BmParams()).valid() == 0);
+}
+
+std::string writeCalibration(double f, double baseline) {
+  JsonValue root = JsonValue::makeObject();
+  root.set("id", "unit-test");
+  JsonValue size = JsonValue::makeArray();
+  size.push(320);
+  size.push(180);
+  root.set("image_size", size);
+  for (const char* side : {"left", "right"}) {
+    JsonValue cam = JsonValue::makeObject();
+    auto arr = [](std::initializer_list<double> v) {
+      JsonValue a = JsonValue::makeArray();
+      for (double x : v) a.push(x);
+      return a;
+    };
+    cam.set("K", arr({f, 0, 160, 0, f, 90, 0, 0, 1}));
+    cam.set("D", arr({0, 0, 0, 0, 0}));
+    cam.set("R", arr({1, 0, 0, 0, 1, 0, 0, 0, 1}));
+    const double tx = std::string(side) == "right" ? -f * baseline : 0;
+    cam.set("P", arr({f, 0, 160, tx, 0, f, 90, 0, 0, 0, 1, 0}));
+    root.set(side, cam);
+  }
+  const std::string path = "/tmp/vibmon_test_stereo_calibration.json";
+  writeFileAtomic(path, jsonPretty(root));
+  return path;
+}
+
+GrayFrame toFrame(const StereoImage& im, int64_t t) {
+  GrayFrame f;
+  f.width = im.w;
+  f.height = im.h;
+  f.pixels = im.px;
+  f.timestampNs = t;
+  return f;
+}
+
+void testCalibrationAndService() {
+  StereoCalibration c;
+  std::string err;
+  CHECK(!loadStereoCalibration("/nonexistent.json", c, err));
+  const std::string path = writeCalibration(300, 60);
+  CHECK(loadStereoCalibration(path, c, err));
+  CHECK_NEAR(c.baselineMm, 60, 1e-9);
+  CHECK_NEAR(rectifiedFocalPx(c, 320), 300, 1e-9);
+
+  // Plane at Z = 1000 mm -> d = f B / Z = 18 px.
+  Texture tex(5);
+  StereoImage l, r;
+  renderPair(tex, 320, 180, [](int, int) { return 18.0; }, l, r);
+  StereoConfig sc;
+  sc.calibrationFile = path;
+  std::vector<std::shared_ptr<const DepthMap>> published;
+  StereoService svc(sc, nullptr, [&](std::shared_ptr<const DepthMap> d) { published.push_back(d); });
+  CHECK(svc.stats().calibrated);
+  svc.process(toFrame(l, 0), toFrame(r, 0));  // temporal filter: a value is shown from the second frame on
+  auto d = svc.process(toFrame(l, 1000), toFrame(r, 1000));
+  CHECK(d->backend == "PL-model");
+  CHECK(d->validFraction > 0.6);
+  double mmPerPx = 0, z = 0;
+  CHECK(stereoScaleAt(*d, 0.6, 0.5, 0.1, 0.1, 300, mmPerPx, z));
+  std::printf("  service: valid %.3f, Z %.1f mm, mm/px %.4f, %.1f ms\n", d->validFraction, z, mmPerPx, d->procMs);
+  CHECK_NEAR(z, 1000, 10);
+  CHECK_NEAR(mmPerPx, 1000.0 / 300, 0.04);
+
+  // Without calibration the service never publishes millimetres.
+  StereoConfig nc;
+  nc.calibrationFile = "/nonexistent.json";
+  StereoService none(nc, nullptr, nullptr);
+  CHECK(!none.stats().calibrated);
+  none.process(toFrame(l, 0), toFrame(r, 0));
+  auto u = none.process(toFrame(l, 0), toFrame(r, 0));
+  CHECK(std::all_of(u->mm.begin(), u->mm.end(), [](uint16_t v) { return v == 0; }));
+  CHECK(!stereoScaleAt(*u, 0.5, 0.5, 0.1, 0.1, 300, mmPerPx, z));
+}
+
+// Flicker of isolated wrong matches over frames with independent sensor noise.
+void testTemporalFilter() {
+  Texture tex(21);
+  StereoImage l0, r0;
+  auto d = [](int x, int) { return x < 170 ? 12.0 : 26.0; };
+  renderPair(tex, 320, 180, d, l0, r0);
+  std::mt19937 rng(3);
+  std::normal_distribution<double> noise(0, 3);
+  TemporalDisparityFilter tf;
+  SgmParams p;
+  p.census = 9;
+  p.paths = 2;
+  int rawWrong = 0, filtWrong = 0, rawValid = 0, filtValid = 0;
+  for (int f = 0; f < 8; ++f) {
+    StereoImage l = l0, r = r0;
+    for (auto* im : {&l, &r})
+      for (auto& v : im->px) v = static_cast<uint8_t>(std::max(0.0, std::min(255.0, v + noise(rng))));
+    const DisparityMap raw = matchSgm(l, r, p);
+    const DisparityMap flt = tf.apply(raw);
+    if (f < 2) continue;
+    for (int y = 12; y < 168; ++y)
+      for (int x = 76; x < 308; ++x) {
+        const size_t i = static_cast<size_t>(y) * 320 + x;
+        if (raw.measured(i)) {
+          ++rawValid;
+          rawWrong += std::fabs(raw.q4[i] / 16.0 - d(x, y)) > 1;
+        }
+        if (flt.measured(i)) {
+          ++filtValid;
+          filtWrong += std::fabs(flt.q4[i] / 16.0 - d(x, y)) > 1;
+        }
+      }
+  }
+  const double rb = static_cast<double>(rawWrong) / rawValid, fb = static_cast<double>(filtWrong) / filtValid;
+  std::printf("  temporal: wrong %.4f -> %.4f, measured %d -> %d px over 6 frames\n", rb, fb, rawValid, filtValid);
+  CHECK(fb <= rb);
+  CHECK(filtValid > 0.9 * rawValid);
+}
+
+}  // namespace
+
+int main() {
+  testPlane();
+  testSubpixelBias();
+  testStepAndExposure();
+  testFlatRejected();
+  testTemporalFilter();
+  testCalibrationAndService();
+  return testSummary("stereo");
+}
