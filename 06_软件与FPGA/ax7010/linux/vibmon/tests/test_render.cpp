@@ -237,12 +237,56 @@ int main(int argc, char** argv) {
   {
     Rect r;
     const UiAction a = tap(st, pd, 105 + 76, 61 + 1, &r);  // image starts at (104 + 76, 60) for 4:3 frames
-    CHECK(a.kind == "roi");
+    CHECK(a.kind == "roi_box");
     UiState s2;
     const JsonValue cmd = FbUi::applyAction(s2, a, r, r.x, r.y, pd, 0);
     CHECK(jStr(cmd, "cmd", "") == "roi");
     CHECK_NEAR(jNum(cmd, "x", 0), 0.25, 0.01);
     CHECK_NEAR(jNum(cmd, "y", 0), 0.25, 0.01);
+  }
+  // Measuring box: inside moves it, edges and corners (also from just outside) resize it.
+  {
+    Rect r;
+    const UiAction a = tap(st, pd, 400, 230, &r);
+    CHECK(a.kind == "roi_box");
+    const NormBox nb = roiBox(pd.s, 640, 480);
+    const Rect b = roiScreenRect(nb, a, r);
+    CHECK(b.w > 80 && b.w < 100);  // 64 px at zoom 2 in the 453 px wide image
+    CHECK(roiGrabAt(b, b.x + b.w / 2, b.y + b.h / 2) == kGrabMove);
+    CHECK(roiGrabAt(b, b.x - 10, b.y - 10) == (kGrabLeft | kGrabTop));
+    CHECK(roiGrabAt(b, b.x + b.w + 10, b.y + b.h / 2) == kGrabRight);
+    CHECK(roiGrabAt(b, b.x + b.w / 2, b.y + b.h - 3) == kGrabBottom);
+    CHECK(roiGrabAt(b, b.x - 40, b.y + b.h / 2) == 0);
+    // Moving keeps the size and stops at the image border.
+    const NormBox m = roiDragged(nb, kGrabMove, 0.1, -2, 640, 480);
+    CHECK_NEAR(m.x0, nb.x0 + 0.1, 1e-9);
+    CHECK_NEAR(m.y0, 0, 1e-9);
+    CHECK_NEAR(m.y1 - m.y0, nb.y1 - nb.y0, 1e-9);
+    // Resizing keeps the opposite edges and stays within 16..256 px.
+    const NormBox g = roiDragged(nb, kGrabRight | kGrabBottom, 1, 0.05, 640, 480);
+    CHECK_NEAR(g.x0, nb.x0, 1e-9);
+    CHECK_NEAR(g.y0, nb.y0, 1e-9);
+    CHECK_NEAR((g.x1 - g.x0) * 640, kRoiMaxPx, 1e-6);
+    CHECK_NEAR(g.y1, nb.y1 + 0.05, 1e-9);
+    const NormBox t = roiDragged(nb, kGrabLeft, 1, 0, 640, 480);
+    CHECK_NEAR(t.x1, nb.x1, 1e-9);
+    CHECK_NEAR((t.x1 - t.x0) * 640, kRoiMinPx, 1e-6);
+    const JsonValue cmd = roiCommand(g, 640, 480);
+    CHECK(jStr(cmd, "cmd", "") == "roi" && jInt(cmd, "w", 0) == 256 && jInt(cmd, "h", 0) == 88);
+    CHECK_NEAR(jNum(cmd, "x", 0), 0.5 * (g.x0 + g.x1), 1e-9);
+    CHECK_NEAR(jNum(cmd, "y", 0), 0.5 * (g.y0 + g.y1), 1e-9);
+    // The live page draws the box being dragged, not the stored one.
+    Canvas cv(1024, 600);
+    std::vector<HitRegion> hits;
+    renderUi(cv, st, pd, hits);
+    CHECK(cv.get(b.x + 27, b.y) == theme::kGreen);
+    UiState ds;
+    ds.roiGrab = kGrabRight | kGrabBottom;
+    ds.roiDrag = g;
+    renderUi(cv, ds, pd, hits);
+    const Rect gb = roiScreenRect(g, a, r);
+    CHECK(cv.get(gb.x + gb.w / 4, gb.y) == theme::kAccent);
+    CHECK(cv.get(gb.x + gb.w / 4, gb.y + gb.h - 1) == theme::kAccent);
   }
   // No ROI changes during a capture.
   CHECK(tap(st, d, 400, 230).isNull());
@@ -395,6 +439,17 @@ int main(int argc, char** argv) {
     renderUi(c, UiState(), sd, hits);
     CHECK(hits.empty());  // nothing reacts after the application stopped
     if (!out.empty()) writePpm(c, out + "/ui_shutdown_done.ppm");
+  }
+  {
+    UiData pd = d;
+    pd.s.measureState = "preview";
+    UiState ds;
+    ds.roiGrab = kGrabRight | kGrabBottom;
+    ds.roiDrag = NormBox{0.36, 0.38, 0.6, 0.5};
+    Canvas c(1024, 600);
+    std::vector<HitRegion> hits;
+    renderUi(c, ds, pd, hits);
+    if (!out.empty()) writePpm(c, out + "/ui_live_roi.ppm");
   }
 
   // Printed slip.

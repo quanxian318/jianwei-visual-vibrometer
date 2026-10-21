@@ -261,7 +261,8 @@ void MeasurementEngine::run() {
     }
     if (start) {
       Roi roi;
-      roi.w = roi.h = cfg.roiSize;
+      roi.w = cfg.roiW;
+      roi.h = cfg.roiH;
       roi.x = static_cast<int>(cx_ * frame.width) - roi.w / 2;
       roi.y = static_cast<int>(cy_ * frame.height) - roi.h / 2;
       samples_.clear();

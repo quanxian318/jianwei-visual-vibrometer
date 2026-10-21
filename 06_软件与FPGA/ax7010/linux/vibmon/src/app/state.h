@@ -30,7 +30,7 @@ struct ResultSummary {
 // AppConfig::settingsFile.
 struct UserSettings {
   double durationS = 10;
-  int roiSize = 64;
+  int roiW = 64, roiH = 64;  // measuring box (pixels)
   char axis = 'y';
   bool autoLight = true;
   double warnPp = 2.0, alarmPp = 5.0;  // mm

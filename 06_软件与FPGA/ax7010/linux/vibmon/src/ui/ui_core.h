@@ -30,15 +30,23 @@ struct Rect {
 };
 
 // What touching a region does. Kind "cmd" sends cmd to Application::command();
-// the other kinds change UI-local state (see FbUi::dispatch).
+// the other kinds change UI-local state (see FbUi::applyAction).
 struct UiAction {
   std::string kind;
   JsonValue cmd;
   int arg = 0;
   std::string text;
-  double nx0 = 0, ny0 = 0, nw = 1, nh = 1;  // "roi": normalised image window shown in the region
+  double nx0 = 0, ny0 = 0, nw = 1, nh = 1;  // "roi"/"roi_box": normalised image window shown in the region
   bool isNull() const { return kind.empty(); }
 };
+
+// Measuring box in normalised image coordinates (0..1).
+struct NormBox {
+  double x0 = 0, y0 = 0, x1 = 0, y1 = 0;
+};
+
+// Parts of the measuring box a touch drags (bit set).
+enum RoiGrab { kGrabLeft = 1, kGrabRight = 2, kGrabTop = 4, kGrabBottom = 8, kGrabMove = 16 };
 
 struct HitRegion {
   Rect r;
@@ -66,6 +74,8 @@ struct UiState {
   double probeX = -1, probeY = -1;  // depth probe point (normalised), -1 = none
   int depthRange = 0;               // 0 = automatic, 1..3 = fixed display ranges
   bool liveHeat = false;     // heat-map overlay on the live preview
+  int roiGrab = 0;           // measuring box being dragged on the live preview (RoiGrab bits, 0 = none)
+  NormBox roiDrag;           // its position while dragging
   std::string toast;
   int64_t toastUntilMs = 0;
   // Wi-Fi dialog
@@ -141,6 +151,21 @@ std::string errorText(const std::string& code);     // command error -> text
 const char* pageTitle(Page p);
 // Largest rectangle with the aspect fw:fh inside box, centred.
 Rect fitAspect(const Rect& box, int fw, int fh);
+
+// Measuring box editing on the live preview ("roi_box" region).
+// Box of the current settings (centre and pixel size) for a fw x fh frame.
+NormBox roiBox(const SystemState& s, int fw, int fh);
+// The box on screen, through the image window that action a shows in region.
+Rect roiScreenRect(const NormBox& b, const UiAction& a, const Rect& region);
+// Part of the on-screen box b that a touch at (x, y) grabs, 0 = none. Edges
+// and corners reach a finger width outside the box and up to a quarter of its
+// size inside; the rest of the inside moves the whole box.
+int roiGrabAt(const Rect& b, int x, int y);
+// b with the grabbed part moved by (dx, dy) (normalised), kept inside the
+// image and within kRoiMinPx..kRoiMaxPx for a fw x fh frame.
+NormBox roiDragged(const NormBox& b, int grab, double dx, double dy, int fw, int fh);
+// "roi" command that places the box b (centre and pixel size).
+JsonValue roiCommand(const NormBox& b, int fw, int fh);
 
 void renderUi(Canvas& c, const UiState& st, const UiData& d, std::vector<HitRegion>& hits);
 // Topmost region at (x, y); disabled and blocking regions return a null action.

@@ -16,8 +16,12 @@
 
 namespace vm {
 
+// Measuring box size limits (pixels): smaller boxes hold too little texture,
+// larger ones make the per-frame NCC search too slow.
+constexpr int kRoiMinPx = 16, kRoiMaxPx = 256;
+
 struct MeasureConfig {
-  int roiSize = 64;
+  int roiW = 64, roiH = 64;  // measuring box (pixels)
   int searchRadius = 8;
   double durationS = 10;
   char axis = 'y';          // displacement axis in image coordinates

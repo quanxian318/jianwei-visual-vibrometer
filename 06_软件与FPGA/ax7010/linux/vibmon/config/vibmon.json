@@ -62,7 +62,8 @@
   "measurement": {
     "duration_s": 10,
     "axis": "y",
-    "roi_size_px": 64,
+    "roi_width_px": 64,
+    "roi_height_px": 64,
     "search_radius_px": 8,
     "min_ncc": 0.6,
     "min_freq_hz": 0.5,

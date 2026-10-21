@@ -23,7 +23,7 @@ class Daemon:
         self.sock = self.dir / 'ctl.sock'
         cfg = {
             'camera': {'source': 'synthetic', 'synthetic': {'fps': 60}},
-            'measurement': {'roi_size_px': 48, 'search_radius_px': 6,
+            'measurement': {'roi_width_px': 48, 'roi_height_px': 48, 'search_radius_px': 6,
                             'duration_s': 1.2, 'calibration_file': str(self.dir / 'cal.json')},
             'storage': {'records_dir': str(self.dir / 'records'), 'settings_file': str(self.dir / 'settings.json')},
             'ui': {'enabled': False}, 'voice': {'enabled': False},
@@ -104,12 +104,17 @@ with tempfile.TemporaryDirectory(prefix='vibmon-regression-') as temp:
                 check(rec['lighting']['on'], 'record retains automatic light state after it is switched off')
             elif name == 'point':
                 app.cmd('set_point', id='A', name='point A')
+                check(app.cmd('roi', x=0.5, y=0.5, w=80, h=40)['ok'], 'measuring box accepts width and height')
+                check(not app.cmd('roi', w=8)['ok'] and app.cmd('settings')['data']['roi_width_px'] == 80,
+                      'a box below 16 px is refused and leaves the size unchanged')
                 check(app.cmd('measure_start')['ok'], 'capture accepted')
                 time.sleep(.25)
                 app.cmd('set_point', id='B', name='point B')
+                check(not app.cmd('roi', w=64, h=64)['ok'], 'capture refuses resizing the measuring box')
                 last = app.result()
                 rec = json.loads((d / 'records' / last['measurement_id'] / 'record.json').read_text())
                 check(rec['point_id'] == 'A' and last['valid'], 'record keeps the point selected at capture start')
+                check((rec['roi']['w'], rec['roi']['h']) == (80, 40), 'capture tracks the box size set by the operator')
             elif name == 'pixel':
                 check(app.cmd('status')['data']['alarm_level'] == '未判级', 'startup has no normal vibration judgment')
                 app.cmd('measure_start')
@@ -131,6 +136,7 @@ with tempfile.TemporaryDirectory(prefix='vibmon-regression-') as temp:
                       'record notes the laser switched off for the capture')
                 check(app.cmd('status')['data']['laser']['on'], 'laser is back on after the capture')
             elif name == 'settings':
+                app.cmd('roi', w=96, h=32)
                 r = app.cmd('set', duration_s=30, warn_pp=0.5, alarm_pp=1.0)
                 check(r['ok'] and r['data']['duration_s'] == 30, 'settings are applied')
                 check(not app.cmd('set', warn_pp=2.0, alarm_pp=1.0)['ok'], 'warning threshold above the alarm threshold is refused')
@@ -140,7 +146,9 @@ with tempfile.TemporaryDirectory(prefix='vibmon-regression-') as temp:
                       'settings are written to the settings file')
                 app.close()
                 app = Daemon(d)
-                check(app.ready() and app.cmd('settings')['data']['duration_s'] == 30, 'settings survive a restart')
+                s = app.ready() and app.cmd('settings')['data']
+                check(s and s['duration_s'] == 30 and (s['roi_width_px'], s['roi_height_px']) == (96, 32),
+                      'settings and the box size survive a restart')
             elif name == 'shutdown':
                 app.cmd('measure_start', duration_s=3)
                 time.sleep(.15)

@@ -14,7 +14,7 @@ cat > "$W/vibmon.json" <<EOF
 {
   "device_id": "smoke",
   "camera": {"source": "synthetic", "synthetic": {"freq_hz": 5, "amplitude_px": 2, "fps": 60}},
-  "measurement": {"duration_s": 4, "calibration_file": "$W/cal.json", "roi_size_px": 48, "search_radius_px": 6},
+  "measurement": {"duration_s": 4, "calibration_file": "$W/cal.json", "roi_width_px": 48, "roi_height_px": 48, "search_radius_px": 6},
   "alarm": {"warn_peak_to_peak": 0.15, "alarm_peak_to_peak": 0.5},
   "storage": {"records_dir": "$W/records"},
   "ui": {"enabled": false},

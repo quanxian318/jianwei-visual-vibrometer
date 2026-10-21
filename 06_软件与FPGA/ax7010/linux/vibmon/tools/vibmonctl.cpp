@@ -1,7 +1,8 @@
 // vibmonctl - command-line client of vibmond's control socket.
 //   vibmonctl [-s /run/vibmon.sock] <cmd> [key=value ...]
 // e.g. vibmonctl status | measure_start duration_s=10 | print | light on=true percent=80
-//      laser on=true | voice asset=measure_done | set_net ssid=lab password=secret
+//      laser on=true | roi x=0.5 y=0.4 w=80 h=48 | voice asset=measure_done
+//      set_net ssid=lab password=secret
 //      settings | set duration_s=30 warn_pp=0.5 alarm_pp=1 light_percent=80 | shutdown
 #include <sys/socket.h>
 #include <sys/un.h>

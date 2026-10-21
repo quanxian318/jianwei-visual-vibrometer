@@ -19,7 +19,7 @@
 | ax7010/pl | carrier_ctrl RTL、Vivado 集成脚本、约束、自检测试平台 | WSL Icarus 行为仿真通过：AXI 分离握手/背压/WSTRB、PWM、按键、事件 FIFO、WS2812、看门狗 | Vivado 综合、实现、上板 |
 | ax7010/pl/vision | 视觉处理 RTL：`vp_reduce` 流式降采样、`vp_core` 时间带通/运动放大/振动能量；测试平台 | 与 Python 模型逐位一致（合成帧和电脑摄像头实拍帧，含奇数高度、随机输入间隔） | AXI 接口封装、接入厂家工程、综合、上板 |
 | pc_sim | 电脑摄像头实验台、位精确模型、Python/C++/RTL 比对脚本 | 摄像头实拍和合成数据下三方逐位一致；实验台自检运行 | — |
-| ax7010/linux/vibmon | AX7010 Linux 程序 vibmond（六页触摸界面、PS 视觉处理线程、运行时设置）、命令行 vibmonctl、联调工具 carrier_test、视觉参考工具 vision_ref | WSL x86-64（g++ 13）编译无警告；6 组单元测试（含界面各页渲染与点按、视觉处理）、36 项应用集成检查（含设置保存与重启生效）、端到端冒烟测试 | ARM 交叉编译、上板 |
+| ax7010/linux/vibmon | AX7010 Linux 程序 vibmond（六页触摸界面、PS 视觉处理线程、运行时设置）、命令行 vibmonctl、联调工具 carrier_test、视觉参考工具 vision_ref | WSL x86-64（g++ 13）编译无警告；6 组单元测试（含界面各页渲染与点按、视觉处理）、40 项应用集成检查（含设置保存与重启生效、测点框尺寸）、端到端冒烟测试 | ARM 交叉编译、上板 |
 | ax7010/linux/petalinux | 设备树片段、内核配置、Yocto 配方、开机自启 | 源码包可独立编译 | 在 PetaLinux 工程中构建 |
 
 ## Nano ESP32 固件
@@ -76,7 +76,7 @@ SPI 时钟按 FCLK 自动选不超过 1 MHz 的分频（100 MHz 时为 781 kHz�
 | 程序 | 用途 |
 |---|---|
 | vibmond | 主程序：板内管理、补光与报警、前面板与五灯、传感器、Nano 链路、测量与记录、打印、触摸界面 |
-| vibmonctl | 本地控制：`status`、`measure_start duration_s=10`、`measure_stop`、`print`、`light on=true percent=80`、`laser on=true`、`mute`、`roi x=0.5 y=0.4`、`voice asset=measure_done`、`set_net ssid=… password=…`、`rtc_set unix_ms=…`、`settings`、`set duration_s=30 warn_pp=0.5 alarm_pp=1 light_percent=80`、`shutdown` |
+| vibmonctl | 本地控制：`status`、`measure_start duration_s=10`、`measure_stop`、`print`、`light on=true percent=80`、`laser on=true`、`mute`、`roi x=0.5 y=0.4 w=80 h=48`（中心为归一化坐标，宽高为像素，可只给其中一部分）、`voice asset=measure_done`、`set_net ssid=… password=…`、`rtc_set unix_ms=…`、`settings`、`set duration_s=30 warn_pp=0.5 alarm_pp=1 light_percent=80`、`shutdown` |
 | vision_ref | 视觉处理参考：对录制片段运行 PS 算法，供与 PC 模型、PL 实现逐位比对（`pc_sim/check_bitexact.py` 调用） |
 | carrier_test | 首板联调（先停 vibmond）：`probe`、`i2c-scan mgmt|sens`、`tca`、`load <名称> 0|1`、`power`、`rtc [set]`、`leds RRGGBB×5`、`pwm a b`、`events [秒]`、`imu`、`adxl`、`sht40`、`tof`、`nano [波特率]`、`printer [波特率]` |
 

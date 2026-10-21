@@ -297,12 +297,17 @@ void renderSettingsPage(Ui& ui, const UiData& d) {
     }
   }
   {
-    const Rect r = row(0, 1, "测点框尺寸", "像素，纹理越丰富越可靠");
+    // Square presets; on the live preview the box is dragged to any width and height.
+    char hint[48];
+    snprintf(hint, sizeof(hint), "当前 %d×%d px", u.roiW, u.roiH);
+    const Rect r = row(0, 1, "测点框尺寸", hint);
     static const int kRoi[4] = {32, 48, 64, 96};
     for (int i = 0; i < 4; ++i) {
       snprintf(buf, sizeof(buf), "%d", kRoi[i]);
-      ui.chip(Rect{r.x + r.w - 4 * 64 - 8 + i * 64, r.y + 12, 58, 36}, buf, u.roiSize == kRoi[i], !busy,
-              cmdAction(setCmd("roi_size_px", JsonValue(kRoi[i]))));
+      JsonValue square = setCmd("roi_width_px", JsonValue(kRoi[i]));
+      square.set("roi_height_px", kRoi[i]);
+      ui.chip(Rect{r.x + r.w - 4 * 64 - 8 + i * 64, r.y + 12, 58, 36}, buf, u.roiW == kRoi[i] && u.roiH == kRoi[i],
+              !busy, cmdAction(square));
     }
   }
   {

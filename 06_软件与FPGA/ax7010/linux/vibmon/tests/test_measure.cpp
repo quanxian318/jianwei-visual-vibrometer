@@ -42,7 +42,8 @@ MeasureResult captureSynthetic(const SyntheticConfig& sc, double seconds, double
   GrayFrame f;
   src->next(f, 0);
   Roi roi;
-  roi.w = roi.h = mc.roiSize;
+  roi.w = mc.roiW;
+  roi.h = mc.roiH;
   roi.x = static_cast<int>(cx * f.width) - roi.w / 2;
   roi.y = static_cast<int>(cy * f.height) - roi.h / 2;
   NccTracker tr;
@@ -80,7 +81,7 @@ void testTrackingChain() {
   sc.axis = 'y';
   sc.noise = 2;
   MeasureConfig mc;
-  mc.roiSize = 48;
+  mc.roiW = mc.roiH = 48;
   mc.searchRadius = 6;
   mc.axis = 'y';
   MeasureResult r = captureSynthetic(sc, 8, 0.5, 0.5, mc);

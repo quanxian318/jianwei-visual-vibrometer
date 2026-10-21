@@ -51,7 +51,7 @@ JsonValue FbUi::applyAction(UiState& st, const UiAction& a, const Rect& region, 
   if (a.kind == "nav") {
     st.page = static_cast<Page>(std::max(0, std::min(kPageCount - 1, a.arg)));
     if (st.page == Page::kResult) st.openRecordId.clear();
-  } else if (a.kind == "roi" || a.kind == "depth_probe") {
+  } else if (a.kind == "roi" || a.kind == "roi_box" || a.kind == "depth_probe") {
     const double nx = a.nx0 + (x - region.x + 0.5) / std::max(1, region.w) * a.nw;
     const double ny = a.ny0 + (y - region.y + 0.5) / std::max(1, region.h) * a.nh;
     if (a.kind == "depth_probe") {
@@ -130,7 +130,7 @@ void FbUi::perform(const UiAction& a, const Rect& region, int x, int y, const Ui
   } else if (name == "shutdown") {
     st_.dialog = Dialog::kNone;
   } else if (name == "roi") {
-    toast("测点位置已更新");
+    toast("测点框已更新");
   }
 }
 
@@ -138,23 +138,42 @@ void FbUi::handleTouch(const TouchEvent& e, const UiData& d) {
   switch (e.type) {
     case TouchEvent::kDown: {
       fingerDown_ = true;
-      moved_ = false;
+      moved_ = dragging_ = false;
       downX_ = e.x;
       downY_ = e.y;
       Rect r;
       const UiAction a = hitTest(hits_, e.x, e.y, &r);
       st_.pressing = !a.isNull();
       st_.pressed = r;
+      st_.roiGrab = 0;
+      if (a.kind == "roi_box" && d.live.frameW > 0 && d.live.frameH > 0) {
+        dragStart_ = roiBox(d.s, d.live.frameW, d.live.frameH);
+        st_.roiGrab = roiGrabAt(roiScreenRect(dragStart_, a, r), e.x, e.y);
+        st_.roiDrag = dragStart_;
+        dragAction_ = a;
+        dragRegion_ = r;
+        dragFw_ = d.live.frameW;
+        dragFh_ = d.live.frameH;
+      }
       dirty_ = true;
       break;
     }
     case TouchEvent::kMove:
-      if (fingerDown_ && (std::abs(e.x - downX_) > 24 || std::abs(e.y - downY_) > 24)) {
+      if (!fingerDown_) break;
+      if (std::abs(e.x - downX_) > 24 || std::abs(e.y - downY_) > 24) {
         moved_ = true;
         if (st_.pressing) {
           st_.pressing = false;
           dirty_ = true;
         }
+      }
+      // The box follows the finger once it has left a small dead zone.
+      if (st_.roiGrab && (dragging_ || std::abs(e.x - downX_) > 6 || std::abs(e.y - downY_) > 6)) {
+        dragging_ = true;
+        const double dx = static_cast<double>(e.x - downX_) / std::max(1, dragRegion_.w) * dragAction_.nw;
+        const double dy = static_cast<double>(e.y - downY_) / std::max(1, dragRegion_.h) * dragAction_.nh;
+        st_.roiDrag = roiDragged(dragStart_, st_.roiGrab, dx, dy, dragFw_, dragFh_);
+        dirty_ = true;
       }
       break;
     case TouchEvent::kUp: {
@@ -162,6 +181,12 @@ void FbUi::handleTouch(const TouchEvent& e, const UiData& d) {
       fingerDown_ = false;
       st_.pressing = false;
       dirty_ = true;
+      if (st_.roiGrab) {
+        // Releasing a dragged box places it; a tap on the box keeps it as it is.
+        st_.roiGrab = 0;
+        if (dragging_) perform(cmdAction(roiCommand(st_.roiDrag, dragFw_, dragFh_)), Rect(), 0, 0, d);
+        break;
+      }
       const int dx = e.x - downX_, dy = e.y - downY_;
       if (st_.dialog == Dialog::kNone && std::abs(dx) > 140 && std::abs(dx) > 2 * std::abs(dy)) {
         const int p = (static_cast<int>(st_.page) + (dx < 0 ? 1 : kPageCount - 1)) % kPageCount;

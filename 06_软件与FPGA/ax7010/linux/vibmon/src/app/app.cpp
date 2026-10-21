@@ -1059,7 +1059,8 @@ std::shared_ptr<const DepthMap> Application::depthLive() {
 void Application::publishSettings() {
   UserSettings u;
   u.durationS = cfg_.measure.durationS;
-  u.roiSize = cfg_.measure.roiSize;
+  u.roiW = cfg_.measure.roiW;
+  u.roiH = cfg_.measure.roiH;
   u.axis = cfg_.measure.axis;
   u.autoLight = cfg_.light.autoOnMeasure;
   u.warnPp = cfg_.alarm.warnPp;
@@ -1081,7 +1082,8 @@ JsonValue Application::settingsJson() {
   const UserSettings& u = s.settings;
   JsonValue o = JsonValue::makeObject();
   o.set("duration_s", u.durationS);
-  o.set("roi_size_px", u.roiSize);
+  o.set("roi_width_px", u.roiW);
+  o.set("roi_height_px", u.roiH);
   o.set("axis", std::string(1, u.axis));
   o.set("auto_light", u.autoLight);
   o.set("light_percent", s.lightPercent);
@@ -1103,7 +1105,7 @@ JsonValue Application::settingsJson() {
 bool Application::applySettings(const JsonValue& c, std::string& err) {
   const SystemState s = state_.snapshot();
   double duration = cfg_.measure.durationS;
-  int roi = cfg_.measure.roiSize;
+  int roiW = cfg_.measure.roiW, roiH = cfg_.measure.roiH;
   char axis = cfg_.measure.axis;
   bool autoLight = cfg_.light.autoOnMeasure;
   double pct = s.lightPercent;
@@ -1118,10 +1120,9 @@ bool Application::applySettings(const JsonValue& c, std::string& err) {
     duration = jNum(c, "duration_s", -1);
     ok = ok && duration >= 1 && duration <= 600;
   }
-  if (c.find("roi_size_px")) {
-    roi = static_cast<int>(jInt(c, "roi_size_px", -1));
-    ok = ok && roi >= 16 && roi <= 256;
-  }
+  if (c.find("roi_width_px")) roiW = static_cast<int>(jInt(c, "roi_width_px", -1));
+  if (c.find("roi_height_px")) roiH = static_cast<int>(jInt(c, "roi_height_px", -1));
+  ok = ok && roiW >= kRoiMinPx && roiW <= kRoiMaxPx && roiH >= kRoiMinPx && roiH <= kRoiMaxPx;
   if (c.find("axis")) {
     const std::string a = jStr(c, "axis", "");
     // A loaded calibration fixes the axis its scale belongs to.
@@ -1162,14 +1163,15 @@ bool Application::applySettings(const JsonValue& c, std::string& err) {
     err = "invalid_value";
     return false;
   }
-  const bool captureKeys = c.find("duration_s") || c.find("roi_size_px") || c.find("axis") ||
-                           c.find("laser_off_during_measurement");
+  const bool captureKeys = c.find("duration_s") || c.find("roi_width_px") || c.find("roi_height_px") ||
+                           c.find("axis") || c.find("laser_off_during_measurement");
   if (captureKeys && measuring_) {
     err = "measuring";
     return false;
   }
   cfg_.measure.durationS = duration;
-  cfg_.measure.roiSize = roi;
+  cfg_.measure.roiW = roiW;
+  cfg_.measure.roiH = roiH;
   cfg_.measure.axis = axis;
   cfg_.light.autoOnMeasure = autoLight;
   cfg_.light.percent = pct;
@@ -1197,7 +1199,8 @@ bool Application::saveSettings() {
   JsonValue root = JsonValue::makeObject();
   JsonValue m = JsonValue::makeObject();
   m.set("duration_s", cfg_.measure.durationS);
-  m.set("roi_size_px", cfg_.measure.roiSize);
+  m.set("roi_width_px", cfg_.measure.roiW);
+  m.set("roi_height_px", cfg_.measure.roiH);
   m.set("axis", std::string(1, cfg_.measure.axis));
   root.set("measurement", m);
   JsonValue l = JsonValue::makeObject();
@@ -1372,11 +1375,17 @@ JsonValue Application::handleCommand(const JsonValue& c) {
     return okReply();
   }
   if (cmd == "roi") {
-    const double x = std::max(0.05, std::min(0.95, jNum(c, "x", 0.5)));
-    const double y = std::max(0.05, std::min(0.95, jNum(c, "y", 0.5)));
-    state_.update([x, y](SystemState& s) {
-      s.roiCx = x;
-      s.roiCy = y;
+    // Centre x/y in normalised image coordinates; w/h (pixels) also resize the
+    // box and are kept like the roi_width_px/roi_height_px settings.
+    if (c.find("w") || c.find("h")) {
+      JsonValue size = JsonValue::makeObject();
+      size.set("roi_width_px", static_cast<int>(jInt(c, "w", cfg_.measure.roiW)));
+      size.set("roi_height_px", static_cast<int>(jInt(c, "h", cfg_.measure.roiH)));
+      if (!applySettings(size, err)) return errReply(err);
+    }
+    state_.update([&c](SystemState& s) {
+      s.roiCx = std::max(0.0, std::min(1.0, jNum(c, "x", s.roiCx)));
+      s.roiCy = std::max(0.0, std::min(1.0, jNum(c, "y", s.roiCy)));
     });
     return okReply();
   }

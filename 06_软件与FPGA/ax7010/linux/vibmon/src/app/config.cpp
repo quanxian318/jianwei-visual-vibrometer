@@ -120,7 +120,8 @@ bool loadConfig(const std::string& path, AppConfig& c, std::string& err) {
   c.camera.synthetic.fps = jNum(syn, "fps", c.camera.synthetic.fps);
 
   const JsonValue& m = jObj(root, "measurement");
-  c.measure.roiSize = i32(m, "roi_size_px", c.measure.roiSize);
+  c.measure.roiW = i32(m, "roi_width_px", c.measure.roiW);
+  c.measure.roiH = i32(m, "roi_height_px", c.measure.roiH);
   c.measure.searchRadius = i32(m, "search_radius_px", c.measure.searchRadius);
   c.measure.durationS = jNum(m, "duration_s", c.measure.durationS);
   const std::string axis = jStr(m, "axis", std::string(1, c.measure.axis));

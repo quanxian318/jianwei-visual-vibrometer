@@ -29,6 +29,48 @@ bool measureEnabled(const SystemState& s) {
          (s.measureState == "preview" || capturing);
 }
 
+// Measuring box b clipped to the image area (zoomed in, it may reach past the
+// view): optional light fill, dashed or solid 2 px outline, and drag handles
+// at the corners (and edge centres once the box is large enough).
+void measureBox(Canvas& c, const Rect& clip, const Rect& b, uint32_t color, bool dashed, int fillAlpha,
+                bool handles) {
+  auto put = [&](int x, int y, int w, int h, int alpha) {
+    const int ax = std::max(x, clip.x), ay = std::max(y, clip.y);
+    const int bx = std::min(x + w, clip.x + clip.w), by = std::min(y + h, clip.y + clip.h);
+    if (bx > ax && by > ay) fillRoundRect(c, ax, ay, bx - ax, by - ay, 0, color, alpha);
+  };
+  if (fillAlpha > 0) put(b.x, b.y, b.w, b.h, fillAlpha);
+  const int step = dashed ? 12 : std::max(b.w, b.h) + 1, len = dashed ? 7 : step;
+  for (int i = 0; i < b.w; i += step) {
+    put(b.x + i, b.y, std::min(len, b.w - i), 2, 255);
+    put(b.x + i, b.y + b.h - 2, std::min(len, b.w - i), 2, 255);
+  }
+  for (int j = 0; j < b.h; j += step) {
+    put(b.x, b.y + j, 2, std::min(len, b.h - j), 255);
+    put(b.x + b.w - 2, b.y + j, 2, std::min(len, b.h - j), 255);
+  }
+  if (!handles) return;
+  // Smaller dots on small boxes so the box itself stays visible.
+  const float r = std::max(3.f, std::min(6.f, std::min(b.w, b.h) / 6.f));
+  auto handle = [&](int x, int y, float hr) {
+    if (!clip.contains(x, y)) return;
+    fillCircle(c, static_cast<float>(x), static_cast<float>(y), hr + 2.5f, 0x05080C, 160);
+    fillCircle(c, static_cast<float>(x), static_cast<float>(y), hr, color);
+  };
+  const int x1 = b.x + b.w, y1 = b.y + b.h;
+  for (int x : {b.x, x1}) {
+    for (int y : {b.y, y1}) handle(x, y, r);
+  }
+  if (b.w >= 56) {
+    handle(b.x + b.w / 2, b.y, 0.75f * r);
+    handle(b.x + b.w / 2, y1, 0.75f * r);
+  }
+  if (b.h >= 56) {
+    handle(b.x, b.y + b.h / 2, 0.75f * r);
+    handle(x1, b.y + b.h / 2, 0.75f * r);
+  }
+}
+
 JsonValue setCmd(const char* key, const JsonValue& v) {
   JsonValue j = JsonValue::makeObject();
   j.set("cmd", "set");
@@ -139,37 +181,47 @@ void renderLivePage(Ui& ui, const UiData& d) {
       blitGray(c, img.x, img.y, img.w, img.h, v.energy.data(), v.ew, v.eh, zx * v.ew, zy * v.eh, zw * v.ew,
                zh * v.eh, heatLut(), 120);
     }
-    auto toScreen = [&](double nx, double ny, float& px, float& py) {
-      px = static_cast<float>(img.x + (nx - zx) / zw * img.w);
-      py = static_cast<float>(img.y + (ny - zy) / zh * img.h);
-    };
-    if ((capturing || analyzing) && live.frameW > 0 && live.roi.w > 0) {
-      float x0, y0, x1, y1;
-      toScreen(static_cast<double>(live.roi.x) / live.frameW, static_cast<double>(live.roi.y) / live.frameH, x0, y0);
-      toScreen(static_cast<double>(live.roi.x + live.roi.w) / live.frameW,
-               static_cast<double>(live.roi.y + live.roi.h) / live.frameH, x1, y1);
-      strokeRoundRect(c, static_cast<int>(x0), static_cast<int>(y0), std::max(4, static_cast<int>(x1 - x0)),
-                      std::max(4, static_cast<int>(y1 - y0)), 3, 2, kAmber);
-    } else if (live.frameW > 0) {
-      float px, py;
-      toScreen(s.roiCx, s.roiCy, px, py);
-      const double half = 0.5 * s.settings.roiSize;
-      float ax, ay, bx, by;
-      toScreen(s.roiCx - half / live.frameW, s.roiCy - half / live.frameH, ax, ay);
-      toScreen(s.roiCx + half / live.frameW, s.roiCy + half / live.frameH, bx, by);
-      dashRect(c, static_cast<int>(ax), static_cast<int>(ay), std::max(6, static_cast<int>(bx - ax)),
-               std::max(6, static_cast<int>(by - ay)), kGreen, 7, 5, 2);
-      lineAA(c, px - 16, py, px - 5, py, 2, kGreen);
-      lineAA(c, px + 5, py, px + 16, py, 2, kGreen);
-      lineAA(c, px, py - 16, px, py - 5, 2, kGreen);
-      lineAA(c, px, py + 5, px, py + 16, 2, kGreen);
-    }
-    UiAction roi = uiAction("roi");
+    // Measuring box: tracked position while capturing; in preview it can be
+    // dragged (inside = move, edges and corners = resize) or moved by a tap.
+    UiAction roi = uiAction("roi_box");
     roi.nx0 = zx;
     roi.ny0 = zy;
     roi.nw = zw;
     roi.nh = zh;
-    ui.hit(img, roi, s.measureState == "preview");
+    const bool editable = s.measureState == "preview";
+    if ((capturing || analyzing) && live.frameW > 0 && live.roi.w > 0) {
+      const NormBox tracked{static_cast<double>(live.roi.x) / live.frameW,
+                            static_cast<double>(live.roi.y) / live.frameH,
+                            static_cast<double>(live.roi.x + live.roi.w) / live.frameW,
+                            static_cast<double>(live.roi.y + live.roi.h) / live.frameH};
+      measureBox(c, img, roiScreenRect(tracked, roi, img), kAmber, false, 0, false);
+    } else if (live.frameW > 0) {
+      const bool dragging = editable && ui.st.roiGrab != 0;
+      const NormBox nb = dragging ? ui.st.roiDrag : roiBox(s, live.frameW, live.frameH);
+      const Rect b = roiScreenRect(nb, roi, img);
+      const uint32_t col = dragging ? kAccent : kGreen;
+      measureBox(c, img, b, col, !dragging, dragging ? 40 : 0, editable);
+      const float px = b.x + b.w / 2.f, py = b.y + b.h / 2.f;
+      if (img.contains(static_cast<int>(px), static_cast<int>(py))) {
+        lineAA(c, px - 16, py, px - 5, py, 2, col);
+        lineAA(c, px + 5, py, px + 16, py, 2, col);
+        lineAA(c, px, py - 16, px, py - 5, 2, col);
+        lineAA(c, px, py + 5, px, py + 16, 2, col);
+      }
+      if (dragging) {
+        snprintf(buf, sizeof(buf), "%ld × %ld px", std::lround((nb.x1 - nb.x0) * live.frameW),
+                 std::lround((nb.y1 - nb.y0) * live.frameH));
+        const FontFace& f = fontFace(18);
+        const int tw = textWidth(f, buf) + 24, th = 32;
+        int ly = b.y - th - 8;
+        if (ly < img.y + 4) ly = b.y + b.h + 8;
+        if (ly + th > img.y + img.h - 4) ly = std::max(img.y + 4, b.y + 4);
+        const int lx = std::max(img.x + 4, std::min(img.x + img.w - tw - 4, b.x + b.w / 2 - tw / 2));
+        fillRoundRect(c, lx, ly, tw, th, 16, 0x05080C, 210);
+        drawTextCentered(c, f, lx + tw / 2, ly + 3, buf, kText);
+      }
+    }
+    ui.hit(img, roi, editable);
   } else {
     drawIcon(c, Icon::kCamera, pc.x + pc.w / 2.f, pc.y + pc.h / 2.f - 30, 56, kText3);
     drawTextCentered(c, fontFace(22, true), pc.x + pc.w / 2, pc.y + pc.h / 2 + 10,
@@ -281,7 +333,7 @@ void renderLivePage(Ui& ui, const UiData& d) {
       snprintf(buf, sizeof(buf), "时长 %s s", fmtNum(s.settings.durationS, 3).c_str());
     }
     drawText(c, fontFace(18), tx, r.y + 94, buf, capturing ? kAccent : kText2);
-    snprintf(buf, sizeof(buf), "测点框 %d px · %c 向", s.settings.roiSize,
+    snprintf(buf, sizeof(buf), "测点框 %d×%d · %c 向", s.settings.roiW, s.settings.roiH,
              static_cast<char>(std::toupper(static_cast<unsigned char>(s.settings.axis))));
     drawText(c, fontFace(14), tx, r.y + 124, buf, kText2);
     drawText(c, fontFace(14), tx, r.y + 146, s.calibrated ? "已标定 · 毫米结果" : "未标定 · 像素结果",

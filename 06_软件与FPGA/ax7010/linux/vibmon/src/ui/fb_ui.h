@@ -20,7 +20,9 @@ class Application;
 // Application::command(), the same path as vibmonctl.
 //
 // Input: tap (finger released near where it went down), horizontal swipe =
-// previous/next page. EC11: on the live page rotation zooms and a short press
+// previous/next page. On the live preview a press on the measuring box drags
+// it (inside moves it, edges and corners resize it) and a tap elsewhere on the
+// image moves it there. EC11: on the live page rotation zooms and a short press
 // resets the zoom; on the history page rotation turns the list pages; on the
 // other pages a short press returns to the live page; a long press cycles the
 // pages.
@@ -55,6 +57,12 @@ class FbUi {
   bool dirty_ = false;
   bool fingerDown_ = false, moved_ = false;
   int downX_ = 0, downY_ = 0;
+  // Measuring-box drag: image window of the pressed region, box at the press.
+  UiAction dragAction_;
+  Rect dragRegion_;
+  NormBox dragStart_;
+  int dragFw_ = 0, dragFh_ = 0;
+  bool dragging_ = false;
 
   std::mutex encMutex_;
   int encSteps_ = 0, encShort_ = 0, encLong_ = 0;

@@ -344,6 +344,69 @@ Rect fitAspect(const Rect& box, int fw, int fh) {
   return Rect{box.x + (box.w - w) / 2, box.y + (box.h - h) / 2, w, h};
 }
 
+NormBox roiBox(const SystemState& s, int fw, int fh) {
+  const double hw = 0.5 * s.settings.roiW / std::max(1, fw), hh = 0.5 * s.settings.roiH / std::max(1, fh);
+  return NormBox{s.roiCx - hw, s.roiCy - hh, s.roiCx + hw, s.roiCy + hh};
+}
+
+Rect roiScreenRect(const NormBox& b, const UiAction& a, const Rect& region) {
+  const auto sx = [&](double nx) { return static_cast<int>(std::lround(region.x + (nx - a.nx0) / a.nw * region.w)); };
+  const auto sy = [&](double ny) { return static_cast<int>(std::lround(region.y + (ny - a.ny0) / a.nh * region.h)); };
+  const int x0 = sx(b.x0), y0 = sy(b.y0);
+  return Rect{x0, y0, sx(b.x1) - x0, sy(b.y1) - y0};
+}
+
+int roiGrabAt(const Rect& b, int x, int y) {
+  constexpr int kReachOut = 28, kReachIn = 14;  // pixels; a fingertip covers about 40
+  if (x < b.x - kReachOut || y < b.y - kReachOut || x >= b.x + b.w + kReachOut || y >= b.y + b.h + kReachOut) {
+    return 0;
+  }
+  const int inX = std::min(kReachIn, b.w / 4), inY = std::min(kReachIn, b.h / 4);
+  int g = 0;
+  if (x < b.x + inX) {
+    g |= kGrabLeft;
+  } else if (x >= b.x + b.w - inX) {
+    g |= kGrabRight;
+  }
+  if (y < b.y + inY) {
+    g |= kGrabTop;
+  } else if (y >= b.y + b.h - inY) {
+    g |= kGrabBottom;
+  }
+  return g ? g : kGrabMove;
+}
+
+NormBox roiDragged(const NormBox& b, int grab, double dx, double dy, int fw, int fh) {
+  // The lower bound wins when the range is empty (box larger than the image).
+  const auto clamp = [](double v, double lo, double hi) { return std::max(lo, std::min(hi, v)); };
+  NormBox r = b;
+  if (grab & kGrabMove) {
+    const double w = b.x1 - b.x0, h = b.y1 - b.y0;
+    r.x0 = clamp(b.x0 + dx, 0, 1 - w);
+    r.y0 = clamp(b.y0 + dy, 0, 1 - h);
+    r.x1 = r.x0 + w;
+    r.y1 = r.y0 + h;
+    return r;
+  }
+  const double minW = static_cast<double>(kRoiMinPx) / fw, maxW = static_cast<double>(kRoiMaxPx) / fw;
+  const double minH = static_cast<double>(kRoiMinPx) / fh, maxH = static_cast<double>(kRoiMaxPx) / fh;
+  if (grab & kGrabLeft) r.x0 = clamp(b.x0 + dx, std::max(0.0, b.x1 - maxW), b.x1 - minW);
+  if (grab & kGrabRight) r.x1 = clamp(b.x1 + dx, b.x0 + minW, std::min(1.0, b.x0 + maxW));
+  if (grab & kGrabTop) r.y0 = clamp(b.y0 + dy, std::max(0.0, b.y1 - maxH), b.y1 - minH);
+  if (grab & kGrabBottom) r.y1 = clamp(b.y1 + dy, b.y0 + minH, std::min(1.0, b.y0 + maxH));
+  return r;
+}
+
+JsonValue roiCommand(const NormBox& b, int fw, int fh) {
+  JsonValue cmd = JsonValue::makeObject();
+  cmd.set("cmd", "roi");
+  cmd.set("x", 0.5 * (b.x0 + b.x1));
+  cmd.set("y", 0.5 * (b.y0 + b.y1));
+  cmd.set("w", static_cast<int>(std::lround((b.x1 - b.x0) * fw)));
+  cmd.set("h", static_cast<int>(std::lround((b.y1 - b.y0) * fh)));
+  return cmd;
+}
+
 UiAction hitTest(const std::vector<HitRegion>& hits, int x, int y, Rect* region) {
   for (auto it = hits.rbegin(); it != hits.rend(); ++it) {
     if (!it->r.contains(x, y)) continue;
