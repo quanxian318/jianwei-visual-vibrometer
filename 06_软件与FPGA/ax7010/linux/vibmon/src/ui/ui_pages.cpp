@@ -114,7 +114,7 @@ void drawMultiPoint(Ui& ui, const UiData& d, const Rect& img, const UiAction& ro
     const FontFace& f = fontFace(18);
     const int tw = textWidth(f, text) + 28;
     fillRoundRect(c, img.x + img.w / 2 - tw / 2, img.y + 56, tw, 32, 16, kRed, 220);
-    drawTextCentered(c, f, img.x + img.w / 2, img.y + 59, text, 0xFFFFFF);
+    drawTextCentered(c, f, img.x + img.w / 2, textTopIn(f, img.y + 56, 32), text, 0xFFFFFF);
   }
 }
 
@@ -329,7 +329,7 @@ void renderLivePage(Ui& ui, const UiData& d) {
         if (ly + th > img.y + img.h - 4) ly = std::max(img.y + 4, b.y + 4);
         const int lx = std::max(img.x + 4, std::min(img.x + img.w - tw - 4, b.x + b.w / 2 - tw / 2));
         fillRoundRect(c, lx, ly, tw, th, 16, 0x05080C, 210);
-        drawTextCentered(c, f, lx + tw / 2, ly + 3, buf, kText);
+        drawTextCentered(c, f, lx + tw / 2, textTopIn(f, ly, th), buf, kText);
       }
     }
     if (multipoint && live.frameW > 0) drawMultiPoint(ui, d, img, roi, editable);
@@ -373,7 +373,7 @@ void renderLivePage(Ui& ui, const UiData& d) {
     const int w = textWidth(f, text) + 38;
     fillRoundRect(c, pc.x + 12, pc.y + 12, w, 32, 16, 0x05080C, 200);
     fillCircle(c, pc.x + 28.f, pc.y + 28.f, 6, col);
-    drawText(c, f, pc.x + 40, pc.y + 15, text, kText);
+    drawText(c, f, pc.x + 40, textTopIn(f, pc.y + 12, 32), text, kText);
     // Acoustic reference: its level while it runs, otherwise its state (a
     // fault says why when tapped). Nothing while no microphone is connected.
     if (s.acousticState != "disabled" && s.acousticState != "absent") {
@@ -391,7 +391,7 @@ void renderLivePage(Ui& ui, const UiData& d) {
       const Rect mr{pc.x + 12 + w + 8, pc.y + 12, textWidth(f, mt) + 50, 32};
       fillRoundRect(c, mr.x, mr.y, mr.w, mr.h, 16, 0x05080C, 200);
       drawIcon(c, Icon::kMic, mr.x + 24.f, mr.y + 16.f, 18, live ? kGreen : mc);
-      drawText(c, f, mr.x + 38, mr.y + 3, mt, mc);
+      drawText(c, f, mr.x + 38, textTopIn(f, mr.y, mr.h), mt, mc);
       if (s.acousticState == "fault") ui.hit(mr, UiAction(), Enable(false, acousticErrorText(s.acousticError)));
     }
   }
@@ -406,7 +406,8 @@ void renderLivePage(Ui& ui, const UiData& d) {
     ui.iconButton(minus, Icon::kMinus, Enable(s.zoom > 1.01, "已是原始大小"), cmdAction(zout), 0x1A2430);
     fillRoundRect(c, bx + 44, pc.y + 12, 62, 36, 10, 0x05080C, 200);
     snprintf(buf, sizeof(buf), "%.1f×", s.zoom);
-    drawTextCentered(c, fontFace(18), bx + 75, pc.y + 17, buf, s.zoom > 1.01 ? kAccent : kText2);
+    drawTextCentered(c, fontFace(18), bx + 75, textTopIn(fontFace(18), pc.y + 12, 36), buf,
+                     s.zoom > 1.01 ? kAccent : kText2);
     ui.iconButton(plus, Icon::kPlus, Enable(s.zoom < 7.99, "已是最大倍率"), cmdAction(zin), 0x1A2430);
     ui.iconButton(fit, Icon::kFit, Enable(s.zoom > 1.01, "已是原始大小"), cmdAction("zoom_reset"), 0x1A2430);
   }
@@ -423,8 +424,9 @@ void renderLivePage(Ui& ui, const UiData& d) {
     }
     const int w = textWidth(f, frameInfo) + textWidth(f, work) + 20;
     fillRoundRect(c, pc.x + 12, pc.y + pc.h - 36, w, 24, 12, 0x05080C, 190);
-    const int x = drawText(c, f, pc.x + 22, pc.y + pc.h - 34, frameInfo, kText2);
-    drawText(c, f, x, pc.y + pc.h - 34, work, live.procMs * live.fps > 1000 ? kAmber : kText2);
+    const int ty = textTopIn(f, pc.y + pc.h - 36, 24);
+    const int x = drawText(c, f, pc.x + 22, ty, frameInfo, kText2);
+    drawText(c, f, x, ty, work, live.procMs * live.fps > 1000 ? kAmber : kText2);
   }
 
   // Live displacement.
@@ -658,9 +660,7 @@ void renderResultPage(Ui& ui, const UiData& d) {
     const FontFace& lf = textWidth(fontFace(32, true), levelText(r.level)) <= bw - 12 ? fontFace(32, true)
                                                                                     : fontFace(22, true);
     fillRoundRect(c, k.x + 16, k.y + 42, bw, 46, 12, col, r.level == AlarmLevel::kUnknown ? 60 : 255);
-    int inkTop = 0, inkBottom = 0;
-    textInk(lf, levelText(r.level), inkTop, inkBottom);
-    drawTextCentered(c, lf, k.x + 16 + bw / 2, k.y + 42 + (46 - (inkBottom - inkTop)) / 2 - inkTop, levelText(r.level),
+    drawTextCentered(c, lf, k.x + 16 + bw / 2, textTopIn(lf, k.y + 42, 46), levelText(r.level),
                      r.level == AlarmLevel::kUnknown ? kText2 : 0xFFFFFF);
     drawText(c, f14, k.x + 16 + bw + 14, k.y + 46, l1, kText2);
     drawText(c, f14, k.x + 16 + bw + 14, k.y + 66, l2, kText2);

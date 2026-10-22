@@ -54,7 +54,7 @@ void Ui::button(const Rect& r, const std::string& label, Icon icon, uint32_t fil
     const int isz = icon != Icon::kNone ? fontPx + 2 : 0, gap = icon != Icon::kNone ? 10 : 0;
     const int x0 = r.x + (r.w - (isz + gap + tw)) / 2;
     if (icon != Icon::kNone) drawIcon(c, icon, x0 + isz / 2.f, r.y + r.h / 2.f, static_cast<float>(isz), tc);
-    drawText(c, font, x0 + isz + gap, r.y + (r.h - font.lineHeight) / 2, label, tc);
+    drawText(c, font, x0 + isz + gap, textTopIn(font, r.y, r.h), label, tc);
   }
   hit(r, a, enabled);
 }
@@ -74,7 +74,7 @@ void Ui::chip(const Rect& r, const std::string& label, bool selected, const Enab
   if (!selected) strokeRoundRect(c, r.x, r.y, r.w, r.h, r.h / 2, 1, kBorder);
   const FontFace& font = fontFace(18);
   const uint32_t tc = selected ? 0xFFFFFF : (enabled ? kText : kText3);
-  drawTextCentered(c, font, r.x + r.w / 2, r.y + (r.h - font.lineHeight) / 2, label, tc);
+  drawTextCentered(c, font, r.x + r.w / 2, textTopIn(font, r.y, r.h), label, tc);
   hit(r, a, enabled ? Enable(!selected) : enabled);  // a selected chip does nothing, a grey one says why
 }
 
@@ -95,7 +95,7 @@ void Ui::stepper(const Rect& r, const std::string& value, const Enable& decOk, c
   iconButton(Rect{r.x + 2, r.y + 2, bw - 4, r.h - 4}, Icon::kMinus, decOk, dec, kNeutral);
   iconButton(Rect{r.x + r.w - bw + 2, r.y + 2, bw - 4, r.h - 4}, Icon::kPlus, incOk, inc, kNeutral);
   const FontFace& font = fontFace(22, true);
-  drawTextCentered(c, font, r.x + r.w / 2, r.y + (r.h - font.lineHeight) / 2, value, kText);
+  drawTextCentered(c, font, r.x + r.w / 2, textTopIn(font, r.y, r.h), value, kText);
 }
 
 int Ui::badge(int x, int y, const std::string& text, uint32_t color, bool filled, int fontPx) {
@@ -106,7 +106,7 @@ int Ui::badge(int x, int y, const std::string& text, uint32_t color, bool filled
   } else {
     fillRoundRect(c, x, y, w, h, h / 2, color, 46);
   }
-  drawText(c, font, x + 10, y + 2, text, filled ? 0xFFFFFF : color);
+  drawText(c, font, x + 10, textTopIn(font, y, h), text, filled ? 0xFFFFFF : color);
   return w;
 }
 
@@ -238,7 +238,7 @@ void drawChart(Canvas& c, const Rect& r, const std::vector<double>& xs, const st
       const int tw = textWidth(f14, o.markerLabel) + 12;
       const int bx = std::min(mx + 6, p.x + p.w - tw);
       fillRoundRect(c, bx, p.y + 4, tw, 22, 6, kAmber);
-      drawText(c, f14, bx + 6, p.y + 6, o.markerLabel, 0x101010);
+      drawText(c, f14, bx + 6, textTopIn(f14, p.y + 4, 22), o.markerLabel, 0x101010);
     }
   }
   if (std::isfinite(o.refX) && o.refX >= x0 && o.refX <= x1) {
@@ -248,7 +248,7 @@ void drawChart(Canvas& c, const Rect& r, const std::vector<double>& xs, const st
       const int tw = textWidth(f14, o.refLabel) + 12;
       const int bx = std::min(mx + 6, p.x + p.w - tw);
       fillRoundRect(c, bx, p.y + 30, tw, 22, 6, o.refColor);
-      drawText(c, f14, bx + 6, p.y + 32, o.refLabel, 0x101010);
+      drawText(c, f14, bx + 6, textTopIn(f14, p.y + 30, 22), o.refLabel, 0x101010);
     }
   }
 }
@@ -511,9 +511,9 @@ void topBar(Ui& ui, const UiData& d) {
   }
   c.fillRect(0, kBarH - 1, kW, 1, kBorder);
   drawIcon(c, Icon::kLogo, 28, 24, 28, kAccent);
-  const int x = drawText(c, fontFace(22, true), 50, 8, "见微", kText);
+  const int x = drawText(c, fontFace(22, true), 50, textTopIn(fontFace(22, true), 8, 32), "见微", kText);
   c.fillRect(x + 14, 14, 1, 20, kBorder);
-  drawText(c, fontFace(18), x + 28, 13, pageTitle(ui.st.page), kText);
+  drawText(c, fontFace(18), x + 28, textTopIn(fontFace(18), 8, 32), pageTitle(ui.st.page), kText);
 
   // Right-aligned status items.
   int rx = kW - 14;
@@ -525,7 +525,7 @@ void topBar(Ui& ui, const UiData& d) {
     const int x0 = rx - w;
     if (pill) fillRoundRect(c, x0, 8, w, 32, 16, color, 48);
     drawIcon(c, icon, x0 + pad + 11.f, 24.f, 20.f, color);
-    drawText(c, f, x0 + pad + 28, 13, text, color);
+    drawText(c, f, x0 + pad + 28, textTopIn(f, 8, 32), text, color);
     rx = x0 - (pill ? 12 : 18);
   };
   const std::string clock = s.timeValid ? formatLocal(d.wallMs, d.tzOffsetMin, "%H:%M:%S") : "--:--:--";
@@ -588,7 +588,7 @@ void reasonBubble(Canvas& c, const Rect& at, const std::string& reason) {
   const float tri[6] = {ax - 8, base, ax + 8, base, ax, base + (above ? 8.f : -8.f)};
   fillPolygon(c, tri, 3, bg);
   drawIcon(c, Icon::kWarn, x + 26.f, y + h / 2.f, 20.f, kAmber);
-  drawText(c, f, x + 44, y + (h - f.lineHeight) / 2, text, kText);
+  drawText(c, f, x + 44, textTopIn(f, y, h), text, kText);
 }
 
 void toast(Ui& ui, const UiData& d) {
@@ -611,7 +611,7 @@ void toast(Ui& ui, const UiData& d) {
   const int x = kCx + (kCw - w) / 2, y = kH - h - 18;
   fillRoundRect(ui.c, x, y, w, h, h / 2, 0x05080C, 225);
   strokeRoundRect(ui.c, x, y, w, h, h / 2, 1, kBorder);
-  drawText(ui.c, f, x + 20, y + (h - f.lineHeight) / 2, text, color);
+  drawText(ui.c, f, x + 20, textTopIn(f, y, h), text, color);
 }
 
 void shutdownScreen(Ui& ui, const UiData& d) {

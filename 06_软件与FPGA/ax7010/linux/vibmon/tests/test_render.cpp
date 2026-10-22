@@ -6,6 +6,7 @@
 #include <cstdio>
 #include <cstring>
 #include <memory>
+#include <random>
 #include <string>
 
 #include "app/report.h"
@@ -416,6 +417,20 @@ int main(int argc, char** argv) {
     UiData ud = d;
     ud.s.measureState = "preview";
     ud.s.last.peakClear = false;
+    // What such a capture looks like: a noise-like waveform and spectrum
+    // whose largest bin is only a few times the median.
+    std::mt19937 rng(7);
+    std::normal_distribution<double> noise(0.0, 1.0);
+    for (double& v : ud.record.disp) v = 0.02 * noise(rng);
+    size_t top = 0;
+    for (size_t k = 0; k < ud.record.amp.size(); ++k) {
+      ud.record.amp[k] = 0.002 * std::fabs(noise(rng));
+      if (ud.record.f[k] > 2 && ud.record.amp[k] > ud.record.amp[top]) top = k;
+    }
+    ud.s.last.dominantHz = ud.record.f[top];
+    ud.s.last.peak = ud.record.amp[top];
+    ud.s.last.peakToPeak = 0.11;
+    ud.s.last.rms = 0.02;
     JsonValue ac = jObj(ud.record.rec, "acoustic");  // no visual frequency to compare with
     JsonValue vis = jObj(ac, "visual");
     vis.set("relation", "no_visual");

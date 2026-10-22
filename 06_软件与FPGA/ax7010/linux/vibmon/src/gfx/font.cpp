@@ -82,6 +82,12 @@ void textInk(const FontFace& f, const std::string& utf8, int& top, int& bottom) 
   }
 }
 
+int textTopIn(const FontFace& f, int boxTop, int boxHeight) {
+  int top = 0, bottom = 0;
+  textInk(f, "测0", top, bottom);
+  return boxTop + (boxHeight - (bottom - top)) / 2 - top;
+}
+
 int drawText(Canvas& c, const FontFace& f, int x, int y, const std::string& utf8, uint32_t color) {
   for (size_t i = 0; i < utf8.size();) {
     const FontGlyph* g = glyphOrFallback(f, nextCodepoint(utf8, i));

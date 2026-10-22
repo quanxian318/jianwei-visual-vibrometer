@@ -580,7 +580,7 @@ void renderWifiDialog(Ui& ui, const UiData& d) {
         drawIcon(c, Icon::kBackspace, kr.x + kr.w / 2.f, kr.y + kh / 2.f, 28, kText);
       } else {
         const FontFace& f = fontFace(k.label.size() > 1 ? 18 : 22, k.label.size() == 1);
-        drawTextCentered(c, f, kr.x + kr.w / 2, kr.y + (kh - f.lineHeight) / 2, k.label, kText);
+        drawTextCentered(c, f, kr.x + kr.w / 2, textTopIn(f, kr.y, kh), k.label, kText);
       }
       ui.hit(kr, uiAction(k.kind, 0, k.text));
       x += w + gap;

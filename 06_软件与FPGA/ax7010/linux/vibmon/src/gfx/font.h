@@ -32,8 +32,12 @@ struct FontFace {
 const FontFace& fontFace(int pixelSize, bool bold = false);
 int textWidth(const FontFace& f, const std::string& utf8);
 // Rows of the drawn pixels, from the top of the line box: [top, bottom).
-// CJK ink sits low in the line box, so a box is centred on this, not on lineHeight.
 void textInk(const FontFace& f, const std::string& utf8, int& top, int& bottom);
+// The y to draw at so that text of this face sits in the middle of a box of
+// that top and height. Centred on the ink of a CJK character and a digit (the
+// line box puts both low), the same for every label of the face so that
+// neighbours share a baseline.
+int textTopIn(const FontFace& f, int boxTop, int boxHeight);
 // Draws with the top-left corner of the line box at (x, y); returns the end x.
 int drawText(Canvas& c, const FontFace& f, int x, int y, const std::string& utf8, uint32_t color);
 int drawTextCentered(Canvas& c, const FontFace& f, int cx, int y, const std::string& utf8, uint32_t color);

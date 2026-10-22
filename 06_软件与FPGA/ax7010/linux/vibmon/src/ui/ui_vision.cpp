@@ -82,13 +82,13 @@ void colourBar(Canvas& c, const Rect& img, const std::string& lo, const std::str
   const int total = wl + 8 + bw + 8 + wh + 20;
   const int x0 = img.x + img.w - total - 8, y0 = img.y + img.h - 34;
   fillRoundRect(c, x0, y0, total, 26, 8, 0x05080C, 205);
-  drawText(c, f, x0 + 10, y0 + 3, lo, kText);
+  drawText(c, f, x0 + 10, textTopIn(f, y0, 26), lo, kText);
   const int bx = x0 + 10 + wl + 8;
   for (int i = 0; i < bw; ++i) {
     const int k = i * 255 / (bw - 1);
     c.fillRect(bx + i, y0 + 9, 1, 8, lut[nearHot ? 255 - k : k]);
   }
-  drawText(c, f, bx + bw + 8, y0 + 3, hi, kText);
+  drawText(c, f, bx + bw + 8, textTopIn(f, y0, 26), hi, kText);
 }
 
 void placeholder(Canvas& c, const Rect& t, Icon icon, const std::string& title, const std::string& hint) {
@@ -106,7 +106,7 @@ void probeMarker(Canvas& c, const Rect& img, double nx, double ny, uint32_t col,
   const int bx = std::max(img.x, std::min(static_cast<int>(px) + 14, img.x + img.w - tw));
   const int by = std::max(img.y, static_cast<int>(py) - 32);
   fillRoundRect(c, bx, by, tw, 22, 6, 0x05080C, 215);
-  drawText(c, f, bx + 7, by + 2, label, col);
+  drawText(c, f, bx + 7, textTopIn(f, by, 22), label, col);
 }
 
 }  // namespace
@@ -210,7 +210,7 @@ void renderVisionPage(Ui& ui, const UiData& d) {
         const char* note = v.paused ? "测量期间暂停" : "滤波器预热中";
         const int w = textWidth(fontFace(18), note) + 24;
         fillRoundRect(c, ri.x + 10, ri.y + 10, w, 32, 16, 0x05080C, 200);
-        drawText(c, fontFace(18), ri.x + 22, ri.y + 14, note, kAmber);
+        drawText(c, fontFace(18), ri.x + 22, textTopIn(fontFace(18), ri.y + 10, 32), note, kAmber);
       }
       // Tapping a vibrating spot moves the measuring ROI there.
       const bool busy = s.measureState == "capturing" || s.measureState == "analyzing";
