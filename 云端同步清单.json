@@ -1,8 +1,8 @@
 {
   "date": "2026-10-22",
   "project": "见微视觉测振仪",
-  "files": 4270,
-  "total_bytes": 958537392,
+  "files": 4273,
+  "total_bytes": 958783277,
   "excluded": [
     ".git/",
     ".agents/",
@@ -4828,8 +4828,8 @@
     },
     {
       "path": "06_软件与FPGA/ax7010/linux/vibmon/Makefile",
-      "bytes": 3358,
-      "sha256": "4abff11fb8b2b103d65e7c7a140c4263bb69767123dc547efffd715842ac5bc4"
+      "bytes": 3486,
+      "sha256": "645637772ef0451da3d43f3e32bb44a2507b32ab99a5206123c761fc15f96afa"
     },
     {
       "path": "06_软件与FPGA/ax7010/linux/vibmon/config/an5642_board.json",
@@ -5133,8 +5133,8 @@
     },
     {
       "path": "06_软件与FPGA/ax7010/linux/vibmon/src/gfx/font_data.inc",
-      "bytes": 3120215,
-      "sha256": "92cb066fec2e083b6db5152ba8c2e309bd2201b10e0de6fb82499120ff88d0d0"
+      "bytes": 3086823,
+      "sha256": "5b509e3c3494f0a2a0d7ea61f44c40adfcd71af83f897e0e58c431c0ed367cf5"
     },
     {
       "path": "06_软件与FPGA/ax7010/linux/vibmon/src/gfx/plot.cpp",
@@ -5373,8 +5373,8 @@
     },
     {
       "path": "06_软件与FPGA/ax7010/linux/vibmon/src/ui/fb_ui.cpp",
-      "bytes": 11861,
-      "sha256": "f5078853a50aae58bced135a79c8b45dae738f3903635c64f5d253eb590fa210"
+      "bytes": 12211,
+      "sha256": "368860388146a94a79bcff8f9a66a0e0784fc9672d7c6cf8a619a65f72232455"
     },
     {
       "path": "06_软件与FPGA/ax7010/linux/vibmon/src/ui/fb_ui.h",
@@ -5403,33 +5403,33 @@
     },
     {
       "path": "06_软件与FPGA/ax7010/linux/vibmon/src/ui/theme.h",
-      "bytes": 1256,
-      "sha256": "d41356dcbdb9f741cf37cc883695eff725d16dab3b7688486b907888ec6047ae"
+      "bytes": 1449,
+      "sha256": "102bde4b71944fb67ea275463961b6406f76f7375ee5e6091930da94cdbf261c"
     },
     {
       "path": "06_软件与FPGA/ax7010/linux/vibmon/src/ui/ui_core.cpp",
-      "bytes": 25133,
-      "sha256": "d64e27868b81a479ac9eb48df85e2e38dd5c0b13a05f477420f82c5e9a9b5837"
+      "bytes": 28897,
+      "sha256": "669b2a63f1b459acded1da97ab890c92e0543ddefb742185b4cb9a0bc1fc5f06"
     },
     {
       "path": "06_软件与FPGA/ax7010/linux/vibmon/src/ui/ui_core.h",
-      "bytes": 8480,
-      "sha256": "863e31e67486f828b10da2fedadf6c9f2cfaff65051b9d8842b4d6d5ef4e9fa6"
+      "bytes": 9766,
+      "sha256": "28d1d5108027548cb49be70eb029b9a41232c9093e4539fa4afe3b8240f68083"
     },
     {
       "path": "06_软件与FPGA/ax7010/linux/vibmon/src/ui/ui_pages.cpp",
-      "bytes": 29055,
-      "sha256": "10232f27cccc821690185795a74d6096cbdd74326962d6c4165efd4f85e84d66"
+      "bytes": 29029,
+      "sha256": "1b5677cdf47146e35292fd6b31a3104c22b48f827777274f3544bf0a1e96b0da"
     },
     {
       "path": "06_软件与FPGA/ax7010/linux/vibmon/src/ui/ui_pages2.cpp",
-      "bytes": 25417,
-      "sha256": "631db9643128fd96f02fc019ff55b9b6d7e3bc45961c02515db9fb13ed0e84b1"
+      "bytes": 26002,
+      "sha256": "5fa55ba59a174a9119718d11723b4f43cba1cde3346b97a7fcd937e8d13152dd"
     },
     {
       "path": "06_软件与FPGA/ax7010/linux/vibmon/src/ui/ui_vision.cpp",
-      "bytes": 14966,
-      "sha256": "7d6b81f59b178c05197a80a2a0981d0a142907b37938949018eaa20d15f9b55e"
+      "bytes": 13018,
+      "sha256": "e9aca539c9fcef22649a36f2a826f6c5cba8aa944a46ebf6006a9e69ea4ef8b5"
     },
     {
       "path": "06_软件与FPGA/ax7010/linux/vibmon/src/util/clock.cpp",
@@ -5513,8 +5513,8 @@
     },
     {
       "path": "06_软件与FPGA/ax7010/linux/vibmon/tests/test_render.cpp",
-      "bytes": 19780,
-      "sha256": "f152d92d383ee8eb387620b47e4598ba2edba04cbbf3c391f784cf25648a7ef7"
+      "bytes": 21608,
+      "sha256": "57b520b649e123097fc9276472e95dca8265627f762f7fd5c0332a58a6efa78e"
     },
     {
       "path": "06_软件与FPGA/ax7010/linux/vibmon/tests/test_serial.cpp",
@@ -5580,6 +5580,11 @@
       "path": "06_软件与FPGA/ax7010/linux/vibmon/tools/carrier_test.cpp",
       "bytes": 15278,
       "sha256": "82613f6a90dddd42dda19ef259ac774f727a0c316e7861643a35cb72cfb955df"
+    },
+    {
+      "path": "06_软件与FPGA/ax7010/linux/vibmon/tools/clip_multipoint.cpp",
+      "bytes": 4933,
+      "sha256": "1fcb5e8cbfdb36753c93c91e4abb005c8f73150230f0bcb39f857356cc40aca9"
     },
     {
       "path": "06_软件与FPGA/ax7010/linux/vibmon/tools/clip_track.cpp",
@@ -5833,13 +5838,13 @@
     },
     {
       "path": "06_软件与FPGA/docs/FPGA视觉处理方案_20261021.md",
-      "bytes": 8037,
-      "sha256": "ab7b062e64af04a38268e10c48e2690bc30b1b4ff1e6424274e151e21c4ba8fa"
+      "bytes": 8052,
+      "sha256": "44b3256345b956aae65b5edcaf8d7abdfaefe67377b4aa6076c47f234c15d204"
     },
     {
       "path": "06_软件与FPGA/docs/UI与触屏编码器说明_20261021.md",
-      "bytes": 9155,
-      "sha256": "92d9ec1e7bab87258ac451e65a9180428e491caca70f7aaf6a3036b7f2e936b2"
+      "bytes": 9893,
+      "sha256": "25c8fa808c2ddbb2e4b401bcc6e027049db5927e30363b4ee70fbef27b0623ca"
     },
     {
       "path": "06_软件与FPGA/docs/validation/app_final.log",
@@ -5903,63 +5908,73 @@
     },
     {
       "path": "06_软件与FPGA/docs/validation/ui_depth.png",
-      "bytes": 103452,
-      "sha256": "293388993a2a4628fdc2e918d1f4bc7d70be7e74228eb75ca93ae0f8fb6c48ca"
+      "bytes": 95724,
+      "sha256": "2a4acd7910c8c5c9d5d2860e97d62f9c42c7b768e176563b69973408166409ed"
     },
     {
       "path": "06_软件与FPGA/docs/validation/ui_device.png",
-      "bytes": 108358,
-      "sha256": "cc2443f1a37bcab505d0021441770b496ea64f1be65164b94547e498b049f5ae"
+      "bytes": 109310,
+      "sha256": "cc27797053748a837c6cfb333e29f6c172fcc977a4eb56307462833591fe32c7"
     },
     {
       "path": "06_软件与FPGA/docs/validation/ui_heat.png",
-      "bytes": 186997,
-      "sha256": "68e05a8982899502ad194580984c55ccecfe90064865e467e6c56d8054dcc7f6"
+      "bytes": 184830,
+      "sha256": "03d65867441dbdcef0264982c230ce905106fe7028b12a1ff1d77d0de70773f6"
     },
     {
       "path": "06_软件与FPGA/docs/validation/ui_history.png",
-      "bytes": 102139,
-      "sha256": "62a508e86aad7cadff631d0bd99cef998638b4271c8bd4e897953daa55895eb2"
+      "bytes": 86327,
+      "sha256": "899a4c53a9d1d89d291041bd3851a9b58acca13a8d48456f996d801afc5a038c"
     },
     {
       "path": "06_软件与FPGA/docs/validation/ui_live.png",
-      "bytes": 142751,
-      "sha256": "a703d736064efb057040cf7f9a03544d7f9aa984c1ddfe5564a7c9ec8588f43d"
+      "bytes": 137303,
+      "sha256": "f262b54d774e95c8ca6f4c046efb9ae6aa3a707237aecd7416e0b27336bf1fa8"
+    },
+    {
+      "path": "06_软件与FPGA/docs/validation/ui_live_multipoint.png",
+      "bytes": 143758,
+      "sha256": "74f50bad1ec9d5d618e1fbe4c5054b6c01ba3129b164586d3c82a367f2c10e78"
     },
     {
       "path": "06_软件与FPGA/docs/validation/ui_live_roi.png",
-      "bytes": 145642,
-      "sha256": "ed9d8c2fe6c05d66e0303f403bb4e8ce3ac54436a4a22f2353dfe6a594d1bbf4"
+      "bytes": 141728,
+      "sha256": "e6f8665f0fdcdc1abc217f967d90d9cddf331df1ae4497d14b986e0983705542"
+    },
+    {
+      "path": "06_软件与FPGA/docs/validation/ui_reason.png",
+      "bytes": 187337,
+      "sha256": "725563c00ea37a61966c8fb1e7bc9cc5861db9874ecfd9d04f4f618af1d8e375"
     },
     {
       "path": "06_软件与FPGA/docs/validation/ui_result.png",
-      "bytes": 122024,
-      "sha256": "8f7e220caf16d83f2079146bcb6c70682cdb01093f09fbf61aaea0c541645870"
+      "bytes": 118938,
+      "sha256": "4d0e378c760f6a2cfa34058a4e8bcbf4d4a738562b41a20a2963825fb24c3376"
     },
     {
       "path": "06_软件与FPGA/docs/validation/ui_settings.png",
-      "bytes": 99398,
-      "sha256": "06e71d510e22a7d22e9ab48abdd0289abf5d3a8ae0c25b24c58fcc27b9199b25"
+      "bytes": 89143,
+      "sha256": "2873262c62ce0928941442a407b9f35865431b7f0e87da26433403b5a5beb2ce"
     },
     {
       "path": "06_软件与FPGA/docs/validation/ui_shutdown.png",
-      "bytes": 97507,
-      "sha256": "cf44981d1fd5a0fdb40708549835662ec2be94bcc009951b5520b3a9fd21bb74"
+      "bytes": 89857,
+      "sha256": "4d8d9c66334cfb48afd250c79e4cfcb2e5c05c3bca425787477a386325c53e07"
     },
     {
       "path": "06_软件与FPGA/docs/validation/ui_shutdown_done.png",
-      "bytes": 16604,
-      "sha256": "94d4de600150f2380378cee0c1ac4a555a3244d6a2a33b3f58ce9f6f9d40b2fc"
+      "bytes": 16655,
+      "sha256": "333bd51acc1680a33f312f3b53207c3f343c522fe8c7217b0b025b24a70b3510"
     },
     {
       "path": "06_软件与FPGA/docs/validation/ui_vision.png",
-      "bytes": 118333,
-      "sha256": "ab98ea819a4971202646a7641d59669f258a9fb0d072789b973342ea49ce4940"
+      "bytes": 112396,
+      "sha256": "d393ca672ae73cc6ef9e12bfef6f9fdee2f78a4d4f9c73084cd600545bb49715"
     },
     {
       "path": "06_软件与FPGA/docs/validation/ui_wifi.png",
-      "bytes": 51765,
-      "sha256": "e09184628b22ebf229f1a0256550cc2a4cbef65dff7345c260bd47da7282fac7"
+      "bytes": 48496,
+      "sha256": "72ff89c5bdd8ba6601774740039b99fea6c8e3cf97a1bed08c399e98fc9b549d"
     },
     {
       "path": "06_软件与FPGA/docs/validation/wav_test.log",
@@ -21348,8 +21363,8 @@
     },
     {
       "path": "AGENTS.md",
-      "bytes": 27066,
-      "sha256": "ecad3956998affc491fc70f0dba9d3a2cdf609c91d2e7a13f7e2d89c23574990"
+      "bytes": 27665,
+      "sha256": "95d7efa9739c678337402415245e6ef76f1e4d5932570c19b8b1ce0a78b5c831"
     },
     {
       "path": "README.md",

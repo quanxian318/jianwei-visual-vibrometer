@@ -15,13 +15,16 @@ using namespace theme;
 // Widgets
 // ---------------------------------------------------------------------------
 
-void Ui::hit(const Rect& r, const UiAction& a, bool enabled) { hits_.push_back(HitRegion{r, a, enabled}); }
+void Ui::hit(const Rect& r, const UiAction& a, const Enable& enabled) {
+  hits_.push_back(HitRegion{r, a, enabled.on, enabled.why});
+}
 
-void Ui::block(const Rect& r) { hits_.push_back(HitRegion{r, UiAction(), false}); }
+void Ui::block(const Rect& r) { hits_.push_back(HitRegion{r, UiAction(), false, std::string()}); }
 
 void Ui::card(const Rect& r, uint32_t fill) {
   fillRoundRect(c, r.x, r.y, r.w, r.h, kRadius, fill);
   strokeRoundRect(c, r.x, r.y, r.w, r.h, kRadius, 1, kBorder);
+  c.fillRect(r.x + kRadius, r.y, r.w - 2 * kRadius, 1, kCardEdge);
 }
 
 void Ui::cardTitle(const Rect& r, const std::string& title, Icon icon) {
@@ -33,8 +36,8 @@ void Ui::cardTitle(const Rect& r, const std::string& title, Icon icon) {
   drawText(c, fontFace(18), x, r.y + 8, title, kText2);
 }
 
-void Ui::button(const Rect& r, const std::string& label, Icon icon, uint32_t fill, bool enabled, const UiAction& a,
-                int fontPx) {
+void Ui::button(const Rect& r, const std::string& label, Icon icon, uint32_t fill, const Enable& enabled,
+                const UiAction& a, int fontPx) {
   const bool down = enabled && pressed(r);
   uint32_t f = enabled ? fill : kDisabled;
   if (down) f = mixColor(f, 0xFFFFFF, 50);
@@ -56,7 +59,7 @@ void Ui::button(const Rect& r, const std::string& label, Icon icon, uint32_t fil
   hit(r, a, enabled);
 }
 
-void Ui::iconButton(const Rect& r, Icon icon, bool enabled, const UiAction& a, uint32_t fill) {
+void Ui::iconButton(const Rect& r, Icon icon, const Enable& enabled, const UiAction& a, uint32_t fill) {
   uint32_t f = enabled ? fill : kDisabled;
   if (enabled && pressed(r)) f = mixColor(f, 0xFFFFFF, 50);
   fillRoundRect(c, r.x, r.y, r.w, r.h, std::min(r.w, r.h) / 2, f, 230);
@@ -64,7 +67,29 @@ void Ui::iconButton(const Rect& r, Icon icon, bool enabled, const UiAction& a, u
   hit(r, a, enabled);
 }
 
-void Ui::chip(const Rect& r, const std::string& label, bool selected, bool enabled, const UiAction& a) {
+void Ui::switchButton(const Rect& r, const std::string& label, Icon icon, uint32_t color, bool on,
+                      const Enable& enabled, const UiAction& a, int fontPx) {
+  const bool down = enabled && pressed(r);
+  const bool lit = on && enabled;
+  if (lit) {
+    fillRoundRect(c, r.x, r.y, r.w, r.h, 10, kCard);
+    fillRoundRect(c, r.x, r.y, r.w, r.h, 10, color, down ? 96 : 60);
+    strokeRoundRect(c, r.x, r.y, r.w, r.h, 10, 1, color, 170);
+  } else {
+    fillRoundRect(c, r.x, r.y, r.w, r.h, 10, enabled ? (down ? kNeutral : kCardHi) : kDisabled);
+    strokeRoundRect(c, r.x, r.y, r.w, r.h, 10, 1, kBorder);
+  }
+  const uint32_t ic = !enabled ? kText3 : (lit ? color : kText2);
+  const uint32_t tc = !enabled ? kText3 : (lit ? mixColor(color, 0xFFFFFF, 120) : kText);
+  const FontFace& font = fontFace(fontPx, true);
+  const int isz = fontPx + 2, gap = 10, tw = textWidth(font, label);
+  const int x0 = r.x + (r.w - (isz + gap + tw)) / 2;
+  drawIcon(c, icon, x0 + isz / 2.f, r.y + r.h / 2.f, static_cast<float>(isz), ic);
+  drawText(c, font, x0 + isz + gap, r.y + (r.h - font.lineHeight) / 2, label, tc);
+  hit(r, a, enabled);
+}
+
+void Ui::chip(const Rect& r, const std::string& label, bool selected, const Enable& enabled, const UiAction& a) {
   uint32_t f = selected ? (enabled ? kAccent : kAccentDim) : kCardHi;
   if (enabled && pressed(r)) f = mixColor(f, 0xFFFFFF, 40);
   fillRoundRect(c, r.x, r.y, r.w, r.h, r.h / 2, f);
@@ -72,10 +97,10 @@ void Ui::chip(const Rect& r, const std::string& label, bool selected, bool enabl
   const FontFace& font = fontFace(18);
   const uint32_t tc = selected ? 0xFFFFFF : (enabled ? kText : kText3);
   drawTextCentered(c, font, r.x + r.w / 2, r.y + (r.h - font.lineHeight) / 2, label, tc);
-  hit(r, a, enabled && !selected);
+  hit(r, a, enabled ? Enable(!selected) : enabled);  // a selected chip does nothing, a grey one says why
 }
 
-void Ui::toggle(const Rect& r, bool on, bool enabled, const UiAction& a) {
+void Ui::toggle(const Rect& r, bool on, const Enable& enabled, const UiAction& a) {
   const uint32_t track = on ? (enabled ? kGreen : 0x2C5A40) : (enabled ? kNeutral : kDisabled);
   fillRoundRect(c, r.x, r.y, r.w, r.h, r.h / 2, track);
   const float kr = r.h / 2.f - 4;
@@ -84,8 +109,8 @@ void Ui::toggle(const Rect& r, bool on, bool enabled, const UiAction& a) {
   hit(Rect{r.x - 8, r.y - 8, r.w + 16, r.h + 16}, a, enabled);
 }
 
-void Ui::stepper(const Rect& r, const std::string& value, bool decOk, bool incOk, const UiAction& dec,
-                 const UiAction& inc) {
+void Ui::stepper(const Rect& r, const std::string& value, const Enable& decOk, const Enable& incOk,
+                 const UiAction& dec, const UiAction& inc) {
   fillRoundRect(c, r.x, r.y, r.w, r.h, 10, kCardHi);
   strokeRoundRect(c, r.x, r.y, r.w, r.h, 10, 1, kBorder);
   const int bw = r.h;
@@ -306,6 +331,25 @@ std::string reasonText(const std::string& reason) {
   return reason.empty() ? std::string("未知原因") : reason;
 }
 
+std::string lightBlock(const SystemState& s) {
+  if (s.pfail) return "掉电预警中";
+  if (s.printerState != "idle") return "打印时不能开关照明和投影";
+  if (!s.lightOn && !s.lightAllowed) return "机壳照明开关未打开";
+  return std::string();
+}
+
+std::string laserBlock(const SystemState& s) {
+  if (s.pfail) return "掉电预警中";
+  if (s.printerState != "idle") return "打印时不能开关照明和投影";
+  if (s.laserOn) return std::string();
+  if (!s.lightAllowed) return "机壳照明开关未打开";
+  // Measurements switch the projector off; its pattern does not move with the surface.
+  if (s.settings.laserOffDuringMeasure && (s.measureState == "capturing" || s.measureState == "analyzing")) {
+    return "测量期间投影保持关闭";
+  }
+  return std::string();
+}
+
 std::string errorText(const std::string& code) {
   static const struct {
     const char* key;
@@ -436,7 +480,8 @@ UiAction hitTest(const std::vector<HitRegion>& hits, int x, int y, Rect* region)
   for (auto it = hits.rbegin(); it != hits.rend(); ++it) {
     if (!it->r.contains(x, y)) continue;
     if (region) *region = it->r;
-    return it->enabled ? it->a : UiAction();
+    if (it->enabled) return it->a;
+    return it->why.empty() ? UiAction() : uiAction("why", 0, it->why);
   }
   return UiAction();
 }
@@ -458,23 +503,29 @@ std::string wifiLabel(const SystemState& s) {
 void topBar(Ui& ui, const UiData& d) {
   Canvas& c = ui.c;
   const SystemState& s = d.s;
-  c.fillRect(0, 0, kW, kBarH, s.pfail ? 0x4A1616 : kBar);
+  if (s.pfail) {
+    c.fillRect(0, 0, kW, kBarH, 0x4A1616);
+  } else {
+    fillGradientV(c, 0, 0, kW, kBarH, kBarTop, kBar);
+  }
   c.fillRect(0, kBarH - 1, kW, 1, kBorder);
   drawIcon(c, Icon::kLogo, 28, 24, 28, kAccent);
-  int x = drawText(c, fontFace(22, true), 50, 8, "见微", kText);
-  x = drawText(c, fontFace(18), x + 8, 13, "视觉测振仪", kText2);
+  const int x = drawText(c, fontFace(22, true), 50, 8, "见微", kText);
   c.fillRect(x + 14, 14, 1, 20, kBorder);
   drawText(c, fontFace(18), x + 28, 13, pageTitle(ui.st.page), kText);
 
   // Right-aligned status items.
   int rx = kW - 14;
-  auto item = [&](Icon icon, const std::string& text, uint32_t color) {
+  // Warnings sit in tinted pills, plain status as icon and text.
+  auto item = [&](Icon icon, const std::string& text, uint32_t color, bool pill = false) {
     const FontFace& f = fontFace(18);
-    const int w = 22 + 6 + textWidth(f, text);
+    const int pad = pill ? 11 : 0;
+    const int w = 22 + 6 + textWidth(f, text) + 2 * pad;
     const int x0 = rx - w;
-    drawIcon(c, icon, x0 + 11.f, 24.f, 20.f, color);
-    drawText(c, f, x0 + 28, 13, text, color);
-    rx = x0 - 18;
+    if (pill) fillRoundRect(c, x0, 8, w, 32, 16, color, 48);
+    drawIcon(c, icon, x0 + pad + 11.f, 24.f, 20.f, color);
+    drawText(c, f, x0 + pad + 28, 13, text, color);
+    rx = x0 - (pill ? 12 : 18);
   };
   const std::string clock = s.timeValid ? formatLocal(d.wallMs, d.tzOffsetMin, "%H:%M:%S") : "--:--:--";
   item(Icon::kClock, clock, s.timeValid ? kText : kAmber);
@@ -482,15 +533,15 @@ void topBar(Ui& ui, const UiData& d) {
   snprintf(buf, sizeof(buf), "%.1fV %.2fA", s.power.busV, s.power.currentA);
   item(Icon::kBolt, s.inaOk ? std::string(buf) : std::string("--"), s.pfail ? kRed : (s.powerWarn ? kAmber : kText2));
   const bool net = s.nanoOnline && s.wifiState == "CONNECTED";
-  item(Icon::kWifi, fitText(fontFace(18), wifiLabel(s), 120), net ? kGreen : (s.nanoOnline ? kText2 : kAmber));
-  item(Icon::kTag, s.pointId.empty() ? std::string("未选测点") : fitText(fontFace(18), s.pointId, 110),
+  item(Icon::kWifi, fitText(fontFace(18), wifiLabel(s), 100), net ? kGreen : (s.nanoOnline ? kText2 : kAmber));
+  item(Icon::kTag, s.pointId.empty() ? std::string("未选测点") : fitText(fontFace(18), s.pointId, 100),
        s.pointId.empty() ? kText3 : kText);
-  if (s.laserOn) item(Icon::kLaser, "激光", kRed);
+  if (s.laserOn) item(Icon::kLaser, "激光", kRed, true);
   if (s.pfail) {
-    item(Icon::kWarn, "掉电预警", kRed);
+    item(Icon::kWarn, "掉电预警", kRed, true);
   } else if (s.alarmLevel == AlarmLevel::kWarn || s.alarmLevel == AlarmLevel::kAlarm) {
     item(s.alarmMuted ? Icon::kBellOff : Icon::kBell, s.alarmLevel == AlarmLevel::kAlarm ? "报警" : "预警",
-         levelColor(s.alarmLevel));
+         levelColor(s.alarmLevel), true);
   }
 }
 
@@ -508,10 +559,10 @@ void rail(Ui& ui) {
     const Rect r{0, kBarH + i * h, kRailW - 1, h};
     const bool active = static_cast<int>(ui.st.page) == i;
     if (active) {
-      c.fillRect(r.x, r.y, r.w, r.h, kRailActive);
-      fillRoundRect(c, 0, r.y + 18, 4, h - 36, 2, kAccent);
+      fillRoundRect(c, r.x + 8, r.y + 8, r.w - 16, r.h - 16, 14, kAccent, 36);
+      fillRoundRect(c, 0, r.y + 22, 4, h - 44, 2, kAccent);
     } else if (ui.pressed(r)) {
-      c.fillRect(r.x, r.y, r.w, r.h, kCardHi);
+      fillRoundRect(c, r.x + 8, r.y + 8, r.w - 16, r.h - 16, 14, kCardHi);
     }
     drawIcon(c, kNav[i].icon, kRailW / 2.f, r.y + 36.f, 30.f, active ? kAccent : kText2);
     drawTextCentered(c, fontFace(14), kRailW / 2, r.y + 58, kNav[i].label, active ? kText : kText2);
@@ -519,10 +570,34 @@ void rail(Ui& ui) {
   }
 }
 
+// Reason of a tapped grey control: a bubble pointing at it, above when there
+// is room, else below.
+void reasonBubble(Canvas& c, const Rect& at, const std::string& reason) {
+  const FontFace& f = fontFace(18);
+  const std::string text = fitText(f, reason, 560);
+  const int w = 16 + 20 + 8 + textWidth(f, text) + 16, h = 42;
+  const bool above = at.y - h - 10 >= kBarH + 4;
+  const int y = above ? at.y - h - 10 : std::min(kH - h - 4, at.y + at.h + 10);
+  const int x = std::max(8, std::min(kW - w - 8, at.x + at.w / 2 - w / 2));
+  const uint32_t bg = 0x2A394C;
+  fillRoundRect(c, x - 2, y + 2, w + 4, h + 4, 14, 0x000000, 90);
+  fillRoundRect(c, x, y, w, h, 12, bg);
+  const float ax = std::max(x + 18.f, std::min(x + w - 18.f, at.x + at.w / 2.f));
+  const float base = above ? static_cast<float>(y + h) : static_cast<float>(y);
+  const float tri[6] = {ax - 8, base, ax + 8, base, ax, base + (above ? 8.f : -8.f)};
+  fillPolygon(c, tri, 3, bg);
+  drawIcon(c, Icon::kWarn, x + 26.f, y + h / 2.f, 20.f, kAmber);
+  drawText(c, f, x + 44, y + (h - f.lineHeight) / 2, text, kText);
+}
+
 void toast(Ui& ui, const UiData& d) {
   std::string text;
   uint32_t color = kText;
   if (!ui.st.toast.empty() && d.nowMs < ui.st.toastUntilMs) {
+    if (ui.st.toastAt.w > 0) {
+      reasonBubble(ui.c, ui.st.toastAt, ui.st.toast);
+      return;
+    }
     text = ui.st.toast;
     color = kAmber;
   } else if (!d.s.message.empty() && d.nowMs - d.s.messageMs < 6000) {
@@ -565,7 +640,7 @@ void shutdownDialog(Ui& ui) {
 void renderUi(Canvas& c, const UiState& st, const UiData& d, std::vector<HitRegion>& hits) {
   hits.clear();
   Ui ui(c, st, hits);
-  c.fill(kBg);
+  fillGradientV(c, 0, 0, kW, kH, kBgTop, kBg);
   if (d.s.shutdownPrepared) {
     shutdownScreen(ui, d);
     return;

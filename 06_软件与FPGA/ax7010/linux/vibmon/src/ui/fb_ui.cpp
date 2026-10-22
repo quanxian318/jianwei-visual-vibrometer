@@ -60,8 +60,13 @@ void FbUi::onEncoderPress(bool longPress) {
 
 JsonValue FbUi::applyAction(UiState& st, const UiAction& a, const Rect& region, int x, int y, const UiData& d,
                             int64_t nowMs) {
-  (void)nowMs;
   if (a.kind == "cmd") return a.cmd;
+  if (a.kind == "why") {  // a grey control was tapped: say why next to it
+    st.toast = a.text;
+    st.toastAt = region;
+    st.toastUntilMs = nowMs + 2500;
+    return JsonValue();
+  }
   if (a.kind == "nav") {
     st.page = static_cast<Page>(std::max(0, std::min(kPageCount - 1, a.arg)));
     if (st.page == Page::kResult) st.openRecordId.clear();
@@ -125,6 +130,7 @@ JsonValue FbUi::applyAction(UiState& st, const UiAction& a, const Rect& region, 
 
 void FbUi::toast(const std::string& text) {
   st_.toast = text;
+  st_.toastAt = Rect();
   st_.toastUntilMs = monoMs() + 4000;
 }
 
@@ -148,7 +154,7 @@ void FbUi::perform(const UiAction& a, const Rect& region, int x, int y, const Ui
   } else if (name == "roi") {
     toast(cmd.find("ref_x") ? "参考点已更新" : "测点框已更新");
   } else if (name == "stereo_distance") {
-    toast("双目深度已按该距离校正");
+    toast(st_.probeX >= 0 ? "已按选点处的距离校正深度" : "已按测点处的距离校正深度");
   }
 }
 
@@ -161,6 +167,7 @@ void FbUi::handleTouch(const TouchEvent& e, const UiData& d) {
       downY_ = e.y;
       Rect r;
       const UiAction a = hitTest(hits_, e.x, e.y, &r);
+      if (st_.toastAt.w > 0) st_.toastUntilMs = 0;  // a new touch closes the reason bubble
       st_.pressing = !a.isNull();
       st_.pressed = r;
       st_.roiGrab = 0;

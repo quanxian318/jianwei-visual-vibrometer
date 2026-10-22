@@ -56,8 +56,10 @@ void renderHistoryPage(Ui& ui, const UiData& d) {
   drawText(c, fontFace(18), kCx + 110, kCy + 9, buf, kText2);
   snprintf(buf, sizeof(buf), "%d / %d", page + 1, pages);
   drawTextCentered(c, fontFace(18), kCx + kCw - 78, kCy + 9, buf, kText2);
-  ui.iconButton(Rect{kCx + kCw - 150, kCy, 44, 40}, Icon::kUp, page > 0, uiAction("hist_page", -1));
-  ui.iconButton(Rect{kCx + kCw - 44, kCy, 44, 40}, Icon::kDown, page + 1 < pages, uiAction("hist_page", 1));
+  ui.iconButton(Rect{kCx + kCw - 150, kCy, 44, 40}, Icon::kUp, Enable(page > 0, "已是第一页"),
+                uiAction("hist_page", -1));
+  ui.iconButton(Rect{kCx + kCw - 44, kCy, 44, 40}, Icon::kDown, Enable(page + 1 < pages, "已是最后一页"),
+                uiAction("hist_page", 1));
 
   if (recs.empty()) {
     ui.emptyState(Rect{kCx, kCy + 50, kCw, kCh - 50}, Icon::kHistory, "暂无测量记录", "完成一次测量后会出现在这里");
@@ -65,7 +67,7 @@ void renderHistoryPage(Ui& ui, const UiData& d) {
   }
   // Columns: time | point | frequency | p-p | rms | level.
   const int cx[6] = {kCx + 16, kCx + 270, kCx + 430, kCx + 560, kCx + 690, kCx + 800};
-  const char* heads[6] = {"时间 / 编号", "测点", "主频", "峰峰值", "有效值", "判级"};
+  const char* heads[6] = {"时间", "测点", "主频", "峰峰值", "有效值", "判级"};
   for (int i = 0; i < 6; ++i) drawText(c, fontFace(14), cx[i], kCy + 52, heads[i], kText3);
   for (int i = 0; i < perPage; ++i) {
     const size_t k = static_cast<size_t>(page * perPage + i);
@@ -75,8 +77,7 @@ void renderHistoryPage(Ui& ui, const UiData& d) {
     const bool down = ui.pressed(row);
     fillRoundRect(c, row.x, row.y, row.w, row.h, 10, down ? kCardHi : kCard);
     strokeRoundRect(c, row.x, row.y, row.w, row.h, 10, 1, kBorder);
-    drawText(c, fontFace(18), cx[0], row.y + 4, r.startLocal.empty() ? std::string("时间未校准") : r.startLocal, kText);
-    drawText(c, fontFace(14), cx[0], row.y + 29, fitText(fontFace(14), r.id, 240), kText3);
+    drawText(c, fontFace(18), cx[0], row.y + 14, r.startLocal.empty() ? std::string("时间未校准") : r.startLocal, kText);
     const std::string point = r.pointId.empty() ? std::string("—") : r.pointId + (r.pointName.empty() ? "" : " " + r.pointName);
     drawText(c, fontFace(18), cx[1], row.y + 14, fitText(fontFace(18), point, 150), kText);
     if (r.valid) {
@@ -86,7 +87,8 @@ void renderHistoryPage(Ui& ui, const UiData& d) {
       drawText(c, fontFace(18), cx[3], row.y + 14, fmtNum(r.peakToPeak, 3) + " " + r.unit, kText);
       drawText(c, fontFace(18), cx[4], row.y + 14, fmtNum(r.rms, 3) + " " + r.unit, kText);
     } else {
-      drawText(c, fontFace(18), cx[2], row.y + 14, fitText(fontFace(18), "无效 · " + reasonText(r.reason), 380), kAmber);
+      drawText(c, fontFace(18), cx[2], row.y + 14, fitText(fontFace(18), "无效 · " + reasonText(r.reason), cx[5] - cx[2] - 24),
+               kAmber);
     }
     ui.badge(cx[5], row.y + 12, levelText(r.level), levelColor(r.level), r.level != AlarmLevel::kUnknown, 18);
     drawIcon(c, Icon::kRight, row.x + row.w - 24.f, row.y + 26.f, 16, kText3);
@@ -272,6 +274,7 @@ void renderSettingsPage(Ui& ui, const UiData& d) {
   const SystemState& s = d.s;
   const UserSettings& u = s.settings;
   const bool busy = s.measureState == "capturing" || s.measureState == "analyzing";
+  const Enable idle(!busy, "测量中不能修改");
   char buf[96];
   const int cw = (kCw - 8) / 2, rh = 60, step = 68;
   auto row = [&](int col, int i, const char* label, const char* hint = nullptr) {
@@ -293,29 +296,34 @@ void renderSettingsPage(Ui& ui, const UiData& d) {
     for (int i = 0; i < 4; ++i) {
       snprintf(buf, sizeof(buf), "%d s", kDur[i]);
       ui.chip(Rect{r.x + r.w - 4 * 64 - 8 + i * 64, r.y + 12, 58, 36}, buf, std::fabs(u.durationS - kDur[i]) < 0.01,
-              !busy, cmdAction(setCmd("duration_s", JsonValue(kDur[i]))));
+              idle, cmdAction(setCmd("duration_s", JsonValue(kDur[i]))));
     }
   }
   {
-    // Square presets; on the live preview the box is dragged to any width and height.
+    // Square presets; on the live preview the box is dragged to any width and height
+    // (then the size is shown, as no preset is selected).
+    static const int kRoi[4] = {32, 48, 64, 96};
+    bool preset = false;
+    for (int k : kRoi) preset = preset || (u.roiW == k && u.roiH == k);
     char hint[48];
     snprintf(hint, sizeof(hint), "当前 %d×%d px", u.roiW, u.roiH);
-    const Rect r = row(0, 1, "测点框尺寸", hint);
-    static const int kRoi[4] = {32, 48, 64, 96};
+    const Rect r = row(0, 1, "测点框尺寸", preset ? nullptr : hint);
     for (int i = 0; i < 4; ++i) {
       snprintf(buf, sizeof(buf), "%d", kRoi[i]);
       JsonValue square = setCmd("roi_width_px", JsonValue(kRoi[i]));
       square.set("roi_height_px", kRoi[i]);
-      ui.chip(Rect{r.x + r.w - 4 * 64 - 8 + i * 64, r.y + 12, 58, 36}, buf, u.roiW == kRoi[i] && u.roiH == kRoi[i],
-              !busy && kRoi[i] <= u.roiMaxPx, cmdAction(square));
+      snprintf(hint, sizeof(hint), "当前测量方式最大 %d px", u.roiMaxPx);
+      const Enable ok = !idle ? idle : Enable(kRoi[i] <= u.roiMaxPx, hint);
+      ui.chip(Rect{r.x + r.w - 4 * 64 - 8 + i * 64, r.y + 12, 58, 36}, buf, u.roiW == kRoi[i] && u.roiH == kRoi[i], ok,
+              cmdAction(square));
     }
   }
   {
-    const bool locked = s.calibrated;
-    const Rect r = row(0, 2, "位移方向", locked ? "由当前标定决定" : nullptr);
-    ui.chip(Rect{r.x + r.w - 2 * 104 - 8, r.y + 12, 98, 36}, "水平 X", u.axis == 'x', !busy && !locked,
+    const Rect r = row(0, 2, "位移方向");
+    const Enable ok = !idle ? idle : Enable(!s.calibrated, "位移方向由当前标定决定");
+    ui.chip(Rect{r.x + r.w - 2 * 104 - 8, r.y + 12, 98, 36}, "水平 X", u.axis == 'x', ok,
             cmdAction(setCmd("axis", JsonValue("x"))));
-    ui.chip(Rect{r.x + r.w - 104 - 8, r.y + 12, 98, 36}, "垂直 Y", u.axis == 'y', !busy && !locked,
+    ui.chip(Rect{r.x + r.w - 104 - 8, r.y + 12, 98, 36}, "垂直 Y", u.axis == 'y', ok,
             cmdAction(setCmd("axis", JsonValue("y"))));
   }
   {
@@ -324,32 +332,34 @@ void renderSettingsPage(Ui& ui, const UiData& d) {
               cmdAction(setCmd("auto_light", JsonValue(!u.autoLight))));
   }
   {
-    const Rect r = row(0, 4, "照明亮度", "LED1 全部照明灯，PWM 调光");
+    const Rect r = row(0, 4, "照明亮度");
     const double p = s.lightPercent;
     snprintf(buf, sizeof(buf), "%.0f%%", p);
-    ui.stepper(Rect{r.x + r.w - 196, r.y + 8, 180, 44}, buf, p > 10.5, p < 99.5,
+    ui.stepper(Rect{r.x + r.w - 196, r.y + 8, 180, 44}, buf, Enable(p > 10.5, "已是最低亮度"),
+               Enable(p < 99.5, "已是最高亮度"),
                cmdAction(setCmd("light_percent", JsonValue(std::max(10.0, p - 10)))),
                cmdAction(setCmd("light_percent", JsonValue(std::min(100.0, p + 10)))));
   }
   {
-    const Rect r = row(0, 5, "测量时关闭投影", "固定十字光线可能干扰表面位移跟踪");
-    const bool laserPolicyEditable = s.measureState != "capturing" && s.measureState != "analyzing";
-    ui.toggle(Rect{r.x + r.w - 82, r.y + 13, 64, 34}, u.laserOffDuringMeasure, laserPolicyEditable,
+    const Rect r = row(0, 5, "测量时关闭投影");
+    ui.toggle(Rect{r.x + r.w - 82, r.y + 13, 64, 34}, u.laserOffDuringMeasure, idle,
               cmdAction(setCmd("laser_off_during_measurement", JsonValue(!u.laserOffDuringMeasure))));
   }
 
   // Right column: alarm, voice, fan.
   const size_t nt = sizeof(kThresholds) / sizeof(kThresholds[0]);
   {
-    const Rect r = row(1, 0, "预警阈值", "峰峰值，毫米");
+    const Rect r = row(1, 0, "峰峰值预警");
     const double dn = nextDown(kThresholds, nt, u.warnPp), up = nextUp(kThresholds, nt, u.warnPp);
-    ui.stepper(Rect{r.x + r.w - 196, r.y + 8, 180, 44}, fmtNum(u.warnPp, 3), dn > 0, up > 0 && up < u.alarmPp,
+    ui.stepper(Rect{r.x + r.w - 216, r.y + 8, 200, 44}, fmtNum(u.warnPp, 3) + " mm", Enable(dn > 0, "已是最小值"),
+               Enable(up > 0 && up < u.alarmPp, up > 0 ? "预警值须低于报警值" : "已是最大值"),
                cmdAction(setCmd("warn_pp", JsonValue(dn))), cmdAction(setCmd("warn_pp", JsonValue(up))));
   }
   {
-    const Rect r = row(1, 1, "报警阈值", "峰峰值，毫米");
+    const Rect r = row(1, 1, "峰峰值报警");
     const double dn = nextDown(kThresholds, nt, u.alarmPp), up = nextUp(kThresholds, nt, u.alarmPp);
-    ui.stepper(Rect{r.x + r.w - 196, r.y + 8, 180, 44}, fmtNum(u.alarmPp, 3), dn > u.warnPp, up > 0,
+    ui.stepper(Rect{r.x + r.w - 216, r.y + 8, 200, 44}, fmtNum(u.alarmPp, 3) + " mm",
+               Enable(dn > u.warnPp, "报警值须高于预警值"), Enable(up > 0, "已是最大值"),
                cmdAction(setCmd("alarm_pp", JsonValue(dn))), cmdAction(setCmd("alarm_pp", JsonValue(up))));
   }
   {
@@ -363,7 +373,9 @@ void renderSettingsPage(Ui& ui, const UiData& d) {
   {
     const Rect r = row(1, 4, "语音音量");
     snprintf(buf, sizeof(buf), "%d", u.volume);
-    ui.stepper(Rect{r.x + r.w - 196, r.y + 8, 180, 44}, buf, u.voice && u.volume > 0, u.voice && u.volume < 100,
+    const char* off = "语音提示已关闭";
+    ui.stepper(Rect{r.x + r.w - 196, r.y + 8, 180, 44}, buf, Enable(u.voice && u.volume > 0, u.voice ? "已是最小音量" : off),
+               Enable(u.voice && u.volume < 100, u.voice ? "已是最大音量" : off),
                cmdAction(setCmd("volume", JsonValue(std::max(0, u.volume - 10)))),
                cmdAction(setCmd("volume", JsonValue(std::min(100, u.volume + 10)))));
   }
@@ -390,7 +402,8 @@ void renderSettingsPage(Ui& ui, const UiData& d) {
     }
     drawText(c, fontFace(18), r.x + 16, r.y + 44, fitText(fontFace(18), st, r.w - 210), kText);
     drawText(c, fontFace(14), r.x + 16, r.y + 76, s.wifiIp.empty() ? "无 IP 地址" : "IP " + s.wifiIp, kText2);
-    ui.button(Rect{r.x + r.w - 180, r.y + 36, 164, 56}, "配置 Wi-Fi", Icon::kWifi, kAccent, s.nanoOnline,
+    ui.button(Rect{r.x + r.w - 180, r.y + 36, 164, 56}, "配置 Wi-Fi", Icon::kWifi, kAccent,
+              Enable(s.nanoOnline, "协处理器离线"),
               uiAction("dialog", static_cast<int>(Dialog::kWifi)), 18);
   }
   {
@@ -405,7 +418,7 @@ void renderSettingsPage(Ui& ui, const UiData& d) {
       if (p > pct && up < 0) up = p;
     }
     snprintf(buf, sizeof(buf), "%d%%", pct);
-    ui.stepper(Rect{r.x + 16, r.y + 44, 180, 48}, buf, dn > 0, up > 0,
+    ui.stepper(Rect{r.x + 16, r.y + 44, 180, 48}, buf, Enable(dn > 0, "已是最低亮度"), Enable(up > 0, "已是最高亮度"),
                cmdAction(setCmd("led_brightness", JsonValue(static_cast<int>(std::lround(dn * 2.55))))),
                cmdAction(setCmd("led_brightness", JsonValue(static_cast<int>(std::lround(up * 2.55))))));
     ui.button(Rect{r.x + r.w - 180, r.y + 36, 164, 56}, "关机", Icon::kPower, kRed, true,
@@ -424,7 +437,6 @@ void renderWifiDialog(Ui& ui, const UiData& d) {
   ui.card(r, kCardHi);
   drawIcon(c, Icon::kWifi, r.x + 36.f, r.y + 34.f, 26, kAccent);
   drawText(c, fontFace(22, true), r.x + 60, r.y + 18, "配置 Wi-Fi", kText);
-  drawText(c, fontFace(14), r.x + 200, r.y + 26, "通过协处理器连接，只保存在 Nano 中", kText3);
   ui.iconButton(Rect{r.x + r.w - 58, r.y + 12, 44, 44}, Icon::kCross, true, uiAction("dialog", 0));
 
   // Fields.
@@ -446,8 +458,8 @@ void renderWifiDialog(Ui& ui, const UiData& d) {
   conn.set("cmd", "set_net");
   conn.set("ssid", st.ssid);
   conn.set("password", st.password);
-  ui.button(Rect{r.x + r.w - 196, r.y + 70, 172, 54}, "连接", Icon::kCheck, kGreen, !st.ssid.empty(), cmdAction(conn),
-            18);
+  ui.button(Rect{r.x + r.w - 196, r.y + 70, 172, 54}, "连接", Icon::kCheck, kGreen,
+            Enable(!st.ssid.empty(), "请先输入网络名称"), cmdAction(conn), 18);
   JsonValue off = JsonValue::makeObject();
   off.set("cmd", "set_net");
   off.set("ssid", "");

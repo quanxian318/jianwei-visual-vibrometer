@@ -141,9 +141,7 @@ void renderVisionPage(Ui& ui, const UiData& d) {
   if (view == 2) {
     drawText(c, fontFace(18), left.x + 14, left.y + 8, "左目画面", kText2);
     if (haveDepth) {
-      // Where the matching ran: PL core, its model on the PS (no PL device), or PS software SGM.
-      const char* where = dm->backend == "PL" ? "PL" : (dm->backend == "PL-model" ? "PS 软件计算" : "PS");
-      snprintf(buf, sizeof(buf), "双目深度 · %s · 有效 %d%%", where, static_cast<int>(dm->validFraction * 100 + 0.5));
+      snprintf(buf, sizeof(buf), "双目深度 · 有效 %d%%", static_cast<int>(dm->validFraction * 100 + 0.5));
       drawText(c, fontFace(18), right.x + 14, right.y + 8, buf, kText2);
     } else {
       drawText(c, fontFace(18), right.x + 14, right.y + 8, "双目深度", kText2);
@@ -181,7 +179,7 @@ void renderVisionPage(Ui& ui, const UiData& d) {
       }
       ui.hit(ri, uiAction("depth_probe"));
     } else {
-      placeholder(c, ri, Icon::kLayers, "双目深度未接入", "双目算法接入后在此显示深度热力图");
+      placeholder(c, ri, Icon::kLayers, "双目深度未接入", "");
     }
   } else {
     drawText(c, fontFace(18), left.x + 14, left.y + 8, "原始画面", kText2);
@@ -215,8 +213,10 @@ void renderVisionPage(Ui& ui, const UiData& d) {
         drawText(c, fontFace(18), ri.x + 22, ri.y + 14, note, kAmber);
       }
       // Tapping a vibrating spot moves the measuring ROI there.
-      ui.hit(ri, uiAction("roi"), s.measureState == "preview");
-      ui.hit(li, uiAction("roi"), s.measureState == "preview");
+      const bool busy = s.measureState == "capturing" || s.measureState == "analyzing";
+      const Enable moveOk(s.measureState == "preview", busy ? "测量中不能移动测点框" : "");
+      ui.hit(ri, uiAction("roi"), moveOk);
+      ui.hit(li, uiAction("roi"), moveOk);
     } else {
       const std::string why = d.live.cameraOk ? "视觉处理未运行" : "相机未就绪";
       placeholder(c, li, Icon::kCamera, why, "");
@@ -227,31 +227,27 @@ void renderVisionPage(Ui& ui, const UiData& d) {
   // Controls.
   const Rect cr{kCx, kCy + ch + 8, kCw, kCh - ch - 8};
   ui.card(cr);
-  const int lx = cr.x + 16, cx0 = cr.x + 96;
-  auto label = [&](int y, const char* t) { drawText(c, fontFace(18), lx, y + 6, t, kText2); };
-  label(cr.y + 14, "显示");
-  ui.chip(Rect{cx0, cr.y + 14, 120, 36}, "运动放大", view == 0, true, uiAction("vision_view", 0));
-  ui.chip(Rect{cx0 + 128, cr.y + 14, 120, 36}, "振动热力", view == 1, true, uiAction("vision_view", 1));
-  ui.chip(Rect{cx0 + 256, cr.y + 14, 120, 36}, "双目深度", view == 2, true, uiAction("vision_view", 2));
+  const int lx = cr.x + 16, cx0 = cr.x + 96, r1 = cr.y + 22, r2 = cr.y + 74, r3 = cr.y + 126;
+  auto label = [&](int x, int y, const char* t) { drawText(c, fontFace(18), x, y + 6, t, kText2); };
+  label(lx, r1, "显示");
+  ui.chip(Rect{cx0, r1, 120, 36}, "运动放大", view == 0, true, uiAction("vision_view", 0));
+  ui.chip(Rect{cx0 + 128, r1, 120, 36}, "振动热力", view == 1, true, uiAction("vision_view", 1));
+  ui.chip(Rect{cx0 + 256, r1, 120, 36}, "双目深度", view == 2, true, uiAction("vision_view", 2));
   if (view == 2) {
-    label(cr.y + 64, "范围");
+    const Enable depthOk(haveDepth, "双目深度未接入");
+    label(lx, r2, "范围");
     static const char* kNames[4] = {"自动", "0.2–1 m", "0.5–2 m", "1–5 m"};
     for (int i = 0; i < 4; ++i) {
-      ui.chip(Rect{cx0 + i * 118, cr.y + 64, 110, 36}, kNames[i], ui.st.depthRange == i, haveDepth,
-              uiAction("depth_range", i));
+      ui.chip(Rect{cx0 + i * 118, r2, 110, 36}, kNames[i], ui.st.depthRange == i, depthOk, uiAction("depth_range", i));
     }
-    label(cr.y + 114, "投影");
+    label(lx, r3, "投影");
     JsonValue lz = JsonValue::makeObject();
     lz.set("cmd", "laser");
     lz.set("on", !s.laserOn);
-    const bool laserLocked = s.settings.laserOffDuringMeasure &&
-                             (s.measureState == "capturing" || s.measureState == "analyzing");
-    ui.toggle(Rect{cx0, cr.y + 115, 64, 34}, s.laserOn,
-              (s.laserOn || (s.lightAllowed && !laserLocked)) && s.printerState == "idle" && !s.pfail,
-              cmdAction(lz));
+    ui.toggle(Rect{cx0, r3 + 1, 64, 34}, s.laserOn, unless(laserBlock(s)), cmdAction(lz));
     // A target at a measured distance at the probe point (else the measuring
     // box) corrects the depth scale offset of the module.
-    drawText(c, fontFace(14), cx0 + 80, cr.y + 124, "距离校正", kText2);
+    label(cx0 + 118, r3, "距离校正");
     static const int kMm[4] = {500, 1000, 2000, 3000};
     static const char* kNamesMm[4] = {"0.5 m", "1 m", "2 m", "3 m"};
     const bool probe = ui.st.probeX >= 0;
@@ -261,10 +257,10 @@ void renderVisionPage(Ui& ui, const UiData& d) {
       j.set("distance_mm", kMm[i]);
       j.set("x", probe ? ui.st.probeX : s.roiCx);
       j.set("y", probe ? ui.st.probeY : s.roiCy);
-      ui.chip(Rect{cx0 + 150 + i * 72, cr.y + 114, 66, 36}, kNamesMm[i], false, haveDepth, cmdAction(j));
+      ui.chip(Rect{cx0 + 214 + i * 90, r3, 82, 36}, kNamesMm[i], false, depthOk, cmdAction(j));
     }
   } else {
-    label(cr.y + 64, "频带");
+    label(lx, r2, "频带");
     static const double kBands[4][2] = {{0.5, 2}, {2, 5}, {5, 10}, {10, 20}};
     for (int i = 0; i < 4; ++i) {
       snprintf(buf, sizeof(buf), "%s–%s Hz", fmtNum(kBands[i][0], 2).c_str(), fmtNum(kBands[i][1], 2).c_str());
@@ -274,7 +270,7 @@ void renderVisionPage(Ui& ui, const UiData& d) {
       j.set("vision_high_hz", kBands[i][1]);
       const bool sel = std::fabs(s.settings.visionLowHz - kBands[i][0]) < 1e-6 &&
                        std::fabs(s.settings.visionHighHz - kBands[i][1]) < 1e-6;
-      ui.chip(Rect{cx0 + i * 118, cr.y + 64, 110, 36}, buf, sel, true, cmdAction(j));
+      ui.chip(Rect{cx0 + i * 118, r2, 110, 36}, buf, sel, true, cmdAction(j));
     }
     const bool follow = s.last.have && s.last.valid && s.last.dominantHz > 0;
     JsonValue j = JsonValue::makeObject();
@@ -283,47 +279,18 @@ void renderVisionPage(Ui& ui, const UiData& d) {
       j.set("vision_low_hz", std::max(0.2, s.last.dominantHz * 0.7));
       j.set("vision_high_hz", s.last.dominantHz * 1.4);
     }
-    ui.chip(Rect{cx0 + 4 * 118, cr.y + 64, 110, 36}, "跟随主频", false, follow, cmdAction(j));
-    label(cr.y + 114, "放大");
+    ui.chip(Rect{cx0 + 4 * 118, r2, 110, 36}, "跟随主频", false, Enable(follow, "需要先有一次有效测量"),
+            cmdAction(j));
+    label(lx, r3, "放大");
+    const Enable gainOk(view == 0, "放大倍数只用于运动放大");
     static const int kGains[4] = {5, 10, 20, 50};
     for (int i = 0; i < 4; ++i) {
       snprintf(buf, sizeof(buf), "×%d", kGains[i]);
       JsonValue g = JsonValue::makeObject();
       g.set("cmd", "set");
       g.set("vision_gain", kGains[i]);
-      ui.chip(Rect{cx0 + i * 90, cr.y + 114, 82, 36}, buf, s.settings.visionGain == kGains[i], view == 0,
-              cmdAction(g));
+      ui.chip(Rect{cx0 + i * 90, r3, 82, 36}, buf, s.settings.visionGain == kGains[i], gainOk, cmdAction(g));
     }
-  }
-
-  // Processing status.
-  const int sx = cr.x + cr.w - 236;
-  c.fillRect(sx - 16, cr.y + 14, 1, cr.h - 28, kBorder);
-  drawText(c, fontFace(14), sx, cr.y + 14, "处理端", kText2);
-  const bool have = view == 2 ? haveDepth : haveVision;
-  if (!have) {
-    drawText(c, fontFace(18), sx, cr.y + 44, view == 2 ? "未接入" : "未运行", kText2);
-    drawText(c, fontFace(14), sx, cr.y + 76, view == 2 ? "等待双目模块输出深度图" : "需要相机画面", kText3);
-    return;
-  }
-  const std::string backend = view == 2 ? dm->backend : v.backend;
-  ui.badge(sx + 52, cr.y + 10, backend == "PL" ? "PL 硬件" : "PS 软件", backend == "PL" ? kViolet : kAccent, true, 14);
-  const int w = view == 2 ? dm->w : v.w, h = view == 2 ? dm->h : v.h;
-  snprintf(buf, sizeof(buf), "%d×%d · %.1f fps", w, h, view == 2 ? dm->fps : v.fps);
-  drawText(c, fontFace(18), sx, cr.y + 44, buf, kText);
-  snprintf(buf, sizeof(buf), "每帧处理 %.2f ms", view == 2 ? dm->procMs : v.procMs);
-  drawText(c, fontFace(18), sx, cr.y + 72, buf, kText);
-  if (view == 2) {
-    double lo = 0, hi = 0;
-    int validPct = 0;
-    autoDepthRange(*dm, lo, hi, validPct);
-    snprintf(buf, sizeof(buf), "有效像素 %d%%", validPct);
-    drawText(c, fontFace(14), sx, cr.y + 106, buf, validPct >= 50 ? kGreen : kAmber);
-    drawText(c, fontFace(14), sx, cr.y + 128, "点深度图选点，再按距离校正", kText3);
-  } else {
-    drawText(c, fontFace(14), sx, cr.y + 106, v.settled ? "时间滤波已稳定" : "时间滤波预热中",
-             v.settled ? kGreen : kAmber);
-    drawText(c, fontFace(14), sx, cr.y + 128, "放大画面只用于显示，不参与计量", kText3);
   }
 }
 

@@ -23,10 +23,16 @@ void zoomWindow(const SystemState& s, double& x0, double& y0, double& w, double&
   y0 = std::max(0.0, std::min(1.0 - h, s.zoomCy - h / 2));
 }
 
-bool measureEnabled(const SystemState& s) {
-  const bool capturing = s.measureState == "capturing";
-  return !s.shutdownPrepared && s.cameraOk && !s.pfail && s.printerState == "idle" &&
-         (s.measureState == "preview" || capturing);
+// Why a measurement (or a baseline capture) cannot be started or stopped now;
+// empty when it can.
+std::string measureBlock(const SystemState& s) {
+  if (s.shutdownPrepared) return "正在关机";
+  if (s.pfail) return "掉电预警中，不能测量";
+  if (!s.cameraOk) return "相机未就绪";
+  if (s.printerState != "idle") return "正在打印，请稍候";
+  if (s.measureState == "analyzing") return "正在计算结果";
+  if (s.measureState != "preview" && s.measureState != "capturing") return "暂不能测量";
+  return std::string();
 }
 
 // Measuring box b clipped to the image area (zoomed in, it may reach past the
@@ -122,11 +128,11 @@ JsonValue setCmd(const char* key, const JsonValue& v) {
 // Result summary for the result page, from the live state or a saved record.
 struct ResultInfo {
   bool have = false, valid = false, saved = false;
-  std::string id, reason, unit = "px", timeText, point, calibration;
+  std::string id, reason, unit = "px", timeText, point;
   std::string method = "roi";
   int points = 0, passed = 0;  // multipoint
   double pointRms = 0;
-  double freq = 0, pp = 0, rms = 0, peak = 0, fps = 0, jitterMs = 0, minNcc = 0;
+  double freq = 0, pp = 0, rms = 0, peak = 0, fps = 0;
   unsigned long dropped = 0;
   AlarmLevel level = AlarmLevel::kUnknown;
   double warnPp = 0, alarmPp = 0;
@@ -167,9 +173,6 @@ ResultInfo fromRecord(const RecordView& v) {
   const JsonValue& cam = jObj(rec, "camera");
   r.fps = jNum(cam, "fps_measured", 0);
   r.dropped = static_cast<unsigned long>(jInt(cam, "frames_dropped", 0));
-  r.jitterMs = jNum(cam, "frame_interval_jitter_ms", 0);
-  r.minNcc = jNum(jObj(rec, "quality"), "min_ncc", 0);
-  r.calibration = mm ? jStr(jObj(rec, "calibration"), "id", "已标定") : std::string("未标定");
   ResultSummary mp;
   readMultiPointSummary(res, mp);
   r.method = mp.method;
@@ -199,7 +202,6 @@ ResultInfo fromState(const SystemState& s) {
   r.point = l.pointId;
   r.warnPp = s.settings.warnPp;
   r.alarmPp = s.settings.alarmPp;
-  r.calibration = l.unit == "mm" ? s.calibrationId : std::string("未标定");
   r.method = l.method;
   r.points = l.points;
   r.passed = l.passedPoints;
@@ -281,7 +283,7 @@ void renderLivePage(Ui& ui, const UiData& d) {
       }
     }
     if (multipoint && live.frameW > 0) drawMultiPoint(ui, d, img, roi, editable);
-    ui.hit(img, roi, editable);
+    ui.hit(img, roi, Enable(editable, capturing || analyzing ? "测量中不能移动测点框" : ""));
     if (!editable && s.zoom > 1.01) {  // the zoomed view can be moved while the box is locked
       UiAction pan = uiAction("pan_view");
       pan.nx0 = zx;
@@ -309,9 +311,7 @@ void renderLivePage(Ui& ui, const UiData& d) {
     std::string text = "预览";
     if (capturing) {
       col = kRed;
-      snprintf(buf, sizeof(buf), "%s %.1f / %.0f s", s.baselineCapture ? "基线采集" : "采集中", s.measureElapsedS,
-               s.measureDurationS);
-      text = buf;
+      text = s.baselineCapture ? "基线采集中" : "采集中";
     } else if (analyzing) {
       col = kAccent;
       text = "计算中";
@@ -333,19 +333,12 @@ void renderLivePage(Ui& ui, const UiData& d) {
     zin.set("steps", 1);
     zout.set("cmd", "zoom");
     zout.set("steps", -1);
-    ui.iconButton(minus, Icon::kMinus, s.zoom > 1.01, cmdAction(zout), 0x1A2430);
+    ui.iconButton(minus, Icon::kMinus, Enable(s.zoom > 1.01, "已是原始大小"), cmdAction(zout), 0x1A2430);
     fillRoundRect(c, bx + 44, pc.y + 12, 62, 36, 10, 0x05080C, 200);
     snprintf(buf, sizeof(buf), "%.1f×", s.zoom);
     drawTextCentered(c, fontFace(18), bx + 75, pc.y + 17, buf, s.zoom > 1.01 ? kAccent : kText2);
-    ui.iconButton(plus, Icon::kPlus, s.zoom < 7.99, cmdAction(zin), 0x1A2430);
-    ui.iconButton(fit, Icon::kFit, s.zoom > 1.01, cmdAction("zoom_reset"), 0x1A2430);
-  }
-  if (live.frameW > 0) {
-    snprintf(buf, sizeof(buf), "%d×%d · %.1f fps", live.frameW, live.frameH, live.fps);
-    const FontFace& f = fontFace(14);
-    const int w = textWidth(f, buf) + 20;
-    fillRoundRect(c, pc.x + 12, pc.y + pc.h - 36, w, 24, 12, 0x05080C, 190);
-    drawText(c, f, pc.x + 22, pc.y + pc.h - 34, buf, kText2);
+    ui.iconButton(plus, Icon::kPlus, Enable(s.zoom < 7.99, "已是最大倍率"), cmdAction(zin), 0x1A2430);
+    ui.iconButton(fit, Icon::kFit, Enable(s.zoom > 1.01, "已是原始大小"), cmdAction("zoom_reset"), 0x1A2430);
   }
 
   // Live displacement.
@@ -369,7 +362,7 @@ void renderLivePage(Ui& ui, const UiData& d) {
     o.symmetric = true;
     o.line = kGreen;
     if (n > 1) {
-      snprintf(buf, sizeof(buf), "最近 %.1f s · 峰峰 %s px", (n - 1) / fps, fmtNum(hi - lo, 3).c_str());
+      snprintf(buf, sizeof(buf), "峰峰 %s px", fmtNum(hi - lo, 3).c_str());
       o.rightNote = buf;
     }
     drawChart(c, wr, xs, ys, o);
@@ -380,64 +373,68 @@ void renderLivePage(Ui& ui, const UiData& d) {
   {
     const Rect r{rx, kCy, rw, 228};
     ui.card(r);
-    ui.cardTitle(r, "测量控制", Icon::kTimer);
-    const bool enabled = measureEnabled(s) && (!multipoint || capturing || s.baselineValid);
-    const float cx = r.x + 82.f, cy = r.y + 118.f;
-    strokeCircle(c, cx, cy, 66, 6, kNeutral);
+    std::string why = measureBlock(s);
+    if (why.empty() && multipoint && !capturing && !s.baselineValid) {
+      why = !s.layoutError.empty() && s.layoutError != "camera_not_ready" ? reasonText(s.layoutError)
+                                                                         : "需先在电机停机时采集基线";
+    }
+    const Enable enabled = unless(why);
+    const float cx = r.x + 78.f, cy = r.y + 98.f;
+    strokeCircle(c, cx, cy, 62, 6, kNeutral);
     if (capturing && s.measureDurationS > 0) {
       const float frac = static_cast<float>(std::min(1.0, s.measureElapsedS / s.measureDurationS));
-      if (frac > 0.002f) strokeArc(c, cx, cy, 66, 6, 0, frac * 2 * kPi, kAccent);
+      if (frac > 0.002f) strokeArc(c, cx, cy, 62, 6, 0, frac * 2 * kPi, kAccent);
     } else if (analyzing) {
       const float a = (d.nowMs % 1200) / 1200.f * 2 * kPi;
-      strokeArc(c, cx, cy, 66, 6, a, a + 1.6f, kAccent);
+      strokeArc(c, cx, cy, 62, 6, a, a + 1.6f, kAccent);
     }
-    const Rect btn{static_cast<int>(cx - 56), static_cast<int>(cy - 56), 112, 112};
+    const Rect btn{static_cast<int>(cx - 64), static_cast<int>(cy - 64), 128, 128};  // the whole ring reacts
     uint32_t fill = enabled ? (capturing ? kRed : kGreen) : kDisabled;
     if (enabled && ui.pressed(btn)) fill = mixColor(fill, 0xFFFFFF, 50);
-    fillCircle(c, cx, cy, 56, fill);
-    drawIcon(c, capturing ? Icon::kStop : Icon::kPlay, cx + (capturing ? 0 : 4), cy, 46, enabled ? 0xFFFFFF : kText3);
+    if (enabled) fillCircle(c, cx, cy, 59, fill, 44);  // soft halo inside the progress ring
+    fillCircle(c, cx, cy, 52, fill);
+    drawIcon(c, capturing ? Icon::kStop : Icon::kPlay, cx + (capturing ? 0 : 4), cy, 42, enabled ? 0xFFFFFF : kText3);
     ui.hit(btn, cmdAction(capturing ? "measure_stop" : "measure_start"), enabled);
-    const int tx = r.x + 162;
-    drawText(c, fontFace(22, true), tx, r.y + 58,
+    // Text centred on the ring: title, progress or state, and (single box) the calibration.
+    const int tx = r.x + 160, tw = r.x + r.w - 12 - tx, ty = r.y + (multipoint ? 62 : 50);
+    drawText(c, fontFace(22, true), tx, ty,
              capturing ? (s.baselineCapture ? "停止采集" : "停止测量") : "开始测量", enabled ? kText : kText3);
+    std::string line;
+    uint32_t lineCol = kText2;
     if (capturing) {
       snprintf(buf, sizeof(buf), "%.1f / %.0f s", s.measureElapsedS, s.measureDurationS);
+      line = buf;
+      lineCol = kAccent;
     } else if (analyzing) {
-      snprintf(buf, sizeof(buf), "正在计算");
-    } else {
-      snprintf(buf, sizeof(buf), "时长 %s s", fmtNum(s.settings.durationS, 3).c_str());
-    }
-    drawText(c, fontFace(18), tx, r.y + 94, buf, capturing ? kAccent : kText2);
-    if (multipoint) {
+      line = "正在计算";
+    } else if (multipoint) {
       // Motor-off baseline first; it belongs to this box and reference group.
-      snprintf(buf, sizeof(buf), "多点测振 · 测点框 %d×%d", s.settings.roiW, s.settings.roiH);
-      drawText(c, fontFace(14), tx, r.y + 124, buf, kText2);
-      if (s.baselineValid) snprintf(buf, sizeof(buf), "停机基线已采集 · %d 窗口", s.baselineWindows);
-      drawText(c, fontFace(14), tx, r.y + 146, s.baselineValid ? buf : "需先停机采集基线",
-               s.baselineValid ? kGreen : kAmber);
-      static const int kDur[2] = {10, 30};
-      for (int i = 0; i < 2; ++i) {
-        const Rect cr{r.x + 14 + i * 72, r.y + r.h - 46, 66, 34};
-        snprintf(buf, sizeof(buf), "%d s", kDur[i]);
-        ui.chip(cr, buf, std::fabs(s.settings.durationS - kDur[i]) < 0.01, !capturing && !analyzing,
-                cmdAction(setCmd("duration_s", JsonValue(kDur[i]))));
-      }
-      const bool baseOk = measureEnabled(s) && !capturing && s.layoutError.empty();
-      ui.chip(Rect{r.x + 14 + 2 * 72, r.y + r.h - 46, 138, 34}, "采集停机基线", false, baseOk,
-              cmdAction("baseline_start"));
+      line = s.baselineValid ? "停机基线已采集" : "未采集停机基线";
+      lineCol = s.baselineValid ? kGreen : kAmber;
     } else {
-      snprintf(buf, sizeof(buf), "测点框 %d×%d · %c 向", s.settings.roiW, s.settings.roiH,
-               static_cast<char>(std::toupper(static_cast<unsigned char>(s.settings.axis))));
-      drawText(c, fontFace(14), tx, r.y + 124, buf, kText2);
-      drawText(c, fontFace(14), tx, r.y + 146, s.calibrated ? "已标定 · 毫米结果" : "未标定 · 像素结果",
+      line = std::string(1, static_cast<char>(std::toupper(static_cast<unsigned char>(s.settings.axis)))) + " 向位移";
+    }
+    drawText(c, fontFace(18), tx, ty + 38, fitText(fontFace(18), line, tw), lineCol);
+    if (!multipoint) {
+      drawText(c, fontFace(14), tx, ty + 68, s.calibrated ? "已标定 · 毫米结果" : "未标定 · 像素结果",
                s.calibrated ? kGreen : kAmber);
-      static const int kDur[4] = {5, 10, 30, 60};
-      for (int i = 0; i < 4; ++i) {
-        const Rect cr{r.x + 14 + i * 72, r.y + r.h - 46, 66, 34};
-        snprintf(buf, sizeof(buf), "%d s", kDur[i]);
-        ui.chip(cr, buf, std::fabs(s.settings.durationS - kDur[i]) < 0.01, !capturing && !analyzing,
-                cmdAction(setCmd("duration_s", JsonValue(kDur[i]))));
-      }
+    }
+    const Enable durOk(!capturing && !analyzing, "测量中不能修改时长");
+    static const int kDurRoi[4] = {5, 10, 30, 60}, kDurMp[2] = {10, 30};
+    const int* durs = multipoint ? kDurMp : kDurRoi;
+    const int nDur = multipoint ? 2 : 4;
+    for (int i = 0; i < nDur; ++i) {
+      const Rect cr{r.x + 14 + i * 72, r.y + r.h - 46, 66, 34};
+      snprintf(buf, sizeof(buf), "%d s", durs[i]);
+      ui.chip(cr, buf, std::fabs(s.settings.durationS - durs[i]) < 0.01, durOk,
+              cmdAction(setCmd("duration_s", JsonValue(durs[i]))));
+    }
+    if (multipoint) {
+      std::string baseWhy = measureBlock(s);
+      if (baseWhy.empty() && capturing) baseWhy = "测量中不能采集基线";
+      if (baseWhy.empty() && !s.layoutError.empty()) baseWhy = reasonText(s.layoutError);
+      ui.chip(Rect{r.x + 14 + 2 * 72, r.y + r.h - 46, 138, 34}, "采集停机基线", false, unless(baseWhy),
+              cmdAction("baseline_start"));
     }
   }
 
@@ -445,56 +442,51 @@ void renderLivePage(Ui& ui, const UiData& d) {
   {
     const Rect r{rx, kCy + 236, rw, 152};
     ui.card(r);
-    ui.cardTitle(r, "实时数据", Icon::kGauge);
+    const int y1 = r.y + 18, y2 = r.y + 84;
     const bool track = capturing && live.frameCount > 0;
     if (multipoint) {
       // Latest 128-frame window of the running capture.
       const MultiPointWindow& w = live.mpWindow;
       const bool sig = track && w.status == 1;
       snprintf(buf, sizeof(buf), "%.2f", w.frequencyHz);
-      ui.metric(r.x + 16, r.y + 36, "窗口主频", sig ? buf : "--", sig ? "Hz" : "");
+      ui.metric(r.x + 18, y1, "窗口主频", sig ? buf : "--", sig ? "Hz" : "");
       snprintf(buf, sizeof(buf), "%d/%zu", w.passed, live.mpPoints.size());
-      ui.metric(r.x + 160, r.y + 36, "超过基线", track && w.status >= 0 ? buf : "--", "",
-                sig ? kGreen : kText);
+      ui.metric(r.x + 160, y1, "超过基线", track && w.status >= 0 ? buf : "--", "", sig ? kGreen : kText);
     } else {
       snprintf(buf, sizeof(buf), "%+.3f", live.lastDisp);
-      ui.metric(r.x + 16, r.y + 36, "位移", track ? buf : "--", "px");
+      ui.metric(r.x + 18, y1, "位移", track ? buf : "--", "px");
       snprintf(buf, sizeof(buf), "%.3f", live.lastScore);
-      ui.metric(r.x + 160, r.y + 36, "相关度", track ? buf : "--", "",
-                track && live.lastScore < 0.6 ? kAmber : kText);
+      ui.metric(r.x + 160, y1, "相关度", track ? buf : "--", "", track && live.lastScore < 0.6 ? kAmber : kText);
     }
     snprintf(buf, sizeof(buf), "%.1f", live.fps);
-    ui.metric(r.x + 16, r.y + 92, "帧率", live.fps > 0 ? buf : "--", "fps");
+    ui.metric(r.x + 18, y2, "帧率", live.fps > 0 ? buf : "--", "fps");
     if (s.distanceValid) {
       snprintf(buf, sizeof(buf), "%d", s.distanceMm);
-      ui.metric(r.x + 160, r.y + 92, "工作距离", buf, "mm");
+      ui.metric(r.x + 160, y2, "工作距离", buf, "mm");
     } else {
-      ui.metric(r.x + 160, r.y + 92, "工作距离", "--", "");
+      ui.metric(r.x + 160, y2, "工作距离", "--", "");
     }
   }
 
   // Quick actions.
   {
     const int y0 = kCy + 396, bw = (rw - 8) / 2, bh = (kCh - 396 - 8) / 2;
-    const bool outOk = s.printerState == "idle" && !s.pfail;
     JsonValue light = JsonValue::makeObject();
     light.set("cmd", "light");
     light.set("on", !s.lightOn);
-    ui.button(Rect{rx, y0, bw, bh}, s.lightOn ? "关闭照明" : "打开照明", Icon::kBulb, s.lightOn ? kAmber : kNeutral,
-              (s.lightOn || s.lightAllowed) && outOk, cmdAction(light), 18);
+    ui.switchButton(Rect{rx, y0, bw, bh}, s.lightOn ? "关闭照明" : "打开照明", Icon::kBulb, kAmber, s.lightOn,
+                    unless(lightBlock(s)), cmdAction(light));
     JsonValue laser = JsonValue::makeObject();
     laser.set("cmd", "laser");
     laser.set("on", !s.laserOn);
-    const bool laserLocked = s.settings.laserOffDuringMeasure &&
-                             (s.measureState == "capturing" || s.measureState == "analyzing");
-    ui.button(Rect{rx + bw + 8, y0, bw, bh}, s.laserOn ? "关闭投影" : "十字投影", Icon::kLaser,
-              s.laserOn ? kRed : kNeutral, (s.laserOn || (s.lightAllowed && !laserLocked)) && outOk,
-              cmdAction(laser), 18);
-    const bool muteOk = (s.alarmLevel == AlarmLevel::kWarn || s.alarmLevel == AlarmLevel::kAlarm) && !s.alarmMuted;
-    ui.button(Rect{rx, y0 + bh + 8, bw, bh}, "报警静音", Icon::kBellOff, kNeutral, muteOk, cmdAction("mute"), 18);
-    const bool heatOk = live.vision.w > 0;
-    ui.button(Rect{rx + bw + 8, y0 + bh + 8, bw, bh}, ui.st.liveHeat ? "关闭热力" : "振动热力", Icon::kHeat,
-              ui.st.liveHeat ? kViolet : kNeutral, heatOk, uiAction("live_heat"), 18);
+    ui.switchButton(Rect{rx + bw + 8, y0, bw, bh}, s.laserOn ? "关闭投影" : "十字投影", Icon::kLaser, kRed, s.laserOn,
+                    unless(laserBlock(s)), cmdAction(laser));
+    const bool alarm = s.alarmLevel == AlarmLevel::kWarn || s.alarmLevel == AlarmLevel::kAlarm;
+    ui.switchButton(Rect{rx, y0 + bh + 8, bw, bh}, "报警静音", Icon::kBellOff, kAmber, false,
+                    unless(!alarm ? "当前没有报警" : (s.alarmMuted ? "报警已静音" : "")), cmdAction("mute"));
+    ui.switchButton(Rect{rx + bw + 8, y0 + bh + 8, bw, bh}, ui.st.liveHeat ? "关闭热力" : "振动热力", Icon::kHeat,
+                    kViolet, ui.st.liveHeat,
+                    Enable(live.vision.w > 0, live.cameraOk ? "视觉处理未运行" : "相机未就绪"), uiAction("live_heat"));
   }
 }
 
@@ -508,13 +500,10 @@ void renderResultPage(Ui& ui, const UiData& d) {
   const bool fromHistory = !ui.st.openRecordId.empty();
   ResultInfo r = fromHistory ? fromRecord(d.record) : fromState(s);
   if (!fromHistory && d.record.loaded && d.record.id == r.id) {
-    // The saved record adds the timing and quality details.
+    // The saved record adds the time and the point name.
     const ResultInfo saved = fromRecord(d.record);
     r.timeText = saved.timeText;
     r.point = saved.point;
-    r.jitterMs = saved.jitterMs;
-    r.minNcc = saved.minNcc;
-    r.calibration = saved.calibration;
   }
   char buf[200];
   if (!r.have) {
@@ -541,11 +530,15 @@ void renderResultPage(Ui& ui, const UiData& d) {
     const std::string values[3] = {fmtNum(r.freq, 4), mp ? std::string(buf) : fmtNum(r.pp, 3),
                                    fmtNum(mp ? r.pointRms : r.rms, 3)};
     const std::string units[3] = {"Hz", mp ? "" : r.unit, r.unit};
+    static const uint32_t kKpi[3] = {kAccent, kGreen, kViolet};
     for (int i = 0; i < 3; ++i) {
       const Rect k{kCx + i * (kw + 8), kCy, kw, kh};
       ui.card(k);
-      drawText(c, fontFace(18), k.x + 16, k.y + 10, labels[i], kText2);
-      const int vx = drawText(c, fontFace(44, true), k.x + 14, k.y + 38, values[i], kText);
+      fillCircle(c, k.x + 21.f, k.y + 21.f, 4, kKpi[i]);
+      drawText(c, fontFace(18), k.x + 32, k.y + 10, labels[i], kText2);
+      const bool fits =
+          textWidth(fontFace(44, true), values[i]) + 6 + textWidth(fontFace(18), units[i]) <= k.w - 28;
+      const int vx = drawText(c, fontFace(fits ? 44 : 32, true), k.x + 14, k.y + (fits ? 38 : 48), values[i], kText);
       drawText(c, fontFace(18), vx + 6, k.y + 64, units[i], kText2);
     }
   } else {
@@ -554,43 +547,42 @@ void renderResultPage(Ui& ui, const UiData& d) {
     fillCircle(c, k.x + 52.f, k.y + kh / 2.f, 30, kAmber, 46);
     drawIcon(c, Icon::kWarn, k.x + 52.f, k.y + kh / 2.f, 34, kAmber);
     drawText(c, fontFace(32, true), k.x + 100, k.y + 14, "结果无效", kAmber);
-    drawText(c, fontFace(22), k.x + 100, k.y + 60, reasonText(r.reason), kText);
-    if (r.saved) drawTextRight(c, fontFace(14), k.x + k.w - 16, k.y + 76, "原始数据已保存，可用于诊断", kText2);
+    drawText(c, fontFace(22), k.x + 100, k.y + 60, fitText(fontFace(22), reasonText(r.reason), k.w - 116), kText);
   }
   {
     const Rect k{kCx + 3 * (kw + 8), kCy, kw, kh};
     const uint32_t col = levelColor(r.level);
     ui.card(k);
     drawText(c, fontFace(18), k.x + 16, k.y + 10, "判级", kText2);
-    fillRoundRect(c, k.x + 16, k.y + 42, 116, 46, 12, col, r.level == AlarmLevel::kUnknown ? 60 : 255);
-    drawTextCentered(c, fontFace(32, true), k.x + 74, k.y + 44, levelText(r.level),
-                     r.level == AlarmLevel::kUnknown ? kText2 : 0xFFFFFF);
+    std::string l1, l2;
     if (r.unit == "mm" && r.alarmPp > 0) {
-      snprintf(buf, sizeof(buf), "预警 %s", fmtNum(r.warnPp, 3).c_str());
-      drawText(c, fontFace(14), k.x + 142, k.y + 46, buf, kText2);
-      snprintf(buf, sizeof(buf), "报警 %s mm", fmtNum(r.alarmPp, 3).c_str());
-      drawText(c, fontFace(14), k.x + 142, k.y + 66, buf, kText2);
+      l1 = "预警 " + fmtNum(r.warnPp, 3);
+      l2 = "报警 " + fmtNum(r.alarmPp, 3) + " mm";
     } else {
-      drawText(c, fontFace(14), k.x + 142, k.y + 56, "未标定不判级", kText2);
+      l1 = r.method == "multipoint" ? "像素结果" : "未标定";
+      l2 = "不判级";
     }
+    const FontFace& f14 = fontFace(14);
+    const int lw = std::max(textWidth(f14, l1), textWidth(f14, l2));
+    const int bw = std::max(80, std::min(116, k.w - 16 - 14 - lw - 14));
+    const FontFace& lf = textWidth(fontFace(32, true), levelText(r.level)) <= bw - 12 ? fontFace(32, true)
+                                                                                    : fontFace(22, true);
+    fillRoundRect(c, k.x + 16, k.y + 42, bw, 46, 12, col, r.level == AlarmLevel::kUnknown ? 60 : 255);
+    drawTextCentered(c, lf, k.x + 16 + bw / 2, k.y + 44 + (46 - lf.lineHeight) / 2, levelText(r.level),
+                     r.level == AlarmLevel::kUnknown ? kText2 : 0xFFFFFF);
+    drawText(c, f14, k.x + 16 + bw + 14, k.y + 46, l1, kText2);
+    drawText(c, f14, k.x + 16 + bw + 14, k.y + 66, l2, kText2);
   }
 
   // Details line.
   {
-    std::string line = r.id;
-    if (!r.timeText.empty()) line += "  ·  " + r.timeText;
-    line += "  ·  测点 " + (r.point.empty() ? std::string("未选") : r.point);
-    snprintf(buf, sizeof(buf), "  ·  %.1f fps  ·  丢帧 %lu", r.fps, r.dropped);
-    line += buf;
-    if (r.jitterMs > 0) {
-      snprintf(buf, sizeof(buf), "  ·  抖动 %.2f ms", r.jitterMs);
+    std::string line = r.timeText.empty() ? std::string() : r.timeText + "  ·  ";
+    line += "测点 " + (r.point.empty() ? std::string("未选") : r.point);
+    if (r.dropped > 0) {
+      snprintf(buf, sizeof(buf), "  ·  丢帧 %lu", r.dropped);
       line += buf;
     }
-    if (r.minNcc > 0) {
-      snprintf(buf, sizeof(buf), "  ·  最低相关 %.2f", r.minNcc);
-      line += buf;
-    }
-    line += "  ·  " + r.calibration;
+    if (r.unit != "mm" && r.method != "multipoint") line += "  ·  未标定，结果为像素";
     drawText(c, fontFace(14), kCx + 4, kCy + kh + 8, fitText(fontFace(14), line, kCw - 8), kText2);
   }
 
@@ -606,10 +598,6 @@ void renderResultPage(Ui& ui, const UiData& d) {
     o.unitX = "s";
     o.line = kGreen;
     o.symmetric = false;
-    if (haveData) {
-      snprintf(buf, sizeof(buf), "%zu 个样本", rv.t.size());
-      o.rightNote = buf;
-    }
     static const std::vector<double> kEmpty;
     drawChart(c, w, haveData ? rv.t : kEmpty, haveData ? rv.disp : kEmpty, o);
   }
@@ -641,12 +629,23 @@ void renderResultPage(Ui& ui, const UiData& d) {
     }
     drawChart(c, sp, f, a, o);
     const int bx = kCx + kCw - 166, bh = (sp.h - 8) / 2;
-    const bool printOk = r.saved && s.measureState == "preview" && s.printerState == "idle" && !s.pfail;
+    std::string printWhy;
+    if (!r.saved) {
+      printWhy = "结果未保存，不能打印";
+    } else if (s.pfail) {
+      printWhy = "掉电预警中";
+    } else if (s.measureState == "capturing" || s.measureState == "analyzing") {
+      printWhy = "测量中不能打印";
+    } else if (s.measureState != "preview") {
+      printWhy = "暂不能打印";
+    } else if (s.printerState != "idle") {
+      printWhy = "正在打印";
+    }
     JsonValue pr = JsonValue::makeObject();
     pr.set("cmd", "print");
     pr.set("measurement_id", r.id);
     ui.button(Rect{bx, y, 166, bh}, s.printerState == "idle" ? "打印报告" : "打印中", Icon::kPrinter, kAccent,
-              printOk, cmdAction(pr), 18);
+              unless(printWhy), cmdAction(pr), 18);
     if (fromHistory) {
       ui.button(Rect{bx, y + bh + 8, 166, bh}, "返回记录", Icon::kLeft, kNeutral, true, uiAction("close_record"), 18);
     } else {

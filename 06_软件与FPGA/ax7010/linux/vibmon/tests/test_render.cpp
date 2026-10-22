@@ -57,6 +57,9 @@ UiAction tap(const UiState& st, const UiData& d, int x, int y, Rect* r = nullptr
 
 std::string cmdOf(const UiAction& a) { return a.kind == "cmd" ? jStr(a.cmd, "cmd", "") : std::string(); }
 
+// A grey control: the tap only shows why.
+bool refused(const UiAction& a) { return a.kind == "why" && !a.text.empty(); }
+
 }  // namespace
 
 int main(int argc, char** argv) {
@@ -163,6 +166,7 @@ int main(int argc, char** argv) {
     dm->backend = "PS";
     dm->fps = 15;
     dm->procMs = 41.5;
+    dm->validFraction = 0.94;
     dm->mm.resize(320 * 240);
     for (int y = 0; y < 240; ++y) {
       for (int x = 0; x < 320; ++x) {
@@ -220,17 +224,17 @@ int main(int argc, char** argv) {
 
   // ------------------------------------------------------------- interactions
   UiState st;
-  // Measure button: stop while capturing, start in preview, disabled while analysing or printing.
-  const int bx = 100 + 608 + 82, by = 56 + 118;
+  // Measure button: stop while capturing, start in preview, grey (with a reason) while analysing or printing.
+  const int bx = 100 + 608 + 78, by = 56 + 98;
   CHECK(cmdOf(tap(st, d, bx, by)) == "measure_stop");
   UiData pd = d;
   pd.s.measureState = "preview";
   CHECK(cmdOf(tap(st, pd, bx, by)) == "measure_start");
   pd.s.printerState = "printing";
-  CHECK(tap(st, pd, bx, by).isNull());
+  CHECK(refused(tap(st, pd, bx, by)));
   pd.s.printerState = "idle";
   pd.s.measureState = "analyzing";
-  CHECK(tap(st, pd, bx, by).isNull());
+  CHECK(refused(tap(st, pd, bx, by)));
   // Preview tap maps through the display zoom to normalised image coordinates.
   pd.s.measureState = "preview";
   pd.s.zoom = 2;
@@ -290,11 +294,15 @@ int main(int argc, char** argv) {
     CHECK(cv.get(gb.x + gb.w / 4, gb.y) == theme::kAccent);
     CHECK(cv.get(gb.x + gb.w / 4, gb.y + gb.h - 1) == theme::kAccent);
   }
-  // No ROI changes during a capture: zoomed in, a tap only reaches the view panning, which sends nothing.
+  // No ROI changes during a capture: a tap reaches the view panning (zoomed in) or the reason, neither sends anything.
   {
     const UiAction a = tap(st, d, 400, 230);
     UiState s2;
-    CHECK(a.isNull() || (a.kind == "pan_view" && FbUi::applyAction(s2, a, Rect(), 400, 230, d, 0).isNull()));
+    CHECK(a.kind == "pan_view" && FbUi::applyAction(s2, a, Rect(), 400, 230, d, 0).isNull());
+    UiData dz = d;
+    dz.s.zoom = 1;
+    const UiAction b = tap(st, dz, 400, 230);
+    CHECK(refused(b) && FbUi::applyAction(s2, b, Rect(), 400, 230, dz, 0).isNull());
   }
   // Zoomed in, the view can be moved (also during a capture) and stays inside the image.
   {
@@ -331,9 +339,9 @@ int main(int argc, char** argv) {
     locked.s.measureState = "capturing";
     locked.s.laserOn = false;
     locked.s.settings.laserOffDuringMeasure = true;
-    CHECK(tap(st, locked, 708 + 154 + 30, 56 + 396 + 20).isNull());
+    CHECK(refused(tap(st, locked, 708 + 154 + 30, 56 + 396 + 20)));
     locked.s.measureState = "analyzing";
-    CHECK(tap(st, locked, 708 + 154 + 30, 56 + 396 + 20).isNull());
+    CHECK(tap(st, locked, 708 + 154 + 30, 56 + 396 + 20).text == "测量期间投影保持关闭");
     locked.s.measureState = "preview";
     CHECK(cmdOf(tap(st, locked, 708 + 154 + 30, 56 + 396 + 20)) == "laser");
   }
@@ -355,7 +363,7 @@ int main(int argc, char** argv) {
     const UiAction a = tap(rs, rd, px, py);
     CHECK(cmdOf(a) == "print" && jStr(a.cmd, "measurement_id", "") == rd.s.last.measurementId);
     rd.s.measureState = "capturing";
-    CHECK(tap(rs, rd, px, py).isNull());
+    CHECK(refused(tap(rs, rd, px, py)));
   }
   // History: rows open the record, pages turn.
   {
@@ -415,9 +423,31 @@ int main(int argc, char** argv) {
     CHECK_NEAR(vs.probeY, 0.5, 0.01);
     CHECK(d.depth->at(0.5, 0.5) == 600);
   }
+  // A grey control says why next to it and sends nothing: the gain only applies to motion magnification.
+  {
+    UiState vs;
+    vs.page = Page::kVision;
+    vs.visionView = 1;
+    UiData vd = d;
+    vd.s.measureState = "preview";
+    const int gx = 100 + 96 + 5, gy = 56 + 344 + 8 + 126 + 18;  // the x5 chip
+    Rect r;
+    const UiAction a = tap(vs, vd, gx, gy, &r);
+    CHECK(refused(a) && a.text == "放大倍数只用于运动放大");
+    CHECK(FbUi::applyAction(vs, a, r, gx, gy, vd, vd.nowMs).isNull());
+    CHECK(vs.toast == a.text && vs.toastAt == r && vs.toastUntilMs > vd.nowMs);
+    Canvas c(1024, 600);
+    std::vector<HitRegion> hits;
+    renderUi(c, vs, vd, hits);
+    if (!out.empty()) writePpm(c, out + "/ui_reason.ppm");
+    vs.visionView = 0;
+    const UiAction g = tap(vs, vd, gx, gy);
+    CHECK(cmdOf(g) == "set" && jInt(g.cmd, "vision_gain", 0) == 5);
+  }
 
   // Every glyph of the shown text exists in the generated fonts.
   for (const char* txt : {"开始测量", "停止测量", "打印报告", "双目深度未接入", "振动热力", "测量记录", "配置 Wi-Fi",
+                          "放大倍数只用于运动放大", "测量期间投影保持关闭", "需先在电机停机时采集基线",
                           "应用已停止, 等待Linux关机", "视觉测振报告", "未判级"}) {
     const std::string str(txt);
     for (bool bold : {false, true}) {
@@ -481,6 +511,19 @@ int main(int argc, char** argv) {
     std::vector<HitRegion> hits;
     renderUi(c, ds, pd, hits);
     if (!out.empty()) writePpm(c, out + "/ui_live_roi.ppm");
+  }
+  {
+    // Multi-point method in preview: grid (green) and reference (amber) templates, baseline state.
+    UiData md = d;
+    md.s.method = "multipoint";
+    md.s.measureState = "preview";
+    md.s.baselineValid = true;
+    md.s.settings.roiW = 160;
+    md.s.settings.roiH = 96;
+    Canvas c(1024, 600);
+    std::vector<HitRegion> hits;
+    renderUi(c, UiState(), md, hits);
+    if (!out.empty()) writePpm(c, out + "/ui_live_multipoint.ppm");
   }
 
   // Printed slip.

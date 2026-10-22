@@ -4,6 +4,7 @@
 #include <cstdint>
 #include <memory>
 #include <string>
+#include <utility>
 #include <vector>
 
 #include "app/state.h"
@@ -48,10 +49,23 @@ struct NormBox {
 // Parts of the measuring box a touch drags (bit set).
 enum RoiGrab { kGrabLeft = 1, kGrabRight = 2, kGrabTop = 4, kGrabBottom = 8, kGrabMove = 16 };
 
+// Whether a control reacts to touch. A disabled control is drawn grey; when
+// it carries a reason, tapping it shows the reason next to the control.
+struct Enable {
+  bool on = true;
+  std::string why;
+  Enable(bool enabled = true) : on(enabled) {}
+  Enable(bool enabled, std::string reason) : on(enabled), why(enabled ? std::string() : std::move(reason)) {}
+  operator bool() const { return on; }
+};
+// Enabled when reason is empty, otherwise disabled for that reason.
+inline Enable unless(const std::string& reason) { return Enable(reason.empty(), reason); }
+
 struct HitRegion {
   Rect r;
   UiAction a;
   bool enabled = true;
+  std::string why;  // disabled: reason shown when it is tapped
 };
 
 // A saved record loaded for the result page.
@@ -81,6 +95,7 @@ struct UiState {
   double panCx = 0.5, panCy = 0.5;  // its centre meanwhile (normalised)
   std::string toast;
   int64_t toastUntilMs = 0;
+  Rect toastAt;  // control a reason belongs to; empty = message at the bottom
   // Wi-Fi dialog
   std::string ssid, password;
   int field = 0;  // 0 = SSID, 1 = password
@@ -108,19 +123,22 @@ class Ui {
   Canvas& c;
   const UiState& st;
 
-  void hit(const Rect& r, const UiAction& a, bool enabled = true);
+  void hit(const Rect& r, const UiAction& a, const Enable& enabled = true);
   void block(const Rect& r);  // swallows touches (modal background)
   bool pressed(const Rect& r) const { return st.pressing && st.pressed == r; }
 
   void card(const Rect& r, uint32_t fill = theme::kCard);
   void cardTitle(const Rect& r, const std::string& title, Icon icon = Icon::kNone);
-  void button(const Rect& r, const std::string& label, Icon icon, uint32_t fill, bool enabled, const UiAction& a,
-              int fontPx = 22);
-  void iconButton(const Rect& r, Icon icon, bool enabled, const UiAction& a, uint32_t fill = theme::kNeutral);
-  void chip(const Rect& r, const std::string& label, bool selected, bool enabled, const UiAction& a);
-  void toggle(const Rect& r, bool on, bool enabled, const UiAction& a);
-  void stepper(const Rect& r, const std::string& value, bool decOk, bool incOk, const UiAction& dec,
-               const UiAction& inc);
+  void button(const Rect& r, const std::string& label, Icon icon, uint32_t fill, const Enable& enabled,
+              const UiAction& a, int fontPx = 22);
+  void iconButton(const Rect& r, Icon icon, const Enable& enabled, const UiAction& a, uint32_t fill = theme::kNeutral);
+  void chip(const Rect& r, const std::string& label, bool selected, const Enable& enabled, const UiAction& a);
+  // Quick-action button: neutral, tinted with color while its output is on.
+  void switchButton(const Rect& r, const std::string& label, Icon icon, uint32_t color, bool on,
+                    const Enable& enabled, const UiAction& a, int fontPx = 18);
+  void toggle(const Rect& r, bool on, const Enable& enabled, const UiAction& a);
+  void stepper(const Rect& r, const std::string& value, const Enable& decOk, const Enable& incOk,
+               const UiAction& dec, const UiAction& inc);
   int badge(int x, int y, const std::string& text, uint32_t color, bool filled = false, int fontPx = 18);
   void emptyState(const Rect& r, Icon icon, const std::string& title, const std::string& hint);
   void metric(int x, int y, const std::string& label, const std::string& value, const std::string& unit,
@@ -152,6 +170,9 @@ uint32_t levelColor(AlarmLevel l);
 std::string fmtNum(double v, int sig = 4);           // %.4g without "-0"
 std::string reasonText(const std::string& reason);  // invalid-result reason -> text
 std::string errorText(const std::string& code);     // command error -> text
+// Why the lighting / the cross projector cannot be switched now; empty when it can.
+std::string lightBlock(const SystemState& s);
+std::string laserBlock(const SystemState& s);
 const char* pageTitle(Page p);
 // Largest rectangle with the aspect fw:fh inside box, centred.
 Rect fitAspect(const Rect& box, int fw, int fh);
@@ -178,7 +199,8 @@ JsonValue roiCommand(const NormBox& b, int fw, int fh);
 void pannedCentre(const UiAction& a, const Rect& region, int dx, int dy, double& cx, double& cy);
 
 void renderUi(Canvas& c, const UiState& st, const UiData& d, std::vector<HitRegion>& hits);
-// Topmost region at (x, y); disabled and blocking regions return a null action.
+// Topmost region at (x, y). A disabled region returns a "why" action with its
+// reason (null without one); blocking regions return a null action.
 UiAction hitTest(const std::vector<HitRegion>& hits, int x, int y, Rect* region = nullptr);
 
 // Page renderers (ui_pages.cpp, ui_pages2.cpp).
