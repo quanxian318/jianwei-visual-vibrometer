@@ -38,7 +38,7 @@ LIB_OBJ := $(addprefix $(BUILD)/obj/,$(notdir $(LIB_CPP:.cpp=.o) $(LIB_C:.c=.o))
 LIB := $(BUILD)/libvibmon.a
 
 APPS := $(BUILD)/vibmond $(BUILD)/vibmonctl $(BUILD)/carrier_test $(BUILD)/vision_ref $(BUILD)/clip_track $(BUILD)/lk_vectors $(BUILD)/stereo_eval $(BUILD)/sgm_vectors \
-        $(BUILD)/plcam
+        $(BUILD)/plcam $(BUILD)/clip_multipoint
 TEST_SRC := $(wildcard tests/test_*.cpp)
 TESTS := $(patsubst tests/%.cpp,$(BUILD)/%,$(TEST_SRC))
 
@@ -76,6 +76,9 @@ $(BUILD)/stereo_eval: $(BUILD)/obj/stereo_eval.o $(LIB)
 	$(CXX) $(LDFLAGS) $^ -o $@ $(LDLIBS)
 
 $(BUILD)/sgm_vectors: $(BUILD)/obj/sgm_vectors.o $(LIB)
+	$(CXX) $(LDFLAGS) $^ -o $@ $(LDLIBS)
+
+$(BUILD)/clip_multipoint: $(BUILD)/obj/clip_multipoint.o $(LIB)
 	$(CXX) $(LDFLAGS) $^ -o $@ $(LDLIBS)
 
 $(BUILD)/plcam: $(BUILD)/obj/plcam.o $(LIB)
