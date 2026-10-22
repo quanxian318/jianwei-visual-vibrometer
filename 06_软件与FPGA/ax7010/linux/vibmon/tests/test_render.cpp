@@ -134,6 +134,7 @@ int main(int argc, char** argv) {
   live.frameCount = 200;
   live.lastDisp = 1.234;
   live.lastScore = 0.973;
+  live.procMs = 0.9;
   for (int i = 0; i < 400; ++i) live.recent.push_back(static_cast<float>(2 * std::sin(i * 2 * M_PI * 12.48 / 59.9)));
 
   // Real vision output: 90 frames of a 5 Hz vertical motion through the PS chain.

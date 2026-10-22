@@ -67,28 +67,6 @@ void Ui::iconButton(const Rect& r, Icon icon, const Enable& enabled, const UiAct
   hit(r, a, enabled);
 }
 
-void Ui::switchButton(const Rect& r, const std::string& label, Icon icon, uint32_t color, bool on,
-                      const Enable& enabled, const UiAction& a, int fontPx) {
-  const bool down = enabled && pressed(r);
-  const bool lit = on && enabled;
-  if (lit) {
-    fillRoundRect(c, r.x, r.y, r.w, r.h, 10, kCard);
-    fillRoundRect(c, r.x, r.y, r.w, r.h, 10, color, down ? 96 : 60);
-    strokeRoundRect(c, r.x, r.y, r.w, r.h, 10, 1, color, 170);
-  } else {
-    fillRoundRect(c, r.x, r.y, r.w, r.h, 10, enabled ? (down ? kNeutral : kCardHi) : kDisabled);
-    strokeRoundRect(c, r.x, r.y, r.w, r.h, 10, 1, kBorder);
-  }
-  const uint32_t ic = !enabled ? kText3 : (lit ? color : kText2);
-  const uint32_t tc = !enabled ? kText3 : (lit ? mixColor(color, 0xFFFFFF, 120) : kText);
-  const FontFace& font = fontFace(fontPx, true);
-  const int isz = fontPx + 2, gap = 10, tw = textWidth(font, label);
-  const int x0 = r.x + (r.w - (isz + gap + tw)) / 2;
-  drawIcon(c, icon, x0 + isz / 2.f, r.y + r.h / 2.f, static_cast<float>(isz), ic);
-  drawText(c, font, x0 + isz + gap, r.y + (r.h - font.lineHeight) / 2, label, tc);
-  hit(r, a, enabled);
-}
-
 void Ui::chip(const Rect& r, const std::string& label, bool selected, const Enable& enabled, const UiAction& a) {
   uint32_t f = selected ? (enabled ? kAccent : kAccentDim) : kCardHi;
   if (enabled && pressed(r)) f = mixColor(f, 0xFFFFFF, 40);

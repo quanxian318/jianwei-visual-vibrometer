@@ -426,6 +426,8 @@ void MeasurementEngine::run() {
   int64_t captureStartNs = 0;
   int64_t fpsWindowStart = monoNs();
   int fpsFrames = 0;
+  int64_t procNs = 0;  // measurement work in the current fps window
+  int procFrames = 0;
   int failures = 0;
   while (running_) {
     // Cancellation must work even when the camera has stopped delivering frames.
@@ -474,8 +476,11 @@ void MeasurementEngine::run() {
     if (now - fpsWindowStart >= 1000000000LL) {
       std::lock_guard<std::mutex> lock(mutex_);
       live_.fps = fpsFrames * 1e9 / static_cast<double>(now - fpsWindowStart);
+      live_.procMs = procFrames ? procNs * 1e-6 / procFrames : 0;
       fpsWindowStart = now;
       fpsFrames = 0;
+      procNs = 0;
+      procFrames = 0;
     }
     {
       std::lock_guard<std::mutex> lock(mutex_);
@@ -589,10 +594,13 @@ void MeasurementEngine::run() {
     }
     if (state_ != State::kCapturing) continue;
     if (mpActive) {
+      const int64_t t0 = monoNs();
       const uint32_t before = mpt.frames();
       const bool analysed = mpt.push(frame);
       mp_.add(frame, mpt, mpt.frames() != before);
       if (analysed) mp_.windows.push_back(mpt.lastWindow());
+      procNs += monoNs() - t0;
+      procFrames++;
       const double elapsed = (frame.timestampNs - captureStartNs) * 1e-9;
       {
         int tracked = 0;
@@ -647,10 +655,13 @@ void MeasurementEngine::run() {
       }
       continue;
     }
+    const int64_t t0 = monoNs();
     const CaptureSample s = tracker.track(frame);
     samples_.push_back(s);
     if (refActive) refSamples_.push_back(refTracker.track(frame));
     if (cfg.fieldSpectrum) field_.add(frame.pixels.data(), frame.width, frame.height);
+    procNs += monoNs() - t0;
+    procFrames++;
     const double elapsed = (frame.timestampNs - captureStartNs) * 1e-9;
     {
       std::lock_guard<std::mutex> lock(mutex_);

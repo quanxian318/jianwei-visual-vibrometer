@@ -292,6 +292,22 @@ void renderVisionPage(Ui& ui, const UiData& d) {
       ui.chip(Rect{cx0 + i * 90, r3, 82, 36}, buf, s.settings.visionGain == kGains[i], gainOk, cmdAction(g));
     }
   }
+
+  // Processed image: size, rate and work per frame (amber when the work takes longer than a frame).
+  const bool have = view == 2 ? haveDepth : haveVision;
+  const int sx = cr.x + cr.w - 186, vx = sx + 70;
+  c.fillRect(sx - 18, r1, 1, r3 + 36 - r1, kBorder);
+  auto stat = [&](int y, const char* name, const std::string& value, uint32_t col) {
+    drawText(c, fontFace(14), sx, y + 10, name, kText3);
+    drawText(c, fontFace(18), vx, y + 6, value, col);
+  };
+  const double fps = !have ? 0 : (view == 2 ? dm->fps : v.fps), ms = !have ? 0 : (view == 2 ? dm->procMs : v.procMs);
+  snprintf(buf, sizeof(buf), "%d×%d", !have ? 0 : (view == 2 ? dm->w : v.w), !have ? 0 : (view == 2 ? dm->h : v.h));
+  stat(r1, "像素", have ? buf : "--", kText);
+  snprintf(buf, sizeof(buf), "%.1f fps", fps);
+  stat(r2, "帧率", have ? buf : "--", kText);
+  snprintf(buf, sizeof(buf), "%.2f ms", ms);
+  stat(r3, "每帧处理", have ? buf : "--", ms * fps > 1000 ? kAmber : kText);
 }
 
 }  // namespace vm

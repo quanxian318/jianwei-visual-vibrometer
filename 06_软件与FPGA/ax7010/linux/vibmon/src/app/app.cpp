@@ -1501,6 +1501,7 @@ JsonValue Application::stateJson() {
     m.set("frame_height", live.frameH);
     m.set("frames", static_cast<unsigned long>(live.frameCount));
     m.set("fps", live.fps);
+    m.set("proc_ms", live.procMs);
     JsonValue vision = JsonValue::makeObject();
     vision.set("backend", live.vision.backend);
     vision.set("width", live.vision.w);

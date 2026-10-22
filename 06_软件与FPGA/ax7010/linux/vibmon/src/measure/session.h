@@ -154,6 +154,7 @@ class MeasurementEngine {
     std::string source;
     std::string error;
     double elapsedS = 0, durationS = 0, fps = 0;
+    double procMs = 0;  // measurement work per frame while capturing (mean over the last second), else 0
     double lastDisp = 0, lastScore = 0;
     std::vector<float> recent;  // recent displacement samples (pixels)
     int frameW = 0, frameH = 0;

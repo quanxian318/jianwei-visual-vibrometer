@@ -340,6 +340,22 @@ void renderLivePage(Ui& ui, const UiData& d) {
     ui.iconButton(plus, Icon::kPlus, Enable(s.zoom < 7.99, "已是最大倍率"), cmdAction(zin), 0x1A2430);
     ui.iconButton(fit, Icon::kFit, Enable(s.zoom > 1.01, "已是原始大小"), cmdAction("zoom_reset"), 0x1A2430);
   }
+  if (live.frameW > 0) {
+    // Frame size and rate; while capturing also the measurement work per frame, amber when it
+    // takes longer than a frame interval (frames would be dropped).
+    const FontFace& f = fontFace(14);
+    snprintf(buf, sizeof(buf), "%d×%d · %.1f fps", live.frameW, live.frameH, live.fps);
+    const std::string frameInfo = buf;
+    std::string work;
+    if (capturing && live.procMs > 0) {
+      snprintf(buf, sizeof(buf), " · 每帧处理 %.1f ms", live.procMs);
+      work = buf;
+    }
+    const int w = textWidth(f, frameInfo) + textWidth(f, work) + 20;
+    fillRoundRect(c, pc.x + 12, pc.y + pc.h - 36, w, 24, 12, 0x05080C, 190);
+    const int x = drawText(c, f, pc.x + 22, pc.y + pc.h - 34, frameInfo, kText2);
+    drawText(c, f, x, pc.y + pc.h - 34, work, live.procMs * live.fps > 1000 ? kAmber : kText2);
+  }
 
   // Live displacement.
   {
@@ -474,19 +490,19 @@ void renderLivePage(Ui& ui, const UiData& d) {
     JsonValue light = JsonValue::makeObject();
     light.set("cmd", "light");
     light.set("on", !s.lightOn);
-    ui.switchButton(Rect{rx, y0, bw, bh}, s.lightOn ? "关闭照明" : "打开照明", Icon::kBulb, kAmber, s.lightOn,
-                    unless(lightBlock(s)), cmdAction(light));
+    ui.button(Rect{rx, y0, bw, bh}, s.lightOn ? "关闭照明" : "打开照明", Icon::kBulb, s.lightOn ? kAmber : kNeutral,
+              unless(lightBlock(s)), cmdAction(light), 18);
     JsonValue laser = JsonValue::makeObject();
     laser.set("cmd", "laser");
     laser.set("on", !s.laserOn);
-    ui.switchButton(Rect{rx + bw + 8, y0, bw, bh}, s.laserOn ? "关闭投影" : "十字投影", Icon::kLaser, kRed, s.laserOn,
-                    unless(laserBlock(s)), cmdAction(laser));
+    ui.button(Rect{rx + bw + 8, y0, bw, bh}, s.laserOn ? "关闭投影" : "十字投影", Icon::kLaser,
+              s.laserOn ? kRed : kNeutral, unless(laserBlock(s)), cmdAction(laser), 18);
     const bool alarm = s.alarmLevel == AlarmLevel::kWarn || s.alarmLevel == AlarmLevel::kAlarm;
-    ui.switchButton(Rect{rx, y0 + bh + 8, bw, bh}, "报警静音", Icon::kBellOff, kAmber, false,
-                    unless(!alarm ? "当前没有报警" : (s.alarmMuted ? "报警已静音" : "")), cmdAction("mute"));
-    ui.switchButton(Rect{rx + bw + 8, y0 + bh + 8, bw, bh}, ui.st.liveHeat ? "关闭热力" : "振动热力", Icon::kHeat,
-                    kViolet, ui.st.liveHeat,
-                    Enable(live.vision.w > 0, live.cameraOk ? "视觉处理未运行" : "相机未就绪"), uiAction("live_heat"));
+    ui.button(Rect{rx, y0 + bh + 8, bw, bh}, "报警静音", Icon::kBellOff, kNeutral,
+              unless(!alarm ? "当前没有报警" : (s.alarmMuted ? "报警已静音" : "")), cmdAction("mute"), 18);
+    ui.button(Rect{rx + bw + 8, y0 + bh + 8, bw, bh}, ui.st.liveHeat ? "关闭热力" : "振动热力", Icon::kHeat,
+              ui.st.liveHeat ? kViolet : kNeutral,
+              Enable(live.vision.w > 0, live.cameraOk ? "视觉处理未运行" : "相机未就绪"), uiAction("live_heat"), 18);
   }
 }
 

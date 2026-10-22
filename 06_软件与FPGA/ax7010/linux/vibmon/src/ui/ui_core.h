@@ -133,9 +133,6 @@ class Ui {
               const UiAction& a, int fontPx = 22);
   void iconButton(const Rect& r, Icon icon, const Enable& enabled, const UiAction& a, uint32_t fill = theme::kNeutral);
   void chip(const Rect& r, const std::string& label, bool selected, const Enable& enabled, const UiAction& a);
-  // Quick-action button: neutral, tinted with color while its output is on.
-  void switchButton(const Rect& r, const std::string& label, Icon icon, uint32_t color, bool on,
-                    const Enable& enabled, const UiAction& a, int fontPx = 18);
   void toggle(const Rect& r, bool on, const Enable& enabled, const UiAction& a);
   void stepper(const Rect& r, const std::string& value, const Enable& decOk, const Enable& incOk,
                const UiAction& dec, const UiAction& inc);
