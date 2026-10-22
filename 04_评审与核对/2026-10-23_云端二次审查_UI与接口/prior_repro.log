@@ -1,3 +1,0 @@
-multipoint_gap: valid=1 dropped=3 spectrum_valid=0 rms=0 reason=
-noise_frequency: valid=1 peak_clear=0 peak_snr=3.06372 frequency=13.9556
-repeat_depth_correction: ok=1/1 cx=618 -> 598 -> 578 error=

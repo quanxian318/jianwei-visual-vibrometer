@@ -1,3 +1,0 @@
-== sd_tone_1200w.txt
-PASS pdm_mic: 1200 words, overflow freeze and gap, kill, both phases
-/mnt/d/codex/2026-10-13/pcb-12v-5a-5-5-2/work/review_cloud_20261023_round2/06_软件与FPGA/ax7010/pl/audio/sim/tb_pdm_mic.v:268: $finish called at 24052750000 (1ps)

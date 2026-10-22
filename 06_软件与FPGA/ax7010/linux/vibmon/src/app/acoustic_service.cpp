@@ -427,10 +427,24 @@ AcousticService::Status AcousticService::status() {
   return s;
 }
 
-void AcousticService::beginCapture() {
+void AcousticService::beginCapture(double durationS) {
   std::lock_guard<std::mutex> lock(mutex_);
   capturing_ = true;
   if (state_ == State::kReady) state_ = State::kCapturing;
+  // The window must still be held when the capture has been analysed: the
+  // capture plus 10 % and 15 s (reader lead, video analysis).
+  const double fs = src_->sampleRate() > 0 ? src_->sampleRate() : 31250;
+  const uint64_t need = static_cast<uint64_t>((durationS * 1.1 + 15) * fs);
+  const uint64_t cap = ring_.size();
+  if (need <= cap) return;
+  std::vector<int16_t> bigger(static_cast<size_t>(need), 0);
+  if (haveData_) {
+    const uint64_t oldest = std::max<uint64_t>(first_, end_ > cap ? end_ - cap : 0);
+    for (uint64_t i = oldest; i < end_; ++i) bigger[i % need] = ring_[i % cap];
+    first_ = oldest;  // nothing older is held, however large the ring now is
+  }
+  ring_.swap(bigger);
+  LOGI(kTag, "ring grown to %.0f s for a %.0f s capture", need / fs, durationS);
 }
 
 void AcousticService::cancelCapture() {

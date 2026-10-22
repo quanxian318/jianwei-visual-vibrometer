@@ -5,6 +5,7 @@
 #include <unistd.h>
 
 #include <algorithm>
+#include <atomic>
 #include <cmath>
 #include <cstdio>
 #include <cstdlib>
@@ -350,7 +351,7 @@ void testService() {
     CHECK(st.lr == "VDD" && hw.phase);
     CHECK_NEAR(st.sampleRate, 31250, 30);  // the PL clock measured against CLOCK_MONOTONIC
     CHECK_NEAR(st.pdmClockHz, 2e6, 2000);
-    svc.beginCapture();
+    svc.beginCapture(2);
     CHECK(svc.status().state == AcousticService::State::kCapturing);
     const int64_t t0 = monoNs();
     sleepMs(2400);
@@ -379,6 +380,42 @@ void testService() {
     // A window older than the stream.
     const AcousticService::Window old = svc.endCapture(t0 - 20000000000LL, t0 - 18000000000LL);
     CHECK(!old.available && old.reason == "not_buffered");
+    svc.stop();
+  }
+  // A 60 s capture with the default 60 s ring: the ring grows when the capture
+  // starts, so the whole window is still held when it ends.
+  {
+    struct Burst : PcmSource {
+      std::atomic<bool>* go;
+      bool sent = false;
+      explicit Burst(std::atomic<bool>* g) : go(g) {}
+      bool start(StartError&) override { return true; }
+      void stop() override {}
+      bool read(std::vector<Block>& out, std::string&) override {
+        if (sent || !*go) return true;
+        Block b;
+        b.pcm.assign(1878125, 200);  // 60.1 s at once
+        b.anchored = true;
+        b.anchorNs = 1000000000LL;
+        out.push_back(std::move(b));
+        sent = true;
+        return true;
+      }
+      double sampleRate() const override { return 31250; }
+      double pdmClockHz() const override { return 2e6; }
+      std::string describe() const override { return "burst"; }
+      std::string lr() const override { return "GND"; }
+      uint32_t clipped() override { return 0; }
+    };
+    std::atomic<bool> go{false};
+    AcousticOptions o;
+    AcousticService svc(o, std::unique_ptr<PcmSource>(new Burst(&go)));
+    svc.start();
+    svc.beginCapture(60);
+    go = true;
+    for (int n = 0; n < 200 && svc.status().samples < 1878125; ++n) sleepMs(10);
+    const AcousticService::Window w = svc.endCapture(1000000000LL, 61000000000LL, 0);
+    CHECK(w.available && w.pcm.size() == 1875000);
     svc.stop();
   }
   // No module: the pull-up in both halves; not connected rather than a fault.

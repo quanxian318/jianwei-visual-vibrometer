@@ -55,7 +55,7 @@ struct AcousticOptions {
   uint64_t base = 0x44030000; // pdm_mic AXI base
   std::string phase = "auto"; // auto | low (L/R = GND) | high (L/R = VDD)
   int warmupMs = 50;          // PL warm-up after the clock starts (chip 10 ms + filter)
-  double ringS = 60;          // PCM kept for measurement windows
+  double ringS = 60;          // PCM kept; a longer capture grows the ring when it starts
   int pollMs = 10;
   double synthHz = 10.84;     // synthetic source: modulation frequency
   AcousticConfig analysis;
@@ -90,8 +90,9 @@ class AcousticService {
   Status status();
   static const char* stateName(State s);
 
-  // A measurement starts: windows of this capture are reported, the state is "capturing".
-  void beginCapture();
+  // A measurement of durationS starts: the ring grows if it could not hold the
+  // whole window until the capture is analysed; the state is "capturing".
+  void beginCapture(double durationS);
   void cancelCapture();
   struct Window {
     bool available = false;

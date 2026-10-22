@@ -660,7 +660,7 @@ bool Application::startMeasurement(double durationS, bool baseline, std::string&
   acousticCapture_ = acousticRecord_;
   voiceHeld_ = 0;
   if (acousticCapture_) {
-    acoustic_->beginCapture();
+    acoustic_->beginCapture(mc.durationS);
     if (!lastVoiceJob_.empty() && nano_->online()) {  // a prompt still playing would be in the window
       JsonValue p = JsonValue::makeObject();
       p.set("job_id", lastVoiceJob_);
