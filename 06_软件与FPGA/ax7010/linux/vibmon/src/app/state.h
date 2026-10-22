@@ -18,10 +18,13 @@ struct ResultSummary {
   std::string reason;
   std::string unit = "px";  // mm when calibrated
   double dominantHz = 0, peakToPeak = 0, rms = 0, peak = 0;
+  bool peakClear = true;     // a clear spectral line; else dominantHz is only the largest bin
   double fps = 0;
   std::string method = "roi";
   int points = 0, passedPoints = 0;  // multipoint: grid points, points above the baseline
   double pointRmsPx = 0;             // multipoint: median RMS of the points above the baseline
+  bool waveformValid = true;         // multipoint: the representative waveform passed its checks
+  std::string waveformReason;        // multipoint: why it did not
   uint32_t dropped = 0;
   AlarmLevel level = AlarmLevel::kUnknown;
   bool saved = false;

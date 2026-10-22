@@ -91,12 +91,16 @@ class StereoService {
   void setPaused(bool paused) { paused_ = paused; }
   // Moves the right image by offsetPx (calibration-size pixels, positive
   // shrinks every disparity), saves it in the calibration file under a new
-  // id ending in "-dist<tag>" and uses it from the next pair on.
-  bool correctOffset(double offsetPx, const std::string& tag, std::string& err);
+  // id ending in "-dist<tag>" and uses it from the next pair on. offsetPx was
+  // measured on a depth map of calibration version mapVersion: a map made
+  // before the last correction does not show it yet and is refused
+  // (err = "depth_stale"), so a repeated tap cannot apply one offset twice.
+  bool correctOffset(double offsetPx, uint64_t mapVersion, const std::string& tag, std::string& err);
   // Called from the camera thread with every left frame; cheap when not due.
   void offerLeft(const GrayFrame& f);
   Stats stats();
   StereoCalibration calibration();  // a copy: the work thread may replace it
+  uint64_t calibrationVersion();    // newest calibration, a pending correction included
 
   // Processes one pair synchronously (used by the thread and by tests).
   std::shared_ptr<DepthMap> process(const GrayFrame& left, const GrayFrame& right);
@@ -112,6 +116,8 @@ class StereoService {
   std::mutex calibMutex_;  // calib_ writes and reads from other threads; pending correction
   StereoCalibration pendingCalib_;
   bool calibChanged_ = false;
+  uint64_t calibVersion_ = 0;   // newest calibration (calibMutex_)
+  uint64_t activeVersion_ = 0;  // calibration of calib_ (work thread)
   RectifyMap mapL_, mapR_;
   TemporalDisparityFilter temporal_;
   int mapSrcW_ = 0, mapSrcH_ = 0;

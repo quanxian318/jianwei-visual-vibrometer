@@ -364,6 +364,7 @@ std::string errorText(const std::string& code) {
       {"no_depth", "暂无深度图"},             {"no_depth_at_point", "该点没有有效深度"},
       {"offset_too_large", "偏差过大，检查距离和选点"}, {"stereo_off", "双目未启用"},
       {"no_calibration", "没有双目标定"},
+      {"depth_stale", "上次校正尚未生效，请等新的深度图"},
       {"lights_on", "照明或激光开启中"},            {"nano_offline", "协处理器离线"},
       {"shutting_down", "正在关机"},          {"busy", "打印机忙"},
       {"invalid_value", "设置值无效"},        {"save_failed", "设置未能保存"},

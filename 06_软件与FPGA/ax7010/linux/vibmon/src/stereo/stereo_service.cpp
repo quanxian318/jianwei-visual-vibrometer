@@ -111,8 +111,18 @@ StereoCalibration StereoService::calibration() {
   return calibChanged_ ? pendingCalib_ : calib_;
 }
 
-bool StereoService::correctOffset(double offsetPx, const std::string& tag, std::string& err) {
-  StereoCalibration c = calibration();
+uint64_t StereoService::calibrationVersion() {
+  std::lock_guard<std::mutex> lock(calibMutex_);
+  return calibVersion_;
+}
+
+bool StereoService::correctOffset(double offsetPx, uint64_t mapVersion, const std::string& tag, std::string& err) {
+  std::lock_guard<std::mutex> lock(calibMutex_);
+  if (mapVersion != calibVersion_) {
+    err = "depth_stale";
+    return false;
+  }
+  StereoCalibration c = calibChanged_ ? pendingCalib_ : calib_;
   if (!c.valid) {
     err = "no_calibration";
     return false;
@@ -122,9 +132,9 @@ bool StereoService::correctOffset(double offsetPx, const std::string& tag, std::
   c.id = (at == std::string::npos ? c.id : c.id.substr(0, at)) + "-dist" + tag;
   if (!saveRightPrincipalX(cfg_.calibrationFile, c.right.K[2], c.id, err)) return false;
   LOGI(kTag, "right image moved by %.2f px (cx %.2f), calibration %s", offsetPx, c.right.K[2], c.id.c_str());
-  std::lock_guard<std::mutex> lock(calibMutex_);
   pendingCalib_ = c;
   calibChanged_ = true;
+  ++calibVersion_;
   return true;
 }
 
@@ -134,6 +144,7 @@ std::shared_ptr<DepthMap> StereoService::process(const GrayFrame& left, const Gr
     std::lock_guard<std::mutex> lock(calibMutex_);
     if (calibChanged_) {  // new rectification: maps and the temporal history start over
       calib_ = pendingCalib_;
+      activeVersion_ = calibVersion_;
       calibChanged_ = false;
       mapSrcW_ = mapSrcH_ = 0;
       temporal_.reset();
@@ -210,6 +221,7 @@ std::shared_ptr<DepthMap> StereoService::process(const GrayFrame& left, const Gr
   d->monoNs = left.timestampNs;
   d->pairSkewMs = std::llabs(left.timestampNs - right.timestampNs) * 1e-6;
   d->calibrationId = calib_.id;
+  d->calibrationVersion = activeVersion_;
   d->focalPx = rectifiedFocalPx(calib_, cfg_.workWidth);
   d->baselineMm = calib_.baselineMm;
   d->mm.assign(disp.q4.size(), 0);

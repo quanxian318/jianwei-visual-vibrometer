@@ -132,6 +132,9 @@ struct ResultInfo {
   std::string method = "roi";
   int points = 0, passed = 0;  // multipoint
   double pointRms = 0;
+  bool waveformOk = true;      // multipoint: the representative waveform passed its checks
+  std::string waveformReason;
+  bool clear = true;           // a clear dominant line (else freq is only the largest bin)
   ResultSummary acoustic;      // acoustic* fields only
   double freq = 0, pp = 0, rms = 0, peak = 0, fps = 0;
   unsigned long dropped = 0;
@@ -159,6 +162,7 @@ ResultInfo fromRecord(const RecordView& v) {
   r.unit = jStr(res, "unit", "px");
   const bool mm = r.unit == "mm";
   r.freq = jNum(res, "dominant_frequency_hz", 0);
+  r.clear = jBool(res, "peak_clear", true);
   r.pp = jNum(res, mm ? "displacement_peak_to_peak_mm" : "displacement_peak_to_peak_px", 0);
   r.rms = jNum(res, mm ? "displacement_rms_mm" : "displacement_rms_px", 0);
   r.peak = jNum(res, mm ? "spectral_peak_mm" : "spectral_peak_px", 0);
@@ -180,6 +184,8 @@ ResultInfo fromRecord(const RecordView& v) {
   r.points = mp.points;
   r.passed = mp.passedPoints;
   r.pointRms = mp.pointRmsPx;
+  r.waveformOk = mp.waveformValid;
+  r.waveformReason = mp.waveformReason;
   readAcousticSummary(rec, r.acoustic);
   return r;
 }
@@ -195,6 +201,7 @@ ResultInfo fromState(const SystemState& s) {
   r.reason = l.reason;
   r.unit = l.unit;
   r.freq = l.dominantHz;
+  r.clear = l.peakClear;
   r.pp = l.peakToPeak;
   r.rms = l.rms;
   r.peak = l.peak;
@@ -208,6 +215,8 @@ ResultInfo fromState(const SystemState& s) {
   r.points = l.points;
   r.passed = l.passedPoints;
   r.pointRms = l.pointRmsPx;
+  r.waveformOk = l.waveformValid;
+  r.waveformReason = l.waveformReason;
   r.acoustic = l;
   return r;
 }
@@ -605,17 +614,20 @@ void renderResultPage(Ui& ui, const UiData& d) {
     const bool mp = r.method == "multipoint";
     const char* labels[3] = {"主频", mp ? "超过基线测点" : "峰峰值", mp ? "测点 RMS" : "有效值"};
     snprintf(buf, sizeof(buf), "%d/%d", r.passed, r.points);
-    const std::string values[3] = {fmtNum(r.freq, 4), mp ? std::string(buf) : fmtNum(r.pp, 3),
-                                   fmtNum(mp ? r.pointRms : r.rms, 3)};
-    const std::string units[3] = {"Hz", mp ? "" : r.unit, r.unit};
+    const std::string values[3] = {r.clear ? fmtNum(r.freq, 4) : std::string("无明确"),
+                                   mp ? std::string(buf) : fmtNum(r.pp, 3), fmtNum(mp ? r.pointRms : r.rms, 3)};
+    const std::string units[3] = {r.clear ? "Hz" : "", mp ? "" : r.unit, r.unit};
     static const uint32_t kKpi[3] = {kAccent, kGreen, kViolet};
     for (int i = 0; i < 3; ++i) {
       const Rect k{kCx + i * (kw + 8), kCy, kw, kh};
       ui.card(k);
       fillCircle(c, k.x + 21.f, k.y + 21.f, 4, kKpi[i]);
       drawText(c, fontFace(18), k.x + 32, k.y + 10, labels[i], kText2);
+      // The 44 px face is digits and Latin only.
+      const bool ascii = std::all_of(values[i].begin(), values[i].end(),
+                                     [](char ch) { return static_cast<unsigned char>(ch) < 0x80; });
       const bool fits =
-          textWidth(fontFace(44, true), values[i]) + 6 + textWidth(fontFace(18), units[i]) <= k.w - 28;
+          ascii && textWidth(fontFace(44, true), values[i]) + 6 + textWidth(fontFace(18), units[i]) <= k.w - 28;
       const int vx = drawText(c, fontFace(fits ? 44 : 32, true), k.x + 14, k.y + (fits ? 38 : 48), values[i], kText);
       drawText(c, fontFace(18), vx + 6, k.y + 64, units[i], kText2);
     }
@@ -646,7 +658,9 @@ void renderResultPage(Ui& ui, const UiData& d) {
     const FontFace& lf = textWidth(fontFace(32, true), levelText(r.level)) <= bw - 12 ? fontFace(32, true)
                                                                                     : fontFace(22, true);
     fillRoundRect(c, k.x + 16, k.y + 42, bw, 46, 12, col, r.level == AlarmLevel::kUnknown ? 60 : 255);
-    drawTextCentered(c, lf, k.x + 16 + bw / 2, k.y + 44 + (46 - lf.lineHeight) / 2, levelText(r.level),
+    int inkTop = 0, inkBottom = 0;
+    textInk(lf, levelText(r.level), inkTop, inkBottom);
+    drawTextCentered(c, lf, k.x + 16 + bw / 2, k.y + 42 + (46 - (inkBottom - inkTop)) / 2 - inkTop, levelText(r.level),
                      r.level == AlarmLevel::kUnknown ? kText2 : 0xFFFFFF);
     drawText(c, f14, k.x + 16 + bw + 14, k.y + 46, l1, kText2);
     drawText(c, f14, k.x + 16 + bw + 14, k.y + 66, l2, kText2);
@@ -661,6 +675,7 @@ void renderResultPage(Ui& ui, const UiData& d) {
       line += buf;
     }
     if (r.unit != "mm" && r.method != "multipoint") line += "  ·  未标定，结果为像素";
+    if (r.method == "multipoint" && !r.waveformOk) line += "  ·  代表测点波形无效：" + reasonText(r.waveformReason);
     uint32_t acol;
     const std::string ac = acousticClause(r.acoustic, acol);
     const FontFace& f14 = fontFace(14);
@@ -710,7 +725,7 @@ void renderResultPage(Ui& ui, const UiData& d) {
         o.markerX = r.acoustic.acousticHz;
         o.markerLabel = "声学 " + fmtNum(r.acoustic.acousticHz, 4) + " Hz";
       }
-      if (r.valid && r.freq > 0) {
+      if (r.valid && r.clear && r.freq > 0) {
         o.refX = r.freq;
         o.refLabel = "视觉 " + fmtNum(r.freq, 4) + " Hz";
       }
@@ -730,8 +745,14 @@ void renderResultPage(Ui& ui, const UiData& d) {
       }
       if (r.valid && r.freq > 0) {
         o.markerX = r.freq;
-        snprintf(buf, sizeof(buf), "%s Hz · %s %s", fmtNum(r.freq, 4).c_str(), fmtNum(r.peak, 3).c_str(),
-                 r.unit.c_str());
+        if (!r.clear) {
+          snprintf(buf, sizeof(buf), "最大峰 %s Hz · 不明确", fmtNum(r.freq, 4).c_str());
+        } else if (!r.waveformOk) {
+          snprintf(buf, sizeof(buf), "%s Hz", fmtNum(r.freq, 4).c_str());
+        } else {
+          snprintf(buf, sizeof(buf), "%s Hz · %s %s", fmtNum(r.freq, 4).c_str(), fmtNum(r.peak, 3).c_str(),
+                   r.unit.c_str());
+        }
         o.markerLabel = buf;
       }
     }

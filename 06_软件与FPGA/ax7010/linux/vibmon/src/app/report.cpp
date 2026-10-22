@@ -50,11 +50,19 @@ Canvas renderReport(const ReportData& d, int width) {
     y += big.lineHeight + 2;
     snprintf(buf, sizeof(buf), "测点 RMS %.4g px (图像平面)", r.pointRmsPx);
     line(buf);
+    if (!r.waveformValid) line("代表测点波形无效: " + r.waveformReason);
     line("多点测振: 与停机基线比较, 不判级");
   } else {
-    snprintf(buf, sizeof(buf), "主频 %.2f Hz", r.dominantHz);
-    drawText(c, big, 2, y, buf, black);
-    y += big.lineHeight + 2;
+    if (r.peakClear) {
+      snprintf(buf, sizeof(buf), "主频 %.2f Hz", r.dominantHz);
+      drawText(c, big, 2, y, buf, black);
+      y += big.lineHeight + 2;
+    } else {
+      drawText(c, big, 2, y, "无明确主频", black);
+      y += big.lineHeight + 2;
+      snprintf(buf, sizeof(buf), "最大谱峰 %.2f Hz (不足以判为主频)", r.dominantHz);
+      line(buf);
+    }
     snprintf(buf, sizeof(buf), "峰峰值 %.4g %s", r.peakToPeak, r.unit.c_str());
     drawText(c, big, 2, y, buf, black);
     y += big.lineHeight + 2;

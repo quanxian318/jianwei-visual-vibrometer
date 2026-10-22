@@ -117,6 +117,8 @@ with tempfile.TemporaryDirectory(prefix='vibmon-regression-') as temp:
                 last = app.result()
                 rec = json.loads((d / 'records' / last['measurement_id'] / 'record.json').read_text())
                 check(rec['point_id'] == 'A' and last['valid'], 'record keeps the point selected at capture start')
+                check(last['peak_clear'] is True and rec['result']['peak_clear'] is True,
+                      'a clean line is reported as a clear dominant frequency')
                 check((rec['roi']['w'], rec['roi']['h']) == (80, 40), 'capture tracks the box size set by the operator')
             elif name == 'pixel':
                 check(app.cmd('status')['data']['alarm_level'] == '未判级', 'startup has no normal vibration judgment')

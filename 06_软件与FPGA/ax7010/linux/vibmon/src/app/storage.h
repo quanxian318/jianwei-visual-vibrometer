@@ -82,6 +82,8 @@ void readMultiPointSummary(const JsonValue& result, ResultSummary& s);
 struct RecordSummary {
   std::string id, startLocal, pointId, pointName, reason, unit;
   bool valid = false;
+  bool peakClear = true;   // false: dominantHz is only the largest bin
+  bool amplitudes = true;  // false: peak-to-peak and RMS unknown (multi-point waveform invalid)
   double dominantHz = 0, peakToPeak = 0, rms = 0;
   AlarmLevel level = AlarmLevel::kUnknown;
 };

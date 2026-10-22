@@ -1,5 +1,6 @@
 #include "gfx/font.h"
 
+#include <algorithm>
 #include <cstdlib>
 
 namespace vm {
@@ -64,6 +65,21 @@ int textWidth(const FontFace& f, const std::string& utf8) {
     if (g) w += g->advance;
   }
   return w;
+}
+
+void textInk(const FontFace& f, const std::string& utf8, int& top, int& bottom) {
+  top = f.lineHeight;
+  bottom = 0;
+  for (size_t i = 0; i < utf8.size();) {
+    const FontGlyph* g = glyphOrFallback(f, nextCodepoint(utf8, i));
+    if (!g || g->h == 0) continue;
+    top = std::min(top, static_cast<int>(g->yoff));
+    bottom = std::max(bottom, g->yoff + g->h);
+  }
+  if (bottom <= top) {
+    top = 0;
+    bottom = f.lineHeight;
+  }
 }
 
 int drawText(Canvas& c, const FontFace& f, int x, int y, const std::string& utf8, uint32_t color) {

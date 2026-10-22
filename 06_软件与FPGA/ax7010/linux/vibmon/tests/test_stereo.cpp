@@ -245,15 +245,23 @@ void testCalibrationAndService() {
   CHECK(distanceOffsetPx(*o, off.calibration().width, 0.6, 0.5, 1000, shift, err));
   CHECK_NEAR(shift, 4, 0.2);
   CHECK(!distanceOffsetPx(*o, off.calibration().width, 0.6, 0.5, 0, shift, err));
-  CHECK(off.correctOffset(shift, "1000", err));
+  CHECK(off.correctOffset(shift, o->calibrationVersion, "1000", err));
+  // The same map again (a second tap before a new pair): it does not show the
+  // correction yet, so the offset is not applied twice.
+  CHECK(!off.correctOffset(shift, o->calibrationVersion, "1000", err) && err == "depth_stale");
   off.process(toFrame(l, 2000), toFrame(r, 2000));
   auto fixed = off.process(toFrame(l, 3000), toFrame(r, 3000));
+  CHECK(fixed->calibrationVersion == off.calibrationVersion() && fixed->calibrationVersion != o->calibrationVersion);
   CHECK(stereoScaleAt(*fixed, 0.6, 0.5, 0.1, 0.1, 300, mmPerPx, z));
   CHECK_NEAR(z, 1000, 15);
   StereoCalibration saved;
   CHECK(loadStereoCalibration(path, saved, err));
   CHECK_NEAR(saved.right.K[2], 160 - shift, 1e-6);
   CHECK(saved.id.size() >= 9 && saved.id.compare(saved.id.size() - 9, 9, "-dist1000") == 0);
+  // On a map of the corrected calibration the next correction is accepted (and small).
+  double again = 0;
+  CHECK(distanceOffsetPx(*fixed, off.calibration().width, 0.6, 0.5, 1000, again, err));
+  CHECK(std::fabs(again) < 0.5 && off.correctOffset(again, fixed->calibrationVersion, "1000", err));
 
   // Without calibration the service never publishes millimetres.
   StereoConfig nc;

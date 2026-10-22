@@ -117,6 +117,10 @@ struct MeasureResult {
     std::vector<uint8_t> valid, gate;
     int passed = 0;
     int representative = -1;
+    // The representative point's own analysis (gaps, tracking, spectrum):
+    // decides its amplitudes and plots, not the windows' frequency.
+    bool waveformValid = false;
+    std::string waveformReason;
   } multipoint;
 };
 

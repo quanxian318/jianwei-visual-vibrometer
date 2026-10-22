@@ -272,15 +272,15 @@ void renderVisionPage(Ui& ui, const UiData& d) {
                        std::fabs(s.settings.visionHighHz - kBands[i][1]) < 1e-6;
       ui.chip(Rect{cx0 + i * 118, r2, 110, 36}, buf, sel, true, cmdAction(j));
     }
-    const bool follow = s.last.have && s.last.valid && s.last.dominantHz > 0;
+    const bool follow = s.last.have && s.last.valid && s.last.peakClear && s.last.dominantHz > 0;
     JsonValue j = JsonValue::makeObject();
     j.set("cmd", "set");
     if (follow) {
       j.set("vision_low_hz", std::max(0.2, s.last.dominantHz * 0.7));
       j.set("vision_high_hz", s.last.dominantHz * 1.4);
     }
-    ui.chip(Rect{cx0 + 4 * 118, r2, 110, 36}, "跟随主频", false, Enable(follow, "需要先有一次有效测量"),
-            cmdAction(j));
+    ui.chip(Rect{cx0 + 4 * 118, r2, 110, 36}, "跟随主频", false,
+            Enable(follow, s.last.have && s.last.valid ? "上次测量没有明确主频" : "需要先有一次有效测量"), cmdAction(j));
     label(lx, r3, "放大");
     const Enable gainOk(view == 0, "放大倍数只用于运动放大");
     static const int kGains[4] = {5, 10, 20, 50};

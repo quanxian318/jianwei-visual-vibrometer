@@ -313,9 +313,14 @@ MeasureResult analyzeMultiPoint(const MultiPointCapture& c, const MeasureConfig&
   pc.mmPerPx = 0;
   pc.calibrationId.clear();
   MeasureResult r = analyzeCapture(s, pc, nominalFps);
+  m.waveformValid = r.valid;
+  m.waveformReason = r.valid ? std::string() : r.reason;
   r.method = "multipoint";
   r.tracker = "multipoint";
+  // Valid with signal windows, whose frequency is the result; the waveform
+  // keeps its own validity above.
   r.valid = m.signalWindows > 0;
+  r.peakClear = r.valid;
   if (r.valid) {
     r.reason.clear();
     r.dominantHz = m.frequencyHz;

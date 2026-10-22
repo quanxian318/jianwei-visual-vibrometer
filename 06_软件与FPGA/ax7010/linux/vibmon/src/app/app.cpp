@@ -808,6 +808,7 @@ void Application::onMeasureDone(const MeasureResult& r) {
   sum.reason = r.reason;
   sum.unit = cal ? "mm" : "px";
   sum.dominantHz = r.dominantHz;
+  sum.peakClear = r.peakClear;
   sum.peakToPeak = r.ppPx * k;
   sum.rms = r.rmsPx * k;
   sum.peak = r.peakAmpPx * k;
@@ -818,6 +819,8 @@ void Application::onMeasureDone(const MeasureResult& r) {
     const MeasureResult::MultiPoint& mp = r.multipoint;
     sum.points = static_cast<int>(mp.points.size());
     sum.passedPoints = mp.passed;
+    sum.waveformValid = mp.waveformValid;
+    sum.waveformReason = mp.waveformReason;
     std::vector<double> rms;
     for (size_t i = 0; i < mp.gate.size(); ++i)
       if (mp.gate[i]) rms.push_back(mp.rmsPx[i]);
@@ -891,6 +894,8 @@ void Application::onMeasureDone(const MeasureResult& r) {
     char buf[128];
     if (r.method == "multipoint") {
       snprintf(buf, sizeof(buf), "主频 %.2f Hz, %d/%d 测点超过停机基线", sum.dominantHz, sum.passedPoints, sum.points);
+    } else if (!sum.peakClear) {
+      snprintf(buf, sizeof(buf), "无明确主频, 峰峰值 %.4g %s, %s", sum.peakToPeak, sum.unit.c_str(), levelText(sum.level));
     } else {
       snprintf(buf, sizeof(buf), "主频 %.2f Hz, 峰峰值 %.4g %s, %s", sum.dominantHz, sum.peakToPeak, sum.unit.c_str(),
                levelText(sum.level));
@@ -944,8 +949,8 @@ void Application::collectAcoustic(const MeasureResult& r, bool window, ResultSum
   a.startOffsetMs = (w.firstNs - r.startMonoNs) * 1e-6;
   a.lr = w.lr;
   a.source = w.source;
-  // Independent estimate: the camera's frequency only enters the comparison.
-  a.analysis = analyzeAcoustic(w.pcm.data(), w.pcm.size(), w.sampleRate, r.valid ? r.dominantHz : 0,
+  // Independent estimate: the camera's frequency (a clear one) only enters the comparison.
+  a.analysis = analyzeAcoustic(w.pcm.data(), w.pcm.size(), w.sampleRate, r.valid && r.peakClear ? r.dominantHz : 0,
                                cfg_.acoustic.service.analysis);
   a.pcm.swap(w.pcm);
   sum.acousticValid = a.analysis.valid;
@@ -1004,6 +1009,7 @@ bool Application::printRecord(const std::string& idIn, std::string& err) {
   d.summary.unit = jStr(res, "unit", "px");
   const bool mm = d.summary.unit == "mm";
   d.summary.dominantHz = jNum(res, "dominant_frequency_hz", 0);
+  d.summary.peakClear = jBool(res, "peak_clear", true);
   d.summary.peakToPeak = jNum(res, mm ? "displacement_peak_to_peak_mm" : "displacement_peak_to_peak_px", 0);
   d.summary.rms = jNum(res, mm ? "displacement_rms_mm" : "displacement_rms_px", 0);
   d.summary.peak = jNum(res, mm ? "spectral_peak_mm" : "spectral_peak_px", 0);
@@ -1028,7 +1034,8 @@ bool Application::printRecord(const std::string& idIn, std::string& err) {
     d.amp.pop_back();
   }
   // The 384-dot slip shows about ten periods of the waveform, not all samples.
-  const double window = d.summary.valid && d.summary.dominantHz > 0 ? 10.0 / d.summary.dominantHz : 2.0;
+  const bool periodic = d.summary.valid && d.summary.peakClear && d.summary.dominantHz > 0;
+  const double window = periodic ? 10.0 / d.summary.dominantHz : 2.0;
   if (!d.t.empty() && d.t.back() - d.t.front() > window) {
     const double t0 = d.t.front();
     size_t n = 0;
@@ -1674,6 +1681,7 @@ JsonValue Application::stateJson() {
     r.set("reason", s.last.reason);
     r.set("unit", s.last.unit);
     r.set("dominant_hz", s.last.dominantHz);
+    r.set("peak_clear", s.last.peakClear);
     r.set("peak_to_peak", s.last.peakToPeak);
     r.set("rms", s.last.rms);
     r.set("level", levelText(s.last.level));
@@ -1796,7 +1804,8 @@ JsonValue Application::handleCommand(const JsonValue& c) {
     if (!distanceOffsetPx(*d, stereo_->calibration().width, jNum(c, "x", 0.5), jNum(c, "y", 0.5), mm, offset, err))
       return errReply(err);
     if (std::fabs(offset) > 80) return errReply("offset_too_large");  // wrong point or distance
-    if (!stereo_->correctOffset(offset, std::to_string(static_cast<int>(mm)), err)) return errReply(err);
+    if (!stereo_->correctOffset(offset, d->calibrationVersion, std::to_string(static_cast<int>(mm)), err))
+      return errReply(err);
     char buf[96];
     snprintf(buf, sizeof(buf), "双目深度已按 %.2f m 校正 (右图平移 %.1f px)", mm / 1000, offset);
     setMessage(buf);

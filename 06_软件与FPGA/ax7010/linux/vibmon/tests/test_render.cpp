@@ -204,6 +204,8 @@ int main(int argc, char** argv) {
     r.peakToPeak = 0.12 + i * 0.4;
     r.rms = 0.04 + i * 0.13;
     r.level = !r.valid ? AlarmLevel::kUnknown : (r.peakToPeak >= 5 ? AlarmLevel::kAlarm : (r.peakToPeak >= 2 ? AlarmLevel::kWarn : AlarmLevel::kNormal));
+    r.peakClear = i != 4;   // no clear line: frequency shown as unknown
+    r.amplitudes = i != 5;  // multi-point waveform failed: amplitudes unknown
     d.records.push_back(r);
   }
   d.record.id = s.last.measurementId;
@@ -406,6 +408,36 @@ int main(int argc, char** argv) {
     for (const HitRegion& h : hits) any = any || h.a.kind == "result_chart";
     CHECK(!any);
   }
+  // No clear dominant line: the result page says so (from the live summary
+  // and from the saved record) and the vision page does not follow it.
+  {
+    UiState rs;
+    rs.page = Page::kResult;
+    UiData ud = d;
+    ud.s.measureState = "preview";
+    ud.s.last.peakClear = false;
+    JsonValue ac = jObj(ud.record.rec, "acoustic");  // no visual frequency to compare with
+    JsonValue vis = jObj(ac, "visual");
+    vis.set("relation", "no_visual");
+    ac.set("visual", vis);
+    ud.record.rec.set("acoustic", ac);
+    Canvas c(1024, 600);
+    std::vector<HitRegion> hits;
+    renderUi(c, rs, ud, hits);
+    if (!out.empty()) writePpm(c, out + "/ui_result_unclear.ppm");
+    JsonValue res = jObj(ud.record.rec, "result");
+    res.set("peak_clear", false);
+    ud.record.rec.set("result", res);
+    rs.openRecordId = ud.record.id;
+    renderUi(c, rs, ud, hits);
+    UiState vs;
+    vs.page = Page::kVision;
+    vs.visionView = 1;
+    renderUi(c, vs, ud, hits);
+    bool refusedFollow = false;
+    for (const HitRegion& h : hits) refusedFollow = refusedFollow || (!h.enabled && h.why == "上次测量没有明确主频");
+    CHECK(refusedFollow);
+  }
   // A microphone fault: the pill on the live page says why when tapped.
   {
     UiState ms;
@@ -533,7 +565,8 @@ int main(int argc, char** argv) {
                           "应用已停止, 等待Linux关机", "视觉测振报告", "未判级", "声学包络谱", "与视觉一致",
                           "视觉频率的 2 倍", "声学包络无明显周期", "声学参考数据中断", "麦克风启动", "麦克风故障",
                           "声学麦克风", "时钟与预热", "未接入", "无麦克风数据（未接或 DAT 异常）", "所设相位无数据，检查 L/R",
-                          "PL 位流不含麦克风接收核", "掉电预警，麦克风已停"}) {
+                          "PL 位流不含麦克风接收核", "掉电预警，麦克风已停", "无明确", "最大峰 13.96 Hz · 不明确",
+                          "上次测量没有明确主频", "上次校正尚未生效，请等新的深度图", "代表测点波形无效：丢帧"}) {
     const std::string str(txt);
     for (bool bold : {false, true}) {
       const FontFace& f = fontFace(22, bold);

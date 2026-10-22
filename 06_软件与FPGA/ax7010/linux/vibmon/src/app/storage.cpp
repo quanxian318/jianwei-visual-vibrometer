@@ -157,9 +157,13 @@ void readMultiPointSummary(const JsonValue& result, ResultSummary& s) {
   s.method = jStr(result, "method", "roi");
   s.points = s.passedPoints = 0;
   s.pointRmsPx = 0;
+  s.waveformValid = true;
+  s.waveformReason.clear();
   if (s.method != "multipoint") return;
   const JsonValue& mp = jObj(result, "multipoint");
   s.passedPoints = static_cast<int>(jInt(mp, "passed_points", 0));
+  s.waveformValid = jBool(mp, "waveform_valid", true);
+  s.waveformReason = jStr(mp, "waveform_reason", "");
   std::vector<double> rms;
   if (const JsonValue* pts = mp.find("points")) {
     for (const JsonValue& p : pts->items()) {
@@ -279,18 +283,21 @@ bool saveRecord(const std::string& dir, const RecordMeta& m, const MeasureResult
   res.set("valid", r.valid);
   res.set("reason", r.valid ? JsonValue() : JsonValue(r.reason));
   res.set("unit", m.unit);
+  // A multi-point result is valid by its windows while its representative
+  // waveform may not be: its amplitudes are then unknown, not zero.
+  const bool wave = r.valid && (r.method != "multipoint" || r.multipoint.waveformValid);
   res.set("dominant_frequency_hz", numOrNull(r.dominantHz, r.valid));
-  res.set("displacement_peak_to_peak_px", numOrNull(r.ppPx, r.valid));
-  res.set("displacement_rms_px", numOrNull(r.rmsPx, r.valid));
-  res.set("spectral_peak_px", numOrNull(r.peakAmpPx, r.valid));
-  res.set("displacement_peak_to_peak_mm", numOrNull(r.ppPx * k, r.valid && cal));
-  res.set("displacement_rms_mm", numOrNull(r.rmsPx * k, r.valid && cal));
-  res.set("spectral_peak_mm", numOrNull(r.peakAmpPx * k, r.valid && cal));
+  res.set("displacement_peak_to_peak_px", numOrNull(r.ppPx, wave));
+  res.set("displacement_rms_px", numOrNull(r.rmsPx, wave));
+  res.set("spectral_peak_px", numOrNull(r.peakAmpPx, wave));
+  res.set("displacement_peak_to_peak_mm", numOrNull(r.ppPx * k, wave && cal));
+  res.set("displacement_rms_mm", numOrNull(r.rmsPx * k, wave && cal));
+  res.set("spectral_peak_mm", numOrNull(r.peakAmpPx * k, wave && cal));
   res.set("definitions", "peak_to_peak and rms of the linearly detrended displacement; spectral_peak is the 0-peak "
                          "amplitude at the dominant frequency (Hann window, coherent gain corrected, single-sided)");
   res.set("window", "hann");
   res.set("tracker", r.tracker.empty() ? JsonValue() : JsonValue(r.tracker));
-  res.set("peak_snr", numOrNull(r.peakSnr, r.valid));
+  res.set("peak_snr", numOrNull(r.peakSnr, wave));
   res.set("peak_clear", r.valid && r.peakClear);
   JsonValue bg = JsonValue::makeObject();
   bg.set("used", r.reference.used);
@@ -370,10 +377,13 @@ bool saveRecord(const std::string& dir, const RecordMeta& m, const MeasureResult
     }
     j.set("references", refs);
     j.set("waveform_point", mp.representative);
+    j.set("waveform_valid", mp.waveformValid);
+    j.set("waveform_reason", mp.waveformValid ? JsonValue() : JsonValue(mp.waveformReason));
     j.set("definition",
           "team multi-point core: 25x25 templates, background translation removed, 128-frame windows gated "
           "against a motor-off baseline (3x); rms_px is the 2D image-plane harmonic RMS, not mm; the waveform and "
-          "spectrum files and the px metrics above describe waveform_point");
+          "spectrum files and the px metrics above describe waveform_point (null when its waveform failed the "
+          "checks: waveform_reason)");
     res.set("multipoint", j);
   }
   res.set("level", levelKey(m.level));
@@ -541,6 +551,8 @@ std::vector<RecordSummary> listRecords(const std::string& dir, size_t maxCount) 
     r.unit = jStr(res, "unit", "px");
     const bool mm = r.unit == "mm";
     r.dominantHz = jNum(res, "dominant_frequency_hz", 0);
+    r.peakClear = jBool(res, "peak_clear", true);
+    r.amplitudes = jBool(jObj(res, "multipoint"), "waveform_valid", true);
     r.peakToPeak = jNum(res, mm ? "displacement_peak_to_peak_mm" : "displacement_peak_to_peak_px", 0);
     r.rms = jNum(res, mm ? "displacement_rms_mm" : "displacement_rms_px", 0);
     const std::string lv = jStr(res, "level", "unknown");

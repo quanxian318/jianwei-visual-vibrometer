@@ -82,11 +82,15 @@ void renderHistoryPage(Ui& ui, const UiData& d) {
     const std::string point = r.pointId.empty() ? std::string("—") : r.pointId + (r.pointName.empty() ? "" : " " + r.pointName);
     drawText(c, fontFace(18), cx[1], row.y + 14, fitText(fontFace(18), point, 150), kText);
     if (r.valid) {
-      drawText(c, fontFace(22, true), cx[2], row.y + 10, fmtNum(r.dominantHz, 4), kText);
-      drawText(c, fontFace(14), cx[2] + 4 + textWidth(fontFace(22, true), fmtNum(r.dominantHz, 4)), row.y + 20, "Hz",
-               kText2);
-      drawText(c, fontFace(18), cx[3], row.y + 14, fmtNum(r.peakToPeak, 3) + " " + r.unit, kText);
-      drawText(c, fontFace(18), cx[4], row.y + 14, fmtNum(r.rms, 3) + " " + r.unit, kText);
+      if (r.peakClear) {
+        const int x = drawText(c, fontFace(22, true), cx[2], row.y + 10, fmtNum(r.dominantHz, 4), kText);
+        drawText(c, fontFace(14), x + 4, row.y + 20, "Hz", kText2);
+      } else {
+        drawText(c, fontFace(18), cx[2], row.y + 14, "无明确", kText2);
+      }
+      // Unknown amplitudes (a multi-point waveform that failed its checks) are not zero.
+      drawText(c, fontFace(18), cx[3], row.y + 14, r.amplitudes ? fmtNum(r.peakToPeak, 3) + " " + r.unit : "—", kText);
+      drawText(c, fontFace(18), cx[4], row.y + 14, r.amplitudes ? fmtNum(r.rms, 3) + " " + r.unit : "—", kText);
     } else {
       drawText(c, fontFace(18), cx[2], row.y + 14, fitText(fontFace(18), "无效 · " + reasonText(r.reason), cx[5] - cx[2] - 24),
                kAmber);

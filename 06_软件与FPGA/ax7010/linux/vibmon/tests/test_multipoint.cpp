@@ -1,14 +1,18 @@
 // Multi-point vibration wrapper around the team's core (third_party/axvibration).
 #include <unistd.h>
 
+#include <cmath>
 #include <cstdlib>
 #include <memory>
 #include <string>
 #include <vector>
 
+#include "app/storage.h"
 #include "measure/frame_source.h"
 #include "measure/multipoint.h"
+#include "measure/session.h"
 #include "test_util.h"
+#include "util/json_util.h"
 #include "vb_runtime.h"
 
 using namespace vm;
@@ -168,11 +172,69 @@ void testBaselineThenSignal() {
   rmdir(dir);
 }
 
+// Windows found the frequency but the representative waveform has a gap:
+// the result stays valid (its frequency), the waveform does not, and the
+// record leaves the waveform's amplitudes unknown instead of zero.
+void testWaveformValidity() {
+  MultiPointCapture c;
+  c.layout.width = 640;
+  c.layout.height = 480;
+  c.layout.points.push_back({320, 240});
+  c.u.resize(1);
+  c.v.resize(1);
+  c.ok.resize(1);
+  for (int i = 0; i < 160; ++i) {
+    const int k = i + (i >= 150 ? 3 : 0);  // three frames missing near the end
+    c.tNs.push_back(1000000000LL + static_cast<int64_t>(k) * 1000000000LL / 60);
+    c.seq.push_back(static_cast<uint32_t>(k));
+    c.timestampValid.push_back(1);
+    c.u[0].push_back(0);
+    c.v[0].push_back(static_cast<float>(std::sin(2 * M_PI * 7 * i / 60)));
+    c.ok[0].push_back(1);
+  }
+  MultiPointWindow w;
+  w.status = 1;
+  w.frequencyHz = 7;
+  w.fs = 60;
+  w.rmsPx = {0.707f};
+  w.gateRatio = {5};
+  w.valid = {1};
+  w.gate = {1};
+  w.passed = 1;
+  c.windows.push_back(w);
+  const MeasureResult r = analyzeMultiPoint(c, MeasureConfig(), 60);
+  CHECK(r.valid && r.reason.empty() && r.peakClear);
+  CHECK_NEAR(r.dominantHz, 7, 1e-9);
+  CHECK(!r.multipoint.waveformValid && r.multipoint.waveformReason == "dropped_frames");
+
+  char tmpl[] = "/tmp/vm_mp_rec_XXXXXX";
+  const std::string dir = mkdtemp(tmpl);
+  RecordMeta m;
+  m.measurementId = "vibmon-01-gap";
+  std::string err;
+  CHECK(saveRecord(dir, m, r, {}, {}, err));
+  JsonValue rec;
+  CHECK(loadJsonFile(dir + "/vibmon-01-gap/record.json", rec, &err));
+  const JsonValue& res = jObj(rec, "result");
+  CHECK(jBool(res, "valid", false) && jNum(res, "dominant_frequency_hz", 0) == 7);
+  const JsonValue* rms = res.find("displacement_rms_px");
+  CHECK(rms && rms->isNull());
+  const JsonValue& mp = jObj(res, "multipoint");
+  CHECK(!jBool(mp, "waveform_valid", true) && jStr(mp, "waveform_reason", "") == "dropped_frames");
+  ResultSummary s;
+  readMultiPointSummary(res, s);
+  CHECK(!s.waveformValid && s.waveformReason == "dropped_frames");
+  const std::vector<RecordSummary> list = listRecords(dir, 5);
+  CHECK(list.size() == 1 && list[0].valid && list[0].peakClear && !list[0].amplitudes);
+  CHECK(std::system(("rm -rf " + dir).c_str()) == 0);
+}
+
 }  // namespace
 
 int main() {
   testLayout();
   testSameAsWholeFrameBlur();
   testBaselineThenSignal();
+  testWaveformValidity();
   return testSummary("multipoint");
 }

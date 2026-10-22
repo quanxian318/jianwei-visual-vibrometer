@@ -17,6 +17,7 @@ struct DepthMap {
   int64_t monoNs = 0;         // capture time of the left frame (CLOCK_MONOTONIC)
   // Stereo provenance: depth = focalPx * baselineMm / disparity.
   std::string calibrationId;
+  uint64_t calibrationVersion = 0;  // StereoService::calibrationVersion() of that calibration
   double focalPx = 0, baselineMm = 0;
   double pairSkewMs = 0;      // |t_left - t_right| of the frames used (software pairing)
   double validFraction = 0;
