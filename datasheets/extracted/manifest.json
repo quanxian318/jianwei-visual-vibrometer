@@ -1,0 +1,17 @@
+{
+  "version": 2,
+  "last_updated": "2026-10-22T12:35:41+08:00",
+  "extractions": {
+    "MP34DT01_012395": {
+      "file": "MP34DT01_012395.json",
+      "mpn": "MP34DT01",
+      "category": "audio",
+      "source_pdf": "../01_\u6570\u636e\u624b\u518c/MP34DT01_\u97f3\u9891\u8f85\u52a9\u6d4b\u632f/MP34DT01_ST_DocID022331_Rev12.pdf",
+      "source_pdf_hash": "sha256:04e66309a03d43b66fccea7704404e291a885683b308caee4bcf1f0df8fe659b",
+      "extraction_date": "2026-10-22T04:35:41.218944+00:00",
+      "extraction_score": 7.6,
+      "extraction_version": 2,
+      "pin_count": 5
+    }
+  }
+}

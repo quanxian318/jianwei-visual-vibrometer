@@ -5,6 +5,7 @@
 
 #include "app/sensor_service.h"
 #include "app/state.h"
+#include "measure/acoustic.h"
 #include "measure/session.h"
 #include "util/json_util.h"
 
@@ -39,16 +40,38 @@ struct RecordMeta {
     double roiDepthMm = 0;
     bool usedForScale = false;
   } stereo;
+  // MP34DT01 acoustic reference over the capture window (acoustic.enabled only).
+  struct Acoustic {
+    bool enabled = false;
+    bool available = false;  // a complete, continuous window was captured
+    std::string reason;      // why not available (not_ready | not_buffered | gap | late | the service fault)
+    std::string source, lr;
+    double sampleRate = 0, pdmClockHz = 0;
+    uint64_t firstIndex = 0;
+    double startOffsetMs = 0;  // first sample relative to the first video frame
+    std::vector<int16_t> pcm;  // written as acoustic.wav when saveWav
+    bool saveWav = true;
+    AcousticAnalysis analysis;
+    double bandLowHz = 0, bandHighHz = 0;
+    bool fanOn = false, buzzer = false;
+    int voiceSuppressed = 0;  // prompts held back during the capture
+  } acoustic;
 };
 
 // <records>/<measurement_id>/record.json (schema vision-vibration-record-1,
 // matching measurement_record.example.json) plus waveform.csv, spectrum.csv
-// and, when available, imu.csv / reference_adxl345.csv.
+// and, when available, imu.csv / reference_adxl345.csv, acoustic.wav and
+// acoustic_spectrum.csv.
 bool saveRecord(const std::string& dir, const RecordMeta& meta, const MeasureResult& r,
                 const std::vector<ImuSample>& imu, const std::vector<AdxlSample>& adxl, std::string& err);
 // Loads the parts of a saved record needed to print it.
 bool loadRecord(const std::string& dir, const std::string& id, JsonValue& record, std::vector<double>& t,
                 std::vector<double>& disp, std::vector<double>& f, std::vector<double>& amp);
+// Envelope spectrum of the acoustic reference (empty when the record has none).
+void loadAcousticSpectrum(const std::string& dir, const std::string& id, std::vector<double>& f,
+                          std::vector<double>& amp);
+// Acoustic figures of a record into s (acoustic* fields).
+void readAcousticSummary(const JsonValue& record, ResultSummary& s);
 std::string latestRecordId(const std::string& dir);
 
 // One line of the record list (history page).

@@ -2,6 +2,8 @@
 
 #include <dirent.h>
 #include <fcntl.h>
+#include <setjmp.h>
+#include <signal.h>
 #include <sys/mman.h>
 #include <unistd.h>
 
@@ -50,6 +52,33 @@ uint32_t PhysWindow::read32(uint32_t offset) { return *reinterpret_cast<volatile
 
 void PhysWindow::write32(uint32_t offset, uint32_t value) {
   *reinterpret_cast<volatile uint32_t*>(base_ + offset) = value;
+}
+
+namespace {
+thread_local sigjmp_buf* probeJump = nullptr;
+
+void onBusError(int sig) {
+  if (probeJump) siglongjmp(*probeJump, 1);
+  signal(sig, SIG_DFL);
+  raise(sig);
+}
+}  // namespace
+
+bool PhysWindow::tryRead32(uint32_t offset, uint32_t& value) {
+  struct sigaction sa {}, old {};
+  sa.sa_handler = onBusError;
+  sigemptyset(&sa.sa_mask);
+  sigaction(SIGBUS, &sa, &old);
+  sigjmp_buf jump;
+  bool ok = false;
+  if (sigsetjmp(jump, 1) == 0) {
+    probeJump = &jump;
+    value = read32(offset);
+    ok = true;
+  }
+  probeJump = nullptr;
+  sigaction(SIGBUS, &old, nullptr);
+  return ok;
 }
 
 bool reservedForDevices(uint64_t base, uint64_t size) {

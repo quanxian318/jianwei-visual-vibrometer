@@ -13,21 +13,19 @@ module tb_carrier_ctrl;
     wire        awready, wready, bvalid, arready, rvalid;
     wire [31:0] rdata;
     wire [1:0]  bresp, rresp;
-    wire        irq;
+    wire        irq, pfail_kill;
 
     reg k1 = 1, enc_sw = 1, enc_a = 1, enc_b = 1;
     reg tof_int = 0, rtc_1hz = 0, pfail_n = 1, exp_int_n = 1, tach_in = 0;
     reg esp_rxd = 1, esp_cts = 1, esp_irq = 0, prn_rxd = 1, prn_cts = 1;
     reg adxl_drdy = 0, imu_int1 = 0, imu_int2 = 0, spi_miso = 0;
     wire led1_pwm, led2_pwm, ws_data, esp_txd, esp_rts, prn_txd, adxl_cs, imu_cs, spi_sclk, spi_mosi;
-    wire i2c0_scl, i2c0_sda, i2c1_scl, i2c1_sda, i2c2_scl, i2c2_sda;
+    wire i2c0_scl, i2c0_sda, i2c1_scl, i2c1_sda;
     pullup (i2c0_scl);
     pullup (i2c0_sda);
     pullup (i2c1_scl);
     pullup (i2c1_sda);
-    pullup (i2c2_scl);
-    pullup (i2c2_sda);
-    wire iic_scl_i0, iic_sda_i0, iic_scl_i1, iic_sda_i1, iic_scl_i2, iic_sda_i2;
+    wire iic_scl_i0, iic_sda_i0, iic_scl_i1, iic_sda_i1;
     wire u_sin, u_ctsn, p_sin, p_ctsn, s_io1_i;
 
     carrier_ctrl #(.CLK_HZ(100000000)) dut (
@@ -37,7 +35,7 @@ module tb_carrier_ctrl;
         .s_axi_bresp(bresp), .s_axi_bvalid(bvalid), .s_axi_bready(bready),
         .s_axi_araddr(araddr), .s_axi_arprot(3'd0), .s_axi_arvalid(arvalid), .s_axi_arready(arready),
         .s_axi_rdata(rdata), .s_axi_rresp(rresp), .s_axi_rvalid(rvalid), .s_axi_rready(rready),
-        .irq(irq),
+        .irq(irq), .pfail_kill(pfail_kill),
         .led1_pwm(led1_pwm), .led2_pwm(led2_pwm), .k1(k1), .ws_data(ws_data), .tof_int(tof_int),
         .rtc_1hz(rtc_1hz), .pfail_n(pfail_n), .exp_int_n(exp_int_n),
         .i2c0_scl(i2c0_scl), .i2c0_sda(i2c0_sda), .i2c1_scl(i2c1_scl), .i2c1_sda(i2c1_sda),
@@ -45,13 +43,11 @@ module tb_carrier_ctrl;
         .esp_txd(esp_txd), .esp_rxd(esp_rxd), .esp_rts(esp_rts), .esp_cts(esp_cts), .esp_irq(esp_irq),
         .prn_txd(prn_txd), .prn_rxd(prn_rxd), .prn_cts(prn_cts),
         .adxl_cs(adxl_cs), .adxl_drdy(adxl_drdy), .imu_cs(imu_cs), .imu_int1(imu_int1), .imu_int2(imu_int2),
-        .i2c2_scl(i2c2_scl), .i2c2_sda(i2c2_sda), .spi_miso(spi_miso), .spi_sclk(spi_sclk), .spi_mosi(spi_mosi),
+        .spi_miso(spi_miso), .spi_sclk(spi_sclk), .spi_mosi(spi_mosi),
         .iic0_scl_i(iic_scl_i0), .iic0_scl_o(1'b0), .iic0_scl_t(1'b1),
         .iic0_sda_i(iic_sda_i0), .iic0_sda_o(1'b0), .iic0_sda_t(1'b1),
         .iic1_scl_i(iic_scl_i1), .iic1_scl_o(1'b0), .iic1_scl_t(1'b1),
         .iic1_sda_i(iic_sda_i1), .iic1_sda_o(1'b0), .iic1_sda_t(1'b1),
-        .iic2_scl_i(iic_scl_i2), .iic2_scl_o(1'b0), .iic2_scl_t(1'b1),
-        .iic2_sda_i(iic_sda_i2), .iic2_sda_o(1'b0), .iic2_sda_t(1'b1),
         .uart_nano_sout(1'b1), .uart_nano_sin(u_sin), .uart_nano_rtsn(1'b0), .uart_nano_ctsn(u_ctsn),
         .uart_prn_sout(1'b1), .uart_prn_sin(p_sin), .uart_prn_ctsn(p_ctsn),
         .spi_sck_o(1'b0), .spi_io0_o(1'b0), .spi_io1_i(s_io1_i), .spi_ss_o(2'b11), .spi_ss_t(1'b0)
@@ -205,15 +201,18 @@ module tb_carrier_ctrl;
         check(highs == 250, "PWM duty 25%");
         check(led2_pwm == 0, "PWM channel 1 disabled");
 
-        // Power fail forces the lights off in hardware.
+        // Power fail forces the lights off in hardware and stops the microphone clock.
+        check(pfail_kill == 0, "no microphone kill without PFAIL");
         pfail_n = 0;
         repeat (20) @(posedge clk);
         check(led1_pwm == 0, "PFAIL kills PWM");
+        check(pfail_kill == 1, "PFAIL kills the microphone clock");
         axi_read(12'h050, v);
         check(v[4] == 1, "PFAIL kill flag");
         pfail_n = 1;
         repeat (20) @(posedge clk);
         check(led1_pwm == 0, "kill stays until cleared");
+        check(pfail_kill == 0, "microphone kill follows PFAIL");
         axi_write(12'h050, 32'h10);
         repeat (300) @(posedge clk);
         highs = 0;

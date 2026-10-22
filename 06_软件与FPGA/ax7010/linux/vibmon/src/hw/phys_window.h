@@ -22,6 +22,9 @@ class PhysWindow : public RegIo {
   size_t size() const { return size_; }
   uint32_t read32(uint32_t offset) override;
   void write32(uint32_t offset, uint32_t value) override;
+  // A read that survives a bus error, i.e. no AXI slave at the address (a
+  // bitstream without the core): false instead of a SIGBUS for the process.
+  bool tryRead32(uint32_t offset, uint32_t& value);
   const uint8_t* bytes() const { return base_; }
   uint8_t* data() { return base_; }
 

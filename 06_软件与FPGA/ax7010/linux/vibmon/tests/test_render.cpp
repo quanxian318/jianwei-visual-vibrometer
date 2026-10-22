@@ -1,6 +1,7 @@
 // Renders every UI page, the dialogs and a printed slip off-screen and checks
 // that touches map to the right actions. With an output directory argument
 // the images are written as PPM for visual review.
+#include <algorithm>
 #include <cmath>
 #include <cstdio>
 #include <cstring>
@@ -108,6 +109,10 @@ int main(int argc, char** argv) {
   s.powerDenyA = 4.5;
   s.nanoRequests = 1234;
   s.fanOn = true;
+  s.acousticState = "capturing";
+  s.acousticLevelDbfs = -38.4;
+  s.acousticRate = 31250;
+  s.acousticLr = "GND";
   s.last.have = s.last.valid = s.last.saved = true;
   s.last.unit = "mm";
   s.last.dominantHz = 12.48;
@@ -208,6 +213,8 @@ int main(int argc, char** argv) {
         "{\"start_local\":\"2026-10-20 13:07:09\",\"point_id\":\"P-01\",\"point_name\":\"电机A\","
         "\"camera\":{\"fps_measured\":59.9,\"frames_dropped\":0,\"frame_interval_jitter_ms\":0.42},"
         "\"quality\":{\"min_ncc\":0.973},\"calibration\":{\"id\":\"CAL-01\"},"
+        "\"acoustic\":{\"available\":true,\"valid\":true,\"visual\":{\"relation\":\"agree\","
+        "\"visual_hz\":12.48,\"acoustic_hz\":12.46,\"harmonic\":0}},"
         "\"result\":{\"valid\":true,\"unit\":\"mm\",\"dominant_frequency_hz\":12.48,"
         "\"displacement_peak_to_peak_mm\":0.1234,\"displacement_rms_mm\":0.0431,\"spectral_peak_mm\":0.061,"
         "\"level\":\"warn\",\"thresholds\":{\"warn_peak_to_peak\":0.1,\"alarm_peak_to_peak\":0.5}}}";
@@ -221,6 +228,12 @@ int main(int argc, char** argv) {
   for (int k = 0; k < 300; ++k) {
     d.record.f.push_back(k * 0.1);
     d.record.amp.push_back(0.061 * std::exp(-std::pow((k * 0.1 - 12.48) / 0.25, 2)) + 0.0015 * std::fabs(std::sin(k * 1.7)));
+  }
+  for (int k = 0; k <= 950; ++k) {  // acoustic envelope 5..100 Hz: the turning frequency and its second harmonic
+    const double f = 5 + k * 0.1;
+    d.record.af.push_back(f);
+    d.record.aamp.push_back(std::exp(-std::pow((f - 12.46) / 0.3, 2)) + 0.35 * std::exp(-std::pow((f - 24.92) / 0.3, 2)) +
+                            0.04 * std::fabs(std::sin(k * 0.77)));
   }
 
   // ------------------------------------------------------------- interactions
@@ -366,6 +379,74 @@ int main(int argc, char** argv) {
     rd.s.measureState = "capturing";
     CHECK(refused(tap(rs, rd, px, py)));
   }
+  // Result page: with a saved envelope spectrum a chip switches the chart to it.
+  {
+    UiState rs;
+    rs.page = Page::kResult;
+    UiData rd = d;
+    rd.s.measureState = "preview";
+    Canvas c(1024, 600);
+    std::vector<HitRegion> hits;
+    renderUi(c, rs, rd, hits);
+    UiAction chip;
+    Rect cr;
+    for (const HitRegion& h : hits) {
+      if (h.a.kind == "result_chart" && h.a.arg == 1) {
+        chip = h.a;
+        cr = h.r;
+      }
+    }
+    CHECK(chip.kind == "result_chart");
+    FbUi::applyAction(rs, chip, cr, 0, 0, rd, 0);
+    CHECK(rs.resultChart == 1);
+    rd.record.af.clear();
+    rd.record.aamp.clear();
+    renderUi(c, rs, rd, hits);
+    bool any = false;
+    for (const HitRegion& h : hits) any = any || h.a.kind == "result_chart";
+    CHECK(!any);
+  }
+  // A microphone fault: the pill on the live page says why when tapped.
+  {
+    UiState ms;
+    UiData md = d;
+    md.s.measureState = "preview";
+    md.s.acousticState = "fault";
+    md.s.acousticError = "no PDM data while the clock is low (L/R = GND set)";
+    Canvas c(1024, 600);
+    std::vector<HitRegion> hits;
+    renderUi(c, ms, md, hits);
+    Rect pr;
+    for (const HitRegion& h : hits) {
+      if (!h.enabled && h.why == "所设相位无数据，检查 L/R") pr = h.r;
+    }
+    CHECK(pr.w > 0);
+    Rect r;
+    const UiAction a = tap(ms, md, pr.x + pr.w / 2, pr.y + pr.h / 2, &r);
+    CHECK(refused(a) && a.text == "所设相位无数据，检查 L/R");
+    CHECK(FbUi::applyAction(ms, a, r, pr.x + pr.w / 2, pr.y + pr.h / 2, md, md.nowMs).isNull());
+    renderUi(c, ms, md, hits);
+    if (!out.empty()) writePpm(c, out + "/ui_mic_fault.ppm");
+  }
+  // No microphone connected (no receiver in the bitstream, or no data on the
+  // pins): the live page looks as without the acoustic reference, the device
+  // page says "not connected" and why.
+  {
+    UiData md = d;
+    md.s.measureState = "preview";
+    md.s.acousticState = "disabled";
+    Canvas off(1024, 600), absent(1024, 600);
+    std::vector<HitRegion> hits;
+    renderUi(off, UiState(), md, hits);
+    md.s.acousticState = "absent";
+    md.s.acousticError = "no PDM receiver at 0x44030000 (bitstream without it)";
+    renderUi(absent, UiState(), md, hits);
+    CHECK(std::equal(off.data(), off.data() + 1024 * 600, absent.data()));
+    UiState ds;
+    ds.page = Page::kDevice;
+    renderUi(absent, ds, md, hits);
+    if (!out.empty()) writePpm(absent, out + "/ui_device_mic_absent.ppm");
+  }
   // History: rows open the record, pages turn.
   {
     UiState hs;
@@ -449,7 +530,10 @@ int main(int argc, char** argv) {
   // Every glyph of the shown text exists in the generated fonts.
   for (const char* txt : {"开始测量", "停止测量", "打印报告", "双目深度未接入", "振动热力", "测量记录", "配置 Wi-Fi",
                           "放大倍数只用于运动放大", "测量期间投影保持关闭", "需先在电机停机时采集基线",
-                          "应用已停止, 等待Linux关机", "视觉测振报告", "未判级"}) {
+                          "应用已停止, 等待Linux关机", "视觉测振报告", "未判级", "声学包络谱", "与视觉一致",
+                          "视觉频率的 2 倍", "声学包络无明显周期", "声学参考数据中断", "麦克风启动", "麦克风故障",
+                          "声学麦克风", "时钟与预热", "未接入", "无麦克风数据（未接或 DAT 异常）", "所设相位无数据，检查 L/R",
+                          "PL 位流不含麦克风接收核", "掉电预警，麦克风已停"}) {
     const std::string str(txt);
     for (bool bold : {false, true}) {
       const FontFace& f = fontFace(22, bold);
@@ -461,7 +545,7 @@ int main(int argc, char** argv) {
   struct Shot {
     const char* name;
     Page page;
-    int view;
+    int view;  // vision view, or the result chart
     Dialog dialog;
   };
   const Shot shots[] = {
@@ -470,11 +554,13 @@ int main(int argc, char** argv) {
       {"ui_depth", Page::kVision, 2, Dialog::kNone},      {"ui_history", Page::kHistory, 0, Dialog::kNone},
       {"ui_device", Page::kDevice, 0, Dialog::kNone},     {"ui_settings", Page::kSettings, 0, Dialog::kNone},
       {"ui_wifi", Page::kSettings, 0, Dialog::kWifi},     {"ui_shutdown", Page::kSettings, 0, Dialog::kShutdown},
+      {"ui_result_acoustic", Page::kResult, 1, Dialog::kNone},
   };
   for (const Shot& sh : shots) {
     UiState rs;
     rs.page = sh.page;
     rs.visionView = sh.view;
+    rs.resultChart = sh.page == Page::kResult ? sh.view : 0;
     rs.dialog = sh.dialog;
     rs.probeX = 0.72;
     rs.probeY = 0.3;

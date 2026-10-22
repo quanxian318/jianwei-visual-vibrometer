@@ -52,6 +52,7 @@ enum class Icon {
   kSpectrum,
   kTimer,
   kLaser,
+  kMic,
 };
 
 // Vector icon centred at (cx, cy) inside a size x size box.

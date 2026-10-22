@@ -38,7 +38,7 @@ LIB_OBJ := $(addprefix $(BUILD)/obj/,$(notdir $(LIB_CPP:.cpp=.o) $(LIB_C:.c=.o))
 LIB := $(BUILD)/libvibmon.a
 
 APPS := $(BUILD)/vibmond $(BUILD)/vibmonctl $(BUILD)/carrier_test $(BUILD)/vision_ref $(BUILD)/clip_track $(BUILD)/lk_vectors $(BUILD)/stereo_eval $(BUILD)/sgm_vectors \
-        $(BUILD)/plcam $(BUILD)/clip_multipoint
+        $(BUILD)/plcam $(BUILD)/clip_multipoint $(BUILD)/pdm_vectors $(BUILD)/wav_acoustic
 TEST_SRC := $(wildcard tests/test_*.cpp)
 TESTS := $(patsubst tests/%.cpp,$(BUILD)/%,$(TEST_SRC))
 
@@ -82,6 +82,12 @@ $(BUILD)/clip_multipoint: $(BUILD)/obj/clip_multipoint.o $(LIB)
 	$(CXX) $(LDFLAGS) $^ -o $@ $(LDLIBS)
 
 $(BUILD)/plcam: $(BUILD)/obj/plcam.o $(LIB)
+	$(CXX) $(LDFLAGS) $^ -o $@ $(LDLIBS)
+
+$(BUILD)/pdm_vectors: $(BUILD)/obj/pdm_vectors.o $(LIB)
+	$(CXX) $(LDFLAGS) $^ -o $@ $(LDLIBS)
+
+$(BUILD)/wav_acoustic: $(BUILD)/obj/wav_acoustic.o $(LIB)
 	$(CXX) $(LDFLAGS) $^ -o $@ $(LDLIBS)
 
 $(BUILD)/test_%: $(BUILD)/obj/test_%.o $(LIB)

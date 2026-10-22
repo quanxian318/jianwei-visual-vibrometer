@@ -95,6 +95,8 @@ JsonValue FbUi::applyAction(UiState& st, const UiAction& a, const Rect& region, 
     st.visionView = a.arg;
   } else if (a.kind == "depth_range") {
     st.depthRange = a.arg;
+  } else if (a.kind == "result_chart") {
+    st.resultChart = a.arg;
   } else if (a.kind == "live_heat") {
     st.liveHeat = !st.liveHeat;
   } else if (a.kind == "ref_edit") {
@@ -318,6 +320,7 @@ void FbUi::gather(UiData& d) {
     record_ = RecordView();
     record_.id = want;
     record_.loaded = loadRecord(cfg.recordsDir, want, record_.rec, record_.t, record_.disp, record_.f, record_.amp);
+    if (record_.loaded) loadAcousticSpectrum(cfg.recordsDir, want, record_.af, record_.aamp);
   }
   d.record = record_;
 }

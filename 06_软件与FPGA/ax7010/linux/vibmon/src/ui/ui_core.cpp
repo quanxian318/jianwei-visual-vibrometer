@@ -189,10 +189,12 @@ void drawChart(Canvas& c, const Rect& r, const std::vector<double>& xs, const st
     drawTextRight(c, f14, p.x - 6, py - 10, tickText(v, ys0), kText2);
   }
   const double xs0 = niceStep(x1 - x0, 6);
+  const int ux = o.unitX.empty() ? r.x + r.w : r.x + r.w - 8 - textWidth(f14, o.unitX);
   for (double v = std::ceil(x0 / xs0) * xs0; v <= x1 + 1e-12; v += xs0) {
     const int px = p.x + static_cast<int>((v - x0) / (x1 - x0) * (p.w - 1));
     c.fillRect(px, p.y, 1, p.h, kGrid);
-    drawTextCentered(c, f14, px, p.y + p.h + 4, tickText(v, xs0), kText2);
+    const std::string t = tickText(v, xs0);
+    if (px + textWidth(f14, t) / 2 < ux - 4) drawTextCentered(c, f14, px, p.y + p.h + 4, t, kText2);  // clear of the unit
   }
   if (!o.unitX.empty()) drawTextRight(c, f14, r.x + r.w - 8, p.y + p.h + 4, o.unitX, kText3);
   if (n < 2) {
@@ -237,6 +239,16 @@ void drawChart(Canvas& c, const Rect& r, const std::vector<double>& xs, const st
       const int bx = std::min(mx + 6, p.x + p.w - tw);
       fillRoundRect(c, bx, p.y + 4, tw, 22, 6, kAmber);
       drawText(c, f14, bx + 6, p.y + 6, o.markerLabel, 0x101010);
+    }
+  }
+  if (std::isfinite(o.refX) && o.refX >= x0 && o.refX <= x1) {
+    const int mx = p.x + static_cast<int>((o.refX - x0) / (x1 - x0) * (p.w - 1));
+    for (int yy = p.y + 3; yy < p.y + p.h; yy += 6) c.fillRect(mx, yy, 1, 3, o.refColor);
+    if (!o.refLabel.empty()) {
+      const int tw = textWidth(f14, o.refLabel) + 12;
+      const int bx = std::min(mx + 6, p.x + p.w - tw);
+      fillRoundRect(c, bx, p.y + 30, tw, 22, 6, o.refColor);
+      drawText(c, f14, bx + 6, p.y + 32, o.refLabel, 0x101010);
     }
   }
 }
@@ -307,6 +319,16 @@ std::string reasonText(const std::string& reason) {
   }
   if (reason.compare(0, 10, "reference_") == 0) return "参考点: " + reasonText(reason.substr(10));
   return reason.empty() ? std::string("未知原因") : reason;
+}
+
+std::string acousticErrorText(const std::string& e) {
+  if (e.find("no PDM receiver") != std::string::npos) return "PL 位流不含麦克风接收核";
+  if (e.find("microphone missing") != std::string::npos) return "无麦克风数据（未接或 DAT 异常）";
+  if (e.find("no PDM data while") != std::string::npos) return "所设相位无数据，检查 L/R";
+  if (e.find("power") != std::string::npos) return "掉电预警，麦克风已停";
+  if (e.find("cannot map") != std::string::npos) return "无法访问麦克风接收核";
+  if (e.find("not running") != std::string::npos) return "麦克风时钟未运行";
+  return e.empty() ? std::string("麦克风故障") : e;
 }
 
 std::string lightBlock(const SystemState& s) {

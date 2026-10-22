@@ -1,5 +1,6 @@
 // History, device, settings pages and the Wi-Fi dialog.
 #include <algorithm>
+#include <cctype>
 #include <cmath>
 #include <cstdio>
 
@@ -228,9 +229,9 @@ void renderDevicePage(Ui& ui, const UiData& d) {
     drawText(c, fontFace(14), r.x + 14, r.y + 70, fitText(fontFace(14), t.detail, tw - 28), kText2);
   }
 
-  // Power budget and versions.
+  // Power budget, acoustic reference and versions.
   const int y = kCy + 4 * (th + 8);
-  const int cw = (kCw - 8) / 2;
+  const int cw = (kCw - 8) / 2, mw = 190, vw = kCw - cw - mw - 16;
   {
     const Rect r{kCx, y, cw, kCh - (y - kCy)};
     ui.card(r);
@@ -254,14 +255,64 @@ void renderDevicePage(Ui& ui, const UiData& d) {
     drawText(c, fontFace(14), lx + 34, by + 21, buf, kText2);
   }
   {
-    const Rect r{kCx + cw + 8, y, cw, kCh - (y - kCy)};
+    // MP34DT01 on J706 through the PL receiver.
+    const Rect r{kCx + cw + 8, y, mw, kCh - (y - kCy)};
+    ui.card(r);
+    ui.cardTitle(r, "声学麦克风", Icon::kMic);
+    const std::string& as = s.acousticState;
+    std::string state = "未启用", detail = "配置中未开启", detail2;
+    TileState st = kOff;
+    if (as == "ready" || as == "capturing") {
+      state = as == "capturing" ? "采集中" : "就绪";
+      st = kOk;
+      snprintf(buf, sizeof(buf), "%.0f dBFS · %.2f kS/s", std::max(-99.0, s.acousticLevelDbfs), s.acousticRate / 1000);
+      detail = buf;
+      if (!s.acousticLr.empty()) detail2 = "L/R " + s.acousticLr;
+    } else if (as == "starting" || as == "warmup") {
+      state = "启动中";
+      st = kWarnS;
+      detail = "时钟与预热";
+    } else if (as == "absent") {
+      state = "未接入";
+      detail = acousticErrorText(s.acousticError);
+    } else if (as == "fault") {
+      state = "故障";
+      st = kErr;
+      detail = acousticErrorText(s.acousticError);
+    }
+    fillCircle(c, r.x + 21.f, r.y + 49.f, 5, tileColor(st));
+    drawText(c, fontFace(14), r.x + 32, r.y + 39, state, tileColor(st));
+    // Two lines: a long reason continues on the second, not inside a word.
+    const FontFace& f14 = fontFace(14);
+    const int lw = r.w - 28;
+    if (detail2.empty() && textWidth(f14, detail) > lw) {
+      size_t cut = 0;
+      for (size_t i = 0; i < detail.size();) {
+        nextCodepoint(detail, i);
+        if (textWidth(f14, detail.substr(0, i)) > lw) break;
+        cut = i;
+      }
+      const auto word = [&](size_t i) { return i < detail.size() && std::isalnum(static_cast<unsigned char>(detail[i])); };
+      size_t w = cut;
+      while (w > 0 && word(w - 1) && word(cut)) --w;
+      if (w > 0) cut = w;
+      detail2 = detail.substr(cut);
+      detail.resize(cut);
+      while (!detail.empty() && detail.back() == ' ') detail.pop_back();
+      while (!detail2.empty() && detail2[0] == ' ') detail2.erase(0, 1);
+    }
+    drawText(c, f14, r.x + 14, r.y + 62, detail, kText2);
+    if (!detail2.empty()) drawText(c, f14, r.x + 14, r.y + 80, fitText(f14, detail2, lw), kText2);
+  }
+  {
+    const Rect r{kCx + cw + mw + 16, y, vw, kCh - (y - kCy)};
     ui.card(r);
     ui.cardTitle(r, "版本信息", Icon::kLayers);
-    drawText(c, fontFace(14), r.x + 16, r.y + 38, "应用  " + s.appVersion, kText);
-    drawText(c, fontFace(14), r.x + 16, r.y + 60, "PL  " + (s.plVersion.empty() ? std::string("—") : s.plVersion), kText);
-    drawText(c, fontFace(14), r.x + 240, r.y + 38, "Nano  " + (s.nanoVersion.empty() ? std::string("—") : s.nanoVersion),
-             kText);
-    drawText(c, fontFace(14), r.x + 240, r.y + 60, "设备  " + s.deviceId, kText);
+    const FontFace& f14 = fontFace(14);
+    drawText(c, f14, r.x + 14, r.y + 34, "应用  " + s.appVersion, kText);
+    drawText(c, f14, r.x + 14, r.y + 51, "PL  " + (s.plVersion.empty() ? std::string("—") : s.plVersion), kText);
+    drawText(c, f14, r.x + 14, r.y + 68, "Nano  " + (s.nanoVersion.empty() ? std::string("—") : s.nanoVersion), kText);
+    drawText(c, f14, r.x + 14, r.y + 85, "设备  " + s.deviceId, kText);
   }
 }
 

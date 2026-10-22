@@ -216,4 +216,35 @@ with tempfile.TemporaryDirectory(prefix='vibmon-regression-') as temp:
         app.close()
         check(app.p.returncode == 0, 'multipoint: SIGTERM follows orderly exit')
 
+    # Acoustic reference from the synthetic PDM source: a tone modulated at the
+    # camera's 12 Hz; the record carries the analysis, its spectrum and the WAV.
+    d = root / 'acoustic'
+    d.mkdir()
+    ac = {'acoustic': {'enabled': True, 'source': 'synthetic', 'synthetic_hz': 12}, 'measurement': {'duration_s': 3}}
+    app = Daemon(d, extra=[ac, {'camera': {'synthetic': {'fps': 60, 'freq_hz': 12}}}])
+    try:
+        check(app.ready(), 'acoustic: starts')
+        for _ in range(100):
+            a = app.cmd('status')['data']['measurement']['acoustic']
+            if a.get('state') == 'ready':
+                break
+            time.sleep(.05)
+        check(a['state'] == 'ready' and a['source'] == 'synthetic' and abs(a['sample_rate_hz'] - 31250) < 1,
+              'acoustic: synthetic source ready at 31.25 kS/s')
+        check(app.cmd('measure_start')['ok'], 'acoustic: capture accepted')
+        last = app.result(polls=300)
+        al = last.get('acoustic') or {}
+        check(last['valid'] and al.get('valid') and al.get('relation') == 'agree' and abs((al.get('frequency_hz') or 0) - 12) < 0.3,
+              'acoustic: the envelope agrees with the camera at 12 Hz')
+        rd = d / 'records' / last['measurement_id']
+        rec = json.loads((rd / 'record.json').read_text())['acoustic']
+        n = rec['window']['samples'] if rec['available'] else 0
+        check(rec['valid'] and rec['source'] == 'synthetic' and abs(n - 3 * 31250) < 1100,  # the video window, within two frames
+              'acoustic: record holds the capture window')
+        check((rd / 'acoustic.wav').stat().st_size == 44 + 2 * n and (rd / 'acoustic_spectrum.csv').exists(),
+              'acoustic: WAV and envelope spectrum saved')
+    finally:
+        app.close()
+        check(app.p.returncode == 0, 'acoustic: SIGTERM follows orderly exit')
+
 sys.exit(bool(failures))

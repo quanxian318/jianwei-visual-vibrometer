@@ -32,6 +32,9 @@
     "max_skew_ms": 15,
     "refine_lk": false
   },
+  "acoustic": {
+    "enabled": true
+  },
   "sensors": {
     "imu": {
       "enabled": false

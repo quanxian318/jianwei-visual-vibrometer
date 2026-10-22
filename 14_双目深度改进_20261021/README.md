@@ -106,9 +106,9 @@ python3 06_软件与FPGA/pc_sim/stereo_benchmark.py <build>/stereo_eval <数据�
 ## 还没做的
 
 1. **PL 上板**：
-   - 2026/10/22 已在队友 AN5642 工程里用 `ax7010/pl/bd/team_bm_to_stereo.tcl` 去掉 BM、接入本核与 AXI DMA（HP1，核 0x43C2_0000、DMA 0x4040_0000）并综合实现（Vivado 2025.2）：13.8k LUT（78%）、32.5 BRAM36（54%）、3 DSP；全设计 WNS +0.51 ns、WHS +0.012 ns，无失败端点；位流与报告在 `06_软件与FPGA/ax7010/pl/stereo/bitstream/`（`an5642_stereo_sgm40.bit.bin` 由 `prepare_an5642_runtime.py` 加载，该脚本同时把 FCLK2 设为 40 MHz）。100 MHz 时 SGM 扫描（路径代价读出→最小值与比较→右视差缓冲写使能，22 级逻辑）约 19.4 ns，WNS −10.2 ns，所以本核和 DMA 改用 FCLK2 40 MHz，256×144 约 61 ms/对；回到 100 MHz 需要给扫描加流水并重做逐位比对。载板 `carrier::add` 尚未合入同一工程。
+   - 已在队友 AN5642 工程里用 `ax7010/pl/bd/team_bm_to_stereo.tcl` 去掉 BM、接入本核与 AXI DMA（HP1，核 0x43C2_0000、DMA 0x4040_0000），并由 `team_design.tcl` 与 MP34DT01 麦克风接收核一起综合实现（Vivado 2025.2）。DMA 存储侧为 64 位，HP1 与本核同用 40 MHz，互连不需要时钟和位宽转换（slice 已基本用满，这样才放下接收核）。全设计 13.5k LUT（76.7%）、slice 98.6%、41.5 BRAM36（69%）、3 DSP；WNS +0.462 ns、WHS +0.007 ns，无失败端点，40 MHz 域最长路径 22.8 ns（余量 1.155 ns）；位流与报告在 `06_软件与FPGA/ax7010/pl/stereo/bitstream/`（`an5642_stereo_sgm40_pdm.bit.bin` 由 `prepare_an5642_runtime.py` 加载，该脚本同时把 FCLK2 设为 40 MHz）。100 MHz 时 SGM 扫描（路径代价读出→最小值与比较→右视差缓冲写使能，22 级逻辑）约 19.4 ns，WNS −10.2 ns，所以本核和 DMA 改用 FCLK2 40 MHz，256×144 约 61 ms/对；回到 100 MHz 需要给扫描加流水并重做逐位比对。载板 `carrier::add` 尚未合入同一工程。
    - 导出 XSA、构建 PetaLinux，用 `pl_verify_every` 观察 `pl_mismatch_frames` 是否为 0。
-   - 与采集、显示、`lk_accum`、视觉显示链一起排 BRAM 预算：基础视频工程约 22.5 个 BRAM36（队友工程总 39.5 减去 BM 的 17），本核 5.5，位移核按 32×32 模板约 4–5，显示链 160×90 约 22，合计接近 60 的上限。去掉 BM 后才放得下。
+   - 与采集、显示、`lk_accum`、视觉显示链一起排资源：当前已用 41.5 个 BRAM36（含麦克风 FIFO 8 个）、slice 98.6%；位移核按 32×32 模板约 4–5 个 BRAM36、显示链 160×90 约 22 个，合计超过 60，接入前需要缩小麦克风 FIFO 或显示链工作图，并腾出 slice。
 2. **AN5642 实拍标定**：
    - 2026/10/22 用一对实拍图（左 cam1、右 cam0）做块匹配：右目整行低约 30 px、各处一致（未见明显旋转）；远景视差 27–30 px，而 3.6 mm 镜头、40 mm 基线在 10 m 处只应约 5 px，说明两镜头水平偏心约 22 px，名义标定会把 10 m 显示成约 2 m、远近关系仍对。名义文件已改为 f 1286 px、右目主点 (618, 390)；剩余误差用已知距离校正（视觉页“距离校正”或 `stereo_distance`）。同一对图上 320×180 实测 35%、补洞 11%，余下的无效区主要是超出搜索范围的近物、白色桌面和左侧搜索边带；放宽去斑会明显引入错配，故保持 60 px。
    - 固定焦距和支架，拍 15–30 对棋盘格，跑 `stereo_calibrate.py`，生成 `/etc/vibmon/stereo_calibration.json`。

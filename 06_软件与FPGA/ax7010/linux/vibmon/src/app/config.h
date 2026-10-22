@@ -4,6 +4,7 @@
 #include <map>
 #include <string>
 
+#include "app/acoustic_service.h"
 #include "measure/frame_source.h"
 #include "drv/pl_camera.h"
 #include "ui/pl_display.h"
@@ -131,6 +132,14 @@ struct AppConfig {
     // "stereo" (depth at the ROI, Z / fx), "file_or_stereo" (file first).
     std::string scaleSource = "file";
   } stereo;
+
+  // MP34DT01 acoustic reference on J706 (PL pdm_mic.v at service.base):
+  // corroborates the camera's frequency, never replaces a measurement.
+  struct Acoustic {
+    bool enabled = false;
+    AcousticOptions service;
+    bool saveWav = true;  // the measurement window as acoustic.wav in the record
+  } acoustic;
 
   struct Alarm {
     double warnPp = 2.0;   // peak-to-peak thresholds in mm; pixels remain unclassified

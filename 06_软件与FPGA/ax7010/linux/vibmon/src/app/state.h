@@ -27,6 +27,12 @@ struct ResultSummary {
   bool saved = false;
   std::string pointId;
   int64_t utcMs = 0;
+  // Acoustic reference of this measurement (enabled = configured; reason
+  // when the audio was not available or not valid).
+  bool acousticEnabled = false, acousticValid = false;
+  std::string acousticReason, acousticRelation;  // relation: agree | harmonic | differ | no_visual | no_peak
+  double acousticHz = 0;
+  int acousticHarmonic = 0;
 };
 
 // Operator settings (settings page / "set" command), persisted to
@@ -114,6 +120,9 @@ struct SystemState {
   std::string deviceId, appVersion, plVersion, nanoVersion, cameraSource;
   bool imuEnabled = false, adxlEnabled = false, tofEnabled = false, shtEnabled = false, printerEnabled = false;
   bool fanOn = false;
+  // MP34DT01 acoustic reference: disabled | starting | warmup | ready | capturing | fault.
+  std::string acousticState = "disabled", acousticError, acousticLr;
+  double acousticLevelDbfs = -200, acousticRate = 0;
   double powerWarnA = 0, powerDenyA = 0;
   unsigned long nanoRequests = 0, nanoRetries = 0, nanoTimeouts = 0, nanoCrcErrors = 0;
 };

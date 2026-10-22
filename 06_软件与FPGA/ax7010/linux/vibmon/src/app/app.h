@@ -6,6 +6,7 @@
 #include <mutex>
 #include <string>
 
+#include "app/acoustic_service.h"
 #include "app/alarm_service.h"
 #include "app/board_service.h"
 #include "app/config.h"
@@ -62,6 +63,7 @@ class Application {
   // publish interval); then depth is reported as missing.
   void publishDepth(std::shared_ptr<const DepthMap> depth);
   void applyStereoScale(MeasureConfig& mc);
+  void collectAcoustic(const MeasureResult& r, bool window, ResultSummary& sum, RecordMeta::Acoustic& a);
   std::shared_ptr<const DepthMap> depthLive();
 
  private:
@@ -128,6 +130,10 @@ class Application {
   std::unique_ptr<MeasurementEngine> engine_;
   std::unique_ptr<StereoService> stereo_;
   RecordMeta::Stereo stereoCapture_;  // stereo context frozen at capture start
+  std::unique_ptr<AcousticService> acoustic_;
+  bool acousticRecord_ = false;   // the running capture records the acoustic reference (a microphone is connected)
+  bool acousticCapture_ = false;  // the running capture has an acoustic window
+  int voiceHeld_ = 0;             // prompts not played during it
   std::unique_ptr<ControlServer> ctl_;
   std::unique_ptr<FbUi> ui_;
 

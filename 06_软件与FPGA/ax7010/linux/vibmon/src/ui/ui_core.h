@@ -74,6 +74,7 @@ struct RecordView {
   bool loaded = false;
   JsonValue rec;
   std::vector<double> t, disp, f, amp;
+  std::vector<double> af, aamp;  // acoustic envelope spectrum (may be empty)
 };
 
 // UI-local state, owned by the UI thread.
@@ -87,6 +88,7 @@ struct UiState {
   int visionView = 0;        // 0 = motion magnification, 1 = vibration heat map, 2 = stereo depth
   double probeX = -1, probeY = -1;  // depth probe point (normalised), -1 = none
   int depthRange = 0;               // 0 = automatic, 1..3 = fixed display ranges
+  int resultChart = 0;              // result page: 0 = displacement spectrum, 1 = acoustic envelope
   bool liveHeat = false;     // heat-map overlay on the live preview
   int roiGrab = 0;           // measuring box being dragged on the live preview (RoiGrab bits, 0 = none)
   NormBox roiDrag;           // its position while dragging
@@ -154,6 +156,9 @@ struct ChartOptions {
   bool fill = false;        // shaded area under the curve
   double markerX = NAN;     // vertical marker (spectral peak)
   std::string markerLabel;
+  double refX = NAN;        // second marker (comparison), below the first label
+  std::string refLabel;
+  uint32_t refColor = theme::kGreen;
   std::string rightNote;    // text at the top right
 };
 void drawChart(Canvas& c, const Rect& r, const std::vector<double>& xs, const std::vector<double>& ys,
@@ -167,6 +172,7 @@ uint32_t levelColor(AlarmLevel l);
 std::string fmtNum(double v, int sig = 4);           // %.4g without "-0"
 std::string reasonText(const std::string& reason);  // invalid-result reason -> text
 std::string errorText(const std::string& code);     // command error -> text
+std::string acousticErrorText(const std::string& error);  // acoustic service fault -> short text
 // Why the lighting / the cross projector cannot be switched now; empty when it can.
 std::string lightBlock(const SystemState& s);
 std::string laserBlock(const SystemState& s);

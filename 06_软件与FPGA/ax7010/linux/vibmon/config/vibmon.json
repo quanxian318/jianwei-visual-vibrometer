@@ -97,6 +97,18 @@
     "speckle_px": 60,
     "temporal_filter": true
   },
+  "acoustic": {
+    "enabled": true,
+    "source": "pl",
+    "base": "0x44030000",
+    "phase": "auto",
+    "warmup_ms": 50,
+    "ring_s": 60,
+    "save_wav": true,
+    "analysis_band_hz": [10, 100],
+    "carrier_bands_hz": [[200, 1000], [1000, 3000], [3000, 8000], [1000, 8000]],
+    "min_prominence_db": 8
+  },
   "alarm": {"warn_peak_to_peak": 2.0, "alarm_peak_to_peak": 5.0, "buzzer": true},
   "voice": {"enabled": true, "volume": 40},
   "fan": {"mode": "auto", "on_temp_c": 40, "off_temp_c": 36, "pause_during_measurement": true},

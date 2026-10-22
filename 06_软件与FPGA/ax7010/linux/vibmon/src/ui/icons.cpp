@@ -316,6 +316,12 @@ void drawIcon(Canvas& c, Icon icon, float cx, float cy, float size, uint32_t col
       p.dot(0.66f, 0.18f, 0.09f);
       p.dot(0.32f, 0.36f, 0.09f);
       break;
+    case Icon::kMic:
+      p.rrect(-0.28f, -0.92f, 0.28f, 0.24f, 0.28f);
+      p.arc(0, -0.12f, 0.56f, kPi / 2, 3 * kPi / 2);
+      p.line(0, 0.44f, 0, 0.8f);
+      p.line(-0.34f, 0.82f, 0.34f, 0.82f);
+      break;
     case Icon::kTimer:
       p.ring(0, 0.12f, 0.72f);
       p.line(0, 0.12f, 0, -0.3f, 1.1f);

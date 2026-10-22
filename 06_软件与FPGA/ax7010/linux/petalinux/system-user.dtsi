@@ -13,6 +13,8 @@
  *    no-map); the stereo UIO node maps it uncached as map2.
  * 2. The AXI IIC / UART16550 / Quad SPI nodes come from the XSA (DTG); the
  *    labels below are the block-design instance names used by add_carrier.tcl.
+ * 3. The PDM microphone receiver (pdm_mic_0, 0x44030000, no interrupt) needs
+ *    no node: vibmond maps its registers through /dev/mem.
  */
 /include/ "carrier_generated.dtsi"
 /include/ "stereo_generated.dtsi"
@@ -44,8 +46,5 @@
 	clock-frequency = <100000>;
 };
 &iic_sens {
-	clock-frequency = <100000>;
-};
-&iic_exp {
 	clock-frequency = <100000>;
 };

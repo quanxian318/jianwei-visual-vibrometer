@@ -132,6 +132,7 @@ struct ResultInfo {
   std::string method = "roi";
   int points = 0, passed = 0;  // multipoint
   double pointRms = 0;
+  ResultSummary acoustic;      // acoustic* fields only
   double freq = 0, pp = 0, rms = 0, peak = 0, fps = 0;
   unsigned long dropped = 0;
   AlarmLevel level = AlarmLevel::kUnknown;
@@ -179,6 +180,7 @@ ResultInfo fromRecord(const RecordView& v) {
   r.points = mp.points;
   r.passed = mp.passedPoints;
   r.pointRms = mp.pointRmsPx;
+  readAcousticSummary(rec, r.acoustic);
   return r;
 }
 
@@ -206,7 +208,46 @@ ResultInfo fromState(const SystemState& s) {
   r.points = l.points;
   r.passed = l.passedPoints;
   r.pointRms = l.pointRmsPx;
+  r.acoustic = l;
   return r;
+}
+
+// One clause on the acoustic reference for the details line, and its colour.
+std::string acousticClause(const ResultSummary& a, uint32_t& col) {
+  char b[96];
+  col = kText2;
+  if (!a.acousticEnabled) return std::string();
+  if (!a.acousticValid) {
+    col = kText3;
+    const std::string& r = a.acousticReason;
+    const char* why = r == "gap" ? "数据中断"
+                      : r == "late" || r == "not_buffered" || r == "not_ready" ? "数据不全"
+                      : r == "stuck" || r == "no_signal" ? "无声音数据"
+                      : r == "clipped" ? "削顶"
+                      : r == "too_short" ? "时长不足" : "不可用";
+    return std::string("声学参考") + why;
+  }
+  if (a.acousticRelation == "no_peak") {
+    col = kText3;
+    return "声学包络无明显周期";
+  }
+  if (a.acousticRelation == "agree") {
+    col = kGreen;
+    snprintf(b, sizeof(b), "声学包络 %s Hz · 与视觉一致", fmtNum(a.acousticHz, 4).c_str());
+  } else if (a.acousticRelation == "harmonic") {
+    col = kAmber;
+    if (a.acousticHarmonic > 0) {
+      snprintf(b, sizeof(b), "声学包络 %s Hz · 视觉频率的 %d 倍", fmtNum(a.acousticHz, 4).c_str(), a.acousticHarmonic);
+    } else {
+      snprintf(b, sizeof(b), "声学包络 %s Hz · 视觉频率的 1/%d", fmtNum(a.acousticHz, 4).c_str(), -a.acousticHarmonic);
+    }
+  } else if (a.acousticRelation == "differ") {
+    col = kAmber;
+    snprintf(b, sizeof(b), "声学包络 %s Hz · 与视觉不同", fmtNum(a.acousticHz, 4).c_str());
+  } else {
+    snprintf(b, sizeof(b), "声学包络 %s Hz", fmtNum(a.acousticHz, 4).c_str());
+  }
+  return b;
 }
 
 }  // namespace
@@ -324,6 +365,26 @@ void renderLivePage(Ui& ui, const UiData& d) {
     fillRoundRect(c, pc.x + 12, pc.y + 12, w, 32, 16, 0x05080C, 200);
     fillCircle(c, pc.x + 28.f, pc.y + 28.f, 6, col);
     drawText(c, f, pc.x + 40, pc.y + 15, text, kText);
+    // Acoustic reference: its level while it runs, otherwise its state (a
+    // fault says why when tapped). Nothing while no microphone is connected.
+    if (s.acousticState != "disabled" && s.acousticState != "absent") {
+      std::string mt = "麦克风启动";
+      uint32_t mc = kText2;
+      const bool live = s.acousticState == "ready" || s.acousticState == "capturing";
+      if (live) {
+        snprintf(buf, sizeof(buf), "%.0f dBFS", std::max(-99.0, s.acousticLevelDbfs));
+        mt = buf;
+        mc = kText;
+      } else if (s.acousticState == "fault") {
+        mt = "麦克风故障";
+        mc = kAmber;
+      }
+      const Rect mr{pc.x + 12 + w + 8, pc.y + 12, textWidth(f, mt) + 50, 32};
+      fillRoundRect(c, mr.x, mr.y, mr.w, mr.h, 16, 0x05080C, 200);
+      drawIcon(c, Icon::kMic, mr.x + 24.f, mr.y + 16.f, 18, live ? kGreen : mc);
+      drawText(c, f, mr.x + 38, mr.y + 3, mt, mc);
+      if (s.acousticState == "fault") ui.hit(mr, UiAction(), Enable(false, acousticErrorText(s.acousticError)));
+    }
   }
   {
     const int bx = pc.x + pc.w - 12 - 3 * 40 - 70;
@@ -520,6 +581,7 @@ void renderResultPage(Ui& ui, const UiData& d) {
     const ResultInfo saved = fromRecord(d.record);
     r.timeText = saved.timeText;
     r.point = saved.point;
+    r.acoustic = saved.acoustic;
   }
   char buf[200];
   if (!r.have) {
@@ -599,7 +661,15 @@ void renderResultPage(Ui& ui, const UiData& d) {
       line += buf;
     }
     if (r.unit != "mm" && r.method != "multipoint") line += "  ·  未标定，结果为像素";
-    drawText(c, fontFace(14), kCx + 4, kCy + kh + 8, fitText(fontFace(14), line, kCw - 8), kText2);
+    uint32_t acol;
+    const std::string ac = acousticClause(r.acoustic, acol);
+    const FontFace& f14 = fontFace(14);
+    const int aw = ac.empty() ? 0 : textWidth(f14, "  ·  " + ac);
+    const int x = drawText(c, f14, kCx + 4, kCy + kh + 8, fitText(f14, line, kCw - 8 - aw), kText2);
+    if (!ac.empty()) {
+      const int x2 = drawText(c, f14, x, kCy + kh + 8, "  ·  ", kText2);
+      drawText(c, f14, x2, kCy + kh + 8, ac, acol);
+    }
   }
 
   // Waveform.
@@ -622,28 +692,55 @@ void renderResultPage(Ui& ui, const UiData& d) {
     const int y = kCy + kh + 34 + 204;
     const Rect sp{kCx, y, kCw - 174, kCh - (y - kCy)};
     ui.card(sp);
+    // The acoustic envelope spectrum of the same window, when the record has one.
+    const bool acoustic = haveData && !rv.af.empty() && rv.af.size() == rv.aamp.size();
+    const bool showAcoustic = acoustic && ui.st.resultChart == 1;
     ChartOptions o;
-    o.title = "幅值谱";
-    o.unitY = r.unit;
-    o.unitX = "Hz";
-    o.fromZero = true;
-    o.fill = true;
     std::vector<double> f, a;
-    if (haveData) {
-      const double fmax = r.fps > 0 ? r.fps * 0.4 : 1e9;  // analysed band
-      for (size_t i = 0; i < rv.f.size() && i < rv.amp.size(); ++i) {
-        if (rv.f[i] > fmax) break;
-        f.push_back(rv.f[i]);
-        a.push_back(rv.amp[i]);
+    if (showAcoustic) {
+      o.title = "声学包络谱";
+      o.unitY = "相对";
+      o.unitX = "Hz";
+      o.fromZero = true;
+      o.fill = true;
+      o.line = kViolet;
+      f = rv.af;
+      a = rv.aamp;
+      if (r.acoustic.acousticValid && r.acoustic.acousticHz > 0) {
+        o.markerX = r.acoustic.acousticHz;
+        o.markerLabel = "声学 " + fmtNum(r.acoustic.acousticHz, 4) + " Hz";
+      }
+      if (r.valid && r.freq > 0) {
+        o.refX = r.freq;
+        o.refLabel = "视觉 " + fmtNum(r.freq, 4) + " Hz";
+      }
+    } else {
+      o.title = "幅值谱";
+      o.unitY = r.unit;
+      o.unitX = "Hz";
+      o.fromZero = true;
+      o.fill = true;
+      if (haveData) {
+        const double fmax = r.fps > 0 ? r.fps * 0.4 : 1e9;  // analysed band
+        for (size_t i = 0; i < rv.f.size() && i < rv.amp.size(); ++i) {
+          if (rv.f[i] > fmax) break;
+          f.push_back(rv.f[i]);
+          a.push_back(rv.amp[i]);
+        }
+      }
+      if (r.valid && r.freq > 0) {
+        o.markerX = r.freq;
+        snprintf(buf, sizeof(buf), "%s Hz · %s %s", fmtNum(r.freq, 4).c_str(), fmtNum(r.peak, 3).c_str(),
+                 r.unit.c_str());
+        o.markerLabel = buf;
       }
     }
-    if (r.valid && r.freq > 0) {
-      o.markerX = r.freq;
-      snprintf(buf, sizeof(buf), "%s Hz · %s %s", fmtNum(r.freq, 4).c_str(), fmtNum(r.peak, 3).c_str(),
-               r.unit.c_str());
-      o.markerLabel = buf;
-    }
     drawChart(c, sp, f, a, o);
+    if (acoustic) {
+      ui.chip(Rect{sp.x + sp.w - 2 * 104 - 10, sp.y + 6, 98, 28}, "位移谱", !showAcoustic, true,
+              uiAction("result_chart", 0));
+      ui.chip(Rect{sp.x + sp.w - 104 - 10, sp.y + 6, 98, 28}, "声学包络", showAcoustic, true, uiAction("result_chart", 1));
+    }
     const int bx = kCx + kCw - 166, bh = (sp.h - 8) / 2;
     std::string printWhy;
     if (!r.saved) {

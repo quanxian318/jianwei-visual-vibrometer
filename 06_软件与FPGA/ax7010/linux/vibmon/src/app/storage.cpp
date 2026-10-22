@@ -10,7 +10,9 @@
 #include <sstream>
 
 #include "app/report.h"
+#include "measure/pdm_model.h"
 #include "util/clock.h"
+#include "util/wav.h"
 
 namespace vm {
 
@@ -30,6 +32,126 @@ const char* levelKey(AlarmLevel l) {
 }
 
 }  // namespace
+
+namespace {
+
+JsonValue peaksJson(const std::vector<AcousticPeak>& peaks) {
+  JsonValue a = JsonValue::makeArray();
+  for (const AcousticPeak& p : peaks) {
+    JsonValue o = JsonValue::makeObject();
+    o.set("hz", p.hz);
+    o.set("prominence_db", p.prominenceDb);
+    a.push(o);
+  }
+  return a;
+}
+
+// The record's acoustic section and files.
+bool saveAcoustic(const std::string& path, const RecordMeta::Acoustic& a, JsonValue& rec) {
+  JsonValue o = JsonValue::makeObject();
+  const AcousticAnalysis& an = a.analysis;
+  o.set("model", "MP34DT01");
+  o.set("available", a.available);
+  o.set("valid", a.available && an.valid);
+  o.set("reason", !a.available ? JsonValue(a.reason) : (an.valid ? JsonValue() : JsonValue(an.reason)));
+  o.set("source", a.source);
+  o.set("lr", a.lr.empty() ? JsonValue() : JsonValue(a.lr));
+  o.set("pdm_clock_hz", numOrNull(a.pdmClockHz, a.pdmClockHz > 0));
+  o.set("sample_rate_hz", numOrNull(a.sampleRate, a.sampleRate > 0));
+  JsonValue flt = JsonValue::makeObject();
+  flt.set("chain", "CIC order 5 /32, 63-tap FIR /2, 16-bit PCM (PDM full scale = +/-32768)");
+  flt.set("delay_ms", kPdmFilterDelayS * 1e3);
+  flt.set("times", "sample times are at the microphone: production time minus this delay");
+  o.set("filter", flt);
+  bool ok = true;
+  if (a.available) {
+    JsonValue w = JsonValue::makeObject();
+    w.set("first_index", static_cast<unsigned long long>(a.firstIndex));
+    w.set("samples", static_cast<unsigned long>(a.pcm.size()));
+    w.set("start_offset_ms", a.startOffsetMs);
+    w.set("definition", "the video capture window; offset of the first sample from the first frame");
+    o.set("window", w);
+    JsonValue lv = JsonValue::makeObject();
+    lv.set("rms_dbfs", an.rmsDbfs);
+    lv.set("peak_dbfs", an.peakDbfs);
+    lv.set("dc_fraction", an.dcFraction);
+    lv.set("clip_fraction", an.clipFraction);
+    lv.set("unit", "dBFS, full-scale sine = 0 dBFS; not a sound pressure level");
+    o.set("level", lv);
+    if (an.valid) {
+      JsonValue band = JsonValue::makeArray();
+      band.push(a.bandLowHz);
+      band.push(a.bandHighHz);
+      o.set("analysis_band_hz", band);
+      JsonValue carrier = JsonValue::makeArray();
+      carrier.push(an.carrierLowHz);
+      carrier.push(an.carrierHighHz);
+      o.set("carrier_band_hz", carrier);
+      JsonValue bands = JsonValue::makeArray();
+      for (const AcousticAnalysis::Band& b : an.bands) {
+        JsonValue e = JsonValue::makeObject();
+        e.set("low_hz", b.lowHz);
+        e.set("high_hz", b.highHz);
+        e.set("modulation", b.modulation);
+        e.set("peak_hz", numOrNull(b.top.hz, b.top.hz > 0));
+        e.set("prominence_db", numOrNull(b.top.prominenceDb, b.top.hz > 0));
+        bands.push(e);
+      }
+      o.set("carrier_bands", bands);
+      o.set("envelope_modulation", an.modulation);
+      o.set("envelope_peaks", peaksJson(an.envelopePeaks));
+      o.set("direct_peaks", peaksJson(an.directPeaks));
+      JsonValue tone = JsonValue::makeObject();
+      tone.set("hz", numOrNull(an.tone.hz, an.tone.hz > 0));
+      tone.set("prominence_db", numOrNull(an.tone.prominenceDb, an.tone.hz > 0));
+      o.set("tone", tone);
+      JsonValue vis = JsonValue::makeObject();
+      vis.set("relation", an.relation);
+      vis.set("visual_hz", numOrNull(an.visualHz, an.visualHz > 0));
+      vis.set("acoustic_hz", numOrNull(an.acousticHz, an.acousticHz > 0));
+      vis.set("difference_hz", numOrNull(an.diffHz, an.relation == "agree" || an.relation == "harmonic" || an.relation == "differ"));
+      vis.set("tolerance_hz", numOrNull(an.toleranceHz, an.toleranceHz > 0));
+      vis.set("harmonic", an.harmonic);
+      vis.set("definition", "envelope peak against the camera's dominant frequency, estimated independently");
+      o.set("visual", vis);
+      if (!an.envFreq.empty()) {
+        std::ostringstream s;
+        s << "frequency_hz,envelope_relative\n";
+        for (size_t i = 0; i < an.envFreq.size(); ++i) s << fmt(an.envFreq[i]) << ',' << fmt(an.envAmp[i]) << '\n';
+        ok = writeFileAtomic(path + "/acoustic_spectrum.csv", s.str()) && ok;
+        o.set("spectrum_file", "acoustic_spectrum.csv");
+      }
+    }
+    if (a.saveWav && !a.pcm.empty() && a.sampleRate > 0) {
+      ok = writeFileAtomic(path + "/acoustic.wav",
+                           wavMono16(a.pcm.data(), a.pcm.size(), static_cast<int>(std::lround(a.sampleRate)))) && ok;
+      o.set("wav_file", "acoustic.wav");
+      o.set("wav_rate_note", "WAV header rate is the measured rate rounded to 1 Hz; use sample_rate_hz");
+    }
+  }
+  JsonValue cond = JsonValue::makeObject();
+  cond.set("fan_on", a.fanOn);
+  cond.set("buzzer", a.buzzer);
+  cond.set("voice_prompts_held", a.voiceSuppressed);
+  o.set("conditions", cond);
+  o.set("note", "acoustic corroboration of the frequency only: no displacement, velocity or sound pressure level");
+  rec.set("acoustic", o);
+  return ok;
+}
+
+}  // namespace
+
+void readAcousticSummary(const JsonValue& record, ResultSummary& s) {
+  const JsonValue* a = record.find("acoustic");
+  s.acousticEnabled = a != nullptr;
+  if (!a) return;
+  s.acousticValid = jBool(*a, "valid", false);
+  s.acousticReason = jStr(*a, "reason", "");
+  const JsonValue& v = jObj(*a, "visual");
+  s.acousticRelation = jStr(v, "relation", "");
+  s.acousticHz = jNum(v, "acoustic_hz", 0);
+  s.acousticHarmonic = static_cast<int>(jInt(v, "harmonic", 0));
+}
 
 void readMultiPointSummary(const JsonValue& result, ResultSummary& s) {
   s.method = jStr(result, "method", "roi");
@@ -298,6 +420,11 @@ bool saveRecord(const std::string& dir, const RecordMeta& m, const MeasureResult
   im.set("file", imu.empty() ? JsonValue() : JsonValue("imu.csv"));
   rec.set("camera_imu", im);
 
+  if (m.acoustic.enabled && !saveAcoustic(path, m.acoustic, rec)) {
+    err = "write acoustic files";
+    return false;
+  }
+
   if (m.stereo.enabled) {
     JsonValue st = JsonValue::makeObject();
     st.set("backend", m.stereo.backend.empty() ? JsonValue() : JsonValue(m.stereo.backend));
@@ -357,6 +484,13 @@ bool loadRecord(const std::string& dir, const std::string& id, JsonValue& record
   readCsv(path + "/waveform.csv", mm ? 3 : 1, t, disp);
   readCsv(path + "/spectrum.csv", mm ? 2 : 1, f, amp);
   return true;
+}
+
+void loadAcousticSpectrum(const std::string& dir, const std::string& id, std::vector<double>& f,
+                          std::vector<double>& amp) {
+  f.clear();
+  amp.clear();
+  readCsv(dir + "/" + id + "/acoustic_spectrum.csv", 1, f, amp);
 }
 
 std::string latestRecordId(const std::string& dir) {

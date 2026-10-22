@@ -1,11 +1,13 @@
 // Carrier board controller for AX7010 J11 (Bank 35), one AXI4-Lite slave.
 //
-//  * owns all 34 carrier pins with the exact port names of
-//    AX7010_carrier_V1.10.xdc (I2C pads are IOBUFs inside this module);
-//  * passes the AXI IIC x3, AXI UART16550 x2 and AXI Quad SPI signals through;
+//  * owns the carrier pins with the exact port names of
+//    AX7010_carrier_V1.10.xdc (I2C pads are IOBUFs inside this module), all
+//    but mic_clk/mic_dat on J706, which belong to ../audio/rtl/pdm_mic.v;
+//  * passes the AXI IIC x2, AXI UART16550 x2 and AXI Quad SPI signals through;
 //  * implements: front panel keys/encoder, two light PWM channels with
 //    power-fail and watchdog kill, WS2812B-V6 driver for HL101..HL105,
-//    a 64-bit timestamp counter and a timestamped event FIFO with interrupt.
+//    a 64-bit timestamp counter and a timestamped event FIFO with interrupt;
+//    pfail_kill stops the microphone clock while PFAIL is low.
 //
 // Register map: see ../README.md (also mirrored in linux/vibmon/src/hw/carrier_regs.h).
 `timescale 1ns / 1ps
@@ -37,6 +39,7 @@ module carrier_ctrl #(
     (* X_INTERFACE_INFO = "xilinx.com:signal:interrupt:1.0 irq INTERRUPT" *)
     (* X_INTERFACE_PARAMETER = "SENSITIVITY LEVEL_HIGH" *)
     output wire        irq,
+    output wire        pfail_kill,  // filtered PFAIL low while its kill is enabled (to pdm_mic kill)
 
     // ---- carrier pins (names match the XDC) ----
     output wire led1_pwm,
@@ -68,19 +71,15 @@ module carrier_ctrl #(
     output wire imu_cs,
     input  wire imu_int1,
     input  wire imu_int2,
-    inout  wire i2c2_scl,
-    inout  wire i2c2_sda,
     input  wire spi_miso,
     output wire spi_sclk,
     output wire spi_mosi,
 
-    // ---- AXI IIC x3 (management, sensors, expansion) ----
+    // ---- AXI IIC x2 (management, sensors) ----
     output wire iic0_scl_i, input wire iic0_scl_o, input wire iic0_scl_t,
     output wire iic0_sda_i, input wire iic0_sda_o, input wire iic0_sda_t,
     output wire iic1_scl_i, input wire iic1_scl_o, input wire iic1_scl_t,
     output wire iic1_sda_i, input wire iic1_sda_o, input wire iic1_sda_t,
-    output wire iic2_scl_i, input wire iic2_scl_o, input wire iic2_scl_t,
-    output wire iic2_sda_i, input wire iic2_sda_o, input wire iic2_sda_t,
 
     // ---- AXI UART16550: Nano link (RTS/CTS) and printer (CTS) ----
     input  wire uart_nano_sout,
@@ -114,8 +113,6 @@ module carrier_ctrl #(
     IOBUF iob_i2c0_sda (.O(iic0_sda_i), .IO(i2c0_sda), .I(iic0_sda_o), .T(iic0_sda_t));
     IOBUF iob_i2c1_scl (.O(iic1_scl_i), .IO(i2c1_scl), .I(iic1_scl_o), .T(iic1_scl_t));
     IOBUF iob_i2c1_sda (.O(iic1_sda_i), .IO(i2c1_sda), .I(iic1_sda_o), .T(iic1_sda_t));
-    IOBUF iob_i2c2_scl (.O(iic2_scl_i), .IO(i2c2_scl), .I(iic2_scl_o), .T(iic2_scl_t));
-    IOBUF iob_i2c2_sda (.O(iic2_sda_i), .IO(i2c2_sda), .I(iic2_sda_o), .T(iic2_sda_t));
 
     wire esp_rxd_s, prn_rxd_s;
     cc_sync #(.WIDTH(2), .INIT(2'b11)) u_sync_rx (.clk(clk), .d({esp_rxd, prn_rxd}), .q({esp_rxd_s, prn_rxd_s}));
@@ -228,6 +225,7 @@ module carrier_ctrl #(
     // ------------------------------------------------------------------
     wire pfail_low = ~gen_f[6];
     wire pwm_kill = pfail_killed | wdg_killed;
+    assign pfail_kill = pfail_kill_en & pfail_low;
     cc_pwm u_pwm (.clk(clk), .rst(rst), .period(pwm_period), .duty0(pwm_duty0), .duty1(pwm_duty1),
                   .en0(pwm_en0), .en1(pwm_en1), .kill(pwm_kill), .out0(led1_pwm), .out1(led2_pwm));
 

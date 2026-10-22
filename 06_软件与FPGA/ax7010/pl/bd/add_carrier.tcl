@@ -8,7 +8,8 @@
 # Vivado cannot use paths with Chinese characters: copy ax7010/pl to an
 # ASCII-only folder first (see ../README.md).
 #
-# Result: carrier_ctrl (module reference, AXI-Lite + IRQ), 3x AXI IIC,
+# Result: carrier_ctrl (module reference, AXI-Lite + IRQ), pdm_mic (module
+# reference, AXI-Lite, no IRQ) for the MP34DT01 on J706, 2x AXI IIC,
 # 2x AXI UART16550, 1x AXI Quad SPI, external ports named exactly as in
 # AX7010_carrier_V1.10.xdc, interrupts appended to IRQ_F2P, fixed AXI
 # addresses, and generated/carrier_generated.dtsi + carrier_map.json.
@@ -20,7 +21,7 @@ namespace eval carrier {
         carrier_ctrl_0 0x44000000 4K
         iic_mgmt       0x44010000 64K
         iic_sens       0x44020000 64K
-        iic_exp        0x44030000 64K
+        pdm_mic_0      0x44030000 4K
         uart_nano      0x44040000 64K
         uart_prn       0x44050000 64K
         spi_sens       0x44060000 64K
@@ -30,7 +31,6 @@ namespace eval carrier {
         carrier_ctrl_0 irq
         iic_mgmt       iic2intc_irpt
         iic_sens       iic2intc_irpt
-        iic_exp        iic2intc_irpt
         uart_nano      ip2intc_irpt
         uart_prn       ip2intc_irpt
         spi_sens       ip2intc_irpt
@@ -146,6 +146,7 @@ proc carrier::add {} {
     # Sources and constraints.
     set rtl [file normalize "$dir/../rtl"]
     add_files -norecurse [glob $rtl/*.v]
+    add_files -norecurse [file normalize "$dir/../audio/rtl/pdm_mic.v"]
     update_compile_order -fileset sources_1
     add_files -fileset constrs_1 -norecurse [file normalize "$dir/../constraints/AX7010_carrier_V1.10.xdc"]
     add_files -fileset constrs_1 -norecurse [file normalize "$dir/../constraints/carrier_timing.xdc"]
@@ -156,7 +157,9 @@ proc carrier::add {} {
     # Cells.
     create_bd_cell -type module -reference carrier_ctrl carrier_ctrl_0
     set_property CONFIG.CLK_HZ $clk_hz [get_bd_cells carrier_ctrl_0]
-    foreach c {iic_mgmt iic_sens iic_exp} {
+    create_bd_cell -type module -reference pdm_mic pdm_mic_0
+    set_property CONFIG.CLK_HZ $clk_hz [get_bd_cells pdm_mic_0]
+    foreach c {iic_mgmt iic_sens} {
         set cell [create_bd_cell -type ip -vlnv [carrier::latest_vlnv axi_iic] $c]
         set_property -dict [list CONFIG.IIC_FREQ_KHZ {100}] $cell
     }
@@ -171,12 +174,13 @@ proc carrier::add {} {
 
     # AXI connections (clock/reset come from the automation).
     carrier::connect_axi $ps carrier_ctrl_0 s_axi
-    foreach c {iic_mgmt iic_sens iic_exp uart_nano uart_prn} { carrier::connect_axi $ps $c S_AXI }
+    carrier::connect_axi $ps pdm_mic_0 s_axi
+    foreach c {iic_mgmt iic_sens uart_nano uart_prn} { carrier::connect_axi $ps $c S_AXI }
     carrier::connect_axi $ps spi_sens AXI_LITE
     connect_bd_net [get_bd_pins carrier_ctrl_0/s_axi_aclk] [get_bd_pins spi_sens/ext_spi_clk]
 
     # IP <-> carrier_ctrl signals.
-    foreach {c n} {iic_mgmt 0 iic_sens 1 iic_exp 2} {
+    foreach {c n} {iic_mgmt 0 iic_sens 1} {
         foreach s {scl sda} {
             connect_bd_net [get_bd_pins $c/${s}_o] [get_bd_pins carrier_ctrl_0/iic${n}_${s}_o]
             connect_bd_net [get_bd_pins $c/${s}_t] [get_bd_pins carrier_ctrl_0/iic${n}_${s}_t]
@@ -199,6 +203,8 @@ proc carrier::add {} {
     connect_bd_net [get_bd_pins spi_sens/ss_o] [get_bd_pins carrier_ctrl_0/spi_ss_o]
     connect_bd_net [get_bd_pins spi_sens/ss_t] [get_bd_pins carrier_ctrl_0/spi_ss_t]
     carrier::tie spi_sens spisel 1
+    # PFAIL stops the microphone clock in hardware before 3V3_SENS goes.
+    connect_bd_net [get_bd_pins carrier_ctrl_0/pfail_kill] [get_bd_pins pdm_mic_0/kill]
 
     # External ports with the XDC names.
     foreach p {led1_pwm led2_pwm ws_data esp_txd esp_rts prn_txd adxl_cs imu_cs spi_sclk spi_mosi} {
@@ -210,10 +216,14 @@ proc carrier::add {} {
         create_bd_port -dir I $p
         connect_bd_net [get_bd_ports $p] [get_bd_pins carrier_ctrl_0/$p]
     }
-    foreach p {i2c0_scl i2c0_sda i2c1_scl i2c1_sda i2c2_scl i2c2_sda} {
+    foreach p {i2c0_scl i2c0_sda i2c1_scl i2c1_sda} {
         create_bd_port -dir IO $p
         connect_bd_net [get_bd_ports $p] [get_bd_pins carrier_ctrl_0/$p]
     }
+    create_bd_port -dir O mic_clk
+    connect_bd_net [get_bd_ports mic_clk] [get_bd_pins pdm_mic_0/mic_clk]
+    create_bd_port -dir I mic_dat
+    connect_bd_net [get_bd_ports mic_dat] [get_bd_pins pdm_mic_0/mic_dat]
 
     # Interrupts.
     set irq_map [carrier::append_irqs $ps $irq_plan]
@@ -252,7 +262,7 @@ proc carrier::write_outputs {clk_hz ratio addr_out irq_map} {
     puts $f "  \"fclk_hz\": $clk_hz,"
     puts $f "  \"spi_sck_hz\": [expr {$clk_hz / $ratio}],"
     puts $f "  \"ip\": \{"
-    set names {carrier_ctrl_0 iic_mgmt iic_sens iic_exp uart_nano uart_prn spi_sens}
+    set names {carrier_ctrl_0 iic_mgmt iic_sens pdm_mic_0 uart_nano uart_prn spi_sens}
     set i 0
     foreach n $names {
         if {[info exists addr($n)]} { set a "\"$addr($n)\"" } else { set a "null" }

@@ -65,6 +65,7 @@ Application::~Application() {
   ctl_.reset();
   if (engine_) engine_->stopCamera();
   if (stereo_) stereo_->stop();
+  if (acoustic_) acoustic_->stop();
   if (sensors_) sensors_->stop();
   printer_.reset();
 }
@@ -292,6 +293,12 @@ bool Application::init() {
     }
   }
 
+  // Acoustic reference (MP34DT01 on J706, PL pdm_mic).
+  if (cfg_.acoustic.enabled) {
+    acoustic_.reset(new AcousticService(cfg_.acoustic.service));
+    acoustic_->start();
+  }
+
   // Control socket and UI.
   ctl_.reset(new ControlServer(loop_, [this](const JsonValue& c) { return handleCommand(c); }));
   ctl_->listen(cfg_.controlSocket);
@@ -514,6 +521,12 @@ void Application::muteAlarm() {
 
 void Application::playVoice(const char* asset) {
   if (!cfg_.voice.enabled || !nano_->online() || pfail_ || shutdown_) return;
+  // The speaker would be in the microphone's window.
+  if (measuring_ && acousticCapture_) {
+    ++voiceHeld_;
+    LOGI("voice", "%s held back: acoustic window open", asset);
+    return;
+  }
   lastVoiceJob_ = nano_->playVoice(asset, cfg_.voice.volume, [asset](const NanoReply& r) {
     if (!r.ok) LOGW("voice", "PLAY_VOICE %s refused: %s", asset, r.code.c_str());
   });
@@ -643,6 +656,17 @@ bool Application::startMeasurement(double durationS, bool baseline, std::string&
     return false;
   }
   measuring_ = true;
+  acousticRecord_ = acoustic_ && !baseline && acoustic_->status().state != AcousticService::State::kAbsent;
+  acousticCapture_ = acousticRecord_;
+  voiceHeld_ = 0;
+  if (acousticCapture_) {
+    acoustic_->beginCapture();
+    if (!lastVoiceJob_.empty() && nano_->online()) {  // a prompt still playing would be in the window
+      JsonValue p = JsonValue::makeObject();
+      p.set("job_id", lastVoiceJob_);
+      nano_->request(vp::kOpStopVoice, p, nullptr);
+    }
+  }
   state_.update([baseline](SystemState& st) { st.baselineCapture = baseline; });
   if (cfg_.fan.pauseDuringMeasure && fanOn_) {
     board_->setFan(false);
@@ -753,6 +777,8 @@ void Application::refreshBaseline() {
 
 void Application::onMeasureDone(const MeasureResult& r) {
   measuring_ = false;
+  const bool acousticRecord = acousticRecord_, acousticWindow = acousticCapture_;
+  acousticRecord_ = acousticCapture_ = false;
   const int64_t now = monoMs();
   if (lightAuto_) setLight(false, nullptr);
   lightAuto_ = false;
@@ -760,6 +786,7 @@ void Application::onMeasureDone(const MeasureResult& r) {
   laserRestore_ = false;
   state_.update([](SystemState& st) { st.baselineCapture = false; });
   if (r.method == "multipoint" && r.multipoint.baseline) {
+    if (acoustic_) acoustic_->cancelCapture();
     baselineScanned_ = false;
     refreshBaseline();
     if (r.valid) {
@@ -825,6 +852,7 @@ void Application::onMeasureDone(const MeasureResult& r) {
     m.tzOffsetMin = cfg_.tzOffsetMin;
     m.cameraSource = engine_->live().source;
     m.stereo = stereoCapture_;
+    if (acousticRecord) collectAcoustic(r, acousticWindow, sum, m.acoustic);
     m.lightOn = captureContext_.lightOn;
     m.lightPercent = captureContext_.lightPercent;
     m.laserOn = captureContext_.laserOn;
@@ -857,6 +885,8 @@ void Application::onMeasureDone(const MeasureResult& r) {
     }
   }
 
+  if (acoustic_) acoustic_->cancelCapture();  // also when nothing was saved
+
   if (r.valid) {
     char buf[128];
     if (r.method == "multipoint") {
@@ -879,6 +909,52 @@ void Application::onMeasureDone(const MeasureResult& r) {
     st.alarmLevel = alarm_->level();
     st.alarmMuted = alarm_->muted();
   });
+}
+
+// The audio of the capture window, analysed against the camera's frequency.
+void Application::collectAcoustic(const MeasureResult& r, bool window, ResultSummary& sum, RecordMeta::Acoustic& a) {
+  a.enabled = true;
+  a.saveWav = cfg_.acoustic.saveWav;
+  a.bandLowHz = cfg_.acoustic.service.analysis.bandLowHz;
+  a.bandHighHz = cfg_.acoustic.service.analysis.bandHighHz;
+  a.fanOn = captureContext_.fanOn;
+  a.buzzer = cfg_.alarm.buzzer && !captureContext_.alarmMuted &&
+             (captureContext_.alarmLevel == AlarmLevel::kWarn || captureContext_.alarmLevel == AlarmLevel::kAlarm);
+  a.voiceSuppressed = voiceHeld_;
+  sum.acousticEnabled = true;
+  const AcousticService::Status st = acoustic_->status();
+  a.source = st.source;
+  a.lr = st.lr;
+  if (!window) {
+    a.reason = st.state == AcousticService::State::kFault ? st.error : std::string("not_ready");
+    sum.acousticReason = a.reason;
+    return;
+  }
+  const int64_t t1 = r.startMonoNs + static_cast<int64_t>(r.durationS * 1e9);
+  AcousticService::Window w = acoustic_->endCapture(r.startMonoNs, t1);
+  if (!w.available) {
+    a.reason = st.state == AcousticService::State::kFault ? st.error : w.reason;
+    sum.acousticReason = a.reason;
+    return;
+  }
+  a.available = true;
+  a.sampleRate = w.sampleRate;
+  a.pdmClockHz = w.pdmClockHz;
+  a.firstIndex = w.firstIndex;
+  a.startOffsetMs = (w.firstNs - r.startMonoNs) * 1e-6;
+  a.lr = w.lr;
+  a.source = w.source;
+  // Independent estimate: the camera's frequency only enters the comparison.
+  a.analysis = analyzeAcoustic(w.pcm.data(), w.pcm.size(), w.sampleRate, r.valid ? r.dominantHz : 0,
+                               cfg_.acoustic.service.analysis);
+  a.pcm.swap(w.pcm);
+  sum.acousticValid = a.analysis.valid;
+  sum.acousticReason = a.analysis.valid ? std::string() : a.analysis.reason;
+  sum.acousticRelation = a.analysis.relation;
+  sum.acousticHz = a.analysis.acousticHz;
+  sum.acousticHarmonic = a.analysis.harmonic;
+  LOGI(kTag, "acoustic: %s, envelope %.3f Hz (%s), %.1f dBFS", a.analysis.valid ? "valid" : a.analysis.reason.c_str(),
+       a.analysis.acousticHz, a.analysis.relation.c_str(), a.analysis.rmsDbfs);
 }
 
 bool Application::printRecord(const std::string& idIn, std::string& err) {
@@ -993,6 +1069,11 @@ void Application::powerFail(bool active) {
   if (active == pfail_) return;
   pfail_ = active;
   state_.update([active](SystemState& s) { s.pfail = active; });
+  if (acoustic_) {
+    acoustic_->setPowerFail(active);
+    if (active) acoustic_->cancelCapture();
+  }
+  if (active) acousticCapture_ = false;
   if (active) {
     LOGW(kTag, "PFAIL: 12 V below threshold - loads off, no new prints or writes");
     setLight(false, nullptr);  // the PL already forced both outputs low
@@ -1024,6 +1105,8 @@ void Application::requestShutdown() {
   setMessage("正在准备关机...");
   if (measuring_) engine_->cancel();
   measuring_ = false;
+  acousticCapture_ = false;
+  if (acoustic_) acoustic_->setPowerFail(true);  // clock off before the sensor supply goes
   board_->inhibitPrinter(true);
   printer_->abort("shutdown");
   setLight(false, nullptr);
@@ -1141,6 +1224,16 @@ void Application::every100ms() {
 
 void Application::every200ms() {
   if (board_ && i2cMgmt_.isOpen()) board_->samplePower();
+  if (acoustic_) {
+    const AcousticService::Status a = acoustic_->status();
+    state_.update([&a](SystemState& s) {
+      s.acousticState = AcousticService::stateName(a.state);
+      s.acousticError = a.error;
+      s.acousticLr = a.lr;
+      s.acousticLevelDbfs = a.levelDbfs;
+      s.acousticRate = a.sampleRate;
+    });
+  }
   if (carrierOk_) {
     tickClock_.addPair(carrier_->timestamp(), monoNs());
     // PFAIL release needs the input high for a full second.
@@ -1535,6 +1628,22 @@ JsonValue Application::stateJson() {
   }
   sj.set("scale_source", cfg_.stereo.scaleSource);
   m.set("stereo", sj);
+  JsonValue ac = JsonValue::makeObject();
+  ac.set("enabled", acoustic_ != nullptr);
+  if (acoustic_) {
+    const AcousticService::Status a = acoustic_->status();
+    ac.set("state", AcousticService::stateName(a.state));
+    ac.set("error", a.error.empty() ? JsonValue() : JsonValue(a.error));
+    ac.set("source", a.source);
+    ac.set("lr", a.lr.empty() ? JsonValue() : JsonValue(a.lr));
+    ac.set("pdm_clock_hz", a.pdmClockHz);
+    ac.set("sample_rate_hz", a.sampleRate);
+    ac.set("level_dbfs", a.levelDbfs > -199 ? JsonValue(a.levelDbfs) : JsonValue());
+    ac.set("samples", static_cast<unsigned long long>(a.samples));
+    ac.set("gaps", static_cast<unsigned long>(a.gaps));
+    ac.set("buffered_s", a.bufferedS);
+  }
+  m.set("acoustic", ac);
   m.set("roi_center_x", s.roiCx);
   m.set("roi_center_y", s.roiCy);
   m.set("zoom", s.zoom);
@@ -1569,6 +1678,15 @@ JsonValue Application::stateJson() {
     r.set("rms", s.last.rms);
     r.set("level", levelText(s.last.level));
     r.set("saved", s.last.saved);
+    if (s.last.acousticEnabled) {
+      JsonValue a = JsonValue::makeObject();
+      a.set("valid", s.last.acousticValid);
+      a.set("reason", s.last.acousticReason);
+      a.set("relation", s.last.acousticRelation);
+      a.set("frequency_hz", s.last.acousticHz > 0 ? JsonValue(s.last.acousticHz) : JsonValue());
+      a.set("harmonic", s.last.acousticHarmonic);
+      r.set("acoustic", a);
+    }
     m.set("last", r);
   }
   o.set("measurement", m);

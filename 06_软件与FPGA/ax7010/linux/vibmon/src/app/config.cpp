@@ -16,6 +16,15 @@ std::string upper(std::string s) {
 
 int i32(const JsonValue& o, const char* k, int def) { return static_cast<int>(jInt(o, k, def)); }
 
+// [lo, hi] in Hz.
+bool band(const JsonValue& v, std::array<double, 2>& out) {
+  if (!v.isArray() || v.size() != 2) return false;
+  const double lo = v.at(0).asDouble(-1), hi = v.at(1).asDouble(-1);
+  if (lo <= 0 || hi <= lo) return false;
+  out = {lo, hi};
+  return true;
+}
+
 }  // namespace
 
 bool loadConfig(const std::string& path, AppConfig& c, std::string& err) {
@@ -185,6 +194,31 @@ bool loadConfig(const std::string& path, AppConfig& c, std::string& err) {
   c.stereo.service.plBufferBase = jAddr(st, "pl_buffer_base", c.stereo.service.plBufferBase);
   c.stereo.service.plBufferSize = static_cast<uint32_t>(jAddr(st, "pl_buffer_size", c.stereo.service.plBufferSize));
   c.stereo.service.plVerifyEvery = i32(st, "pl_verify_every", c.stereo.service.plVerifyEvery);
+
+  const JsonValue& ac = jObj(root, "acoustic");
+  c.acoustic.enabled = jBool(ac, "enabled", c.acoustic.enabled);
+  c.acoustic.saveWav = jBool(ac, "save_wav", c.acoustic.saveWav);
+  AcousticOptions& ao = c.acoustic.service;
+  ao.source = jStr(ac, "source", ao.source) == "synthetic" ? "synthetic" : "pl";
+  ao.base = jAddr(ac, "base", ao.base);
+  ao.phase = jStr(ac, "phase", ao.phase);
+  if (ao.phase != "low" && ao.phase != "high") ao.phase = "auto";
+  ao.warmupMs = i32(ac, "warmup_ms", ao.warmupMs);
+  ao.ringS = jNum(ac, "ring_s", ao.ringS);
+  ao.pollMs = std::max(2, i32(ac, "poll_ms", ao.pollMs));
+  ao.synthHz = jNum(ac, "synthetic_hz", ao.synthHz);
+  std::array<double, 2> b;
+  if (const JsonValue* v = ac.find("analysis_band_hz"); v && band(*v, b)) {
+    ao.analysis.bandLowHz = b[0];
+    ao.analysis.bandHighHz = b[1];
+  }
+  if (const JsonValue* v = ac.find("carrier_bands_hz"); v && v->isArray() && v->size() > 0) {
+    std::vector<std::array<double, 2>> bands;
+    for (const JsonValue& e : v->items())
+      if (band(e, b)) bands.push_back(b);
+    if (!bands.empty()) ao.analysis.carrierBands = bands;
+  }
+  ao.analysis.minProminenceDb = jNum(ac, "min_prominence_db", ao.analysis.minProminenceDb);
 
   const JsonValue& a = jObj(root, "alarm");
   c.alarm.warnPp = jNum(a, "warn_peak_to_peak", c.alarm.warnPp);

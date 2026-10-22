@@ -5,7 +5,8 @@ Run after stopping the desktop and vibmond, before starting an5642_board.json.
 No bootloader or persistent PL flash is written. image.ub must already exclude
 the top 32 MiB (prepare_an5642_image.py). Requires root and a PCAP .bit.bin
 (tools/bit_to_bin.py). FCLK1 is set to 125 MHz (video) and FCLK2 to 40 MHz
-(stereo core of pl/bd/team_bm_to_stereo.tcl), which the ALINX FSBL does not.
+(stereo core, its DMA and S_AXI_HP1 of pl/bd/team_bm_to_stereo.tcl), which
+the ALINX FSBL does not.
 The kernel display stays blanked: its device tree describes the ALINX PL, whose
 VTC and dynclk addresses are swapped in the camera design, so vibmond drives
 the video path itself (ui.display = pl_vdma).
