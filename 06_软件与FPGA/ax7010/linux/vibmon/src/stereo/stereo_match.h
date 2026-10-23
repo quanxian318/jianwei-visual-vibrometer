@@ -88,6 +88,11 @@ SgmParams plCoreParams(const SgmParams& post = SgmParams());
 // What the PL core returns for a rectified pair (bit-exact model): census + sgmRaw.
 DisparityMap plCoreModel(const StereoImage& left, const StereoImage& right);
 
+// Reuse the PL's top/left paths on vertically flipped images to check the
+// opposite vertical direction. Disparities still refer to the left camera.
+StereoImage flipStereoRows(const StereoImage& image);
+DisparityMap fuseVerticalPasses(const DisparityMap& forward, const DisparityMap& flipped, int toleranceQ4 = 16);
+
 // The two stages of matchSgm, split where the PL/PS boundary lies:
 //  - censusTransform: descriptors (PS today; returns bits and border width).
 //  - sgmRaw: cost, path aggregation, winner-take-all, uniqueness, sub-pixel

@@ -194,6 +194,7 @@ bool loadConfig(const std::string& path, AppConfig& c, std::string& err) {
   c.stereo.service.plBufferBase = jAddr(st, "pl_buffer_base", c.stereo.service.plBufferBase);
   c.stereo.service.plBufferSize = static_cast<uint32_t>(jAddr(st, "pl_buffer_size", c.stereo.service.plBufferSize));
   c.stereo.service.plVerifyEvery = i32(st, "pl_verify_every", c.stereo.service.plVerifyEvery);
+  c.stereo.service.plVerticalCheck = jBool(st, "pl_vertical_check", c.stereo.service.plVerticalCheck);
 
   const JsonValue& ac = jObj(root, "acoustic");
   c.acoustic.enabled = jBool(ac, "enabled", c.acoustic.enabled);

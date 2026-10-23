@@ -50,6 +50,7 @@ struct StereoConfig {
   uint64_t plBufferBase = 0;
   uint32_t plBufferSize = 0x100000;
   int plVerifyEvery = 0;             // >0: every N-th PL frame is recomputed on the PS and compared
+  bool plVerticalCheck = true;       // two PL passes: top/left and bottom/left consistency
   bool temporal = true;  // TemporalDisparityFilter on the published map
   std::string calibrationFile = "/etc/vibmon/stereo_calibration.json";
   int workWidth = 320, workHeight = 180;  // matching resolution (as the team's BM path)

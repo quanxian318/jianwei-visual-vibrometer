@@ -36,7 +36,7 @@ bool autoDepthRange(const DepthMap& m, double& lo, double& hi, int& validPct) {
   std::vector<uint16_t> v;
   v.reserve(m.mm.size() / 4 + 1);
   for (size_t i = 0; i < m.mm.size(); i += 4) {
-    if (m.mm[i]) v.push_back(m.mm[i]);
+    if (m.mm[i] && (m.filled.empty() || !m.filled[i])) v.push_back(m.mm[i]);
   }
   const size_t sampled = (m.mm.size() + 3) / 4;
   validPct = sampled ? static_cast<int>(100 * v.size() / sampled) : 0;
@@ -60,8 +60,11 @@ void depthIndex(const DepthMap& m, double lo, double hi, std::vector<uint8_t>& o
       out[i] = image ? static_cast<uint8_t>(m.left[i] >> 2) : 0;
       continue;
     }
-    const double t = std::max(0.0, std::min(1.0, (z - lo) / (hi - lo)));
-    out[i] = static_cast<uint8_t>(64 + (1.0 - t) * 191.0 + 0.5);
+    // Disparity (inverse depth) preserves the colour contrast of nearby
+    // objects even when a few far surfaces have very small disparity.
+    const double near = 1.0 / std::max(1.0, lo), far = 1.0 / std::max(lo + 1.0, hi);
+    const double t = std::max(0.0, std::min(1.0, (1.0 / z - far) / (near - far)));
+    out[i] = static_cast<uint8_t>(64 + t * 191.0 + 0.5);
   }
 }
 

@@ -30,7 +30,8 @@
     "pl_buffer_base": "0x1F800000",
     "pl_buffer_size": "0x100000",
     "max_skew_ms": 15,
-    "refine_lk": false
+    "refine_lk": false,
+    "pl_vertical_check": true
   },
   "acoustic": {
     "enabled": true

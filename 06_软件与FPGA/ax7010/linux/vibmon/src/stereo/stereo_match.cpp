@@ -209,6 +209,49 @@ int DisparityMap::valid() const {
   return n;
 }
 
+StereoImage flipStereoRows(const StereoImage& image) {
+  StereoImage out = image;
+  for (int y = 0; y < image.h; ++y)
+    std::copy_n(image.px.begin() + static_cast<size_t>(image.h - 1 - y) * image.w, image.w,
+                out.px.begin() + static_cast<size_t>(y) * image.w);
+  return out;
+}
+
+DisparityMap fuseVerticalPasses(const DisparityMap& a, const DisparityMap& flipped, int toleranceQ4) {
+  DisparityMap out;
+  out.w = a.w;
+  out.h = a.h;
+  out.q4.assign(a.q4.size(), kInvalidDisparity);
+  if (a.w <= 0 || a.h <= 0 || a.q4.size() != static_cast<size_t>(a.w) * a.h ||
+      flipped.w != a.w || flipped.h != a.h || flipped.q4.size() != a.q4.size()) return out;
+  auto at = [&](const DisparityMap& m, int x, int y, bool flip) {
+    if (x < 0 || y < 0 || x >= a.w || y >= a.h) return kInvalidDisparity;
+    const size_t i = static_cast<size_t>(flip ? a.h - 1 - y : y) * a.w + x;
+    return m.measured(i) ? m.q4[i] : kInvalidDisparity;
+  };
+  for (int y = 0; y < a.h; ++y)
+    for (int x = 0; x < a.w; ++x) {
+      const int qa = at(a, x, y, false), qb = at(flipped, x, y, true);
+      int16_t& q = out.q4[static_cast<size_t>(y) * a.w + x];
+      if (qa >= 0 && qb >= 0) {
+        if (std::abs(qa - qb) <= toleranceQ4) q = static_cast<int16_t>((qa + qb + 1) / 2);
+      } else if (qa >= 0 || qb >= 0) {
+        const int candidate = qa >= 0 ? qa : qb;
+        const DisparityMap& other = qa >= 0 ? flipped : a;
+        int support = 0;
+        for (int dy = -1; dy <= 1; ++dy)
+          for (int dx = -1; dx <= 1; ++dx) {
+            const int v = at(other, x + dx, y + dy, qa >= 0);
+            support += v >= 0 && std::abs(candidate - v) <= toleranceQ4;
+          }
+        // A one-sided occlusion must have nearby independent support; a
+        // disagreement is not filled or counted as a measured depth.
+        if (support >= 3) q = static_cast<int16_t>(candidate);
+      }
+    }
+  return out;
+}
+
 namespace {
 void fillHoles(DisparityMap& m, int maxRun) {
   m.filled.assign(m.q4.size(), 0);

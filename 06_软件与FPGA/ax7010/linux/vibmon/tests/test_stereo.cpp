@@ -364,7 +364,42 @@ void testTemporalFilter() {
 
 }  // namespace
 
+// Opposite vertical scans must agree before becoming a measured depth.
+// A hole may retain a real one-sided estimate with independent neighbours;
+// it must never acquire an invented depth from interpolation.
+static void testVerticalPasses() {
+  StereoImage image;image.w=3;image.h=2;image.px={1,2,3,4,5,6};
+  CHECK(flipStereoRows(image).px == std::vector<uint8_t>({4,5,6,1,2,3}));
+  DisparityMap a,b;a.w=b.w=5;a.h=b.h=5;a.q4.assign(25,128);b.q4.assign(25,136);
+  auto out=fuseVerticalPasses(a,b);CHECK(out.q4[12]==132);
+  b.q4[12]=256;out=fuseVerticalPasses(a,b);CHECK(out.q4[12]==kInvalidDisparity);
+  b.q4[12]=-1;out=fuseVerticalPasses(a,b);CHECK(out.q4[12]==128);
+  b.q4.assign(25,-1);out=fuseVerticalPasses(a,b);CHECK(out.valid()==0);
+  b.q4.assign(25,128);b.filled.assign(25,1);out=fuseVerticalPasses(a,b);CHECK(out.valid()==0);
+  b.filled.clear();b.q4.assign(25,128);a.q4.assign(25,-1);a.q4[6]=128;a.q4[7]=128;a.q4[8]=128;
+  b.q4[12]=-1;out=fuseVerticalPasses(a,b);CHECK(out.q4[12]==-1);
+  // Independent synthetic truth: retain the textured planes and their
+  // depth step despite an exposure difference between the cameras.
+  Texture texture(501);
+  StereoImage l,r;
+  auto truth=[](int x,int y){return x>100&&y>40 ? 14.35 : 8.35;};
+  renderPair(texture,192,96,truth,l,r,1.12,7);
+  auto old=plCoreModel(l,r);
+  auto fused=fuseVerticalPasses(old,plCoreModel(flipStereoRows(l),flipStereoRows(r)));
+  int oldCount=0,newCount=0,oldBad=0,newBad=0;
+  for(int y=12;y<84;++y) for(int x=40;x<180;++x){
+    size_t i=static_cast<size_t>(y)*192+x;
+    if(old.measured(i)){++oldCount;oldBad+=std::abs(old.q4[i]/16.0-truth(x,y))>1;}
+    if(fused.measured(i)){++newCount;newBad+=std::abs(fused.q4[i]/16.0-truth(x,y))>1;}
+  }
+  CHECK(newCount>0.75*oldCount);
+  CHECK(newBad*1.0/newCount<=oldBad*1.0/oldCount+0.005);
+  std::printf("  vertical check: measured %d -> %d, bad>1px %.4f -> %.4f\n",oldCount,newCount,
+              oldBad*1.0/oldCount,newBad*1.0/newCount);
+}
+
 int main() {
+  testVerticalPasses();
   testPlane();
   testSubpixelBias();
   testStepAndExposure();

@@ -67,12 +67,16 @@ void StereoService::offerLeft(const GrayFrame& f) {
 
 void StereoService::workLoop() {
   const int64_t periodNs = static_cast<int64_t>(1e9 / std::max(1.0, right_->nominalFps()));
+  int64_t lastPublishNs = 0;
   while (running_) {
     GrayFrame left, right;
     {
       std::unique_lock<std::mutex> lock(mutex_);
       cv_.wait_for(lock, std::chrono::milliseconds(200), [this] { return havePending_ || !running_; });
-      if (!havePending_) continue;
+      if (!havePending_) {
+        if (paused_) lastPublishNs = 0;
+        continue;
+      }
       left = std::move(pendingLeft_);
       havePending_ = false;
     }
@@ -96,6 +100,9 @@ void StereoService::workLoop() {
       setThreadNice(10);
       std::shared_ptr<DepthMap> d = process(left, right);
       setThreadNice(0);
+      const int64_t publishedNs = monoNs();
+      d->fps = lastPublishNs > 0 && publishedNs > lastPublishNs ? 1e9 / (publishedNs - lastPublishNs) : 0;
+      lastPublishNs = publishedNs;
       std::lock_guard<std::mutex> lock(mutex_);
       stats_.lastProcMs = d->procMs;
       stats_.lastValid = d->validFraction;
@@ -166,42 +173,51 @@ std::shared_ptr<DepthMap> StereoService::process(const GrayFrame& left, const Gr
   DisparityMap disp;
   std::string backend = "PS";
   if (cfg_.backend == "pl") {
-    // PL stereo core (census + 2-path SGM + LR check, fixed parameters), then
-    // the PS post-processing with the configured filters.
+    // Reuse the same PL core in both vertical directions. Matching remains
+    // on the PL; PS only checks the two candidate disparities and filters.
     const SgmParams pl = plCoreParams(cfg_.sgm);
-    bool done = false;
-    if (pl_) {
-      std::string err;
-      if (pl_->match(l, r, disp, err)) {
-        done = true;
-        backend = "PL";
-        bool verify = false;
-        {
-          std::lock_guard<std::mutex> lock(mutex_);
-          stats_.plFrames++;
-          stats_.plCycles = pl_->lastCycles();
-          verify = cfg_.plVerifyEvery > 0 && stats_.plFrames % static_cast<uint64_t>(cfg_.plVerifyEvery) == 0;
-        }
-        if (verify) {
-          // On-board PS/PL consistency check against the bit-exact model.
-          const bool same = plCoreModel(l, r).q4 == disp.q4;
-          std::lock_guard<std::mutex> lock(mutex_);
-          stats_.plVerified++;
-          if (!same) {
-            stats_.plMismatchFrames++;
-            LOGW(kTag, "PL output differs from the model (frame %llu)", static_cast<unsigned long long>(stats_.plFrames));
+    backend = "PL";
+    auto matchRaw = [&](const StereoImage& a, const StereoImage& b) {
+      DisparityMap raw;
+      bool done = false;
+      if (pl_) {
+        std::string err;
+        if (pl_->match(a, b, raw, err)) {
+          done = true;
+          bool verify = false;
+          {
+            std::lock_guard<std::mutex> lock(mutex_);
+            stats_.plFrames++;
+            stats_.plCycles = pl_->lastCycles();
+            verify = cfg_.plVerifyEvery > 0 && stats_.plFrames % static_cast<uint64_t>(cfg_.plVerifyEvery) == 0;
           }
+          if (verify) {
+            // On-board PS/PL consistency check against the bit-exact model.
+            const bool same = plCoreModel(a, b).q4 == raw.q4;
+            std::lock_guard<std::mutex> lock(mutex_);
+            stats_.plVerified++;
+            if (!same) {
+              stats_.plMismatchFrames++;
+              LOGW(kTag, "PL output differs from the model (frame %llu)", static_cast<unsigned long long>(stats_.plFrames));
+            }
+          }
+        } else {
+          std::lock_guard<std::mutex> lock(mutex_);
+          stats_.plFailures++;
+          stats_.plError = err;
+          LOGW(kTag, "PL stereo failed: %s; using the model for this frame", err.c_str());
         }
-      } else {
-        std::lock_guard<std::mutex> lock(mutex_);
-        stats_.plFailures++;
-        stats_.plError = err;
-        LOGW(kTag, "PL stereo failed: %s; using the model for this frame", err.c_str());
       }
-    }
-    if (!done) {
-      disp = plCoreModel(l, r);  // == stereo_core.v output
-      backend = "PL-model";
+      if (!done) {
+        raw = plCoreModel(a, b);  // == stereo_core.v output
+        backend = "PL-model";
+      }
+      return raw;
+    };
+    disp = matchRaw(l, r);
+    if (cfg_.plVerticalCheck) {
+      const DisparityMap reverse = matchRaw(flipStereoRows(l), flipStereoRows(r));
+      disp = fuseVerticalPasses(disp, reverse);
     }
     stereoPostProcess(l, r, 4 /* census 9x7 border */, pl, disp);
   } else {
