@@ -287,7 +287,8 @@ bool Application::init() {
                                     std::move(pl)));
     if (stereo_->start()) {
       StereoService* svc = stereo_.get();
-      engine_->setFrameTap([svc](const GrayFrame& f) { svc->offerLeft(f); });
+      engine_->setFrameTap([svc](const GrayFrame& f) { svc->offerLeft(f); }, cfg_.stereo.service.rateHz);
+      stereoStarted_ = true;
     } else {
       LOGW(kTag, "stereo: right camera %s not available", cfg_.stereo.right.device.c_str());
     }
@@ -794,7 +795,7 @@ void Application::onMeasureDone(const MeasureResult& r) {
       if (panel_) panel_->flash(PanelService::Flash::kSuccess, now);
       playVoice("measure_done");
     } else {
-      setMessage("基线未保存: " + r.reason);
+      setMessage("基线未保存: " + reasonText(r.reason));
     }
     return;
   }
@@ -1312,6 +1313,19 @@ void Application::every1s() {
 
 MeasurementEngine::Live Application::cameraLive() {
   return engine_ ? engine_->live() : MeasurementEngine::Live();
+}
+
+void Application::setDisplayNeeds(bool preview, bool vision, bool depth) {
+  if (engine_) engine_->setDisplayNeeds(preview, vision);
+  if (!stereoStarted_) return;
+  const bool run = depth || cfg_.stereo.scaleSource != "file";
+  if (run && stereo_->paused()) {
+    // The time without depth is no publish interval.
+    std::lock_guard<std::mutex> lock(depthMutex_);
+    depthPublishedNs_ = depthIntervalNs_ = 0;
+  }
+  stereo_->setPaused(!run);
+  engine_->setFrameTapRate(run ? cfg_.stereo.service.rateHz : 0);
 }
 
 void Application::publishDepth(std::shared_ptr<const DepthMap> depth) {

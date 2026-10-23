@@ -92,7 +92,7 @@ struct UiState {
   bool liveHeat = false;     // heat-map overlay on the live preview
   int roiGrab = 0;           // measuring box being dragged on the live preview (RoiGrab bits, 0 = none)
   NormBox roiDrag;           // its position while dragging
-  bool refEdit = false;      // multi-point: drags and taps place the reference group, not the box
+  bool refEdit = false;      // multi-point: the next drag or tap places the reference group, not the box
   bool panning = false;      // zoomed live view being dragged by the finger
   double panCx = 0.5, panCy = 0.5;  // its centre meanwhile (normalised)
   std::string toast;
@@ -109,6 +109,7 @@ struct UiData {
   SystemState s;
   MeasurementEngine::Live live;
   std::shared_ptr<const DepthMap> depth;  // stereo depth, null until the stereo module publishes one
+  bool stereoOn = false;                  // the stereo module runs (no map yet: waiting for one)
   std::vector<RecordSummary> records;
   RecordView record;
   int64_t nowMs = 0;   // CLOCK_MONOTONIC
@@ -202,6 +203,13 @@ JsonValue roiCommand(const NormBox& b, int fw, int fh);
 void pannedCentre(const UiAction& a, const Rect& region, int dx, int dy, double& cx, double& cy);
 
 void renderUi(Canvas& c, const UiState& st, const UiData& d, std::vector<HitRegion>& hits);
+// Camera card of the live page (kLiveCameraCard) alone, over the last full
+// frame: a newer camera image between full frames. Its touch regions are
+// those the last renderUi registered.
+constexpr Rect kLiveCameraCard{theme::kCx, theme::kCy, 600, 348};
+void renderLivePreview(Canvas& c, const UiState& st, const UiData& d);
+// The window (sx, sy, sw, sh, normalised) of a camera image into r.
+void drawPreview(Canvas& c, const Rect& r, const PreviewImage& p, double sx, double sy, double sw, double sh);
 // Topmost region at (x, y). A disabled region returns a "why" action with its
 // reason (null without one); blocking regions return a null action.
 UiAction hitTest(const std::vector<HitRegion>& hits, int x, int y, Rect* region = nullptr);

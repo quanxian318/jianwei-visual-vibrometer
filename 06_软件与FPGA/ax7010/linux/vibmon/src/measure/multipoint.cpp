@@ -226,6 +226,20 @@ bool MultiPointTracker::pointValid(int i) const { return impl_ && impl_->s.last_
 float MultiPointTracker::pointU(int i) const { return impl_ ? impl_->s.last[i][0] : 0.f; }
 float MultiPointTracker::pointV(int i) const { return impl_ ? impl_->s.last[i][1] : 0.f; }
 bool MultiPointTracker::referenceValid() const { return impl_ && impl_->s.reference_valid; }
+
+std::vector<Roi> MultiPointTracker::regions() const {
+  std::vector<Roi> r;
+  if (!impl_) return r;
+  const Impl& m = *impl_;
+  for (int i = 0; i < m.cfg.nroi + m.cfg.nref; ++i) {  // as blurAround, with its one-pixel margin
+    const float cx = m.cfg.xy[i][0] + (m.s.initialized ? m.s.patch[i].u : 0.f);
+    const float cy = m.cfg.xy[i][1] + (m.s.initialized ? m.s.patch[i].v : 0.f);
+    const int x0 = static_cast<int>(std::floor(cx)) - kReach - 1, y0 = static_cast<int>(std::floor(cy)) - kReach - 1;
+    const int x1 = static_cast<int>(std::ceil(cx)) + kReach + 1, y1 = static_cast<int>(std::ceil(cy)) + kReach + 1;
+    r.push_back(Roi{x0, y0, x1 - x0 + 1, y1 - y0 + 1});
+  }
+  return r;
+}
 uint32_t MultiPointTracker::frames() const { return impl_ ? impl_->s.frames : 0; }
 int MultiPointTracker::baselineWindows() const { return impl_ ? static_cast<int>(impl_->b.windows) : 0; }
 

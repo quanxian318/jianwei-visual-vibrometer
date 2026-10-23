@@ -330,6 +330,65 @@ void blitGray(Canvas& c, int x, int y, int w, int h, const uint8_t* img, int iw,
   }
 }
 
+void blitBgr(Canvas& c, int x, int y, int w, int h, const uint8_t* img, int iw, int ih, double sx, double sy,
+             double sw, double sh) {
+  if (!img || iw <= 0 || ih <= 0 || w <= 0 || h <= 0) return;
+  const int cx0 = std::max(0, x), cx1 = std::min(c.width(), x + w);
+  if (cx0 >= cx1) return;
+  const int n = cx1 - cx0;
+  if (sw >= w && sh >= h) {
+    std::vector<int> xo(n);
+    for (int i = 0; i < n; ++i)
+      xo[i] = 3 * std::max(0, std::min(iw - 1, static_cast<int>(sx + (cx0 - x + i + 0.5) * sw / w)));
+    for (int j = 0; j < h; ++j) {
+      const int py = y + j;
+      if (py < 0 || py >= c.height()) continue;
+      const int iy = std::max(0, std::min(ih - 1, static_cast<int>(sy + (j + 0.5) * sh / h)));
+      const uint8_t* row = img + static_cast<size_t>(iy) * iw * 3;
+      uint32_t* d = c.data() + static_cast<size_t>(py) * c.width() + cx0;
+      for (int i = 0; i < n; ++i) {
+        const uint8_t* p = row + xo[i];
+        d[i] = p[0] | (static_cast<uint32_t>(p[1]) << 8) | (static_cast<uint32_t>(p[2]) << 16);
+      }
+    }
+    return;
+  }
+  std::vector<int> xo(n), xf(n);
+  for (int i = 0; i < n; ++i) {
+    double fx = sx + (cx0 - x + i + 0.5) * sw / w - 0.5;
+    fx = std::max(0.0, std::min(static_cast<double>(iw - 1), fx));
+    int ix = static_cast<int>(fx);
+    if (ix > iw - 2) ix = std::max(0, iw - 2);
+    xo[i] = 3 * ix;
+    xf[i] = iw > 1 ? static_cast<int>((fx - ix) * 256) : 0;
+  }
+  const int next = iw > 1 ? 3 : 0;
+  for (int j = 0; j < h; ++j) {
+    const int py = y + j;
+    if (py < 0 || py >= c.height()) continue;
+    double fy = sy + (j + 0.5) * sh / h - 0.5;
+    fy = std::max(0.0, std::min(static_cast<double>(ih - 1), fy));
+    int iy = static_cast<int>(fy);
+    if (iy > ih - 2) iy = std::max(0, ih - 2);
+    const int wy = ih > 1 ? static_cast<int>((fy - iy) * 256) : 0;
+    const uint8_t* r0 = img + static_cast<size_t>(iy) * iw * 3;
+    const uint8_t* r1 = img + static_cast<size_t>(std::min(iy + 1, ih - 1)) * iw * 3;
+    uint32_t* d = c.data() + static_cast<size_t>(py) * c.width() + cx0;
+    for (int i = 0; i < n; ++i) {
+      const uint8_t* a = r0 + xo[i];
+      const uint8_t* b = r1 + xo[i];
+      const int wx = xf[i];
+      uint32_t col = 0;
+      for (int k = 0; k < 3; ++k) {
+        const int top = a[k] * (256 - wx) + a[k + next] * wx;
+        const int bot = b[k] * (256 - wx) + b[k + next] * wx;
+        col |= static_cast<uint32_t>((top * (256 - wy) + bot * wy + 32768) >> 16) << (8 * k);
+      }
+      d[i] = col;
+    }
+  }
+}
+
 namespace {
 struct HeatLut {
   uint32_t v[256];

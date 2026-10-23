@@ -133,9 +133,21 @@ int main(int argc, char** argv) {
   live.fps = 59.9;
   live.frameW = 640;
   live.frameH = 480;
-  live.previewW = 320;
-  live.previewH = 240;
-  live.preview = scene(320, 240, 0);
+  {
+    // Colour camera image (BGR, as the PL cameras store it) with a warm tint: red > green > blue.
+    auto p = std::make_shared<PreviewImage>();
+    p->width = 640;
+    p->height = 480;
+    p->frame = 1;
+    const std::vector<uint8_t> g = scene(640, 480, 0);
+    p->bgr.resize(3 * g.size());
+    for (size_t i = 0; i < g.size(); ++i) {
+      p->bgr[3 * i] = static_cast<uint8_t>(g[i] * 0.6);
+      p->bgr[3 * i + 1] = static_cast<uint8_t>(g[i] * 0.85);
+      p->bgr[3 * i + 2] = g[i];
+    }
+    live.preview = p;
+  }
   live.roi = Roi{288, 208, 64, 64};
   live.frameCount = 200;
   live.lastDisp = 1.234;
@@ -659,6 +671,33 @@ int main(int argc, char** argv) {
     std::vector<HitRegion> hits;
     renderUi(c, UiState(), md, hits);
     if (!out.empty()) writePpm(c, out + "/ui_live_multipoint.ppm");
+    // The camera image keeps its colours (red and blue not swapped).
+    const Rect img = fitAspect(Rect{kLiveCameraCard.x + 4, kLiveCameraCard.y + 4, kLiveCameraCard.w - 8,
+                                    kLiveCameraCard.h - 8}, 640, 480);
+    int warm = 0, cold = 0;
+    for (int y = img.y; y < img.y + img.h; y += 4) {
+      for (int x = img.x; x < img.x + img.w; x += 4) {
+        const uint32_t p = c.get(x, y);
+        const int r = (p >> 16) & 0xFF, b = p & 0xFF;
+        warm += r > b + 8;
+        cold += b > r + 8;
+      }
+    }
+    CHECK(warm > 4 * cold);  // the overlays (green templates, buttons) are the cold part
+    // The camera card redrawn alone over the frame leaves the frame as a full render makes it.
+    Canvas again = c;
+    renderLivePreview(again, UiState(), md);
+    CHECK(memcmp(again.data(), c.data(), sizeof(uint32_t) * c.width() * c.height()) == 0);
+    // "Move reference": the next tap places the reference group, then the box takes touches again.
+    UiState rs;
+    rs.refEdit = true;
+    Rect r;
+    const UiAction a = tap(rs, md, img.x + img.w / 4, img.y + img.h * 3 / 4, &r);
+    CHECK(a.kind == "roi_box");
+    JsonValue cmd = FbUi::applyAction(rs, a, r, img.x + img.w / 4, img.y + img.h * 3 / 4, md, 0);
+    CHECK(cmd.find("ref_x") && !rs.refEdit);
+    cmd = FbUi::applyAction(rs, a, r, img.x + img.w / 4, img.y + img.h * 3 / 4, md, 0);
+    CHECK(cmd.find("x") && !cmd.find("ref_x"));
   }
 
   // Printed slip.

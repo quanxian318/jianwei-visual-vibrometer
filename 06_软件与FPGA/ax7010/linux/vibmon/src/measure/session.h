@@ -132,10 +132,16 @@ struct MultiPointCapture {
   std::vector<uint8_t> timestampValid;
   std::vector<std::vector<float>> u, v;     // [point][frame], reference motion removed
   std::vector<std::vector<uint8_t>> ok;     // [point][frame]
+  std::vector<uint8_t> refOk;               // [frame] reference group tracked
   std::vector<MultiPointWindow> windows;
   void reset(const MultiPointLayout& l);
   void add(const GrayFrame& f, const MultiPointTracker& t, bool tracked);
 };
+// What made windows of a capture invalid, from its frames: "dropped_frames"
+// (sequence gaps), "irregular_sampling" (an interval more than 10 % off the
+// median, the team's window check), "reference_lost" or "tracking_lost",
+// whichever hit most frames; empty when none did.
+std::string multiPointWindowCause(const MultiPointCapture& c);
 // Result of a multi-point measurement (not a baseline) from its windows.
 MeasureResult analyzeMultiPoint(const MultiPointCapture& c, const MeasureConfig& cfg, double nominalFps);
 
@@ -148,6 +154,15 @@ MeasureResult analyzeWithReference(const std::vector<CaptureSample>& target, con
 
 // Pure analysis of a finished capture (unit-tested on synthetic data).
 MeasureResult analyzeCapture(const std::vector<CaptureSample>& samples, const MeasureConfig& cfg, double nominalFps);
+
+// Camera image for display at full resolution: colour (BGR888, byte 0 = blue)
+// when the source delivers it, otherwise gray.
+struct PreviewImage {
+  int width = 0, height = 0;
+  uint64_t frame = 0;         // engine frame count when taken: a new image has a new number
+  std::vector<uint8_t> bgr;   // width * height * 3, or empty
+  std::vector<uint8_t> gray;  // width * height when bgr is empty
+};
 
 class MeasurementEngine {
  public:
@@ -162,8 +177,7 @@ class MeasurementEngine {
     double lastDisp = 0, lastScore = 0;
     std::vector<float> recent;  // recent displacement samples (pixels)
     int frameW = 0, frameH = 0;
-    int previewW = 0, previewH = 0;
-    std::vector<uint8_t> preview;
+    std::shared_ptr<const PreviewImage> preview;  // shared, not copied, with every reader
     Roi roi;
     uint64_t frameCount = 0;
     VisionLive vision;
@@ -175,7 +189,7 @@ class MeasurementEngine {
   };
   using DoneFn = std::function<void(const MeasureResult&)>;
 
-  explicit MeasurementEngine(std::unique_ptr<FrameSource> source, int previewWidth = 320);
+  explicit MeasurementEngine(std::unique_ptr<FrameSource> source);
   ~MeasurementEngine();
 
   bool startCamera();
@@ -183,9 +197,15 @@ class MeasurementEngine {
   // roi centre in normalised image coordinates (0..1).
   // Display image processing (vision page); runs beside the tracker.
   void setVision(const VisionConfig& cfg);
-  // Called on the camera thread with every preview frame (not during a
-  // capture), e.g. to feed the stereo service the left image.
-  void setFrameTap(std::function<void(const GrayFrame&)> tap);
+  // Called on the camera thread with a preview frame (not during a capture)
+  // at most rateHz times a second, e.g. to feed the stereo service the left image.
+  void setFrameTap(std::function<void(const GrayFrame&)> tap, double rateHz);
+  void setFrameTapRate(double rateHz);  // 0 stops the tap
+  // What the display shows. Outside a capture a frame is converted only when
+  // something uses it: the preview (when shown), the vision chain (when its
+  // output is shown and it is idle) or the frame tap; the vision chain pauses
+  // while its output is not shown. Both default to true (no screen).
+  void setDisplayNeeds(bool preview, bool vision);
   bool beginCapture(const MeasureConfig& cfg, double cx, double cy, DoneFn done);
   void endCapture();  // analyse what was captured so far
   void cancel();      // drop the capture without a result
@@ -194,10 +214,9 @@ class MeasurementEngine {
 
  private:
   void run();
-  void updatePreview(const GrayFrame& f);
+  void updatePreview(GrayFrame& f);
 
   std::unique_ptr<FrameSource> src_;
-  int previewWidth_;
   std::thread thread_;
   std::atomic<bool> running_{false};
   std::atomic<State> state_{State::kStopped};
@@ -210,9 +229,11 @@ class MeasurementEngine {
   std::vector<CaptureSample> samples_, refSamples_;
   MultiPointCapture mp_;
   FieldSpectrum field_;
-  int64_t lastPreviewNs_ = 0;
+  int64_t lastPreviewNs_ = 0, lastTapNs_ = 0;
+  std::atomic<bool> previewWanted_{true}, visionWanted_{true};
   VisionPipeline vision_;
   std::function<void(const GrayFrame&)> tap_;
+  double tapRateHz_ = 0;
 };
 
 }  // namespace vm

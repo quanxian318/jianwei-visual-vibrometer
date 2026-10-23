@@ -1,8 +1,13 @@
 #include "measure/pl_camera_source.h"
 
+#include <pthread.h>
+#include <sched.h>
+
+#include <algorithm>
 #include <atomic>
 #include <cstring>
 #include <mutex>
+#include <thread>
 #if defined(__ARM_NEON)
 #include <arm_neon.h>
 #endif
@@ -14,42 +19,53 @@
 namespace vm {
 namespace {
 
-// RGB888 (byte 0 = R) to luma, (77 R + 150 G + 29 B + 128) >> 8, read straight
-// from the uncached frame store: one pass, no intermediate copy.
-void rgbToGray(const uint8_t* rgb, uint8_t* gray, size_t n) {
+// BGR888 as the camera path stores it (OV5640 BGR565, remapped so that
+// byte 0 = blue) to luma, (29 B + 150 G + 77 R + 128) >> 8, read straight from
+// the uncached frame store in one pass; `copy` (optional) receives the BGR
+// bytes for display.
+void bgrToGray(const uint8_t* bgr, uint8_t* gray, uint8_t* copy, size_t n) {
   size_t i = 0;
 #if defined(__ARM_NEON)
-  const uint8x8_t kr = vdup_n_u8(77), kg = vdup_n_u8(150), kb = vdup_n_u8(29);
+  const uint8x8_t kb = vdup_n_u8(29), kg = vdup_n_u8(150), kr = vdup_n_u8(77);
   for (; i + 16 <= n; i += 16) {
-    const uint8x16x3_t p = vld3q_u8(rgb + 3 * i);
-    uint16x8_t lo = vmull_u8(vget_low_u8(p.val[0]), kr);
+    const uint8x16x3_t p = vld3q_u8(bgr + 3 * i);
+    if (copy) vst3q_u8(copy + 3 * i, p);
+    uint16x8_t lo = vmull_u8(vget_low_u8(p.val[0]), kb);
     lo = vmlal_u8(lo, vget_low_u8(p.val[1]), kg);
-    lo = vmlal_u8(lo, vget_low_u8(p.val[2]), kb);
-    uint16x8_t hi = vmull_u8(vget_high_u8(p.val[0]), kr);
+    lo = vmlal_u8(lo, vget_low_u8(p.val[2]), kr);
+    uint16x8_t hi = vmull_u8(vget_high_u8(p.val[0]), kb);
     hi = vmlal_u8(hi, vget_high_u8(p.val[1]), kg);
-    hi = vmlal_u8(hi, vget_high_u8(p.val[2]), kb);
+    hi = vmlal_u8(hi, vget_high_u8(p.val[2]), kr);
     vst1q_u8(gray + i, vcombine_u8(vrshrn_n_u16(lo, 8), vrshrn_n_u16(hi, 8)));
   }
 #endif
   for (; i < n; ++i) {
-    const uint8_t* q = rgb + 3 * i;
-    gray[i] = static_cast<uint8_t>((77u * q[0] + 150u * q[1] + 29u * q[2] + 128u) >> 8);
+    const uint8_t* q = bgr + 3 * i;
+    gray[i] = static_cast<uint8_t>((29u * q[0] + 150u * q[1] + 77u * q[2] + 128u) >> 8);
+    if (copy) memcpy(copy + 3 * i, q, 3);
   }
 }
 
 struct Capture {
   explicit Capture(const PlCameraConfig& c) : cfg(c) {}
+  ~Capture() {
+    watching = false;
+    if (watcher.joinable()) watcher.join();
+  }
   PlCameraConfig cfg;
   std::mutex mutex;
   std::unique_ptr<PlCameraRig> rig;
   std::atomic<bool> active[2] = {{false}, {false}};
   // Store each writer was last seen on and when it moved there, i.e. when the
-  // store before it completed. Every polling reader updates both cameras, so
-  // a camera read only now and then (the stereo right camera) still gets
-  // completion times from the measurement camera's 1 ms polling.
+  // store before it completed: noted every 1 ms by a real-time thread, so the
+  // completion times do not depend on how busy the readers are (the team's
+  // window check rejects an interval 10 %, 2.2 ms at 45 fps, off).
+  std::thread watcher;
+  std::atomic<bool> watching{false};
   std::mutex seenMutex;
   int seenStore[2] = {-1, -1};
   int64_t seenNs[2] = {0, 0};
+  int64_t clearedNs[2] = {0, 0}, loggedNs[2] = {0, 0};
 
   void observe() {
     const int64_t now = monoNs();
@@ -60,7 +76,34 @@ struct Capture {
       if (s != seenStore[c]) {
         seenStore[c] = s;
         seenNs[c] = now;
+        continue;
       }
+      // A frame with SOF/EOL timing errors (the partial first frame, a glitch
+      // on the sensor lines) stops the writer until the error bits are
+      // cleared, as the team's start-up loop does. Done here, for both
+      // cameras, because a reader that only takes the newest frame (the
+      // stereo right camera) never waits on a stopped writer.
+      const int64_t kStuckNs = 100000000;
+      if (now - seenNs[c] < kStuckNs || now - clearedNs[c] < kStuckNs) continue;
+      clearedNs[c] = now;
+      const uint32_t errors = rig->errors(c);
+      if (!errors) continue;
+      rig->clearErrors(c);
+      if (now - loggedNs[c] > 60000000000LL) {
+        loggedNs[c] = now;
+        LOGW("plcam", "camera %d writer stopped on VDMA errors 0x%x; cleared", c, errors);
+      }
+    }
+  }
+
+  void watch() {
+    sched_param sp{};
+    sp.sched_priority = 10;
+    if (pthread_setschedparam(pthread_self(), SCHED_FIFO, &sp) != 0)
+      LOGW("plcam", "frame times without real-time priority (not root?)");
+    while (watching) {
+      observe();
+      sleepMs(1);
     }
   }
 
@@ -95,6 +138,7 @@ struct Capture {
       seenStore[cam] = -1;
     }
     active[cam] = true;
+    if (!watching.exchange(true)) watcher = std::thread(&Capture::watch, this);
     return true;
   }
 
@@ -147,12 +191,6 @@ class PlCameraSource : public FrameSource {
       const int store = cap_->rig->writingStore(cam_);
       const int64_t moved = cap_->movedAt(cam_, store);
       if (store < 0 || store >= 3 || (store == lastStore_ && !(latest && moved > 0))) {
-        // A partial first frame (SOF/EOL timing error) stops the writer until
-        // the error bits are cleared, as the team's start-up loop does.
-        if (monoMs() - lastClearMs_ >= 100) {
-          if (cap_->rig->errors(cam_)) cap_->rig->clearErrors(cam_);
-          lastClearMs_ = monoMs();
-        }
         sleepMs(1);
         continue;
       }
@@ -162,11 +200,28 @@ class PlCameraSource : public FrameSource {
       const int64_t stamp = moved > 0 ? moved : monoNs();
       out.width = PlCameraRig::kWidth;
       out.height = PlCameraRig::kHeight;
-      out.pixels.resize(static_cast<size_t>(out.width) * out.height);
-      rgbToGray(memory_.bytes() + done * cap_->cfg.frameStride, out.pixels.data(), out.pixels.size());
-      // The writer comes back to `done` two frame times after it completed;
-      // a read that ended later may mix two frames.
-      if (cap_->rig->writingStore(cam_) == done || monoNs() - stamp > reuseNs) continue;
+      if (!out.skipPixels) {
+        const size_t n = static_cast<size_t>(out.width) * out.height;
+        const uint8_t* src = memory_.bytes() + done * cap_->cfg.frameStride;
+        out.pixels.resize(n);
+        if (out.wantColor || out.regions.empty()) {
+          if (out.wantColor) out.bgr.resize(3 * n);
+          bgrToGray(src, out.pixels.data(), out.wantColor ? out.bgr.data() : nullptr, n);
+        } else {
+          for (const Roi& r : out.regions) {
+            const int x0 = std::max(0, r.x), x1 = std::min(out.width, r.x + r.w);
+            const int y0 = std::max(0, r.y), y1 = std::min(out.height, r.y + r.h);
+            for (int y = y0; y < y1 && x0 < x1; ++y) {
+              const size_t o = static_cast<size_t>(y) * out.width + x0;
+              bgrToGray(src + 3 * o, out.pixels.data() + o, nullptr, static_cast<size_t>(x1 - x0));
+            }
+          }
+        }
+        // The writer comes back to `done` two frame times after it completed;
+        // a read that ended later may mix two frames.
+        if (cap_->rig->writingStore(cam_) == done || monoNs() - stamp > reuseNs) continue;
+      }
+      if (!out.wantColor || out.skipPixels) out.bgr.clear();
       const uint32_t errors = cap_->rig->errors(cam_);
       if (errors) {
         cap_->rig->clearErrors(cam_);
@@ -185,7 +240,6 @@ class PlCameraSource : public FrameSource {
 
   std::shared_ptr<Capture> cap_;
   int cam_, lastStore_ = 0;
-  int64_t lastClearMs_ = 0;
   uint32_t sequence_ = 0;
   bool started_ = false;
   PhysWindow memory_;

@@ -2,6 +2,9 @@
 
 #include <cmath>
 #include <cstring>
+#if defined(__ARM_NEON)
+#include <arm_neon.h>
+#endif
 
 #include "util/clock.h"
 #include "util/log.h"
@@ -170,12 +173,17 @@ void PlDisplay::present(const Canvas& c) {
   const int w = c.width() < kWidth ? c.width() : kWidth;
   const int h = c.height() < kHeight ? c.height() : kHeight;
   for (int y = 0; y < h; ++y) {
-    const uint32_t* src = c.data() + static_cast<size_t>(y) * c.width();
-    for (int x = 0; x < w; ++x) {
-      row_[3 * x] = static_cast<uint8_t>(src[x] >> 16);
-      row_[3 * x + 1] = static_cast<uint8_t>(src[x] >> 8);
-      row_[3 * x + 2] = static_cast<uint8_t>(src[x]);
+    // 0x00RRGGBB in memory is B, G, R, 0: drop every fourth byte.
+    const uint8_t* src = reinterpret_cast<const uint8_t*>(c.data() + static_cast<size_t>(y) * c.width());
+    uint8_t* dst = row_.data();
+    int x = 0;
+#if defined(__ARM_NEON)
+    for (; x + 16 <= w; x += 16) {
+      const uint8x16x4_t p = vld4q_u8(src + 4 * x);
+      vst3q_u8(dst + 3 * x, uint8x16x3_t{{p.val[0], p.val[1], p.val[2]}});
     }
+#endif
+    for (; x < w; ++x) memcpy(dst + 3 * x, src + 4 * x, 3);
     memcpy(store + static_cast<size_t>(y) * kWidth * 3, row_.data(), static_cast<size_t>(w) * 3);  // burst into WC memory
   }
   // The reader switches at the next frame start, so the shown store is never written.

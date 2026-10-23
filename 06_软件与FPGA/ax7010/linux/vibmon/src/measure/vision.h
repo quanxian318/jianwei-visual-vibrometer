@@ -90,6 +90,8 @@ class VisionPipeline {
   void stop();
   void configure(const VisionConfig& cfg);
   void setPaused(bool paused);  // e.g. while a measurement needs the CPU
+  // Running, not paused and no frame waiting: offer() would be processed.
+  bool wantsFrame();
   void offer(const uint8_t* gray, int w, int h, int64_t tNs);
   VisionLive live();
 

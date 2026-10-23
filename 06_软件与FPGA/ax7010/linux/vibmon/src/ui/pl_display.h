@@ -13,8 +13,10 @@ namespace vm {
 // user space because the ALINX kernel's display nodes describe a different PL:
 // axi_dynclk makes the pixel and 5x serial clocks, the v_tc generator the
 // 1024x600@60 CVT timing of the 7" panel, and an AXI VDMA MM2S channel reads
-// RGB888 (byte 0 = R) from three frame stores in reserved DDR. present() fills
-// a store that is not shown and parks the reader on it, so frames never tear.
+// 24-bit pixels from three frame stores in reserved DDR: byte 0 goes out as
+// blue and byte 2 as red (rgb2dvi channel 0 / 2), the order the cameras store.
+// present() fills a store that is not shown and parks the reader on it, so
+// frames never tear.
 struct PlDisplayConfig {
   uint32_t vdmaBase = 0x43000000, vtcBase = 0x43C00000, dynclkBase = 0x43C10000;
   // Store k at bufferBase + k * bufferStride; above the six camera stores in

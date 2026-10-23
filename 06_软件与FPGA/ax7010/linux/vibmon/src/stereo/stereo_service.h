@@ -89,6 +89,7 @@ class StereoService {
   bool start();
   void stop();
   void setPaused(bool paused) { paused_ = paused; }
+  bool paused() const { return paused_; }
   // Moves the right image by offsetPx (calibration-size pixels, positive
   // shrinks every disparity), saves it in the calibration file under a new
   // id ending in "-dist<tag>" and uses it from the next pair on. offsetPx was

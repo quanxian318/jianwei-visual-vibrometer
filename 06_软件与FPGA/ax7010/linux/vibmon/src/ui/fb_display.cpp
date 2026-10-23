@@ -169,7 +169,8 @@ void TouchInput::toScreen(int& x, int& y) const {
 void TouchInput::read(std::vector<TouchEvent>& out) {
   if (fd_ < 0) return;
   input_event ev;
-  while (::read(fd_, &ev, sizeof(ev)) == static_cast<ssize_t>(sizeof(ev))) {
+  ssize_t n;
+  while ((n = ::read(fd_, &ev, sizeof(ev))) == static_cast<ssize_t>(sizeof(ev))) {
     if (ev.type == EV_ABS) {
       if (ev.code == ABS_MT_POSITION_X || ev.code == ABS_X) rawX_ = ev.value;
       if (ev.code == ABS_MT_POSITION_Y || ev.code == ABS_Y) rawY_ = ev.value;
@@ -197,6 +198,12 @@ void TouchInput::read(std::vector<TouchEvent>& out) {
       lastX_ = x;
       lastY_ = y;
     }
+  }
+  if (n < 0 && errno == ENODEV) {  // unplugged or enumerated again: open() finds it anew
+    LOGW("ui", "touch device gone");
+    ::close(fd_);
+    fd_ = -1;
+    down_ = downPending_ = upPending_ = false;
   }
 }
 

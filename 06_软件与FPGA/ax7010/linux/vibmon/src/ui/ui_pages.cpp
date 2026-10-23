@@ -265,7 +265,12 @@ std::string acousticClause(const ResultSummary& a, uint32_t& col) {
 // Live page
 // ---------------------------------------------------------------------------
 
-void renderLivePage(Ui& ui, const UiData& d) {
+namespace {
+
+// Camera card of the live page: the image, the measuring box and everything
+// drawn over them. Nothing leaves the card, so it can be redrawn alone
+// between full frames (renderLivePreview).
+void livePreviewCard(Ui& ui, const UiData& d) {
   Canvas& c = ui.c;
   const SystemState& s = d.s;
   const MeasurementEngine::Live& live = d.live;
@@ -275,7 +280,7 @@ void renderLivePage(Ui& ui, const UiData& d) {
   char buf[160];
 
   // Camera preview.
-  const Rect pc{kCx, kCy, 600, 348};
+  const Rect pc = kLiveCameraCard;
   ui.card(pc, 0x05080C);
   const Rect img = fitAspect(Rect{pc.x + 4, pc.y + 4, pc.w - 8, pc.h - 8}, live.frameW, live.frameH);
   double zx, zy, zw, zh;
@@ -284,9 +289,8 @@ void renderLivePage(Ui& ui, const UiData& d) {
     zx = ui.st.panCx - zw / 2;
     zy = ui.st.panCy - zh / 2;
   }
-  if (live.cameraOk && !live.preview.empty() && live.previewW > 0) {
-    blitGray(c, img.x, img.y, img.w, img.h, live.preview.data(), live.previewW, live.previewH, zx * live.previewW,
-             zy * live.previewH, zw * live.previewW, zh * live.previewH);
+  if (live.cameraOk && live.preview && live.preview->width > 0) {
+    drawPreview(c, img, *live.preview, zx, zy, zw, zh);
     const VisionLive& v = live.vision;
     if (ui.st.liveHeat && v.ew > 0 && v.energy.size() == static_cast<size_t>(v.ew) * v.eh) {
       blitGray(c, img.x, img.y, img.w, img.h, v.energy.data(), v.ew, v.eh, zx * v.ew, zy * v.eh, zw * v.ew,
@@ -428,6 +432,30 @@ void renderLivePage(Ui& ui, const UiData& d) {
     const int x = drawText(c, f, pc.x + 22, ty, frameInfo, kText2);
     drawText(c, f, x, ty, work, live.procMs * live.fps > 1000 ? kAmber : kText2);
   }
+}
+
+}  // namespace
+
+void renderLivePreview(Canvas& c, const UiState& st, const UiData& d) {
+  // The page background under the card first: its rounded corners then blend
+  // as in a full frame.
+  const Rect& r = kLiveCameraCard;
+  for (int y = r.y; y < r.y + r.h; ++y) c.fillRect(r.x, y, r.w, 1, mixColor(kBgTop, kBg, y * 255 / (kH - 1)));
+  std::vector<HitRegion> unused;  // the regions of the last full frame stay in use
+  Ui ui(c, st, unused);
+  livePreviewCard(ui, d);
+}
+
+void renderLivePage(Ui& ui, const UiData& d) {
+  Canvas& c = ui.c;
+  const SystemState& s = d.s;
+  const MeasurementEngine::Live& live = d.live;
+  const bool capturing = s.measureState == "capturing";
+  const bool analyzing = s.measureState == "analyzing";
+  const bool multipoint = s.method == "multipoint";
+  char buf[160];
+
+  livePreviewCard(ui, d);
 
   // Live displacement.
   {

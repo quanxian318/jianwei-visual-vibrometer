@@ -119,6 +119,7 @@ void renderVisionPage(Ui& ui, const UiData& d) {
   const bool haveVision = d.live.cameraOk && v.w > 0 && v.source.size() == static_cast<size_t>(v.w) * v.h;
   const DepthMap* dm = d.depth.get();
   const bool haveDepth = dm && dm->w > 0 && dm->mm.size() == static_cast<size_t>(dm->w) * dm->h;
+  const bool havePreview = d.live.cameraOk && d.live.preview && d.live.preview->width > 0;
   char buf[160];
   const int cw = (kCw - 8) / 2, ch = 344;
   const Rect left{kCx, kCy, cw, ch}, right{kCx + cw + 8, kCy, cw, ch};
@@ -146,11 +147,10 @@ void renderVisionPage(Ui& ui, const UiData& d) {
     } else {
       drawText(c, fontFace(18), right.x + 14, right.y + 8, "双目深度", kText2);
     }
-    if (haveDepth && dm->left.size() == dm->mm.size()) {
+    if (havePreview) {
+      drawPreview(c, li, *d.live.preview, 0, 0, 1, 1);
+    } else if (haveDepth && dm->left.size() == dm->mm.size()) {
       blitGray(c, li.x, li.y, li.w, li.h, dm->left.data(), dm->w, dm->h, 0, 0, dm->w, dm->h);
-    } else if (d.live.cameraOk && !d.live.preview.empty() && d.live.previewW > 0) {
-      blitGray(c, li.x, li.y, li.w, li.h, d.live.preview.data(), d.live.previewW, d.live.previewH, 0, 0,
-               d.live.previewW, d.live.previewH);
     } else {
       placeholder(c, li, Icon::kCamera, "无画面", "");
     }
@@ -178,6 +178,8 @@ void renderVisionPage(Ui& ui, const UiData& d) {
         probeMarker(c, ri, ui.st.probeX, ui.st.probeY, kAmber, z ? distanceText(z) : std::string("无效"));
       }
       ui.hit(ri, uiAction("depth_probe"));
+    } else if (d.stereoOn) {
+      placeholder(c, ri, Icon::kLayers, "等待双目深度", "");
     } else {
       placeholder(c, ri, Icon::kLayers, "双目深度未接入", "");
     }
@@ -190,11 +192,21 @@ void renderVisionPage(Ui& ui, const UiData& d) {
     }
     drawText(c, fontFace(18), right.x + 14, right.y + 8, buf, kText2);
     if (haveVision) {
-      blitGray(c, li.x, li.y, li.w, li.h, v.source.data(), v.w, v.h, 0, 0, v.w, v.h);
+      // The camera image at full resolution and in colour where it is shown
+      // as it is; the chain's own working image only without it.
+      if (havePreview) {
+        drawPreview(c, li, *d.live.preview, 0, 0, 1, 1);
+      } else {
+        blitGray(c, li.x, li.y, li.w, li.h, v.source.data(), v.w, v.h, 0, 0, v.w, v.h);
+      }
       if (view == 0 && v.magnified.size() == v.source.size()) {
         blitGray(c, ri.x, ri.y, ri.w, ri.h, v.magnified.data(), v.w, v.h, 0, 0, v.w, v.h);
       } else if (view == 1 && v.ew > 0 && v.energy.size() == static_cast<size_t>(v.ew) * v.eh) {
-        blitGray(c, ri.x, ri.y, ri.w, ri.h, v.source.data(), v.w, v.h, 0, 0, v.w, v.h);
+        if (havePreview) {
+          drawPreview(c, ri, *d.live.preview, 0, 0, 1, 1);
+        } else {
+          blitGray(c, ri.x, ri.y, ri.w, ri.h, v.source.data(), v.w, v.h, 0, 0, v.w, v.h);
+        }
         blitGray(c, ri.x, ri.y, ri.w, ri.h, v.energy.data(), v.ew, v.eh, 0, 0, v.ew, v.eh, heatLut(), 150);
         colourBar(c, ri, "弱", "强", false);
       }
@@ -219,7 +231,11 @@ void renderVisionPage(Ui& ui, const UiData& d) {
       ui.hit(li, uiAction("roi"), moveOk);
     } else {
       const std::string why = d.live.cameraOk ? "视觉处理未运行" : "相机未就绪";
-      placeholder(c, li, Icon::kCamera, why, "");
+      if (havePreview) {
+        drawPreview(c, li, *d.live.preview, 0, 0, 1, 1);
+      } else {
+        placeholder(c, li, Icon::kCamera, why, "");
+      }
       placeholder(c, ri, Icon::kVision, why, "");
     }
   }
@@ -234,7 +250,7 @@ void renderVisionPage(Ui& ui, const UiData& d) {
   ui.chip(Rect{cx0 + 128, r1, 120, 36}, "振动热力", view == 1, true, uiAction("vision_view", 1));
   ui.chip(Rect{cx0 + 256, r1, 120, 36}, "双目深度", view == 2, true, uiAction("vision_view", 2));
   if (view == 2) {
-    const Enable depthOk(haveDepth, "双目深度未接入");
+    const Enable depthOk(haveDepth, d.stereoOn ? "等待双目深度" : "双目深度未接入");
     label(lx, r2, "范围");
     static const char* kNames[4] = {"自动", "0.2–1 m", "0.5–2 m", "1–5 m"};
     for (int i = 0; i < 4; ++i) {

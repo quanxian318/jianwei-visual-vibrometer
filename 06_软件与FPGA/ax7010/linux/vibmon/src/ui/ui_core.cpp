@@ -313,6 +313,7 @@ std::string reasonText(const std::string& reason) {
       {"baseline_mismatch", "帧率与基线不一致"},  {"invalid_windows", "分析窗口无效"},
       {"baseline_too_short", "基线时长不足"},    {"baseline_not_saved", "基线未能保存"},
       {"reference_outside_frame", "参考点超出画面"}, {"reference_in_box", "参考点落在测点框内"},
+      {"reference_lost", "参考点跟踪失败"},
   };
   for (const auto& m : kMap) {
     if (reason == m.key) return m.text;
@@ -401,6 +402,17 @@ Rect fitAspect(const Rect& box, int fw, int fh) {
     w = box.h * fw / fh;
   }
   return Rect{box.x + (box.w - w) / 2, box.y + (box.h - h) / 2, w, h};
+}
+
+void drawPreview(Canvas& c, const Rect& r, const PreviewImage& p, double sx, double sy, double sw, double sh) {
+  const size_t n = static_cast<size_t>(p.width) * p.height;
+  if (p.bgr.size() == 3 * n) {
+    blitBgr(c, r.x, r.y, r.w, r.h, p.bgr.data(), p.width, p.height, sx * p.width, sy * p.height, sw * p.width,
+            sh * p.height);
+  } else if (p.gray.size() == n) {
+    blitGray(c, r.x, r.y, r.w, r.h, p.gray.data(), p.width, p.height, sx * p.width, sy * p.height, sw * p.width,
+             sh * p.height);
+  }
 }
 
 NormBox roiBox(const SystemState& s, int fw, int fh) {

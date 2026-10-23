@@ -179,6 +179,11 @@ void VisionPipeline::configure(const VisionConfig& cfg) {
 
 void VisionPipeline::setPaused(bool paused) { paused_ = paused; }
 
+bool VisionPipeline::wantsFrame() {
+  std::lock_guard<std::mutex> lock(mutex_);
+  return running_ && cfg_.enabled && !paused_ && !havePending_;
+}
+
 void VisionPipeline::offer(const uint8_t* gray, int w, int h, int64_t tNs) {
   {
     std::lock_guard<std::mutex> lock(mutex_);
@@ -234,14 +239,18 @@ void VisionPipeline::process(const uint8_t* gray, int w, int h, int64_t tNs) {
     w1 = (w1 + 1) / 2;
     h1 = (h1 + 1) / 2;
   }
-  // Sampling rate from the processed frames (skipped frames lower it).
-  if (lastNs_ > 0 && tNs > lastNs_) {
+  // Sampling rate from the processed frames (skipped frames lower it). After
+  // a pause (output not shown, a capture) the bands start over.
+  const bool resumed = lastNs_ > 0 && tNs - lastNs_ > 1000000000LL;
+  if (resumed) {
+    fps_ = 0;
+  } else if (lastNs_ > 0 && tNs > lastNs_) {
     const double inst = 1e9 / static_cast<double>(tNs - lastNs_);
     fps_ = fps_ > 0 ? fps_ + 0.1 * (inst - fps_) : inst;
   }
   lastNs_ = tNs;
   const double fs = fps_ > 0 ? fps_ : 30.0;
-  if (w1 != bw_ || h1 != bh_ || cfg.lowHz != lastLow_ || cfg.highHz != lastHigh_) {
+  if (resumed || w1 != bw_ || h1 != bh_ || cfg.lowHz != lastLow_ || cfg.highHz != lastHigh_) {
     band_ = BandState();
     bw_ = w1;
     bh_ = h1;

@@ -74,6 +74,9 @@ class MultiPointTracker {
   float pointU(int i) const;
   float pointV(int i) const;
   bool referenceValid() const;
+  // Parts of the next frame push() reads: around every template where it was
+  // last tracked (the rest of the frame need not be converted).
+  std::vector<Roi> regions() const;
   uint32_t frames() const;
   int baselineWindows() const;
   bool saveBaseline(const std::string& newPath) const;  // refuses to overwrite

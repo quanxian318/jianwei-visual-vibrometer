@@ -44,6 +44,12 @@ class FbUi {
  private:
   void run();
   void gather(UiData& d);
+  // Tells the application what the screen shows, so camera, vision and
+  // depth work runs only for what is seen.
+  void updateDisplayNeeds();
+  // Only the camera card changes: the live page without a dialog, a message
+  // over it or a finger on it.
+  bool cameraOnly(int64_t nowMs) const;
   void handleTouch(const TouchEvent& e, const UiData& d);
   void handleEncoder();
   void perform(const UiAction& a, const Rect& region, int x, int y, const UiData& d);
@@ -66,6 +72,7 @@ class FbUi {
   int dragFw_ = 0, dragFh_ = 0, dragMaxPx_ = 0;
   bool dragging_ = false;
   bool panArmed_ = false;  // zoomed in: a drag that does not take the box moves the view
+  int needs_ = -1;         // display needs last sent (bit 0 preview, 1 vision, 2 depth)
 
   std::mutex encMutex_;
   int encSteps_ = 0, encShort_ = 0, encLong_ = 0;

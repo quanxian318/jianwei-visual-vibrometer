@@ -45,10 +45,28 @@ def main():
         raise RuntimeError('expected word-swapped PCAP binary, not a .bit header')
     fb = open('/dev/fb0', 'r+b', buffering=0)
     fcntl.ioctl(fb, 0x4611, 4)  # FBIOBLANK powerdown: stop the kernel display DMA
+    # The kernel gates the FCLKs its device tree does not use (FCLK2 here) at
+    # boot; a PS access to logic on a stopped clock never completes and hangs
+    # the system. Enable FCLK1/FCLK2 through devcfg so the clock framework keeps
+    # them on, then set the rates.
+    devcfg = '/sys/class/xdevcfg/xdevcfg/device'
+    for n in (1, 2):
+        d = '%s/fclk/fclk%d' % (devcfg, n)
+        if not os.path.exists(d) and os.path.exists(devcfg + '/fclk_export'):
+            with open(devcfg + '/fclk_export', 'w') as f:
+                f.write('fclk%d' % n)
+        if os.path.exists(d + '/enable'):
+            with open(d + '/enable', 'w') as f:
+                f.write('1')
     reg(0xF8000008, 0xDF0D)
     reg(0xF8000180, 0x00200400)  # FCLK1: IO PLL / 4 / 2 = 125 MHz
     reg(0xF8000190, 0x00500500)  # FCLK2: IO PLL / 5 / 5 = 40 MHz
+    for gate in (0xF8000188, 0xF8000198):  # FPGAn_CLK_CTRL + 8, bit 0 = clock stopped
+        if reg(gate) & 1:
+            reg(gate, reg(gate) & ~1)
     reg(0xF8000004, 0x767B)
+    if reg(0xF8000188) & 1 or reg(0xF8000198) & 1:
+        raise RuntimeError('FCLK1/FCLK2 still gated: not loading the PL')
     with open('/dev/xdevcfg', 'wb', buffering=0) as dev:
         n = dev.write(bit)
         if n != len(bit):

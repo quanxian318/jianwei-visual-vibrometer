@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <cstdlib>
 
 #include "util/clock.h"
 #include "util/log.h"
@@ -231,6 +232,7 @@ void MultiPointCapture::reset(const MultiPointLayout& l) {
   tNs.clear();
   seq.clear();
   timestampValid.clear();
+  refOk.clear();
   windows.clear();
   u.assign(l.points.size(), std::vector<float>());
   v.assign(l.points.size(), std::vector<float>());
@@ -241,11 +243,50 @@ void MultiPointCapture::add(const GrayFrame& f, const MultiPointTracker& t, bool
   tNs.push_back(f.timestampNs);
   seq.push_back(f.sequence);
   timestampValid.push_back(f.timestampValid);
+  refOk.push_back(tracked && t.referenceValid());
   for (size_t i = 0; i < u.size(); ++i) {
     u[i].push_back(t.pointU(static_cast<int>(i)));
     v[i].push_back(t.pointV(static_cast<int>(i)));
     ok[i].push_back(tracked && t.pointValid(static_cast<int>(i)));
   }
+}
+
+std::string multiPointWindowCause(const MultiPointCapture& c) {
+  const size_t n = c.tNs.size();
+  if (n < 2) return std::string();
+  std::vector<int64_t> dt(n - 1);
+  for (size_t i = 1; i < n; ++i) dt[i - 1] = c.tNs[i] - c.tNs[i - 1];
+  std::vector<int64_t> sorted = dt;
+  std::nth_element(sorted.begin(), sorted.begin() + sorted.size() / 2, sorted.end());
+  const int64_t median = sorted[sorted.size() / 2];
+  int dropped = 0, irregular = 0, refLost = 0, pointLost = 0;
+  for (size_t i = 1; i < n; ++i) {
+    if (c.seq[i] != c.seq[i - 1] + 1) {
+      ++dropped;
+    } else if (std::llabs(dt[i - 1] - median) * 10 > median) {
+      ++irregular;
+    }
+  }
+  for (size_t f = 0; f < n; ++f) {
+    if (f < c.refOk.size() && !c.refOk[f]) {
+      ++refLost;
+      continue;
+    }
+    for (const auto& p : c.ok) {
+      if (f < p.size() && !p[f]) {
+        ++pointLost;
+        break;
+      }
+    }
+  }
+  LOGI(kTag, "multi-point frames %zu: dropped %d, irregular intervals %d, reference lost %d, points lost %d", n,
+       dropped, irregular, refLost, pointLost);
+  const int most = std::max(std::max(dropped, irregular), std::max(refLost, pointLost));
+  if (!most) return std::string();
+  if (most == dropped) return "dropped_frames";
+  if (most == irregular) return "irregular_sampling";
+  if (most == refLost) return "reference_lost";
+  return "tracking_lost";
 }
 
 MeasureResult analyzeMultiPoint(const MultiPointCapture& c, const MeasureConfig& cfg, double nominalFps) {
@@ -326,15 +367,22 @@ MeasureResult analyzeMultiPoint(const MultiPointCapture& c, const MeasureConfig&
     r.dominantHz = m.frequencyHz;
   } else {
     r.dominantHz = 0;
-    r.reason = c.windows.empty() ? "too_few_frames"
-                                 : (m.quietWindows ? "no_signal" : (m.mismatchWindows ? "baseline_mismatch" : "invalid_windows"));
+    if (c.windows.empty()) {
+      r.reason = "too_few_frames";
+    } else if (m.quietWindows) {
+      r.reason = "no_signal";
+    } else if (m.mismatchWindows) {
+      r.reason = "baseline_mismatch";
+    } else {
+      r.reason = multiPointWindowCause(c);
+      if (r.reason.empty()) r.reason = "invalid_windows";
+    }
   }
   r.multipoint = m;
   return r;
 }
 
-MeasurementEngine::MeasurementEngine(std::unique_ptr<FrameSource> source, int previewWidth)
-    : src_(std::move(source)), previewWidth_(previewWidth) {}
+MeasurementEngine::MeasurementEngine(std::unique_ptr<FrameSource> source) : src_(std::move(source)) {}
 
 MeasurementEngine::~MeasurementEngine() { stopCamera(); }
 
@@ -370,9 +418,20 @@ void MeasurementEngine::stopCamera() {
 
 void MeasurementEngine::setVision(const VisionConfig& cfg) { vision_.configure(cfg); }
 
-void MeasurementEngine::setFrameTap(std::function<void(const GrayFrame&)> tap) {
+void MeasurementEngine::setFrameTap(std::function<void(const GrayFrame&)> tap, double rateHz) {
   std::lock_guard<std::mutex> lock(mutex_);
   tap_ = std::move(tap);
+  tapRateHz_ = rateHz;
+}
+
+void MeasurementEngine::setFrameTapRate(double rateHz) {
+  std::lock_guard<std::mutex> lock(mutex_);
+  tapRateHz_ = rateHz;
+}
+
+void MeasurementEngine::setDisplayNeeds(bool preview, bool vision) {
+  previewWanted_ = preview;
+  visionWanted_ = vision;
 }
 
 bool MeasurementEngine::beginCapture(const MeasureConfig& cfg, double cx, double cy, DoneFn done) {
@@ -406,20 +465,18 @@ MeasurementEngine::Live MeasurementEngine::live() {
   return l;
 }
 
-void MeasurementEngine::updatePreview(const GrayFrame& f) {
-  const int pw = std::min(previewWidth_, f.width);
-  const int ph = std::max(1, f.height * pw / std::max(1, f.width));
-  std::vector<uint8_t> p(static_cast<size_t>(pw) * ph);
-  for (int y = 0; y < ph; ++y) {
-    const int sy = y * f.height / ph;
-    for (int x = 0; x < pw; ++x) p[static_cast<size_t>(y) * pw + x] = f.at(x * f.width / pw, sy);
+void MeasurementEngine::updatePreview(GrayFrame& f) {
+  auto p = std::make_shared<PreviewImage>();
+  p->width = f.width;
+  p->height = f.height;
+  if (f.bgr.size() == static_cast<size_t>(f.width) * f.height * 3) {
+    p->bgr.swap(f.bgr);
+  } else {
+    p->gray = f.pixels;
   }
   std::lock_guard<std::mutex> lock(mutex_);
-  live_.preview.swap(p);
-  live_.previewW = pw;
-  live_.previewH = ph;
-  live_.frameW = f.width;
-  live_.frameH = f.height;
+  p->frame = live_.frameCount;
+  live_.preview = std::move(p);
 }
 
 void MeasurementEngine::run() {
@@ -447,6 +504,25 @@ void MeasurementEngine::run() {
         state_ = State::kPreview;
       }
     }
+    // Outside a capture a frame is converted only when something uses it.
+    // The software vision chain is display work: it runs while its output is
+    // shown and pauses while a capture needs the CPU.
+    const bool measuring = state_ != State::kPreview;
+    vision_.setPaused(measuring || !visionWanted_);
+    const int64_t due = monoNs();
+    const bool previewDue = previewWanted_ && due - lastPreviewNs_ >= (measuring ? 200000000LL : 50000000LL);
+    const bool visionDue = !measuring && vision_.wantsFrame();
+    std::function<void(const GrayFrame&)> tap;
+    {
+      std::lock_guard<std::mutex> lock(mutex_);
+      if (!measuring && tap_ && tapRateHz_ > 0 && due - lastTapNs_ >= static_cast<int64_t>(1e9 / tapRateHz_))
+        tap = tap_;
+    }
+    frame.skipPixels = !measuring && !previewDue && !visionDue && !tap;
+    frame.wantColor = previewDue;
+    // A running multi-point capture reads only around its templates.
+    frame.regions.clear();
+    if (mpActive && !previewDue) frame.regions = mpt.regions();
     if (!src_->next(frame, 500)) {
       if (++failures == 10) {
         DoneFn done;
@@ -490,28 +566,29 @@ void MeasurementEngine::run() {
     {
       std::lock_guard<std::mutex> lock(mutex_);
       live_.frameCount++;
+      live_.frameW = frame.width;
+      live_.frameH = frame.height;
     }
-    if (now - lastPreviewNs_ >= 100000000LL) {  // 10 Hz preview
-      lastPreviewNs_ = now;
-      updatePreview(frame);
-    }
-    // The software vision chain shares the CPU: it pauses while a capture runs.
-    const State st = state_;
-    vision_.setPaused(st == State::kCapturing || st == State::kAnalyzing);
-    vision_.offer(frame.pixels.data(), frame.width, frame.height, frame.timestampNs);
-    if (st == State::kPreview) {
-      std::function<void(const GrayFrame&)> tap;
-      {
-        std::lock_guard<std::mutex> lock(mutex_);
-        tap = tap_;
+    if (!frame.skipPixels) {
+      if (previewDue) {  // first: it takes the colour copy, which the others do not need
+        lastPreviewNs_ = now;
+        updatePreview(frame);
       }
-      if (tap) tap(frame);
+      if (visionDue) vision_.offer(frame.pixels.data(), frame.width, frame.height, frame.timestampNs);
+      if (tap) {
+        lastTapNs_ = now;
+        tap(frame);
+      }
     }
 
     bool start = false, end = false, cancel = false;
     MeasureConfig cfg;
     {
       std::lock_guard<std::mutex> lock(mutex_);
+      // A capture starts on a converted frame: one requested while this frame
+      // was read without pixels starts with the next (the state already says
+      // capturing, so nothing below may run for this frame).
+      if (startRequested_ && frame.skipPixels && !cancelRequested_) continue;
       start = startRequested_;
       end = endRequested_;
       cancel = cancelRequested_;
@@ -640,8 +717,17 @@ void MeasurementEngine::run() {
           r.fpsMeasured = r.durationS > 0 ? (r.frames - 1) / r.durationS : 0;
           r.fpsNominal = src_->nominalFps();
           r.valid = mpt.saveBaseline(cfg.baselineFile);
-          if (r.valid) m.baselineFile = cfg.baselineFile;
-          else r.reason = m.baselineWindows < 5 || r.durationS < 5 ? "baseline_too_short" : "baseline_not_saved";
+          if (r.valid) {
+            m.baselineFile = cfg.baselineFile;
+          } else if (r.durationS < 5) {
+            r.reason = "baseline_too_short";
+          } else if (m.baselineWindows < 5) {
+            // Long enough, but too few windows passed the team's check: say why.
+            r.reason = multiPointWindowCause(mp_);
+            if (r.reason.empty()) r.reason = "invalid_windows";
+          } else {
+            r.reason = "baseline_not_saved";
+          }
         } else {
           r = analyzeMultiPoint(mp_, cfg, src_->nominalFps());
         }

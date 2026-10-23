@@ -41,7 +41,7 @@ bool FbUi::start() {
   if (touch_.open(cfg.ui.touchDev)) {
     touch_.setScreen(display_->width(), display_->height(), cfg.ui.swapXY, cfg.ui.invertX, cfg.ui.invertY);
   } else {
-    LOGW("ui", "no touch input device found");
+    LOGW("ui", "no touch input device yet; looking again every 3 s");
   }
   running_ = true;
   thread_ = std::thread(&FbUi::run, this);
@@ -80,8 +80,10 @@ JsonValue FbUi::applyAction(UiState& st, const UiAction& a, const Rect& region, 
     }
     JsonValue cmd = JsonValue::makeObject();
     cmd.set("cmd", "roi");
-    cmd.set(st.refEdit && a.kind == "roi_box" ? "ref_x" : "x", nx);
-    cmd.set(st.refEdit && a.kind == "roi_box" ? "ref_y" : "y", ny);
+    const bool ref = st.refEdit && a.kind == "roi_box";
+    cmd.set(ref ? "ref_x" : "x", nx);
+    cmd.set(ref ? "ref_y" : "y", ny);
+    if (ref) st.refEdit = false;  // one placement per "move reference": the box takes touches again
     return cmd;
   } else if (a.kind == "hist_page") {
     st.historyPage = std::max(0, st.historyPage + a.arg);
@@ -233,6 +235,7 @@ void FbUi::handleTouch(const TouchEvent& e, const UiData& d) {
           ref.set("cmd", "roi");
           ref.set("ref_x", 0.5 * (st_.roiDrag.x0 + st_.roiDrag.x1));
           ref.set("ref_y", 0.5 * (st_.roiDrag.y0 + st_.roiDrag.y1));
+          st_.refEdit = false;  // placed: the box takes touches again
           perform(cmdAction(ref), Rect(), 0, 0, d);
         } else if (dragging_) {
           perform(cmdAction(roiCommand(st_.roiDrag, dragFw_, dragFh_)), Rect(), 0, 0, d);
@@ -303,6 +306,7 @@ void FbUi::gather(UiData& d) {
   d.s = app_.snapshot();
   d.live = app_.cameraLive();
   d.depth = app_.depthLive();
+  d.stereoOn = app_.stereoOn();
   d.nowMs = monoMs();
   d.wallMs = realtimeMs();
   d.tzOffsetMin = cfg.tzOffsetMin;
@@ -325,21 +329,64 @@ void FbUi::gather(UiData& d) {
   d.record = record_;
 }
 
+void FbUi::updateDisplayNeeds() {
+  const bool live = st_.page == Page::kLive, vision = st_.page == Page::kVision;
+  const bool depthView = vision && st_.visionView == 2;
+  const int needs = (live || vision ? 1 : 0) | ((vision && !depthView) || (live && st_.liveHeat) ? 2 : 0) |
+                    (depthView ? 4 : 0);
+  if (needs == needs_) return;
+  needs_ = needs;
+  app_.setDisplayNeeds(needs & 1, needs & 2, needs & 4);
+}
+
+bool FbUi::cameraOnly(int64_t nowMs) const {
+  return st_.page == Page::kLive && st_.dialog == Dialog::kNone && st_.toastUntilMs <= nowMs && !fingerDown_ &&
+         !st_.pressing && !st_.roiGrab && !st_.panning;
+}
+
 void FbUi::run() {
   UiData d;
-  int64_t nextFrame = 0;
+  int64_t nextFrame = 0, nextCamera = 0, nextTouchScan = 0;
+  uint64_t shownImage = 0;
   std::vector<TouchEvent> events;
   while (running_) {
     const int64_t now = monoMs();
+    // The panel's USB touch controller may enumerate after the start (or again
+    // after an HDMI disturbance): look for it every 3 s while there is none.
+    if (touch_.fd() < 0 && now >= nextTouchScan) {
+      nextTouchScan = now + 3000;
+      const AppConfig& cfg = app_.config();
+      if (touch_.open(cfg.ui.touchDev))
+        touch_.setScreen(display_->width(), display_->height(), cfg.ui.swapXY, cfg.ui.invertX, cfg.ui.invertY);
+    }
     if (now >= nextFrame || dirty_) {
       gather(d);
       handleEncoder();
       renderUi(canvas_, st_, d, hits_);
       display_->present(canvas_);
+      shownImage = d.live.preview ? d.live.preview->frame : 0;
       dirty_ = false;
-      if (now >= nextFrame) nextFrame = now + 125;  // ~8 fps; touch feedback draws in between
+      // ~8 fps, touch feedback draws in between; 4 fps on the live page in
+      // preview, where the camera card has its own updates.
+      if (now >= nextFrame)
+        nextFrame = now + (st_.page == Page::kLive && d.s.measureState == "preview" ? 250 : 125);
+      updateDisplayNeeds();
+    } else if (now >= nextCamera) {
+      // Between full frames the camera card follows each new camera image.
+      nextCamera = now + 20;
+      if (cameraOnly(now)) {
+        d.live = app_.cameraLive();
+        if (d.live.preview && d.live.preview->frame != shownImage) {
+          d.s = app_.snapshot();
+          d.nowMs = now;
+          renderLivePreview(canvas_, st_, d);
+          display_->present(canvas_);
+          shownImage = d.live.preview->frame;
+        }
+      }
     }
-    const int wait = static_cast<int>(std::max<int64_t>(0, nextFrame - monoMs()));
+    const int64_t wake = st_.page == Page::kLive ? std::min(nextFrame, nextCamera) : nextFrame;
+    const int wait = static_cast<int>(std::max<int64_t>(0, wake - monoMs()));
     if (touch_.fd() >= 0) {
       pollfd p{touch_.fd(), POLLIN, 0};
       if (poll(&p, 1, std::min(wait, 125)) > 0) {

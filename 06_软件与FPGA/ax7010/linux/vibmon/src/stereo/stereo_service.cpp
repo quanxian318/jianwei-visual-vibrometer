@@ -66,8 +66,6 @@ void StereoService::offerLeft(const GrayFrame& f) {
 }
 
 void StereoService::workLoop() {
-  // Depth is display work: it yields the CPU to tracking.
-  setThreadNice(10);
   const int64_t periodNs = static_cast<int64_t>(1e9 / std::max(1.0, right_->nominalFps()));
   while (running_) {
     GrayFrame left, right;
@@ -80,7 +78,8 @@ void StereoService::workLoop() {
     }
     // Software pairing, no hardware exposure sync: the right frame completed
     // last, or the next one when that is nearer to the left frame's time.
-    // Only the right frames of the pairs are converted.
+    // Only the right frames of the pairs are converted, at normal priority:
+    // a conversion that the busy CPU delays past the store's reuse is lost.
     bool ok = right_->latest(right, 200);
     if (ok && left.timestampNs - right.timestampNs > periodNs / 2) ok = right_->next(right, 200);
     const double skewMs = ok ? std::llabs(right.timestampNs - left.timestampNs) * 1e-6 : 0;
@@ -93,7 +92,10 @@ void StereoService::workLoop() {
       if (!pairOk) stats_.skewRejected++;
     }
     if (pairOk) {
+      // Depth is display work: it yields the CPU to tracking.
+      setThreadNice(10);
       std::shared_ptr<DepthMap> d = process(left, right);
+      setThreadNice(0);
       std::lock_guard<std::mutex> lock(mutex_);
       stats_.lastProcMs = d->procMs;
       stats_.lastValid = d->validFraction;

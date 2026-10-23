@@ -33,6 +33,11 @@ void dashRect(Canvas& c, int x, int y, int w, int h, uint32_t color, int dash = 
 // the canvas.
 void blitGray(Canvas& c, int x, int y, int w, int h, const uint8_t* img, int iw, int ih, double sx, double sy,
               double sw, double sh, const uint32_t* lut = nullptr, int alpha = 255, bool nearest = false);
+// Opaque blit of the source window of a BGR888 image (byte 0 = blue): nearest
+// when the window is reduced (a camera frame on the screen stays sharp),
+// bilinear when it is enlarged (zoom).
+void blitBgr(Canvas& c, int x, int y, int w, int h, const uint8_t* img, int iw, int ih, double sx, double sy,
+             double sw, double sh);
 // 256-entry perceptual colour map (dark blue -> cyan -> yellow -> red).
 const uint32_t* heatLut();
 

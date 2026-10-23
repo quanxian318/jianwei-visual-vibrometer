@@ -7,6 +7,10 @@
 
 namespace vm {
 
+struct Roi {
+  int x = 0, y = 0, w = 0, h = 0;
+};
+
 struct GrayFrame {
   int width = 0;
   int height = 0;
@@ -14,6 +18,14 @@ struct GrayFrame {
   int64_t timestampNs = 0;      // CLOCK_MONOTONIC capture time
   bool timestampValid = true;  // false for dequeue-time fallback, unsuitable for metrology
   uint32_t sequence = 0;        // driver sequence; gaps mean dropped frames
+  // What the reader needs of the next frame. skipPixels: only its time and
+  // sequence (a source may leave pixels as they are). regions: when not
+  // empty, only the pixels inside them. wantColor: also a colour copy of the
+  // whole frame for display in bgr, left empty by sources without colour.
+  bool skipPixels = false;
+  std::vector<Roi> regions;
+  bool wantColor = false;
+  std::vector<uint8_t> bgr;  // width * height * 3, byte 0 = blue
   uint8_t at(int x, int y) const { return pixels[static_cast<size_t>(y) * width + x]; }
 };
 

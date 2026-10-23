@@ -1,5 +1,6 @@
 #pragma once
 
+#include <atomic>
 #include <cstdint>
 #include <deque>
 #include <memory>
@@ -65,6 +66,11 @@ class Application {
   void applyStereoScale(MeasureConfig& mc);
   void collectAcoustic(const MeasureResult& r, bool window, ResultSummary& sum, RecordMeta::Acoustic& a);
   std::shared_ptr<const DepthMap> depthLive();
+  bool stereoOn() const { return stereoStarted_; }
+  // What the screen shows (UI thread): the camera preview, the vision chain's
+  // output, stereo depth. Work for what is not shown stops; depth keeps
+  // running while the measurement takes its scale from it.
+  void setDisplayNeeds(bool preview, bool vision, bool depth);
 
  private:
   JsonValue handleCommand(const JsonValue& cmd);
@@ -129,6 +135,7 @@ class Application {
   std::unique_ptr<PrinterService> printer_;
   std::unique_ptr<MeasurementEngine> engine_;
   std::unique_ptr<StereoService> stereo_;
+  std::atomic<bool> stereoStarted_{false};
   RecordMeta::Stereo stereoCapture_;  // stereo context frozen at capture start
   std::unique_ptr<AcousticService> acoustic_;
   bool acousticRecord_ = false;   // the running capture records the acoustic reference (a microphone is connected)
