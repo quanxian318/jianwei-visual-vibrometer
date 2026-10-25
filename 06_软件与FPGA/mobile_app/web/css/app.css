@@ -312,8 +312,13 @@ input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 26p
 .sheet .actions { display: flex; gap: 12px; margin-top: 22px; }
 .sheet .actions .btn { flex: 1; }
 .sheet .btn:not(.primary):not(.danger) { background: var(--surface-2); box-shadow: none; }
-.toast { position: fixed; left: 50%; top: calc(var(--sat) + 14px); z-index: 60; transform: translate(-50%, -160%); max-width: calc(100% - 44px); background: var(--surface-solid); color: var(--text); padding: 12px 18px; border-radius: 18px; box-shadow: var(--shadow-lift); display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 500; transition: transform 0.55s var(--spring); }
-.toast.show { transform: translate(-50%, 0); }
+/* Hidden: lifted past its own height, the status bar and the shadow, faded and
+   not hit-testable (moving up a fraction of its height left it on screen under
+   a status bar). */
+.toast { position: fixed; left: 50%; top: calc(var(--sat) + 14px); z-index: 60; max-width: calc(100% - 44px); background: var(--surface-solid); color: var(--text); padding: 12px 18px; border-radius: 18px; box-shadow: var(--shadow-lift); display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 500;
+  transform: translate(-50%, calc(-100% - var(--sat) - 60px)); opacity: 0; visibility: hidden; pointer-events: none;
+  transition: transform 0.5s var(--ease), opacity 0.35s ease, visibility 0s linear 0.5s; }
+.toast.show { transform: translate(-50%, 0); opacity: 1; visibility: visible; pointer-events: auto; transition: transform 0.55s var(--spring), opacity 0.2s ease, visibility 0s; }
 .toast.ok svg { color: var(--ok); }
 .toast.err svg { color: var(--alarm); }
 .toast.warn svg { color: var(--warn); }

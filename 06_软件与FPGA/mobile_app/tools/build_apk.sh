@@ -10,8 +10,8 @@
 set -euo pipefail
 export LC_ALL=C.UTF-8 LANG=C.UTF-8  # Java needs it for the non-ASCII project path
 cd "$(dirname "$0")/.."
-VERSION_NAME=1.0.2
-VERSION_CODE=3
+VERSION_NAME=1.0.3
+VERSION_CODE=4
 CACHE="${JW_APK_CACHE:-$HOME/.cache/jianwei-apk}"
 M=https://repo.maven.apache.org/maven2
 mkdir -p "$CACHE" build dist

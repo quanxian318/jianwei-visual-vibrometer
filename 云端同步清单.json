@@ -2,7 +2,7 @@
   "date": "2026-10-25",
   "project": "见微视觉测振仪",
   "files": 4409,
-  "total_bytes": 963107186,
+  "total_bytes": 963108753,
   "excluded": [
     ".git/",
     ".agents/",
@@ -6469,9 +6469,9 @@
       "sha256": "8604d81df2b7f80a11e07ad3b18db2bfa5eda3dc3d00be950ed6ad0eaa30aaac"
     },
     {
-      "path": "06_软件与FPGA/mobile_app/dist/JianweiVibro-1.0.2.apk",
-      "bytes": 648997,
-      "sha256": "e6d54d35e14bf17eba355845231794b422099e55c9aff22a00fcd577508759ed"
+      "path": "06_软件与FPGA/mobile_app/dist/JianweiVibro-1.0.3.apk",
+      "bytes": 649157,
+      "sha256": "50fd459b937d0c36931f3ae94953fe1796979ffeca1e85f5504a836f52607986"
     },
     {
       "path": "06_软件与FPGA/mobile_app/docs/icon_512.png",
@@ -6491,7 +6491,7 @@
     {
       "path": "06_软件与FPGA/mobile_app/tools/build_apk.sh",
       "bytes": 3122,
-      "sha256": "ce3ded0ce7171f70c46cd7e95f08b93a9e5b799b2a488605980437abfcd7f7a3"
+      "sha256": "8b2ae5b25e781f4419277b8b96347494e47ec5fbb3f156cd828c2e1d0b38f181"
     },
     {
       "path": "06_软件与FPGA/mobile_app/tools/make_fonts.py",
@@ -6510,8 +6510,8 @@
     },
     {
       "path": "06_软件与FPGA/mobile_app/web/css/app.css",
-      "bytes": 28785,
-      "sha256": "752be1802d643c838b55f725dd635a759d49b846a8984a3e781fa2536755c0fb"
+      "bytes": 29226,
+      "sha256": "d7358be7449c82664a33e49fc51775b40b5230d96022cea44aa3ebcef0e1509f"
     },
     {
       "path": "06_软件与FPGA/mobile_app/web/fonts/Inter-var.woff2",
@@ -6556,7 +6556,7 @@
     {
       "path": "06_软件与FPGA/mobile_app/web/js/app.js",
       "bytes": 17080,
-      "sha256": "83faa0954df9e302e00bed79f95b0bd995d193311d6d609a1ce22e93e3ccea7b"
+      "sha256": "3d5a0a141ab936c188e010b741779700d82033cb0ac6685397bce2cdfac79474"
     },
     {
       "path": "06_软件与FPGA/mobile_app/web/js/charts.js",
@@ -22005,8 +22005,8 @@
     },
     {
       "path": "15_手机APP_20261025/README.md",
-      "bytes": 16040,
-      "sha256": "058e8a3245802703623c86ce3692e39ac977aec48c6118a0f73637e1fe25a45c"
+      "bytes": 16686,
+      "sha256": "cb148b1b363a7ab4d0a6b495cb9c300bf47fd8dbc0a0f561722ed2c9d93afd50"
     },
     {
       "path": "15_手机APP_20261025/截图/01_连接_总览_测量_记录.jpg",
@@ -22035,8 +22035,8 @@
     },
     {
       "path": "AGENTS.md",
-      "bytes": 37776,
-      "sha256": "b52dc1ec50d70bcb8f349fba2fa56c8782fd922d7aebb5252f998e0205a8267d"
+      "bytes": 38096,
+      "sha256": "85133f834610cc371939b03327ff2d791b5fa1c175a522140b2cde6b396d94da"
     },
     {
       "path": "README.md",
