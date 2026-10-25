@@ -1,12 +1,13 @@
 # 当前项目事实
 
 2026-10-25新增配套手机APP，见15_手机APP_20261025/README.md。
-- APK：06_软件与FPGA/mobile_app/dist/JianweiVibro-1.0.1.apk，包名com.jianwei.vibro，minSdk24/target34，apksig v2签名校验通过。界面为WebView＋HTML，默认浅色，可选深色/跟随系统；内置Inter与Noto Sans SC子集字体；3D数字孪生可旋转缩放、滑动条调节爆炸程度、点击部件看状态；记录详情含3D时频瀑布；有演示模式。
+- APK：06_软件与FPGA/mobile_app/dist/JianweiVibro-1.0.2.apk，包名com.jianwei.vibro，minSdk24/target34，apksig v2签名校验通过。界面为WebView＋HTML，默认浅色，可选深色/跟随系统；内置Inter与Noto Sans SC子集字体；3D数字孪生可旋转缩放、滑动条调节爆炸程度、点击部件看状态；记录详情含3D时频瀑布；有演示模式。
 - 构建：无Android SDK，tools/build_apk.sh用Maven Central上的aapt2/dx/apksig/android-all。签名密钥android/keystore不入库，本地重建换钥后需先卸载旧版。
 - 连接：局域网直连vibmond新增HTTP API（app_api，默认8080端口、UDP 48300发现，默认免配对——用户说明仅私下使用，可选require_pairing用屏幕6位码）。另可经Nano ESP32网关：热点VIBMON-xxxx/vibmon2026，地址192.168.4.1:80，可与站点Wi-Fi同时开启，mDNS为vibmon-xxxx.local。
 - 协议：V1.1新增PUBLISH 0x60（status/settings/points/records/curves快照，每帧≤900B）、COMMAND_RESULT 0x62、事件APP_COMMAND/APP_CLIENT，HELLO能力声明app_gateway；Nano固件升为0.2.0。
 - 测试：vibmond新增http_server/app_api/app_remote，测振与双目算法未改；12组单测、103项集成（新增38项，含pty模拟Nano网关）、冒烟、协议向量、ARM交叉编译通过，并修正了判级代码映射。Nano网关核心主机测试通过，Arduino部分只用桩头做语法检查，未做Xtensa编译。
 - 1.0.1修复：3D模型拖动时部件忽隐忽现（只按面中心深度排序，外壳大面盖住装在其上的灯/镜头/旋钮等；改为外装件按所在表面朝向显示并画在外壳之上、内部件按面隐藏、爆炸时按模块分层排序），点击部件闪一下不弹详情（触摸后浏览器又补发鼠标事件，同一次点击选中又取消；现忽略触摸后的模拟鼠标事件，详情改为底部弹出面板）。同一签名密钥，可覆盖安装。
+- 1.0.2：背面触摸屏上的界面块原按屏幕坐标轴对齐矩形绘制、转动时滑动变形，改为全部在屏幕平面(u,v)内绘制，且(u,v)点先在三维面上插值再投影（原来对投影后四角做双线性插值，绿色状态环在斜视角下偏移约3px）；同处叠放的外装件加层序（窗＜边框＜镜片）。模型加细：双目黑色视窗与三级镜头圈、灯条亮芯、ToF窗、后盖四颗螺丝、底部四个橡胶脚、两侧挂绳耳、DC插座与SD卡槽、旋钮指示线与底圈、电源键圈，板上增加排针、电解电容、电感与芯片。
 - 未验证：未在Android真机运行，未与板卡或Nano实物联调。
 
 2026-10-25当前冻结标记freeze-20261025-capture-near-stereo，事实见04_评审与核对/2026-10-25_冻结_彩色与近景双目/冻结说明与当前事实.md及冻结清单.json。运行程序SHA256 e3e94a0db5165401b15a468f817d4022888bf591b7c0879f8668c2cbcd630fe9。保留4测点4参考45fps采集修复；同帧彩色、先配对后转灰度；双目256x144，pl_search_ranges=2，复用PL搜索0–127（共4次调用），PS11x11相关性跨段核对。修复部分用户设置重置搜索段参数。83次PL/PS逐位核对0差异/0PL失败，最终pl_verify_every=0，455–470ms/幅、深度约1.7fps、该场景真实有效约37%。预览估计不进测量，UI邻域读取需6个同层真实点并标ROI。12组单测65项集成和冒烟通过。20/50cm图已保存；20cm仍有无效，未验收稳定准确测距，需要核对对焦并做真实棋盘格标定。保留名义标定+单点偏移dist1000（右cx637.9826667、cy390），未盲改焦距/外参，PL位流未变。机位/ROI已变，测振需重采停机基线。按用户要求本轮结束后冻结，不继续改代码。

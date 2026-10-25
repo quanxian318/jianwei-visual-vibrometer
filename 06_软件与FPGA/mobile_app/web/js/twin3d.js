@@ -69,7 +69,7 @@
       cap1.push(map(A[0], A[1], len / 2)); cap0.unshift(map(A[0], A[1], -len / 2));
     }
     out.push({ p: cap1, n: nm(0, 0, 1), mat: opt.cap || mat, decal: opt.decal });
-    out.push({ p: cap0, n: nm(0, 0, -1), mat: opt.back || mat });
+    out.push({ p: cap0, n: nm(0, 0, -1), mat: opt.back || mat, decal: opt.backDecal });
     return out;
   }
   // Flat decal quad facing +z (or -z with back).
@@ -107,7 +107,9 @@
   // Parts on the outside of the housing: drawn over it while the surface they
   // sit on faces the viewer, hidden while it faces away.
   const FRONT = [0, 0, 1], BACK = [0, 0, -1], TOP = [0, -1, 0], BOTTOM = [0, 1, 0], LEFT = [-1, 0, 0], RIGHT = [1, 0, 0];
-  const mount = (n, faces) => faces.map((f) => Object.assign({}, f, { mount: n }));
+  // layer orders parts stacked on the same spot (window < bezel < glass).
+  const mount = (n, faces, layer) => faces.map((f) => Object.assign({}, f, { mount: n, layer: layer || 0 }));
+  const capDecal = (faces, decal) => faces.map((f) => (Math.abs(f.n[0]) + Math.abs(f.n[1]) < 0.01 && f.n[2] > 0.9 ? Object.assign({}, f, { decal }) : f));
   // Parts inside the closed housing: only drawn once their module moves out.
   const enclosed = (faces) => faces.map((f) => Object.assign({}, f, { inside: true }));
   const MODULES = (() => [
@@ -116,8 +118,14 @@
       rbox(0, 0, -0.05, W - 0.5, H - 0.5, 0.18, R - 0.25, 0, 'trim'),
       mount(BOTTOM, cyl(0, H / 2 + 0.18, -1.2, 1.25, 0.36, 'y', 'metal', { n: 18 })),
       mount(LEFT, sidePlate(-W / 2 - 0.01, -1.2, -1.9, 6.2, 2.6, 'grille', 'grille', true)),
-      mount(RIGHT, sidePlate(W / 2 + 0.01, 3.4, -1.9, 1.0, 2.2, 'port', 'portC')),
-      mount(RIGHT, sidePlate(W / 2 + 0.01, 5.0, -1.9, 1.1, 1.1, 'port', 'portDC'))), ex: [0, 0, -11], delay: 0 },
+      mount(RIGHT, sidePlate(W / 2 + 0.01, 3.4, -1.9, 0.9, 2.2, 'port', 'portC')),
+      mount(RIGHT, sidePlate(W / 2 + 0.01, 1.7, -1.9, 0.28, 2.1, 'port')),  // SD card slot
+      mount(RIGHT, cyl(W / 2 + 0.04, 5.1, -1.9, 0.56, 0.08, 'x', 'chrome', { n: 20, cap: 'port', decal: 'jack' })),
+      // Back cover screws, rubber feet, strap lugs.
+      ...[[-10.2, -5.8], [10.2, -5.8], [-10.2, 5.8], [10.2, 5.8]].map((c) => mount(BACK, cyl(c[0], c[1], ZB - 0.03, 0.34, 0.06, 'z', 'screw', { n: 16, back: 'screw', backDecal: 'screw' }))),
+      ...[[-8.6, 2.4], [8.6, 2.4], [-8.6, -2.6], [8.6, -2.6]].map((c) => mount(BOTTOM, cyl(c[0], H / 2 + 0.1, c[1], 0.75, 0.2, 'y', 'rubber', { n: 16 }))),
+      mount(LEFT, rbox(-W / 2 - 0.22, -4.6, -1.9, 0.44, 1.7, 1.1, 0.2, 0.05, 'metal')),
+      mount(RIGHT, rbox(W / 2 + 0.22, -4.6, -1.9, 0.44, 1.7, 1.1, 0.2, 0.05, 'metal'))), ex: [0, 0, -11], delay: 0 },
     { id: 'shellF', shell: true, name: '前壳', parts: cat(
       sheen(rbox(0, 0, 1.95, W, H, 3.7, R, 0.7, 'shell', 'glass')),
       mount(FRONT, plate(-5.2, 3.6, ZF + 0.01, 1.4, 0.5, 'glassHi', 'micHole')),
@@ -125,23 +133,29 @@
     { id: 'lcd', short: '触摸屏', name: '7 寸触摸屏', parts: mount(BACK, cat(rbox(0, -0.3, ZB - 0.12, 17.8, 11.2, 0.3, 0.8, 0.08, 'bezel', 'bezel'), plate(0, -0.3, ZB - 0.29, 15.6, 9.2, 'screen', 'screen', true))), ex: [0, 0, -19], delay: 0.05 },
     { id: 'camera', short: '双目相机', name: 'AN5642 双目相机', parts: cat(
       enclosed(box(0, -1.6, 2.35, 10.4, 3.2, 0.22, 'pcbDark', 'pcb')),
-      mount(FRONT, cat(
-        cyl(-3.3, -1.6, 3.86, 1.32, 0.1, 'z', 'chrome', { cap: 'chrome', n: 28 }), cyl(3.3, -1.6, 3.86, 1.32, 0.1, 'z', 'chrome', { cap: 'chrome', n: 28 }),
-        cyl(-3.3, -1.6, 3.27, 1.0, 1.4, 'z', 'metal', { cap: 'lens', decal: 'lens', n: 28 }), cyl(3.3, -1.6, 3.27, 1.0, 1.4, 'z', 'metal', { cap: 'lens', decal: 'lens', n: 28 })))), ex: [0, 0, 9.5], delay: 0.15 },
-    { id: 'light', short: '照明', name: '照明灯 LED1', parts: mount(FRONT, cat(rbox(-7.2, -5.2, ZF + 0.08, 4.6, 0.62, 0.16, 0.31, 0, 'lamp'), rbox(7.2, -5.2, ZF + 0.08, 4.6, 0.62, 0.16, 0.31, 0, 'lamp'))), ex: [0, 0, 15], delay: 0, glow: 'light' },
+      enclosed(cat(cyl(-3.3, -1.6, 3.1, 0.95, 1.3, 'z', 'metal', { n: 24 }), cyl(3.3, -1.6, 3.1, 0.95, 1.3, 'z', 'metal', { n: 24 }))),
+      mount(FRONT, capDecal(rbox(0, -1.6, ZF + 0.025, 10.6, 3.6, 0.05, 1.8, 0, 'camWin'), 'sheen'), 0),
+      mount(FRONT, cat(cyl(-3.3, -1.6, ZF + 0.09, 1.34, 0.08, 'z', 'chrome', { cap: 'chrome', n: 32 }), cyl(3.3, -1.6, ZF + 0.09, 1.34, 0.08, 'z', 'chrome', { cap: 'chrome', n: 32 })), 1),
+      mount(FRONT, cat(cyl(-3.3, -1.6, ZF + 0.14, 1.12, 0.06, 'z', 'lensRing', { n: 32 }), cyl(3.3, -1.6, ZF + 0.14, 1.12, 0.06, 'z', 'lensRing', { n: 32 })), 2),
+      mount(FRONT, cat(cyl(-3.3, -1.6, ZF + 0.19, 0.96, 0.05, 'z', 'metal', { cap: 'lens', decal: 'lens', n: 32 }), cyl(3.3, -1.6, ZF + 0.19, 0.96, 0.05, 'z', 'metal', { cap: 'lens', decal: 'lens', n: 32 })), 3)), ex: [0, 0, 9.5], delay: 0.15 },
+    { id: 'light', short: '照明', name: '照明灯 LED1', parts: cat(mount(FRONT, cat(rbox(-7.2, -5.2, ZF + 0.08, 4.6, 0.62, 0.16, 0.31, 0, 'lamp'), rbox(7.2, -5.2, ZF + 0.08, 4.6, 0.62, 0.16, 0.31, 0, 'lamp'))),
+      mount(FRONT, cat(rbox(-7.2, -5.2, ZF + 0.175, 4.1, 0.22, 0.03, 0.11, 0, 'lampCore'), rbox(7.2, -5.2, ZF + 0.175, 4.1, 0.22, 0.03, 0.11, 0, 'lampCore')), 1)), ex: [0, 0, 15], delay: 0, glow: 'light' },
     { id: 'laser', short: '十字投影', name: '十字投影 LED2', parts: mount(FRONT, cyl(0, -5.2, ZF + 0.08, 0.42, 0.18, 'z', 'chrome', { cap: 'laser' })), ex: [0, 0, 15], delay: 0, glow: 'laser' },
-    { id: 'sensors', short: '传感器', name: '环境与测距传感器', parts: cat(box(6.4, 3.4, 2.6, 3.0, 2.2, 0.18, 'pcbBlue', 'pcb'), box(6.4, 3.4, 2.85, 1.0, 0.7, 0.3, 'chip'), mount(FRONT, rbox(6.4, 3.4, ZF + 0.03, 1.6, 0.8, 0.06, 0.4, 0, 'sensorWin'))), ex: [6, 3, 7.5], delay: 0.3, inner: true },
+    { id: 'sensors', short: '传感器', name: '环境与测距传感器', parts: cat(box(6.4, 3.4, 2.6, 3.0, 2.2, 0.18, 'pcbBlue', 'pcb'), box(6.4, 3.4, 2.85, 1.0, 0.7, 0.3, 'chip'), mount(FRONT, capDecal(rbox(6.4, 3.4, ZF + 0.03, 1.8, 0.8, 0.06, 0.4, 0, 'sensorWin'), 'tof'))), ex: [6, 3, 7.5], delay: 0.3, inner: true },
     { id: 'mic', short: '麦克风', name: 'MP34DT01 麦克风', parts: cat(box(-5.2, 3.6, 2.6, 2.2, 1.6, 0.16, 'pcbViolet', 'pcb'), box(-5.2, 3.6, 2.8, 0.7, 0.5, 0.25, 'metal')), ex: [-6, 3, 7.5], delay: 0.3, inner: true },
     { id: 'nfc', short: 'NFC', name: 'PN532 NFC', parts: cat(box(-8.2, -1.4, 2.6, 4.4, 4.4, 0.14, 'pcbBlue', 'coil')), ex: [-8, -1, 6], delay: 0.25, inner: true },
     { id: 'carrier', short: '主载板', name: '主载板', parts: cat(
       box(0, 0.6, 0.9, 21.4, 12.2, 0.2, 'pcb', 'pcb'),
       box(-7, 4.8, 1.25, 2.4, 1.2, 0.5, 'conn'), box(8.6, 4.9, 1.25, 1.8, 1.0, 0.5, 'conn'), box(2.4, 3.4, 1.15, 2.0, 2.0, 0.3, 'chip'),
-      cyl(5.6, 3.6, 1.6, 0.6, 1.2, 'z', 'cap', { n: 14 }), box(-2.2, 4.6, 1.1, 3.4, 0.6, 0.25, 'conn')), ex: [0, 0, 3], delay: 0.2, inner: true },
-    { id: 'nano', short: 'ESP32', name: 'Nano ESP32 协处理器', parts: cat(box(7.6, -3.6, 1.4, 4.6, 1.8, 0.16, 'pcbTeal', 'pcb'), box(7.6, -3.6, 1.62, 1.4, 1.1, 0.28, 'metal'), box(10.1, -3.6, 1.55, 0.6, 0.9, 0.35, 'chrome')), ex: [8, -4, 4], delay: 0.35, inner: true },
+      cyl(5.6, 3.6, 1.6, 0.6, 1.2, 'z', 'cap', { n: 16, decal: 'capTop' }), cyl(6.9, 3.6, 1.45, 0.45, 0.9, 'z', 'cap', { n: 14, decal: 'capTop' }),
+      box(-2.2, 4.6, 1.1, 3.4, 0.6, 0.25, 'conn', 'header'), box(-9.4, -3.4, 1.12, 0.5, 4.2, 0.26, 'header', 'header'),
+      box(-4.6, -4.6, 1.06, 1.4, 1.4, 0.18, 'chip'), box(4.0, 0.2, 1.06, 1.6, 1.0, 0.16, 'chip'), box(-5.6, 1.6, 1.15, 1.2, 1.2, 0.35, 'inductor')), ex: [0, 0, 3], delay: 0.2, inner: true },
+    { id: 'nano', short: 'ESP32', name: 'Nano ESP32 协处理器', parts: cat(box(7.6, -3.6, 1.4, 4.6, 1.8, 0.16, 'pcbTeal', 'pcb'), box(7.6, -3.6, 1.62, 1.4, 1.1, 0.28, 'metal'), box(10.1, -3.6, 1.55, 0.6, 0.9, 0.35, 'chrome'), box(6.4, -3.6, 1.56, 0.6, 0.6, 0.12, 'chip'), box(7.6, -4.4, 1.5, 4.2, 0.12, 0.16, 'header')), ex: [8, -4, 4], delay: 0.35, inner: true },
     { id: 'core', short: 'AX7010', name: 'AX7010 核心板', parts: cat(
       box(-1.6, -0.4, -0.75, 10.4, 6.8, 0.2, 'pcb', 'pcb'), box(-1.6, -0.4, -1.05, 3.2, 3.2, 0.4, 'chip'),
       ...[0, 1, 2, 3, 4, 5, 6].map((i) => box(-3.0 + i * 0.47, -0.4, -1.55, 0.14, 3.0, 0.7, 'heatsink')),
-      box(2.6, -2.6, -1.0, 1.8, 1.0, 0.3, 'chip'), box(2.6, 1.6, -1.0, 1.8, 1.0, 0.3, 'chip')), ex: [0, 0, -5.5], delay: 0.25, inner: true },
+      box(2.6, -2.6, -1.0, 1.8, 1.0, 0.3, 'chip'), box(2.6, 1.6, -1.0, 1.8, 1.0, 0.3, 'chip'),
+      box(-5.9, -0.4, -1.0, 0.6, 5.8, 0.3, 'header'), box(2.9, -0.5, -0.95, 1.2, 1.2, 0.2, 'chip')), ex: [0, 0, -5.5], delay: 0.25, inner: true },
     { id: 'printer', short: '打印机', name: 'EM5820H 打印机', parts: cat(
       rbox(-6.6, 4.4, -1.6, 7.4, 3.6, 3.2, 0.5, 0.1, 'printer', 'printer'),
       cyl(-6.6, 4.3, -1.6, 1.3, 6.6, 'x', 'paper', { cap: 'paper' }),
@@ -149,11 +163,12 @@
     { id: 'power', short: '电源', name: '电源与功率监测', parts: cat(box(8.4, 4.6, -1.5, 4.4, 2.6, 0.18, 'pcbDark', 'pcb'), box(8.0, 4.6, -1.05, 1.6, 1.2, 0.7, 'inductor'), cyl(10.7, 5.0, -1.9, 0.5, 1.2, 'x', 'chrome', { n: 14 })), ex: [8, 7, -2.5], delay: 0.4, inner: true },
     { id: 'fan', short: '风扇', name: '散热风扇', parts: cat(box(-10.6, -1.2, -1.9, 0.7, 4.6, 4.6, 'fanFrame'), cyl(-11.0, -1.2, -1.9, 0.55, 0.3, 'x', 'metal', { n: 14 }), blades(-11.0, -1.2, -1.9, 2.0, 'blade')), ex: [-9, 0, -3], delay: 0.35, inner: true },
     { id: 'panel', short: '前面板', name: '前面板（旋钮/状态灯）', parts: cat(
+      mount(TOP, cat(cyl(6.6, -H / 2 - 0.05, -0.4, 1.2, 0.1, 'y', 'chrome', { n: 32 }), cyl(3.6, -H / 2 - 0.03, -0.4, 0.68, 0.06, 'y', 'trim', { n: 24 }))),
       mount(TOP, cat(
-        cyl(6.6, -H / 2 - 0.55, -0.4, 1.0, 1.1, 'y', 'knob', { n: 28, knurl: 0.07, cap: 'knobTop' }),
-        cyl(3.6, -H / 2 - 0.12, -0.4, 0.55, 0.24, 'y', 'button', { n: 18 }),
+        cyl(6.6, -H / 2 - 0.62, -0.4, 1.0, 1.15, 'y', 'knob', { n: 36, knurl: 0.06, cap: 'knobTop', back: 'knobTop', backDecal: 'knobMark' }),
+        cyl(3.6, -H / 2 - 0.14, -0.4, 0.55, 0.24, 'y', 'button', { n: 22 }),
         // The light bar is a flat strip on the top surface.
-        plate3(-2.4, -H / 2 - 0.02, -0.4, 5.2, 0.4, 'ledbar'))),
+        plate3(-2.4, -H / 2 - 0.02, -0.4, 5.2, 0.4, 'ledbar')), 1),
       enclosed(box(1.5, -H / 2 + 1.2, -0.4, 10, 0.16, 2.6, 'pcbDark'))), ex: [0, -8, 0], delay: 0.1 },
   ])().map((m) => (m.inner ? Object.assign(m, { parts: m.parts.map((f) => (f.mount ? f : Object.assign({}, f, { inside: true }))) }) : m));
 
@@ -172,6 +187,12 @@
       lamp: { c: [214, 218, 224], s: 0.4, p: 20 },
       laser: { c: [60, 20, 26], s: 0.9, p: 50 },
       sensorWin: { c: [14, 16, 22], s: 0.9, p: 60 },
+      camWin: { c: [6, 8, 12], s: 1.0, p: 70 },
+      lensRing: { c: [28, 30, 36], s: 0.6, p: 30 },
+      lampCore: { c: [236, 238, 242], s: 0.3, p: 20 },
+      screw: { c: [158, 164, 174], s: 0.9, p: 30 },
+      rubber: { c: [38, 40, 44], s: 0.1, p: 8 },
+      header: { c: [24, 24, 26], s: 0.3, p: 14 },
       pcb: { c: [24, 84, 66], s: 0.25, p: 12 },
       pcbDark: { c: [28, 34, 44], s: 0.25, p: 12 },
       pcbBlue: { c: [30, 64, 128], s: 0.25, p: 12 },
@@ -206,7 +227,7 @@
   }
   const STAG = 0.45;  // spread of the explode start times
   const ease = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
-  const bil = (q, u, v) => {
+  const bil2 = (q, u, v) => {
     const a = [q[0][0] + (q[1][0] - q[0][0]) * u, q[0][1] + (q[1][1] - q[0][1]) * u];
     const b = [q[3][0] + (q[2][0] - q[3][0]) * u, q[3][1] + (q[2][1] - q[3][1]) * u];
     return [a[0] + (b[0] - a[0]) * v, a[1] + (b[1] - a[1]) * v];
@@ -366,11 +387,13 @@
         const shellAlpha = m.shell ? 1 - 0.9 * U.clamp(em * 1.3, 0, 1) : 1;
         let sx = 0, sy = 0, sz = 0, cnt = 0;
         m.parts.forEach((f) => {
+          const w3 = f.decal ? [] : null;  // view-space corners, for decals in perspective
           const pts = f.p.map((p0) => {
             let p = p0;
             if (f.spin) { const dy = p[1] - f.spin[0], dz = p[2] - f.spin[1]; p = [p[0], f.spin[0] + dy * spinC - dz * spinS, f.spin[1] + dy * spinS + dz * spinC]; }
             const q = rot([p[0] + off[0], p[1] + off[1], p[2] + off[2]], this.ry, this.rx);
             sx += q[0]; sy += q[1]; sz += q[2]; cnt++;
+            if (w3) w3.push(q);
             return proj(q);
           });
           if (f.inside && em < 0.03) return;  // hidden inside the closed housing
@@ -379,7 +402,7 @@
           const onTop = f.mount && attached;
           if (onTop && rot(f.mount, this.ry, this.rx)[2] < 0.02) return;  // its surface faces away
           let z = 0; pts.forEach((p) => { z += p[2]; });
-          polys.push({ m, f, pts, n, z: z / pts.length, alpha: shellAlpha, onTop });
+          polys.push({ m, f, pts, n, z: z / pts.length, alpha: shellAlpha, onTop, w3 });
         });
         if (cnt) centers[m.id] = proj([sx / cnt, sy / cnt, sz / cnt]);
       });
@@ -397,6 +420,7 @@
       polys.sort((a, b) => {
         if (a.onTop !== b.onTop) return a.onTop ? 1 : -1;
         if (layered && !a.onTop && a.m !== b.m) return depth[a.m.id] - depth[b.m.id];
+        if (a.onTop && (a.f.layer || 0) !== (b.f.layer || 0)) return (a.f.layer || 0) - (b.f.layer || 0);
         return a.z - b.z;
       });
       this.hits = [];
@@ -410,7 +434,7 @@
         const spec = Math.pow(Math.max(0, n[0] * hv[0] + n[1] * hv[1] + n[2] * hv[2]), mat.p) * mat.s;
         let col = mat.c.map((v) => v * (0.5 + 0.55 * lam + rim) + 255 * spec * 0.55);
         if (mat.e) col = col.map((v, i) => v + mat.c[i] * mat.e);
-        if (m.glow === 'light' && this.lightOn && f.mat === 'lamp' && n[2] > 0.4) col = [255, 252, 240];
+        if (m.glow === 'light' && this.lightOn && (f.mat === 'lamp' || f.mat === 'lampCore') && n[2] > 0.4) col = f.mat === 'lampCore' ? [255, 255, 255] : [255, 246, 226];
         if (f.mat === 'laser' && this.laserOn) col = [255, 70, 80];
         if (f.mat === 'ledbar') col = this.ledCol(t);
         let alpha = p.alpha;
@@ -424,7 +448,7 @@
         const fill = 'rgb(' + col.join(',') + ')';
         g.fillStyle = fill; g.fill();
         g.strokeStyle = fill; g.lineWidth = 0.6; g.stroke();  // closes hairline seams between faces
-        if (f.decal) this.decal(g, f.decal, p.pts, t, dark);
+        if (f.decal) this.decal(g, f.decal, p.pts, t, dark, p.w3, proj);
         if (this.sel === m.id) { g.strokeStyle = 'rgba(' + accent.join(',') + ',.9)'; g.lineWidth = 1; g.stroke(); }
         g.globalAlpha = 1;
         if (!m.shell || e < 0.5) this.hits.push({ id: m.id, pts: p.pts, shell: m.shell, onTop: p.onTop });
@@ -456,7 +480,16 @@
       const k = 0.75 + 0.25 * Math.sin(t * (lv === 'alarm' ? 8 : 2.2));
       return base.map((v) => v * k);
     }
-    decal(g, kind, q, t, dark) {
+    decal(g, kind, q, t, dark, w3, proj) {
+      // (u, v) on a quad face: interpolated on the face in 3D, then projected,
+      // so decals follow the perspective exactly (a bilinear blend of the
+      // projected corners drifts at oblique views).
+      const bil = (qq, u, v) => {
+        if (qq !== q || !w3 || w3.length !== 4) return bil2(qq, u, v);
+        const a = w3[0], b = w3[1], c = w3[2], d = w3[3], P = [0, 0, 0];
+        for (let i = 0; i < 3; i++) P[i] = (a[i] + (b[i] - a[i]) * u) * (1 - v) + (d[i] + (c[i] - d[i]) * u) * v;
+        return proj(P);
+      };
       g.save();
       g.beginPath(); q.forEach((p, i) => (i ? g.lineTo(p[0], p[1]) : g.moveTo(p[0], p[1]))); g.closePath(); g.clip();
       if (kind === 'sheen') {
@@ -467,30 +500,82 @@
         gr.addColorStop(0.62, 'rgba(120,140,255,.05)'); gr.addColorStop(1, 'rgba(255,255,255,0)');
         g.fillStyle = gr; g.fill();
       } else if (kind === 'screen') {
+        // A small live UI drawn in the screen's own (u, v) plane, so it stays
+        // on the glass whatever the view angle.
         const acc = rgb(css('--accent'));
+        const poly = (uv) => { g.beginPath(); uv.forEach((p, i) => { const s2 = bil(q, p[0], p[1]); if (i) g.lineTo(s2[0], s2[1]); else g.moveTo(s2[0], s2[1]); }); g.closePath(); };
+        const quad = (u0, v0, u1, v1) => poly([[u0, v0], [u1, v0], [u1, v1], [u0, v1]]);
         const a = bil(q, 0, 0), b = bil(q, 1, 1);
         const gr = g.createLinearGradient(a[0], a[1], b[0], b[1]);
-        gr.addColorStop(0, 'rgba(' + acc.join(',') + ',.32)'); gr.addColorStop(1, 'rgba(10,14,24,0)');
+        gr.addColorStop(0, 'rgba(' + acc.join(',') + ',.30)'); gr.addColorStop(1, 'rgba(10,14,24,0)');
         g.fillStyle = gr; g.fill();
-        g.strokeStyle = 'rgba(' + acc.join(',') + ',.95)'; g.lineWidth = 1.3;
+        // Status line and page tabs.
+        g.fillStyle = 'rgba(255,255,255,.55)';
+        quad(0.06, 0.07, 0.2, 0.1); g.fill();
+        quad(0.82, 0.07, 0.94, 0.1); g.fill();
+        g.fillStyle = 'rgba(255,255,255,.18)';
+        for (let i = 0; i < 6; i++) { quad(0.06 + i * 0.148, 0.88, 0.18 + i * 0.148, 0.93); g.fill(); }
+        g.fillStyle = 'rgba(' + acc.join(',') + ',.9)';
+        quad(0.06, 0.88, 0.18, 0.93); g.fill();
+        // Reading blocks and the level ring.
+        g.fillStyle = 'rgba(255,255,255,.85)';
+        quad(0.06, 0.18, 0.4, 0.3); g.fill();
+        g.fillStyle = 'rgba(255,255,255,.35)';
+        quad(0.06, 0.33, 0.26, 0.37); g.fill();
+        const lc = this.ledCol(t).map(Math.round).join(',');
+        g.strokeStyle = 'rgb(' + lc + ')'; g.lineWidth = 2;
         g.beginPath();
-        for (let i = 0; i <= 60; i++) {
-          const u = 0.08 + i / 60 * 0.84;
-          const w = this.wave && this.wave.length ? this.wave[Math.floor(i / 60 * (this.wave.length - 1))] : Math.sin(i * 0.7 + t * 6);
-          const p = bil(q, u, 0.66 + 0.14 * U.clamp(w, -1, 1));
+        for (let i = 0; i <= 40; i++) {
+          const th = -Math.PI * 0.8 + i / 40 * Math.PI * 1.25;
+          const p = bil(q, 0.8 + Math.cos(th) * 0.085, 0.28 + Math.sin(th) * 0.145);
           if (i) g.lineTo(p[0], p[1]); else g.moveTo(p[0], p[1]);
         }
         g.stroke();
-        g.fillStyle = 'rgba(255,255,255,.7)';
-        [[0.08, 0.14, 0.24], [0.08, 0.25, 0.38]].forEach((r) => {
-          const p0 = bil(q, r[0], r[1]), p1 = bil(q, r[2], r[1] + 0.05);
-          g.fillRect(Math.min(p0[0], p1[0]), Math.min(p0[1], p1[1]), Math.abs(p1[0] - p0[0]), Math.max(1, Math.abs(p1[1] - p0[1])));
+        // Live waveform.
+        g.strokeStyle = 'rgba(' + acc.join(',') + ',.95)'; g.lineWidth = 1.3;
+        g.beginPath();
+        for (let i = 0; i <= 60; i++) {
+          const u = 0.06 + i / 60 * 0.88;
+          const w = this.wave && this.wave.length ? this.wave[Math.floor(i / 60 * (this.wave.length - 1))] : Math.sin(i * 0.7 + t * 6);
+          const p = bil(q, u, 0.64 + 0.12 * U.clamp(w, -1, 1));
+          if (i) g.lineTo(p[0], p[1]); else g.moveTo(p[0], p[1]);
+        }
+        g.stroke();
+        g.fillStyle = 'rgba(255,255,255,.05)';
+        poly([[0.55, 0], [0.95, 0], [0.6, 1], [0.2, 1]]); g.fill();  // glass reflection
+      } else if (kind === 'screw' || kind === 'capTop') {
+        let x = 0, y = 0; q.forEach((p) => { x += p[0]; y += p[1]; });
+        const c0 = [x / q.length, y / q.length], k = q.length;
+        g.strokeStyle = kind === 'screw' ? 'rgba(30,34,40,.75)' : 'rgba(200,204,212,.5)'; g.lineWidth = 1;
+        [[0, k / 2], [k / 4, 3 * k / 4]].forEach((ij) => {
+          const p1 = q[Math.round(ij[0]) % k], p2 = q[Math.round(ij[1]) % k];
+          g.beginPath(); g.moveTo(c0[0] + (p1[0] - c0[0]) * 0.55, c0[1] + (p1[1] - c0[1]) * 0.55); g.lineTo(c0[0] + (p2[0] - c0[0]) * 0.55, c0[1] + (p2[1] - c0[1]) * 0.55); g.stroke();
         });
-        const rc = bil(q, 0.8, 0.28), rad = Math.abs(bil(q, 0.9, 0.28)[0] - rc[0]);
-        g.strokeStyle = 'rgb(' + this.ledCol(t).map(Math.round).join(',') + ')'; g.lineWidth = 2;
-        g.beginPath(); g.arc(rc[0], rc[1], Math.max(2, rad), -Math.PI * 0.8, Math.PI * 0.4); g.stroke();
-        const r0 = bil(q, 0.55, 0), r1 = bil(q, 0.95, 0), r2 = bil(q, 0.6, 1), r3 = bil(q, 0.2, 1);
-        g.fillStyle = 'rgba(255,255,255,.05)'; g.beginPath(); g.moveTo(r0[0], r0[1]); g.lineTo(r1[0], r1[1]); g.lineTo(r2[0], r2[1]); g.lineTo(r3[0], r3[1]); g.fill();
+      } else if (kind === 'jack') {
+        let x = 0, y = 0; q.forEach((p) => { x += p[0]; y += p[1]; });
+        const c0 = [x / q.length, y / q.length], sc = (f) => q.map((p) => [c0[0] + (p[0] - c0[0]) * f, c0[1] + (p[1] - c0[1]) * f]);
+        g.fillStyle = 'rgba(6,7,9,.95)'; g.beginPath(); sc(0.72).forEach((p, i) => (i ? g.lineTo(p[0], p[1]) : g.moveTo(p[0], p[1]))); g.closePath(); g.fill();
+        g.fillStyle = 'rgba(210,214,222,.9)'; g.beginPath(); sc(0.2).forEach((p, i) => (i ? g.lineTo(p[0], p[1]) : g.moveTo(p[0], p[1]))); g.closePath(); g.fill();
+      } else if (kind === 'knobMark') {
+        let x = 0, y = 0; q.forEach((p) => { x += p[0]; y += p[1]; });
+        const c0 = [x / q.length, y / q.length], r0 = q[0];
+        g.strokeStyle = 'rgba(255,255,255,.85)'; g.lineWidth = 1.6; g.lineCap = 'round';
+        g.beginPath(); g.moveTo(c0[0] + (r0[0] - c0[0]) * 0.35, c0[1] + (r0[1] - c0[1]) * 0.35); g.lineTo(c0[0] + (r0[0] - c0[0]) * 0.8, c0[1] + (r0[1] - c0[1]) * 0.8); g.stroke();
+      } else if (kind === 'tof') {
+        let x = 0, y = 0; q.forEach((p) => { x += p[0]; y += p[1]; });
+        const c0 = [x / q.length, y / q.length], ra = q[0], rb = q[Math.floor(q.length / 2)];
+        [[ra, '120,40,60'], [rb, '60,70,90']].forEach((d) => {
+          const p = [c0[0] + (d[0][0] - c0[0]) * 0.45, c0[1] + (d[0][1] - c0[1]) * 0.45];
+          g.fillStyle = 'rgba(' + d[1] + ',.95)'; g.beginPath(); g.arc(p[0], p[1], 1.6, 0, Math.PI * 2); g.fill();
+          g.fillStyle = 'rgba(255,255,255,.45)'; g.beginPath(); g.arc(p[0] - 0.5, p[1] - 0.5, 0.5, 0, Math.PI * 2); g.fill();
+        });
+      } else if (kind === 'header') {
+        g.fillStyle = 'rgba(214,178,94,.85)';
+        const long = Math.hypot(q[1][0] - q[0][0], q[1][1] - q[0][1]) >= Math.hypot(q[3][0] - q[0][0], q[3][1] - q[0][1]);
+        for (let i = 0; i < 10; i++) {
+          const tpos = 0.07 + i * 0.096;
+          [0.3, 0.7].forEach((o) => { const p = long ? bil(q, tpos, o) : bil(q, o, tpos); g.beginPath(); g.arc(p[0], p[1], 0.8, 0, Math.PI * 2); g.fill(); });
+        }
       } else if (kind === 'pcb' || kind === 'coil') {
         g.strokeStyle = 'rgba(214,178,94,.55)'; g.lineWidth = 0.7;
         if (kind === 'coil') {
