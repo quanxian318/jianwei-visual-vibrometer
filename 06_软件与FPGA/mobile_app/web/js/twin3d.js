@@ -78,6 +78,10 @@
     return back ? [{ p: [[x1, y0, z], [x0, y0, z], [x0, y1, z], [x1, y1, z]], n: [0, 0, -1], mat, decal }]
       : [{ p: [[x0, y0, z], [x1, y0, z], [x1, y1, z], [x0, y1, z]], n: [0, 0, 1], mat, decal }];
   }
+  function plate3(cx, y, cz, w, d, mat) {
+    const x0 = cx - w / 2, x1 = cx + w / 2, z0 = cz - d / 2, z1 = cz + d / 2;
+    return [{ p: [[x0, y, z0], [x1, y, z0], [x1, y, z1], [x0, y, z1]], n: [0, -1, 0], mat }];
+  }
   function sidePlate(x, cy, cz, h, d, mat, decal, left) {
     const y0 = cy - h / 2, y1 = cy + h / 2, z0 = cz - d / 2, z1 = cz + d / 2;
     return left ? [{ p: [[x, y0, z0], [x, y0, z1], [x, y1, z1], [x, y1, z0]], n: [-1, 0, 0], mat, decal }]
@@ -100,26 +104,33 @@
   const ZF = D / 2, ZB = -D / 2;
   // Glossy caps get a diagonal sheen.
   const sheen = (faces) => faces.map((f) => (f.mat === 'glass' && f.n[2] > 0.9 ? Object.assign({ decal: 'sheen' }, f) : f));
-  const MODULES = [
+  // Parts on the outside of the housing: drawn over it while the surface they
+  // sit on faces the viewer, hidden while it faces away.
+  const FRONT = [0, 0, 1], BACK = [0, 0, -1], TOP = [0, -1, 0], BOTTOM = [0, 1, 0], LEFT = [-1, 0, 0], RIGHT = [1, 0, 0];
+  const mount = (n, faces) => faces.map((f) => Object.assign({}, f, { mount: n }));
+  // Parts inside the closed housing: only drawn once their module moves out.
+  const enclosed = (faces) => faces.map((f) => Object.assign({}, f, { inside: true }));
+  const MODULES = (() => [
     { id: 'shellR', shell: true, name: '后壳', parts: cat(
       rbox(0, 0, -1.95, W, H, 3.7, R, 0.7, 'shell', 'shell'),
       rbox(0, 0, -0.05, W - 0.5, H - 0.5, 0.18, R - 0.25, 0, 'trim'),
-      cyl(0, H / 2 + 0.18, -1.2, 1.25, 0.36, 'y', 'metal', { n: 18 }),
-      sidePlate(-W / 2 - 0.01, -1.2, -1.9, 6.2, 2.6, 'grille', 'grille', true),
-      sidePlate(W / 2 + 0.01, 3.4, -1.9, 1.0, 2.2, 'port', 'portC'),
-      sidePlate(W / 2 + 0.01, 5.0, -1.9, 1.1, 1.1, 'port', 'portDC')), ex: [0, 0, -11], delay: 0 },
+      mount(BOTTOM, cyl(0, H / 2 + 0.18, -1.2, 1.25, 0.36, 'y', 'metal', { n: 18 })),
+      mount(LEFT, sidePlate(-W / 2 - 0.01, -1.2, -1.9, 6.2, 2.6, 'grille', 'grille', true)),
+      mount(RIGHT, sidePlate(W / 2 + 0.01, 3.4, -1.9, 1.0, 2.2, 'port', 'portC')),
+      mount(RIGHT, sidePlate(W / 2 + 0.01, 5.0, -1.9, 1.1, 1.1, 'port', 'portDC'))), ex: [0, 0, -11], delay: 0 },
     { id: 'shellF', shell: true, name: '前壳', parts: cat(
       sheen(rbox(0, 0, 1.95, W, H, 3.7, R, 0.7, 'shell', 'glass')),
-      plate(-5.2, 3.6, ZF + 0.01, 1.4, 0.5, 'glassHi', 'micHole'),
-      plate(7.4, -5.3 + 10.6, ZF + 0.01, 3.0, 0.5, 'glass', 'brand')), ex: [0, 0, 15], delay: 0 },
-    { id: 'lcd', short: '触摸屏', name: '7 寸触摸屏', parts: cat(rbox(0, -0.3, ZB - 0.12, 17.8, 11.2, 0.3, 0.8, 0.08, 'bezel', 'bezel'), plate(0, -0.3, ZB - 0.29, 15.6, 9.2, 'screen', 'screen', true)), ex: [0, 0, -19], delay: 0.05 },
+      mount(FRONT, plate(-5.2, 3.6, ZF + 0.01, 1.4, 0.5, 'glassHi', 'micHole')),
+      mount(FRONT, plate(7.4, -5.3 + 10.6, ZF + 0.01, 3.0, 0.5, 'glass', 'brand'))), ex: [0, 0, 15], delay: 0 },
+    { id: 'lcd', short: '触摸屏', name: '7 寸触摸屏', parts: mount(BACK, cat(rbox(0, -0.3, ZB - 0.12, 17.8, 11.2, 0.3, 0.8, 0.08, 'bezel', 'bezel'), plate(0, -0.3, ZB - 0.29, 15.6, 9.2, 'screen', 'screen', true))), ex: [0, 0, -19], delay: 0.05 },
     { id: 'camera', short: '双目相机', name: 'AN5642 双目相机', parts: cat(
-      box(0, -1.6, 2.35, 10.4, 3.2, 0.22, 'pcbDark', 'pcb'),
-      cyl(-3.3, -1.6, 3.27, 1.0, 1.4, 'z', 'metal', { cap: 'lens', decal: 'lens', n: 28 }), cyl(3.3, -1.6, 3.27, 1.0, 1.4, 'z', 'metal', { cap: 'lens', decal: 'lens', n: 28 }),
-      cyl(-3.3, -1.6, 3.86, 1.32, 0.1, 'z', 'chrome', { cap: 'chrome', n: 28 }), cyl(3.3, -1.6, 3.86, 1.32, 0.1, 'z', 'chrome', { cap: 'chrome', n: 28 })), ex: [0, 0, 9.5], delay: 0.15, front: true },
-    { id: 'light', short: '照明', name: '照明灯 LED1', parts: cat(rbox(-7.2, -5.2, ZF + 0.08, 4.6, 0.62, 0.16, 0.31, 0, 'lamp'), rbox(7.2, -5.2, ZF + 0.08, 4.6, 0.62, 0.16, 0.31, 0, 'lamp')), ex: [0, 0, 15], delay: 0, glow: 'light' },
-    { id: 'laser', short: '十字投影', name: '十字投影 LED2', parts: cat(cyl(0, -5.2, ZF + 0.08, 0.42, 0.18, 'z', 'chrome', { cap: 'laser' })), ex: [0, 0, 15], delay: 0, glow: 'laser' },
-    { id: 'sensors', short: '传感器', name: '环境与测距传感器', parts: cat(box(6.4, 3.4, 2.6, 3.0, 2.2, 0.18, 'pcbBlue', 'pcb'), box(6.4, 3.4, 2.85, 1.0, 0.7, 0.3, 'chip'), rbox(6.4, 3.4, ZF + 0.03, 1.6, 0.8, 0.06, 0.4, 0, 'sensorWin')), ex: [6, 3, 7.5], delay: 0.3, inner: true },
+      enclosed(box(0, -1.6, 2.35, 10.4, 3.2, 0.22, 'pcbDark', 'pcb')),
+      mount(FRONT, cat(
+        cyl(-3.3, -1.6, 3.86, 1.32, 0.1, 'z', 'chrome', { cap: 'chrome', n: 28 }), cyl(3.3, -1.6, 3.86, 1.32, 0.1, 'z', 'chrome', { cap: 'chrome', n: 28 }),
+        cyl(-3.3, -1.6, 3.27, 1.0, 1.4, 'z', 'metal', { cap: 'lens', decal: 'lens', n: 28 }), cyl(3.3, -1.6, 3.27, 1.0, 1.4, 'z', 'metal', { cap: 'lens', decal: 'lens', n: 28 })))), ex: [0, 0, 9.5], delay: 0.15 },
+    { id: 'light', short: '照明', name: '照明灯 LED1', parts: mount(FRONT, cat(rbox(-7.2, -5.2, ZF + 0.08, 4.6, 0.62, 0.16, 0.31, 0, 'lamp'), rbox(7.2, -5.2, ZF + 0.08, 4.6, 0.62, 0.16, 0.31, 0, 'lamp'))), ex: [0, 0, 15], delay: 0, glow: 'light' },
+    { id: 'laser', short: '十字投影', name: '十字投影 LED2', parts: mount(FRONT, cyl(0, -5.2, ZF + 0.08, 0.42, 0.18, 'z', 'chrome', { cap: 'laser' })), ex: [0, 0, 15], delay: 0, glow: 'laser' },
+    { id: 'sensors', short: '传感器', name: '环境与测距传感器', parts: cat(box(6.4, 3.4, 2.6, 3.0, 2.2, 0.18, 'pcbBlue', 'pcb'), box(6.4, 3.4, 2.85, 1.0, 0.7, 0.3, 'chip'), mount(FRONT, rbox(6.4, 3.4, ZF + 0.03, 1.6, 0.8, 0.06, 0.4, 0, 'sensorWin'))), ex: [6, 3, 7.5], delay: 0.3, inner: true },
     { id: 'mic', short: '麦克风', name: 'MP34DT01 麦克风', parts: cat(box(-5.2, 3.6, 2.6, 2.2, 1.6, 0.16, 'pcbViolet', 'pcb'), box(-5.2, 3.6, 2.8, 0.7, 0.5, 0.25, 'metal')), ex: [-6, 3, 7.5], delay: 0.3, inner: true },
     { id: 'nfc', short: 'NFC', name: 'PN532 NFC', parts: cat(box(-8.2, -1.4, 2.6, 4.4, 4.4, 0.14, 'pcbBlue', 'coil')), ex: [-8, -1, 6], delay: 0.25, inner: true },
     { id: 'carrier', short: '主载板', name: '主载板', parts: cat(
@@ -138,11 +149,13 @@
     { id: 'power', short: '电源', name: '电源与功率监测', parts: cat(box(8.4, 4.6, -1.5, 4.4, 2.6, 0.18, 'pcbDark', 'pcb'), box(8.0, 4.6, -1.05, 1.6, 1.2, 0.7, 'inductor'), cyl(10.7, 5.0, -1.9, 0.5, 1.2, 'x', 'chrome', { n: 14 })), ex: [8, 7, -2.5], delay: 0.4, inner: true },
     { id: 'fan', short: '风扇', name: '散热风扇', parts: cat(box(-10.6, -1.2, -1.9, 0.7, 4.6, 4.6, 'fanFrame'), cyl(-11.0, -1.2, -1.9, 0.55, 0.3, 'x', 'metal', { n: 14 }), blades(-11.0, -1.2, -1.9, 2.0, 'blade')), ex: [-9, 0, -3], delay: 0.35, inner: true },
     { id: 'panel', short: '前面板', name: '前面板（旋钮/状态灯）', parts: cat(
-      cyl(6.6, -H / 2 - 0.55, -0.4, 1.0, 1.1, 'y', 'knob', { n: 28, knurl: 0.07, cap: 'knobTop' }),
-      cyl(3.6, -H / 2 - 0.12, -0.4, 0.55, 0.24, 'y', 'button', { n: 18 }),
-      rbox(-2.4, -H / 2 - 0.04, -0.4, 5.2, 0.4, 0.1, 0.2, 0, 'ledbar'),
-      box(1.5, -H / 2 + 1.2, -0.4, 10, 0.16, 2.6, 'pcbDark')), ex: [0, -8, 0], delay: 0.1 },
-  ];
+      mount(TOP, cat(
+        cyl(6.6, -H / 2 - 0.55, -0.4, 1.0, 1.1, 'y', 'knob', { n: 28, knurl: 0.07, cap: 'knobTop' }),
+        cyl(3.6, -H / 2 - 0.12, -0.4, 0.55, 0.24, 'y', 'button', { n: 18 }),
+        // The light bar is a flat strip on the top surface.
+        plate3(-2.4, -H / 2 - 0.02, -0.4, 5.2, 0.4, 'ledbar'))),
+      enclosed(box(1.5, -H / 2 + 1.2, -0.4, 10, 0.16, 2.6, 'pcbDark'))), ex: [0, -8, 0], delay: 0.1 },
+  ])().map((m) => (m.inner ? Object.assign(m, { parts: m.parts.map((f) => (f.mount ? f : Object.assign({}, f, { inside: true }))) }) : m));
 
   // ------------------------------------------------------------ materials
   function palette(dark) {
@@ -237,9 +250,15 @@
     modules() { return MODULES.filter((m) => !m.shell); }
     bind() {
       const c = this.c;
-      let last = null, pinch = null, moved = 0, t0 = 0;
+      let last = null, pinch = null, moved = 0, t0 = 0, lastTouch = 0;
+      // A tap fires touch events and then emulated mouse events; handling both
+      // selected and immediately deselected the part.
+      const fromMouse = (e) => !e.touches && !e.changedTouches;
+      const stale = (e) => fromMouse(e) && Date.now() - lastTouch < 900;
       const pos = (e) => (e.touches ? [e.touches[0].clientX, e.touches[0].clientY] : [e.clientX, e.clientY]);
       const start = (e) => {
+        if (e.touches) lastTouch = Date.now();
+        else if (stale(e)) return;
         if (e.touches && e.touches.length === 2) { pinch = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY); last = null; return; }
         last = pos(e); moved = 0; t0 = Date.now(); this.auto = false; this.vel = 0;
       };
@@ -260,18 +279,20 @@
         if (e.cancelable) e.preventDefault();
       };
       const end = (e) => {
+        if (e.changedTouches) { lastTouch = Date.now(); if (e.cancelable) e.preventDefault(); }  // no emulated click / dblclick
         if (pinch && (!e.touches || e.touches.length < 2)) { pinch = null; last = null; return; }
         if (last && moved < 8 && Date.now() - t0 < 400) this.tap(last[0], last[1]);
         last = null; this.kick();
       };
       c.addEventListener('touchstart', start, { passive: true });
       c.addEventListener('touchmove', move, { passive: false });
-      c.addEventListener('touchend', end);
+      c.addEventListener('touchend', end, { passive: false });
+      c.addEventListener('touchcancel', () => { last = null; pinch = null; });
       c.addEventListener('mousedown', start);
       window.addEventListener('mousemove', (e) => { if (last) move(e); });
       window.addEventListener('mouseup', (e) => { if (last) end(e); });
       c.addEventListener('wheel', (e) => { this.zoom = U.clamp(this.zoom * (e.deltaY < 0 ? 1.08 : 0.93), 0.6, 2.6); this.kick(); e.preventDefault(); }, { passive: false });
-      c.addEventListener('dblclick', () => this.reset());
+      c.addEventListener('dblclick', (e) => { if (!stale(e)) this.reset(); });
       if (typeof IntersectionObserver !== 'undefined') new IntersectionObserver((en) => { this.visible = en[0].isIntersecting; if (this.visible) this.kick(); }).observe(c);
     }
     tap(x, y) {
@@ -340,7 +361,7 @@
         // Each module leaves on its own beat: shells first, then the layers inside.
         const raw = U.clamp(this.explodeT, 0, 1);
         const em = ease(U.clamp((raw * (1 + STAG) - (m.delay || 0)) / 1, 0, 1));
-        if (m.inner && em < 0.03 && e < 0.06) return;  // hidden inside the closed housing
+        const attached = em < 0.5;  // still on (or close to) the housing
         const off = m.ex.map((v) => v * em);
         const shellAlpha = m.shell ? 1 - 0.9 * U.clamp(em * 1.3, 0, 1) : 1;
         let sx = 0, sy = 0, sz = 0, cnt = 0;
@@ -352,14 +373,32 @@
             sx += q[0]; sy += q[1]; sz += q[2]; cnt++;
             return proj(q);
           });
+          if (f.inside && em < 0.03) return;  // hidden inside the closed housing
           const n = rot(f.n, this.ry, this.rx);
           if (n[2] <= 0.0001 && !f.spin) return;
+          const onTop = f.mount && attached;
+          if (onTop && rot(f.mount, this.ry, this.rx)[2] < 0.02) return;  // its surface faces away
           let z = 0; pts.forEach((p) => { z += p[2]; });
-          polys.push({ m, f, pts, n, z: z / pts.length, alpha: shellAlpha });
+          polys.push({ m, f, pts, n, z: z / pts.length, alpha: shellAlpha, onTop });
         });
         if (cnt) centers[m.id] = proj([sx / cnt, sy / cnt, sz / cnt]);
       });
-      polys.sort((a, b) => a.z - b.z);
+      // Painter's order. Closed: faces by depth (only the housing and what is
+      // on it remain). Exploded: each module is a layer, ordered by its mean
+      // depth, so a large housing face can no longer cut through a small part.
+      // Parts mounted on the housing go last, over the surface they sit on.
+      const layered = e > 0.15;
+      const depth = {};
+      if (layered) {
+        const acc = {};
+        polys.forEach((p) => { if (p.onTop) return; const a = acc[p.m.id] || (acc[p.m.id] = [0, 0]); a[0] += p.z; a[1]++; });
+        Object.keys(acc).forEach((k) => { depth[k] = acc[k][0] / acc[k][1]; });
+      }
+      polys.sort((a, b) => {
+        if (a.onTop !== b.onTop) return a.onTop ? 1 : -1;
+        if (layered && !a.onTop && a.m !== b.m) return depth[a.m.id] - depth[b.m.id];
+        return a.z - b.z;
+      });
       this.hits = [];
       const V = [0, 0, 1];
       const hv = norm([L[0] + V[0], L[1] + V[1], L[2] + V[2]]);
@@ -388,7 +427,7 @@
         if (f.decal) this.decal(g, f.decal, p.pts, t, dark);
         if (this.sel === m.id) { g.strokeStyle = 'rgba(' + accent.join(',') + ',.9)'; g.lineWidth = 1; g.stroke(); }
         g.globalAlpha = 1;
-        if (!m.shell || e < 0.5) this.hits.push({ id: m.id, pts: p.pts, shell: m.shell });
+        if (!m.shell || e < 0.5) this.hits.push({ id: m.id, pts: p.pts, shell: m.shell, onTop: p.onTop });
       });
       this.glows(g, proj, e, dark);
       this.centers = centers;

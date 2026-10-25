@@ -2,7 +2,7 @@
   "date": "2026-10-25",
   "project": "见微视觉测振仪",
   "files": 4408,
-  "total_bytes": 962836858,
+  "total_bytes": 962832682,
   "excluded": [
     ".git/",
     ".agents/",
@@ -6469,9 +6469,9 @@
       "sha256": "8604d81df2b7f80a11e07ad3b18db2bfa5eda3dc3d00be950ed6ad0eaa30aaac"
     },
     {
-      "path": "06_软件与FPGA/mobile_app/dist/JianweiVibro-1.0.0.apk",
-      "bytes": 646100,
-      "sha256": "1d13f6708207472fd466f23260904a823c8136d80228991d1b7222981bc55b00"
+      "path": "06_软件与FPGA/mobile_app/dist/JianweiVibro-1.0.1.apk",
+      "bytes": 647314,
+      "sha256": "a1c77ffbfa39671cba76b5e8cbd787b6a2129baec60421ea690d2183be5c4f19"
     },
     {
       "path": "06_软件与FPGA/mobile_app/docs/icon_512.png",
@@ -6491,7 +6491,7 @@
     {
       "path": "06_软件与FPGA/mobile_app/tools/build_apk.sh",
       "bytes": 3122,
-      "sha256": "b101546729778ed05d7f2d69848e1737004b0fcd1fb9738f5a8f7312a76f8052"
+      "sha256": "e735a6a52f9dff5539eb70e0a28018ab30779815e5d0154c95b7ac374485042e"
     },
     {
       "path": "06_软件与FPGA/mobile_app/tools/make_fonts.py",
@@ -6556,7 +6556,7 @@
     {
       "path": "06_软件与FPGA/mobile_app/web/js/app.js",
       "bytes": 17080,
-      "sha256": "67d97d0e5cdab95efa8f5f88f2170af7c6f7c5df0db509a58dfb8627e9e8b2f8"
+      "sha256": "dfe29a6c890419a69284356dba1e5433f60b3447ea8cf379ad568619539b2208"
     },
     {
       "path": "06_软件与FPGA/mobile_app/web/js/charts.js",
@@ -6585,8 +6585,8 @@
     },
     {
       "path": "06_软件与FPGA/mobile_app/web/js/page_device.js",
-      "bytes": 15273,
-      "sha256": "0be3318546527a2211eec7359f4b016f55dffda12e5fa4437811a9c9904060ee"
+      "bytes": 16268,
+      "sha256": "b5b69535c683c80332bc2526e9703b17db4989ed408b927418b35d7737c847d1"
     },
     {
       "path": "06_软件与FPGA/mobile_app/web/js/page_home.js",
@@ -6615,8 +6615,8 @@
     },
     {
       "path": "06_软件与FPGA/mobile_app/web/js/twin3d.js",
-      "bytes": 31850,
-      "sha256": "b6460ec3936c0152befc9435eb456d348dc2af16d0f841a21b02312222e04c12"
+      "bytes": 34620,
+      "sha256": "e6fb0c57128a7b033e4a593fa04825f7f2318fdde920f1c3ed47e8596545cd08"
     },
     {
       "path": "06_软件与FPGA/mobile_app/web/js/util.js",
@@ -22005,33 +22005,33 @@
     },
     {
       "path": "15_手机APP_20261025/README.md",
-      "bytes": 13475,
-      "sha256": "d9f310a7dd235fe731fab03bbf88ce68cc8fc44c103631423835314d5d81b88d"
+      "bytes": 14746,
+      "sha256": "dddf9790c21f10765c1abcee0ff2e29b9b51f90bb3e35e6df46eb5ac8e2f62ec"
     },
     {
       "path": "15_手机APP_20261025/截图/01_连接_总览_测量_记录.jpg",
-      "bytes": 159091,
-      "sha256": "ce80276d8a8fbb81cc8f9a15f5789d53d02eab992b02414ee5be9699385201ab"
+      "bytes": 159369,
+      "sha256": "b55424c22e7079f59795d0df403e02002a009e453f7b3c28242c33694e62e555"
     },
     {
       "path": "15_手机APP_20261025/截图/02_详情_3D时频_测点_设置.jpg",
-      "bytes": 157691,
-      "sha256": "7de94083087f427a45015e9addf89529a5a133c774e1290bdc31a9951affe7c7"
+      "bytes": 157511,
+      "sha256": "55aa24a5aad858d088747970fa6ca4cf5a6ff057ba362cc384140fc9fd6ae2f1"
     },
     {
       "path": "15_手机APP_20261025/截图/03_设备数字孪生_爆炸视图.jpg",
-      "bytes": 152363,
-      "sha256": "f4f1a5740307d68c3005b0603d7d4b3a14628e206711bee9da2abb3591258a16"
+      "bytes": 147069,
+      "sha256": "57b4c4b9c07cab4efb7999bdfe273e8164b83ef47f26d25284db0a80953df6f1"
     },
     {
       "path": "15_手机APP_20261025/截图/04_测量中_网络_深色.jpg",
-      "bytes": 173549,
-      "sha256": "e3f153c85a270fc2c5a30755556c459dfddaacb98a850f3456e982be9ff3ea8f"
+      "bytes": 167823,
+      "sha256": "cbc8b1b7460b81882539b2524728a6b47441cad0ba986af01845df3c8c7a92cc"
     },
     {
       "path": "AGENTS.md",
-      "bytes": 36666,
-      "sha256": "11497e3f3c049917b92b2f1285af5cc888391c0d9266770b484bbb54ed214bc5"
+      "bytes": 37162,
+      "sha256": "ddf90affcd3d9915a9005f9befb41c681d77c60211cd825caa1622370565c7f2"
     },
     {
       "path": "README.md",

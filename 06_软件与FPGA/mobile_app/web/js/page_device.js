@@ -78,16 +78,13 @@
         if (!r) return;
         const id = r.getAttribute('data-m');
         this.twin.select(id);
-        U.$('.twin-wrap', el).scrollIntoView({ behavior: 'smooth', block: 'center' });
+        U.$('.twin-wrap', el).scrollIntoView({ behavior: 'smooth', block: 'start' });
       });
       el.addEventListener('click', (e) => {
         const g = e.target.closest('[data-go]');
         if (g) { App.push(g.getAttribute('data-go')); return; }
         const d = e.target.closest('[data-do]');
         if (d) this.act(d.getAttribute('data-do'));
-        const a = e.target.closest('[data-mact]');
-        if (a) this.moduleAction(a.getAttribute('data-mact'));
-        if (e.target.closest('[data-unsel]')) this.twin.select(null);
       });
       App.on((l) => this.update(l));
       this.update(App.live);
@@ -126,37 +123,64 @@
       U.$('#dvNet', el).textContent = n.wifi === 'CONNECTED' ? '已连接' : '未连接';
       U.$('#dvTime', el).textContent = l.tv ? '已同步' : '未同步';
     },
+    // The health summary stays on the page; a selected module opens a sheet
+    // with its details (refreshed with the live state while it is open).
     showModule(id) {
       const box = U.$('#dvMod', this.el);
       if (!box || !this.sm) return;
-      let html;
-      if (!id) {
-        const all = this.twin.modules();
-        const c = { ok: 0, warn: 0, alarm: 0, off: 0, unknown: 0 };
-        all.forEach((m) => { c[(this.sm[m.id] || {}).state || 'unknown']++; });
-        const health = c.alarm ? 'alarm' : c.warn ? 'warn' : 'ok';
-        html = '<div class="card health"><div class="flex"><div class="hico" style="background:var(--' + health + '-soft);color:var(--' + health + ')">' + Icon(health === 'ok' ? 'shield' : 'alert') + '</div>' +
-          '<div class="grow"><div class="h-t">' + (health === 'ok' ? '整机状态良好' : health === 'warn' ? '有模块需要注意' : '有模块异常') + '</div>' +
-          '<div class="h-s num">' + c.ok + ' / ' + all.length + ' 正常</div></div></div></div>';
-      } else {
-        const m = Twin3D.MODULES.find((x) => x.id === id);
-        const s = this.sm[id] || { state: 'unknown', rows: [] };
-        const cls = s.state === 'off' ? 'unknown' : s.state;
-        const l = App.live || {};
-        const acts = id === 'light' ? '<button class="btn small" data-mact="light">' + (l.light && l.light.on ? '关闭照明' : '打开照明') + '</button>'
-          : id === 'laser' ? '<button class="btn small" data-mact="laser">' + (l.laser ? '关闭投影' : '打开投影') + '</button>'
-            : id === 'panel' ? '<button class="btn small" data-mact="mute">静音确认</button>'
-              : id === 'camera' ? '<button class="btn small" data-mact="measure">去测量</button>'
-                : id === 'nano' ? '<button class="btn small" data-mact="net">网络设置</button>' : '';
-        html = '<div class="card mod-card fade-in" style="border-color:var(--' + (cls === 'unknown' ? 'border' : cls) + ')">' +
-          '<div class="flex"><div class="hico" style="background:var(--' + cls + '-soft);color:var(--' + cls + ')">' + Icon(MOD_IC[id] || 'chip') + '</div>' +
-          '<div class="grow"><div class="h-t">' + m.name.replace(/（.*）/, '') + '</div><div class="h-s">' + ST_TEXT[s.state] + '</div></div>' +
-          '<button class="icon-btn" data-unsel style="box-shadow:none;background:var(--surface-2)">' + Icon('close', 's') + '</button></div>' +
-          '<div class="mod-desc">' + (DESC[id] || '') + '</div>' +
-          (s.rows.length ? '<div class="kv">' + s.rows.map((r) => '<div class="k">' + r[0] + '</div><div class="v num">' + U.esc(r[1] == null ? '—' : r[1]) + '</div>').join('') + '</div>' : '') +
-          (acts ? '<div class="flex mt16">' + acts + '</div>' : '') + '</div>';
-      }
+      const all = this.twin.modules();
+      const c = { ok: 0, warn: 0, alarm: 0, off: 0, unknown: 0 };
+      all.forEach((m) => { c[(this.sm[m.id] || {}).state || 'unknown']++; });
+      const health = c.alarm ? 'alarm' : c.warn ? 'warn' : 'ok';
+      const html = '<div class="card health"><div class="flex"><div class="hico" style="background:var(--' + health + '-soft);color:var(--' + health + ')">' + Icon(health === 'ok' ? 'shield' : 'alert') + '</div>' +
+        '<div class="grow"><div class="h-t">' + (health === 'ok' ? '整机状态良好' : health === 'warn' ? '有模块需要注意' : '有模块异常') + '</div>' +
+        '<div class="h-s num">' + c.ok + ' / ' + all.length + ' 正常</div></div></div></div>';
       if (box.innerHTML !== html) box.innerHTML = html;
+      if (!id) {
+        if (this.sheetId && U.sheet.current) U.sheet.current(null);
+        return;
+      }
+      if (this.sheetId === id && this.sheetEl) {
+        const body = U.$('#modBody', this.sheetEl), nh = this.moduleHtml(id);
+        if (body && body.innerHTML !== nh) body.innerHTML = nh;
+        return;
+      }
+      if (this.sheetId && U.sheet.current) U.sheet.current(null);
+      this.sheetId = id;
+      U.sheet('<div id="modBody">' + this.moduleHtml(id) + '</div>', (sh, close) => {
+        this.sheetEl = sh;
+        const mask = sh.previousSibling;
+        if (mask && mask.classList && mask.classList.contains('mask')) { mask.style.background = 'rgba(9,12,20,.12)'; mask.style.backdropFilter = 'none'; }  // keep the model visible
+        sh.addEventListener('click', (e) => {
+          const a = e.target.closest('[data-mact]');
+          if (!a) return;
+          const act = a.getAttribute('data-mact');
+          if (act === 'measure' || act === 'net') close(null);
+          this.moduleAction(act);
+        });
+      }).then(() => {
+        if (this.sheetId !== id) return;
+        this.sheetId = null;
+        this.sheetEl = null;
+        if (this.twin.sel === id) this.twin.select(null);
+      });
+    },
+    moduleHtml(id) {
+      const m = Twin3D.MODULES.find((x) => x.id === id);
+      const s = this.sm[id] || { state: 'unknown', rows: [] };
+      const cls = s.state === 'off' ? 'unknown' : s.state;
+      const l = App.live || {};
+      const acts = id === 'light' ? '<button class="btn small" data-mact="light">' + (l.light && l.light.on ? '关闭照明' : '打开照明') + '</button>'
+        : id === 'laser' ? '<button class="btn small" data-mact="laser">' + (l.laser ? '关闭投影' : '打开投影') + '</button>'
+          : id === 'panel' ? '<button class="btn small" data-mact="mute">静音确认</button>'
+            : id === 'camera' ? '<button class="btn small" data-mact="measure">去测量</button>'
+              : id === 'nano' ? '<button class="btn small" data-mact="net">网络设置</button>' : '';
+      return '<div class="flex"><div class="hico" style="background:var(--' + cls + '-soft);color:var(--' + cls + ')">' + Icon(MOD_IC[id] || 'chip') + '</div>' +
+        '<div class="grow"><div class="h-t">' + m.name.replace(/（.*）/, '') + '</div><div class="h-s">' + ST_TEXT[s.state] + '</div></div>' +
+        '<button class="icon-btn" data-close="" style="box-shadow:none;background:var(--surface-2)">' + Icon('close', 's') + '</button></div>' +
+        '<div class="mod-desc">' + (DESC[id] || '') + '</div>' +
+        (s.rows.length ? '<div class="kv">' + s.rows.map((r) => '<div class="k">' + r[0] + '</div><div class="v num">' + U.esc(r[1] == null ? '—' : r[1]) + '</div>').join('') + '</div>' : '') +
+        (acts ? '<div class="flex mt16">' + acts + '</div>' : '');
     },
     moduleAction(a) {
       const l = App.live || {};

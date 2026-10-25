@@ -8,7 +8,7 @@
     { id: 'device', t: '设备', ic: 'device' },
   ];
   const App = {
-    version: '1.0.0',
+    version: '1.0.1',
     pages: {},
     dev: null,
     live: null,
