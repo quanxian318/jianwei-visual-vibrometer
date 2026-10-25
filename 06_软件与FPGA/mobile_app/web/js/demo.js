@@ -138,7 +138,7 @@
         case 'laser':
           if (a.on && s.ms === 'capturing') return { ok: false, error: 'measuring' };
           s.laser = a.on != null ? a.on : !s.laser; return { ok: true };
-        case 'mute': s.mute = true; return { ok: true };
+        case 'mute': s.mute = a.on !== false; return { ok: true };
         case 'set_point': s.pt = POINTS.find((p) => p.id === a.id) || { id: a.id, name: a.name || '', uid: '' }; return { ok: true };
         case 'roi': s.roi = [a.x != null ? a.x : s.roi[0], a.y != null ? a.y : s.roi[1], a.w || s.roi[2], a.h || s.roi[3]]; return { ok: true };
         case 'set': Object.keys(a).forEach((k) => { if (k in this.settingsV) this.settingsV[k] = a[k]; }); return { ok: true, data: this.settingsV };

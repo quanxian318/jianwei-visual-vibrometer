@@ -101,6 +101,7 @@ class Application {
   std::string outputBlocker();
   void applyOutputs();
   void muteAlarm();
+  void unmuteAlarm();
   void playVoice(const char* asset);
   void powerFail(bool active);
   void requestShutdown();

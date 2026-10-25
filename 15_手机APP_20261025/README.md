@@ -2,7 +2,7 @@
 
 配套见微视觉测振仪的 Android APP，以及为它新增的设备侧接口：AX7010 局域网 API 和 Nano ESP32 Wi-Fi 网关。
 
-- 安装包：[`06_软件与FPGA/mobile_app/dist/JianweiVibro-1.0.3.apk`](../06_软件与FPGA/mobile_app/dist/JianweiVibro-1.0.3.apk)（约 630 KB，Android 7.0 及以上，v2 签名；1.0.x 同一签名，可直接覆盖安装）
+- 安装包：[`06_软件与FPGA/mobile_app/dist/JianweiVibro-1.0.4.apk`](../06_软件与FPGA/mobile_app/dist/JianweiVibro-1.0.4.apk)（约 630 KB，Android 7.0 及以上，v2 签名；1.0.x 同一签名，可直接覆盖安装）
 - 源码：[`06_软件与FPGA/mobile_app`](../06_软件与FPGA/mobile_app)
 - 截图：[截图](截图)，用演示模式在 390×844 手机视口中渲染
 
@@ -52,6 +52,8 @@
 | POST pair/request、pair、unpair | 仅 `require_pairing` 时使用 | — |
 
 设备发现：向 UDP 48300 端口发送 `VIBMON_DISCOVER`，AX 与网关各自单播回复 info 的 JSON。网关另有 mDNS `vibmon-xxxx.local`（服务 `_vibmon._tcp`）。
+
+`mute` 命令带 `{"on":false}` 时取消静音（不带参数或 on 为 true 时静音并确认报警，屏幕 K1 不变）。
 
 live 字段：`dev ver ms el dur cam method bl roi[cx,cy,w,h] cal unit lv mute light{on,pct,ok} laser pt{id,name,uid} pwr{v,a,w,warn,pf} tc rh dist tach fan prn msg tv utc nano{on,wifi,ip,sd,nfc} st{on,be,vf} ac set{dur,warn,alarm,axis} last{id,ok,why,u,hz,clr,amp,pp,rms,lv,saved,ac_hz} fps fw fh mp{win,hz}`；不含 wave 时不超过 900 字节，可装入一帧协议。
 
@@ -133,6 +135,11 @@ tools/build_apk.sh          # -> dist/JianweiVibro-<版本>.apk
 ### 1.0.3（2026-10-25）
 
 - **消息提示到时间不消失、卡在屏幕顶端**：提示隐藏时只向上移动自身高度的 160%，但它的起始位置在状态栏下方（状态栏高度由 Android 外壳传给页面）。手机状态栏 24 px 以上时，单行提示仍有 10–34 px 露在屏幕顶端；电脑浏览器没有状态栏，所以之前的走查没有发现。现在隐藏时上移「自身高度 + 状态栏 + 60 px」，同时淡出，隐藏后不可见、不可点。已按 0/24/30/48 px 状态栏和长短两种文案复测：3.4 s 后全部完全离开屏幕；中途替换的提示仍正常显示后再消失。
+
+### 1.0.4（2026-10-25）
+
+- **测量页「开始测量」圆形按钮左上角的图标错位、压在按钮上**：按钮样式里给外圈进度环写的 `.go svg`（绝对定位铺满、旋转 −90°）同时命中了按钮中间的播放／分析中图标，图标于是被挪到中心圆的左上角并转了 90°。改为只作用于按钮直接子元素的进度环（`.go > svg`），图标回到文字上方居中。已截图复核空闲、采集倒计时、分析中三种状态，进度环仍从正上方开始走。
+- **首页「静音」按下变蓝后再按没反应**：设备端 `mute` 命令原本只能静音（确认报警），没有取消，App 再按一次只是重复静音。vibmond 的 `mute` 命令新增 `on` 参数（默认 true，屏幕 K1 与旧客户端行为不变），`{"on":false}` 恢复报警声；首页按钮按当前状态切换静音／恢复，提示语随之变化；Nano 网关原样转发参数，固件无需改动。新增驱动单测（取消静音后蜂鸣器重新按节拍响）和 2 项集成检查（共 105 项通过），ARM 交叉编译无警告；演示模式已在浏览器中连按四次复核开关交替。若板上仍是旧版 vibmond，按钮只能静音，需同步更新设备程序。
 
 ## 8. 未验证与限制
 

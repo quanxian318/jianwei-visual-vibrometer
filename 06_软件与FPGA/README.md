@@ -84,7 +84,7 @@ SPI 时钟按 FCLK 自动选不超过 1 MHz 的分频（100 MHz 时为 781 kHz�
 | 程序 | 用途 |
 |---|---|
 | vibmond | 主程序：板内管理、补光与报警、前面板与五灯、传感器、Nano 链路、测量与记录、打印、触摸界面 |
-| vibmonctl | 本地控制：`status`、`measure_start duration_s=10`、`baseline_start`（多点方式的停机基线）、`measure_stop`、`print`、`light on=true percent=80`、`laser on=true`、`mute`、`roi x=0.5 y=0.4 w=80 h=48 ref_x=0.1 ref_y=0.9`（中心为归一化坐标，宽高为像素，ref 为多点参考点组中心，可只给其中一部分）、`pan x=0.3 y=0.6`（放大时的视野中心，归一化坐标）、`stereo_distance distance_mm=1000 x=0.5 y=0.5`（该点目标的实际距离，校正双目水平偏心）、`voice asset=measure_done`、`set_net ssid=… password=…`、`rtc_set unix_ms=…`、`settings`、`set duration_s=30 warn_pp=0.5 alarm_pp=1 light_percent=80`、`shutdown` |
+| vibmonctl | 本地控制：`status`、`measure_start duration_s=10`、`baseline_start`（多点方式的停机基线）、`measure_stop`、`print`、`light on=true percent=80`、`laser on=true`、`mute`（`mute on=false`取消静音）、`roi x=0.5 y=0.4 w=80 h=48 ref_x=0.1 ref_y=0.9`（中心为归一化坐标，宽高为像素，ref 为多点参考点组中心，可只给其中一部分）、`pan x=0.3 y=0.6`（放大时的视野中心，归一化坐标）、`stereo_distance distance_mm=1000 x=0.5 y=0.5`（该点目标的实际距离，校正双目水平偏心）、`voice asset=measure_done`、`set_net ssid=… password=…`、`rtc_set unix_ms=…`、`settings`、`set duration_s=30 warn_pp=0.5 alarm_pp=1 light_percent=80`、`shutdown` |
 | vision_ref | 视觉处理参考：对录制片段运行 PS 算法，供与 PC 模型、PL 实现逐位比对（`pc_sim/check_bitexact.py` 调用） |
 | carrier_test | 首板联调（先停 vibmond）：`probe`、`i2c-scan mgmt|sens`、`tca`、`load <名称> 0|1`、`power`、`rtc [set]`、`leds RRGGBB×5`、`pwm a b`、`events [秒]`、`imu`、`adxl`、`sht40`、`tof`、`nano [波特率]`、`printer [波特率]` |
 

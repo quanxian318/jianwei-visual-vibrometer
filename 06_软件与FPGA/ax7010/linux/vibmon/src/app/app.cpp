@@ -524,6 +524,12 @@ void Application::muteAlarm() {
   setMessage("报警已确认, 声音已静音");
 }
 
+void Application::unmuteAlarm() {
+  alarm_->mute(false);
+  state_.update([](SystemState& s) { s.alarmMuted = false; });
+  setMessage("报警声已恢复");
+}
+
 void Application::playVoice(const char* asset) {
   if (!cfg_.voice.enabled || !nano_->online() || pfail_ || shutdown_) return;
   // The speaker would be in the microphone's window.
@@ -1768,7 +1774,11 @@ JsonValue Application::handleCommand(const JsonValue& c) {
     return okReply();
   }
   if (cmd == "mute") {
-    muteAlarm();
+    // {"on":false} undoes it (the app's mute button is a toggle).
+    if (jBool(c, "on", true))
+      muteAlarm();
+    else
+      unmuteAlarm();
     return okReply();
   }
   if (cmd == "roi") {

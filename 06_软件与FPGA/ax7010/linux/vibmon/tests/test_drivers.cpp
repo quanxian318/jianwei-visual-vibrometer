@@ -113,6 +113,9 @@ void testPrinterInhibit() {
   alarm.mute();
   alarm.tick(20);
   CHECK((bus.regs[0x20][3] & 0x0F) == 0x01);  // muting keeps the red lamp
+  alarm.mute(false);
+  alarm.tick(1010);
+  CHECK((bus.regs[0x20][3] & 0x0F) == 0x09);  // unmuted: the buzzer sounds again
 }
 
 void testIna() {

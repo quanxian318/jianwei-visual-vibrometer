@@ -2,7 +2,7 @@
   "date": "2026-10-25",
   "project": "见微视觉测振仪",
   "files": 4409,
-  "total_bytes": 963108753,
+  "total_bytes": 963111505,
   "excluded": [
     ".git/",
     ".agents/",
@@ -4890,8 +4890,8 @@
     },
     {
       "path": "06_软件与FPGA/README.md",
-      "bytes": 21979,
-      "sha256": "1f6149f02829944cc655f7ac488601d77ddc8f16278a0b0005bcb08edbed5ef2"
+      "bytes": 22012,
+      "sha256": "323f3022290bdb85c0c7bffc1b8d8aab59dad95a834bc9f7c18afa1685ca974c"
     },
     {
       "path": "06_软件与FPGA/ax7010/linux/petalinux/recipes-apps/vibmon/files/vibmon.init",
@@ -4960,18 +4960,18 @@
     },
     {
       "path": "06_软件与FPGA/ax7010/linux/vibmon/src/app/alarm_service.h",
-      "bytes": 1254,
-      "sha256": "813b90b205b2a8760250b6bfad4a717ad8be99a518a567298072ac7b58e561de"
+      "bytes": 1303,
+      "sha256": "ceabe46b6b95a3bc61bcfe034b5a6e8ddf4bc1d70cefc9a02bece02eb0f9b7de"
     },
     {
       "path": "06_软件与FPGA/ax7010/linux/vibmon/src/app/app.cpp",
-      "bytes": 72753,
-      "sha256": "2aeb12d802595430c6ea17ddb554c19adc69ce589b8ac88452fde23d38f81ee0"
+      "bytes": 73051,
+      "sha256": "41665bfa6fde6e6ebea3f9ea80388e279cada1bc4e0c37f77bf0b7532dc74867"
     },
     {
       "path": "06_软件与FPGA/ax7010/linux/vibmon/src/app/app.h",
-      "bytes": 6986,
-      "sha256": "f00c7fae48ceed8b47de21e2edccd950950846985e27a9c4ef1d1a3cc9010b6a"
+      "bytes": 7008,
+      "sha256": "1e49ad346596d6b0fed91f6d38ec34f49233683b28ea2ff40cb399980c9dfb59"
     },
     {
       "path": "06_软件与FPGA/ax7010/linux/vibmon/src/app/app_api.cpp",
@@ -5675,8 +5675,8 @@
     },
     {
       "path": "06_软件与FPGA/ax7010/linux/vibmon/tests/test_app_host.py",
-      "bytes": 27343,
-      "sha256": "76c4a05df9ae9ee1d250ae33a33d3a5e743f06bd491744f1172921bf11f1d9e6"
+      "bytes": 27596,
+      "sha256": "cfe819c6ae7b5979988ed9d2b96136a1a682d35ac28f0124bbaea2f58fa452eb"
     },
     {
       "path": "06_软件与FPGA/ax7010/linux/vibmon/tests/test_depth_capture.cpp",
@@ -5685,8 +5685,8 @@
     },
     {
       "path": "06_软件与FPGA/ax7010/linux/vibmon/tests/test_drivers.cpp",
-      "bytes": 12795,
-      "sha256": "678f0c51bbee81a6a8219b1eea4bba63d8aa40910a3fbc4ee67419f4993b2ea7"
+      "bytes": 12918,
+      "sha256": "5092640f193d4c994da6564d93866c5899ea4792f873a37ed2881aa4016d99ab"
     },
     {
       "path": "06_软件与FPGA/ax7010/linux/vibmon/tests/test_lk.cpp",
@@ -6469,9 +6469,9 @@
       "sha256": "8604d81df2b7f80a11e07ad3b18db2bfa5eda3dc3d00be950ed6ad0eaa30aaac"
     },
     {
-      "path": "06_软件与FPGA/mobile_app/dist/JianweiVibro-1.0.3.apk",
-      "bytes": 649157,
-      "sha256": "50fd459b937d0c36931f3ae94953fe1796979ffeca1e85f5504a836f52607986"
+      "path": "06_软件与FPGA/mobile_app/dist/JianweiVibro-1.0.4.apk",
+      "bytes": 649177,
+      "sha256": "8d3475f0150e57321afbb1d1cdbdaba3b7c25d5a1460a408e9c02ea205f2d569"
     },
     {
       "path": "06_软件与FPGA/mobile_app/docs/icon_512.png",
@@ -6491,7 +6491,7 @@
     {
       "path": "06_软件与FPGA/mobile_app/tools/build_apk.sh",
       "bytes": 3122,
-      "sha256": "8b2ae5b25e781f4419277b8b96347494e47ec5fbb3f156cd828c2e1d0b38f181"
+      "sha256": "d35c23cbb74d92609d5a934eb559a4a723186ed22527060e099635fea318601f"
     },
     {
       "path": "06_软件与FPGA/mobile_app/tools/make_fonts.py",
@@ -6510,8 +6510,8 @@
     },
     {
       "path": "06_软件与FPGA/mobile_app/web/css/app.css",
-      "bytes": 29226,
-      "sha256": "d7358be7449c82664a33e49fc51775b40b5230d96022cea44aa3ebcef0e1509f"
+      "bytes": 29228,
+      "sha256": "65233b6cfedf4ddd6c3f225c64fa0e7e2313b2af2d0dcc5cf5cb071450524795"
     },
     {
       "path": "06_软件与FPGA/mobile_app/web/fonts/Inter-var.woff2",
@@ -6556,7 +6556,7 @@
     {
       "path": "06_软件与FPGA/mobile_app/web/js/app.js",
       "bytes": 17080,
-      "sha256": "3d5a0a141ab936c188e010b741779700d82033cb0ac6685397bce2cdfac79474"
+      "sha256": "c58c0c60c511f0de6e68d57a26e6d6761d5595f44b056ed7343f9095be95574e"
     },
     {
       "path": "06_软件与FPGA/mobile_app/web/js/charts.js",
@@ -6565,8 +6565,8 @@
     },
     {
       "path": "06_软件与FPGA/mobile_app/web/js/demo.js",
-      "bytes": 15609,
-      "sha256": "06d245eefbb9ed5cd3884e6733051d977af38c3c620822970bafacd0f6182ab7"
+      "bytes": 15619,
+      "sha256": "d0f19a5de2c56918125fe17a2e5a30c76fb4ed0ea94893e106dcb373cc6dae8c"
     },
     {
       "path": "06_软件与FPGA/mobile_app/web/js/fx3d.js",
@@ -6590,8 +6590,8 @@
     },
     {
       "path": "06_软件与FPGA/mobile_app/web/js/page_home.js",
-      "bytes": 11062,
-      "sha256": "692a9446af878643e2fe1abf9c2770d3f69b021844d6ba49bf66555393557109"
+      "bytes": 11107,
+      "sha256": "eba9bb6264d9789b4e3bd50833b0f86aaad3bd655cc406c00ea99a976a02db6c"
     },
     {
       "path": "06_软件与FPGA/mobile_app/web/js/page_measure.js",
@@ -22005,8 +22005,8 @@
     },
     {
       "path": "15_手机APP_20261025/README.md",
-      "bytes": 16686,
-      "sha256": "cb148b1b363a7ab4d0a6b495cb9c300bf47fd8dbc0a0f561722ed2c9d93afd50"
+      "bytes": 18069,
+      "sha256": "6fcbe8c26d378a298acdc8a71dbb8248fa16ad316845a41a8d6e45407f5c4bdd"
     },
     {
       "path": "15_手机APP_20261025/截图/01_连接_总览_测量_记录.jpg",
@@ -22035,8 +22035,8 @@
     },
     {
       "path": "AGENTS.md",
-      "bytes": 38096,
-      "sha256": "85133f834610cc371939b03327ff2d791b5fa1c175a522140b2cde6b396d94da"
+      "bytes": 38610,
+      "sha256": "96f9666ddb9af41311e44b508bb650ce4caa4f8eba23eebb5ebf9d2ce52088cf"
     },
     {
       "path": "README.md",

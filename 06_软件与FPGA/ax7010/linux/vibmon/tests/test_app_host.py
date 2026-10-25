@@ -141,6 +141,8 @@ with tempfile.TemporaryDirectory(prefix='vibmon-regression-') as temp:
                 check(rec['laser_projector'] == {'on': False, 'switched_off_for_capture': True},
                       'record notes the laser switched off for the capture')
                 check(app.cmd('status')['data']['laser']['on'], 'laser is back on after the capture')
+                check(app.cmd('mute')['ok'] and app.cmd('status')['data']['alarm_muted'], 'mute silences the alarm')
+                check(app.cmd('mute', on=False)['ok'] and not app.cmd('status')['data']['alarm_muted'], 'mute with on=false undoes it')
             elif name == 'settings':
                 app.cmd('zoom', steps=4)
                 check(app.cmd('pan', x=0.99, y=0.01)['ok'], 'the zoomed view can be moved')

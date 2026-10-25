@@ -63,7 +63,7 @@
       } else if (q === 'laser') {
         App.cmd('laser', { on: !l.laser });
       } else if (q === 'mute') {
-        App.cmd('mute', {}, '已静音，报警已确认');
+        App.cmd('mute', { on: !l.mute }, l.mute ? '报警声已恢复' : '已静音，报警已确认');
       }
     },
     update(l) {
