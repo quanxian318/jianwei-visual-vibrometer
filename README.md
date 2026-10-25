@@ -6,6 +6,7 @@
 
 - **[PL、PS 与 ESP32 职责和接口分工](00_当前设计方案/PL_PS_ESP32职责与接口分工.md)**：目标由 PL 提取实时位移、PS 管理测量和分析、ESP32 管理 NFC/辅助 SD/语音/Wi-Fi；文内区分目标与当前实现。
 - **[测振算法推进（LK 位移核、PL 累加核、视频结果）](13_测振算法推进_20261021/README.md)**：PS/PL 位精确一致的位移引擎与两段视频的结果和 620 rpm 比对。
+- **[手机 APP（Android 安装包、局域网 API、ESP32 Wi-Fi 网关）](15_手机APP_20261025/README.md)**：配套 APP 支持实时状态、远程测量、记录与 3D 时频、测点、3D 数字孪生爆炸视图和设备设置，APK 在 06_软件与FPGA/mobile_app/dist。
 - **[双目深度改进（PL 双目核、标定、真值对比）](14_双目深度改进_20261021/README.md)**：Census＋SGM＋左右校验的 PL 核与 RTL 逐位验证，误匹配率约为队友 BM 的一半以下。
 - **[完整云端资料导航](云端资料入口.md)** · [私密 GitHub 仓库](https://github.com/quanxian318/jianwei-visual-vibrometer)
 - **[双PCB团队开发资料：离线阅读入口](09_团队开发资料_20261020/README.html)**

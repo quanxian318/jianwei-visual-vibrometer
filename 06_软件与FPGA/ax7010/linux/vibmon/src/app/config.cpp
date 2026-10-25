@@ -258,6 +258,18 @@ bool loadConfig(const std::string& path, AppConfig& c, std::string& err) {
   c.ui.invertY = jBool(ui, "invert_y", c.ui.invertY);
 
   c.controlSocket = jStr(root, "control_socket", c.controlSocket);
+
+  const JsonValue& api = jObj(root, "app_api");
+  c.appApi.enabled = jBool(api, "enabled", c.appApi.enabled);
+  c.appApi.httpPort = std::max(0, std::min(65535, i32(api, "http_port", c.appApi.httpPort)));
+  c.appApi.discoveryPort = std::max(-1, std::min(65535, i32(api, "discovery_port", c.appApi.discoveryPort)));
+  c.appApi.name = jStr(api, "name", c.appApi.name);
+  c.appApi.requirePairing = jBool(api, "require_pairing", c.appApi.requirePairing);
+  c.appApi.tokensFile = jStr(api, "tokens_file", c.appApi.tokensFile);
+  c.appApi.pinTimeoutS = std::max(30, std::min(600, i32(api, "pin_timeout_s", c.appApi.pinTimeoutS)));
+  const JsonValue& gw = jObj(root, "app_gateway");
+  c.gateway.enabled = jBool(gw, "enabled", c.gateway.enabled);
+  c.gateway.statusPeriodMs = std::max(500, i32(gw, "status_period_ms", c.gateway.statusPeriodMs));
   c.poweroffOnShutdown = jBool(root, "poweroff_on_shutdown", c.poweroffOnShutdown);
 
   const JsonValue& pts = jObj(root, "points");

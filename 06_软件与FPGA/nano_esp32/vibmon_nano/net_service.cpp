@@ -45,8 +45,14 @@ const char* NetService::stateName(State s) {
 void NetService::begin() {
   WiFi.persistent(false);  // credentials live in our own NVS namespace
   WiFi.setHostname("vibmon-nano");
-  WiFi.mode(WIFI_STA);
+  WiFi.mode(g_settings.apEnabled ? WIFI_AP_STA : WIFI_STA);
   WiFi.setAutoReconnect(false);
+  uint8_t mac[6] = {0};
+  WiFi.macAddress(mac);
+  char name[16];
+  snprintf(name, sizeof(name), "VIBMON-%02X%02X", mac[4], mac[5]);
+  apSsid_ = name;
+  if (g_settings.apEnabled) startAp();
   WiFi.onEvent(onWifiEvent);
   sntp_set_time_sync_notification_cb(onTimeSync);
   ssid_ = g_settings.wifiSsid;
@@ -70,6 +76,55 @@ void NetService::configure(const std::string& ssid, const std::string& password)
   } else {
     startConnect();
   }
+}
+
+void NetService::startAp() {
+  // Fixed address so the app finds the gateway without discovery.
+  WiFi.softAPConfig(IPAddress(192, 168, 4, 1), IPAddress(192, 168, 4, 1), IPAddress(255, 255, 255, 0));
+  apOn_ = WiFi.softAP(apSsid_.c_str(), g_settings.apPassword.c_str(), 6, 0, 4);
+  LOGI(kTag, "access point %s %s", apSsid_.c_str(), apOn_ ? "on, 192.168.4.1" : "failed");
+}
+
+void NetService::configureAp(bool enabled, const std::string& password) {
+  if (enabled) {
+    WiFi.mode(WIFI_AP_STA);
+    if (apOn_) WiFi.softAPdisconnect(false);
+    startAp();
+  } else {
+    WiFi.softAPdisconnect(true);
+    apOn_ = false;
+    WiFi.mode(WIFI_STA);
+    LOGI(kTag, "access point off");
+  }
+  (void)password;  // already stored in g_settings by the caller
+}
+
+void NetService::describeAp(vp::JsonValue& obj) const {
+  obj.set("enabled", apOn_);
+  obj.set("ssid", apSsid_);
+  obj.set("ip", apOn_ ? vp::JsonValue(WiFi.softAPIP().toString().c_str()) : vp::JsonValue());
+  obj.set("clients", apOn_ ? static_cast<int>(WiFi.softAPgetStationNum()) : 0);
+}
+
+void NetService::scan(vp::JsonValue& obj) {
+  const int16_t n = WiFi.scanComplete();
+  if (n == WIFI_SCAN_RUNNING) {
+    obj.set("scanning", true);
+    return;
+  }
+  vp::JsonValue list = vp::JsonValue::makeArray();
+  for (int16_t i = 0; i < n && i < 20; ++i) {
+    vp::JsonValue o = vp::JsonValue::makeObject();
+    o.set("ssid", WiFi.SSID(i).c_str());
+    o.set("rssi", static_cast<int>(WiFi.RSSI(i)));
+    o.set("secure", WiFi.encryptionType(i) != WIFI_AUTH_OPEN);
+    list.push(o);
+  }
+  obj.set("networks", list);
+  // Results are read once; the next request starts a fresh scan.
+  WiFi.scanDelete();
+  WiFi.scanNetworks(true);
+  obj.set("scanning", n < 0);
 }
 
 void NetService::startConnect() {
@@ -157,6 +212,9 @@ void NetService::describe(vp::JsonValue& obj) const {
     obj.set("rssi", static_cast<int>(WiFi.RSSI()));
   }
   obj.set("attempts", static_cast<unsigned long>(attempts_));
+  vp::JsonValue ap = vp::JsonValue::makeObject();
+  describeAp(ap);
+  obj.set("ap", ap);
 }
 
 void NetService::timeInfo(vp::JsonValue& obj) const {

@@ -38,6 +38,11 @@ enum Opcode : uint8_t {
   kOpDrainEvents = 0x40,
   kOpAckEvents = 0x41,
   kOpPreparePowerOff = 0x50,
+  // App gateway extension (protocol V1.1, AX -> Nano, see 15_手机APP_20261025):
+  // AX publishes snapshots that the Nano serves to the phone app over Wi-Fi
+  // and answers the APP_COMMAND events the Nano queued for it.
+  kOpPublish = 0x60,
+  kOpCommandResult = 0x62,
   kOpEvent = 0x40,  // opcode used by kind=3 event frames
 };
 

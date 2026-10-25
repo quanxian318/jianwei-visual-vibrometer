@@ -3,8 +3,8 @@
 // Numbering "By Arduino pin (default)". Needs the shared library
 // 06_软件与FPGA/shared/vibproto (see ../README.md for the build command).
 //
-// Services: AX link (protocol V1), PN532 NFC, MicroSD + I2S voice, Wi-Fi/NTP,
-// power-fail input. Everything runs from loop() except audio playback, which
+// Services: AX link (protocol V1.1), PN532 NFC, MicroSD + I2S voice, Wi-Fi/NTP,
+// power-fail input, phone app gateway (access point, HTTP API, discovery). Everything runs from loop() except audio playback, which
 // has its own task so SD reads and I2S writes never stall the link.
 
 #include <SPI.h>
@@ -17,6 +17,7 @@
 #include "esp_random.h"
 #include "esp_system.h"
 #include "event_store.h"
+#include "http_gateway.h"
 #include "link.h"
 #include "log.h"
 #include "net_service.h"
@@ -105,6 +106,7 @@ void setup() {
   g_events.post("BOOT", boot);
 
   g_net.begin();
+  http_gateway::begin();
   enableLoopWDT();
 }
 
@@ -114,6 +116,7 @@ void loop() {
   g_sd.poll();
   g_nfc.poll();
   g_net.poll();
+  http_gateway::poll();
   console::poll();
   router::pumpEvents();
   g_link.flushTx();

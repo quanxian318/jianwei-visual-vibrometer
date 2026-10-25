@@ -15,6 +15,13 @@ class NetService {
   void poll();
   // SET_NET: empty ssid switches Wi-Fi off.
   void configure(const std::string& ssid, const std::string& password);
+  // Access point for the phone app (kept on beside the station when enabled).
+  void configureAp(bool enabled, const std::string& password);
+  const std::string& apSsid() const { return apSsid_; }
+  void describeAp(vp::JsonValue& obj) const;
+  // Asynchronous scan for the app's network list: starts one when none is
+  // running and returns the last results ("scanning" while it runs).
+  void scan(vp::JsonValue& obj);
   bool timeValid() const { return timeValid_; }
   void describe(vp::JsonValue& obj) const;  // GET_STATUS "wifi"
   void timeInfo(vp::JsonValue& obj) const;  // GET_TIME data
@@ -24,6 +31,7 @@ class NetService {
   void startConnect();
   void enter(State s, const char* reason);
   void startSntp();
+  void startAp();
   static const char* stateName(State s);
 
   State state_ = State::kOff;
@@ -34,6 +42,8 @@ class NetService {
   uint32_t backoffMs_ = 0;
   uint32_t attempts_ = 0;
   bool sntpStarted_ = false;
+  bool apOn_ = false;
+  std::string apSsid_;
   bool timeValid_ = false;
   int64_t lastSyncUptimeMs_ = 0;
 };

@@ -9,6 +9,7 @@
 
 #include "app/acoustic_service.h"
 #include "app/alarm_service.h"
+#include "app/app_api.h"
 #include "app/board_service.h"
 #include "app/config.h"
 #include "app/control_server.h"
@@ -115,6 +116,13 @@ class Application {
   bool saveSettings();
   void publishSettings();
   JsonValue settingsJson();
+  // Phone app (app_remote.cpp): LAN API, Nano gateway publishing, APP_* events.
+  void startAppApi();
+  JsonValue liveJson(bool wave);
+  void publishToNano(bool force);
+  void publishTopic(const char* topic, const JsonValue& data);
+  void onAppEvent(const NanoEvent& e);
+  void commandResult(int64_t cid, const JsonValue& reply);
 
   AppConfig cfg_;
   EventLoop loop_;
@@ -142,6 +150,12 @@ class Application {
   bool acousticCapture_ = false;  // the running capture has an acoustic window
   int voiceHeld_ = 0;             // prompts not played during it
   std::unique_ptr<ControlServer> ctl_;
+  std::unique_ptr<AppApi> appApi_;
+  bool gatewayCapable_ = false;     // the Nano announced app_gateway in HELLO
+  std::string publishedResultId_;   // last measurement sent to the gateway
+  std::string publishedSettings_;
+  int64_t nextStatusPublishMs_ = 0;
+  std::string lastLiveSig_, publishedSession_;
   std::unique_ptr<FbUi> ui_;
 
   bool carrierOk_ = false;

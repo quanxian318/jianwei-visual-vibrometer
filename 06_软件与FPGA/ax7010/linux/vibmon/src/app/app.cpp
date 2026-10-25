@@ -63,6 +63,7 @@ Application::Application(const AppConfig& cfg) : cfg_(cfg) {}
 Application::~Application() {
   ui_.reset();
   ctl_.reset();
+  appApi_.reset();
   if (engine_) engine_->stopCamera();
   if (stereo_) stereo_->stop();
   if (acoustic_) acoustic_->stop();
@@ -303,6 +304,7 @@ bool Application::init() {
   // Control socket and UI.
   ctl_.reset(new ControlServer(loop_, [this](const JsonValue& c) { return handleCommand(c); }));
   ctl_->listen(cfg_.controlSocket);
+  startAppApi();
   if (cfg_.ui.enabled) {
     ui_.reset(new FbUi(*this));
     if (!ui_->start()) ui_.reset();
@@ -478,6 +480,8 @@ void Application::onNanoEvent(const NanoEvent& e) {
     LOGW(kTag, "voice failed: %s", vp::jsonSerialize(e.data).c_str());
   } else if (e.type == "FAULT") {
     LOGW(kTag, "Nano fault: %s", vp::jsonSerialize(e.data).c_str());
+  } else if (e.type == "APP_COMMAND" || e.type == "APP_CLIENT") {
+    onAppEvent(e);
   } else if (e.type == "BOOT") {
     LOGI(kTag, "Nano booted: %s", vp::jsonSerialize(e.data).c_str());
   }

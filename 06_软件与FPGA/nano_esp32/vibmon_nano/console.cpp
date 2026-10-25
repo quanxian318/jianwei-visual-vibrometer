@@ -8,6 +8,7 @@
 #include <vibproto.h>
 
 #include "app_config.h"
+#include "app_gateway.h"
 #include "audio_service.h"
 #include "event_store.h"
 #include "link.h"
@@ -74,6 +75,9 @@ void cmdStatus() {
   vp::JsonValue e = vp::JsonValue::makeObject();
   g_events.describe(e);
   s.set("events", e);
+  vp::JsonValue gw = vp::JsonValue::makeObject();
+  g_gateway.describe(gw);
+  s.set("gateway", gw);
   printJson(s);
 }
 
@@ -92,6 +96,7 @@ void handle(const std::string& line) {
   const std::string& c = a[0];
   if (c == "help") {
     println("help status events sd nfc | play <asset_id> [volume] | stop | wifi <ssid> [password] | wifi off");
+    println("ap on|off | ap pass <8..63 chars> (phone app access point)");
     println("baud <rate> | flow on|off | log error|warn|info|debug | reboot");
   } else if (c == "status") {
     cmdStatus();
@@ -133,6 +138,19 @@ void handle(const std::string& line) {
       std::string pass = a.size() >= 3 ? a[2] : std::string();
       g_net.configure(a[1], pass);
       println(g_settings.saveWifi(a[1], pass) ? "wifi saved" : "wifi save failed");
+    }
+  } else if (c == "ap" && a.size() >= 2) {
+    if (a[1] == "pass" && a.size() >= 3 && a[2].size() >= 8 && a[2].size() <= 63) {
+      const bool ok = g_settings.saveAp(g_settings.apEnabled, a[2]);
+      if (ok && g_settings.apEnabled) g_net.configureAp(true, a[2]);
+      println(ok ? "ap password saved" : "ap save failed");
+    } else if (a[1] == "on" || a[1] == "off") {
+      const bool on = a[1] == "on";
+      const bool ok = g_settings.saveAp(on, g_settings.apPassword);
+      if (ok) g_net.configureAp(on, g_settings.apPassword);
+      println(ok ? (on ? "ap on" : "ap off") : "ap save failed");
+    } else {
+      println("usage: ap on|off | ap pass <8..63 chars>");
     }
   } else if (c == "baud" && a.size() >= 2) {
     uint32_t b = static_cast<uint32_t>(strtoul(a[1].c_str(), nullptr, 10));

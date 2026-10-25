@@ -115,6 +115,9 @@
   "storage": {"records_dir": "/home/root/vibmon/records"},
   "ui": {"enabled": true, "fbdev": "/dev/fb0", "touch_device": "auto", "swap_xy": false, "invert_x": false, "invert_y": false},
   "control_socket": "/run/vibmon.sock",
+  "app_api": {"enabled": true, "http_port": 8080, "discovery_port": 48300, "name": "", "require_pairing": false,
+              "tokens_file": "/home/root/vibmon/app_tokens.json", "pin_timeout_s": 120},
+  "app_gateway": {"enabled": true, "status_period_ms": 2000},
   "poweroff_on_shutdown": true,
   "points": {
     "04A1B2C3D4E5F6": {"id": "P-01", "name": "示例测点"}

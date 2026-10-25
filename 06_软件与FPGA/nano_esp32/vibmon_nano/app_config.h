@@ -2,7 +2,7 @@
 #include <stddef.h>
 #include <stdint.h>
 
-#define VIBMON_NANO_VERSION "0.1.0"
+#define VIBMON_NANO_VERSION "0.2.0"
 #define VIBMON_NANO_PROFILE "carrier-2026-10-20"
 
 namespace cfg {
@@ -47,6 +47,12 @@ constexpr uint32_t kSdRetryMountMs = 5000;
 
 // Power fail input.
 constexpr uint32_t kPfailReleaseMs = 1000;
+
+// Phone app gateway: access point "VIBMON-xxxx" (last MAC bytes) at
+// 192.168.4.1, HTTP API v1 on port 80, UDP discovery, mDNS vibmon-xxxx.local.
+constexpr const char* kDefaultApPassword = "vibmon2026";  // private use; change in the app
+constexpr uint16_t kHttpPort = 80;
+constexpr uint16_t kDiscoveryPort = 48300;
 
 // Wi-Fi / NTP.
 constexpr uint32_t kWifiConnectTimeoutMs = 20000;

@@ -25,6 +25,8 @@ void Settings::load() {
     ntp1 = cfg::kDefaultNtp1;
     ntp2 = cfg::kDefaultNtp2;
     ntp3 = cfg::kDefaultNtp3;
+    apEnabled = true;
+    apPassword = cfg::kDefaultApPassword;
     return;
   }
   wifiSsid = readString(p, "ssid", "");
@@ -34,7 +36,10 @@ void Settings::load() {
   ntp1 = readString(p, "ntp1", cfg::kDefaultNtp1);
   ntp2 = readString(p, "ntp2", cfg::kDefaultNtp2);
   ntp3 = readString(p, "ntp3", cfg::kDefaultNtp3);
+  apEnabled = p.getBool("ap_on", true);
+  apPassword = readString(p, "ap_pass", cfg::kDefaultApPassword);
   p.end();
+  if (apPassword.size() < 8 || apPassword.size() > 63) apPassword = cfg::kDefaultApPassword;
   if (linkBaud < 9600 || linkBaud > 5000000) linkBaud = cfg::kDefaultLinkBaud;
 }
 
@@ -60,6 +65,19 @@ bool Settings::saveLink(uint32_t baud, bool flow) {
   if (ok) {
     linkBaud = baud;
     flowControl = flow;
+  }
+  return ok;
+}
+
+bool Settings::saveAp(bool enabled, const std::string& password) {
+  Preferences p;
+  if (!p.begin(kNs, false)) return false;
+  bool ok = p.putBool("ap_on", enabled) == sizeof(uint8_t);
+  ok = p.putString("ap_pass", password.c_str()) == password.size() && ok;
+  p.end();
+  if (ok) {
+    apEnabled = enabled;
+    apPassword = password;
   }
   return ok;
 }

@@ -1,6 +1,7 @@
 #include "router.h"
 
 #include "app_config.h"
+#include "app_gateway.h"
 #include "audio_service.h"
 #include "esp_timer.h"
 #include "event_store.h"
@@ -159,6 +160,7 @@ Result handleHello(const vp::Frame& req, std::string& sid) {
   // A handshake always starts a fresh session: no job of the old one continues.
   g_audio.resetSession();
   g_power.clearPrepared();
+  g_gateway.clear();
   cacheClear();
   g_session = sid;
   g_sessionActive = true;
@@ -178,6 +180,7 @@ Result handleHello(const vp::Frame& req, std::string& sid) {
   caps.push("wifi");
   caps.push("ntp");
   caps.push("power_fail");
+  caps.push("app_gateway");
   r.data.set("capabilities", caps);
   vp::JsonValue cursor = vp::JsonValue::makeObject();
   g_events.describe(cursor);
@@ -215,6 +218,9 @@ Result handleGetStatus() {
   vp::JsonValue link = vp::JsonValue::makeObject();
   g_link.describe(link);
   r.data.set("link", link);
+  vp::JsonValue gw = vp::JsonValue::makeObject();
+  g_gateway.describe(gw);
+  r.data.set("gateway", gw);
   return r;
 }
 
@@ -370,6 +376,24 @@ Result handlePreparePowerOff(const vp::Frame& req) {
   return r;
 }
 
+// PUBLISH (0x60): {"topic", "data"} snapshot for the phone app gateway.
+Result handlePublish(const vp::Frame& req) {
+  std::string topic;
+  const vp::JsonValue* data = req.payload.find("data");
+  if (!getString(req.payload, "topic", topic, 1, 16)) return fail("BAD_ARGUMENT", "topic");
+  if (data == nullptr || !data->isObject()) return fail("BAD_ARGUMENT", "data");
+  if (!g_gateway.store(topic, *data, millis())) return fail("BAD_ARGUMENT", "unknown_topic");
+  return Result();
+}
+
+// COMMAND_RESULT (0x62): {"cid", "ok", "error"?, "data"?} for an APP_COMMAND.
+Result handleCommandResult(const vp::Frame& req) {
+  int64_t cid = 0;
+  if (!getRange(req.payload, "cid", cid, 1, 0x7FFFFFFF)) return fail("BAD_ARGUMENT", "cid");
+  if (!g_gateway.complete(cid, req.payload)) return fail("BAD_ARGUMENT", "unknown_cid");
+  return Result();
+}
+
 void reply(const vp::Frame& req, const std::string& sid, const Result& r, bool cache) {
   std::string frame = buildResponse(req, sid, r);
   if (cache) cacheStore(req, frame);
@@ -450,6 +474,8 @@ void onFrame(const vp::Frame& req) {
     }
     case vp::kOpAckEvents: reply(req, sid, handleAck(req), true); break;
     case vp::kOpPreparePowerOff: reply(req, sid, handlePreparePowerOff(req), true); break;
+    case vp::kOpPublish: reply(req, sid, handlePublish(req), true); break;
+    case vp::kOpCommandResult: reply(req, sid, handleCommandResult(req), true); break;
     default: reply(req, sid, fail("UNSUPPORTED", "opcode"), true); break;
   }
 }

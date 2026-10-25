@@ -5,6 +5,7 @@
 #include <string>
 
 #include "app/acoustic_service.h"
+#include "app/app_api.h"
 #include "measure/frame_source.h"
 #include "drv/pl_camera.h"
 #include "ui/pl_display.h"
@@ -179,6 +180,13 @@ struct AppConfig {
   } ui;
 
   std::string controlSocket = "/run/vibmon.sock";
+  // Phone app: LAN HTTP API + UDP discovery, and publishing to the Nano
+  // gateway (Wi-Fi) when the Nano firmware offers it.
+  AppApiConfig appApi;
+  struct Gateway {
+    bool enabled = true;
+    int statusPeriodMs = 2000;
+  } gateway;
   bool poweroffOnShutdown = true;
   std::map<std::string, PointInfo> points;  // NFC UID (upper-case hex) -> measuring point
 };
