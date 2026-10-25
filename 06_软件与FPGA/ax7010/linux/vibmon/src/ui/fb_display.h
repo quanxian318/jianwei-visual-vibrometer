@@ -17,6 +17,7 @@ class Display {
   virtual int width() const = 0;
   virtual int height() const = 0;
   virtual void present(const Canvas& c) = 0;
+  virtual void presentRegion(const Canvas& c, int, int, int, int) { present(c); }
 };
 
 // Puts the active virtual terminal in graphics mode while the UI runs, so the

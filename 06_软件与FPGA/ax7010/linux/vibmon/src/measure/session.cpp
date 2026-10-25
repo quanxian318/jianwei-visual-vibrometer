@@ -418,7 +418,7 @@ void MeasurementEngine::stopCamera() {
 
 void MeasurementEngine::setVision(const VisionConfig& cfg) { vision_.configure(cfg); }
 
-void MeasurementEngine::setFrameTap(std::function<void(const GrayFrame&)> tap, double rateHz) {
+void MeasurementEngine::setFrameTap(std::function<void(GrayFrame&)> tap, double rateHz) {
   std::lock_guard<std::mutex> lock(mutex_);
   tap_ = std::move(tap);
   tapRateHz_ = rateHz;
@@ -510,16 +510,21 @@ void MeasurementEngine::run() {
     const bool measuring = state_ != State::kPreview;
     vision_.setPaused(measuring || !visionWanted_);
     const int64_t due = monoNs();
-    const bool previewDue = previewWanted_ && due - lastPreviewNs_ >= (measuring ? 200000000LL : 50000000LL);
+    // Idle preview follows delivered frames. During capture retain the last
+    // image so full-colour DDR reads cannot interrupt metrology samples.
+    const bool previewDue = !measuring && previewWanted_;
     const bool visionDue = !measuring && vision_.wantsFrame();
-    std::function<void(const GrayFrame&)> tap;
+    std::function<void(GrayFrame&)> tap;
     {
       std::lock_guard<std::mutex> lock(mutex_);
       if (!measuring && tap_ && tapRateHz_ > 0 && due - lastTapNs_ >= static_cast<int64_t>(1e9 / tapRateHz_))
         tap = tap_;
     }
     frame.skipPixels = !measuring && !previewDue && !visionDue && !tap;
-    frame.wantColor = previewDue;
+    frame.wantColor = previewDue || static_cast<bool>(tap);  // same-frame stereo colour
+    // Stereo-only view: hand off the BGR snapshot immediately. The stereo
+    // worker obtains its right frame before deriving gray from cached BGR.
+    frame.colorOnly = !measuring && !visionDue && ((previewDue && !tap) || (!previewDue && tap));
     // A running multi-point capture reads only around its templates.
     frame.regions.clear();
     if (mpActive && !previewDue) frame.regions = mpt.regions();
@@ -588,7 +593,7 @@ void MeasurementEngine::run() {
       // A capture starts on a converted frame: one requested while this frame
       // was read without pixels starts with the next (the state already says
       // capturing, so nothing below may run for this frame).
-      if (startRequested_ && frame.skipPixels && !cancelRequested_) continue;
+      if (startRequested_ && (frame.skipPixels || frame.colorOnly) && !cancelRequested_) continue;
       start = startRequested_;
       end = endRequested_;
       cancel = cancelRequested_;
@@ -628,10 +633,14 @@ void MeasurementEngine::run() {
         mp_.reset(layout);
         mpActive = true;
         box = roi;
-        const bool analysed = mpt.push(frame);
-        mp_.add(frame, mpt, mpt.frames() > 0);
-        if (analysed) mp_.windows.push_back(mpt.lastWindow());
-        captureStartNs = frame.timestampNs;
+        // Template allocation, whole-frame input and gradient initialization
+        // can exceed one frame period. Finish that work before the timed series.
+        if (!mpt.prime(frame)) {
+          mpActive = false;
+          refuse("invalid_frame");
+          continue;
+        }
+        captureStartNs = 0;
         state_ = State::kCapturing;
         std::lock_guard<std::mutex> lock(mutex_);
         live_.roi = roi;
@@ -678,6 +687,7 @@ void MeasurementEngine::run() {
     if (mpActive) {
       const int64_t t0 = monoNs();
       const uint32_t before = mpt.frames();
+      if (!before) captureStartNs = frame.timestampNs;
       const bool analysed = mpt.push(frame);
       mp_.add(frame, mpt, mpt.frames() != before);
       if (analysed) mp_.windows.push_back(mpt.lastWindow());
@@ -731,6 +741,7 @@ void MeasurementEngine::run() {
         } else {
           r = analyzeMultiPoint(mp_, cfg, src_->nominalFps());
         }
+        if (r.valid) multiPointWindowCause(mp_);  // retain capture-quality diagnostics on success too
         r.roi = box;
         r.frameWidth = frame.width;
         r.frameHeight = frame.height;

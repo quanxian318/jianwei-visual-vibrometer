@@ -88,6 +88,7 @@ struct UiState {
   int visionView = 0;        // 0 = motion magnification, 1 = vibration heat map, 2 = stereo depth
   double probeX = -1, probeY = -1;  // depth probe point (normalised), -1 = none
   int depthRange = 0;               // 0 = automatic, 1..3 = fixed display ranges
+    mutable DepthDisplayRange depthDisplayRange;  // rendering cache, not a user setting
   int resultChart = 0;              // result page: 0 = displacement spectrum, 1 = acoustic envelope
   bool liveHeat = false;     // heat-map overlay on the live preview
   int roiGrab = 0;           // measuring box being dragged on the live preview (RoiGrab bits, 0 = none)
@@ -110,6 +111,7 @@ struct UiData {
   MeasurementEngine::Live live;
   std::shared_ptr<const DepthMap> depth;  // stereo depth, null until the stereo module publishes one
   bool stereoOn = false;                  // the stereo module runs (no map yet: waiting for one)
+  double previewDisplayFps = 0;          // unique preview images actually submitted, not capture rate
   std::vector<RecordSummary> records;
   RecordView record;
   int64_t nowMs = 0;   // CLOCK_MONOTONIC

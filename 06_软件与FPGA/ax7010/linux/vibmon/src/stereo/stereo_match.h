@@ -93,6 +93,13 @@ DisparityMap plCoreModel(const StereoImage& left, const StereoImage& right);
 StereoImage flipStereoRows(const StereoImage& image);
 DisparityMap fuseVerticalPasses(const DisparityMap& forward, const DisparityMap& flipped, int toleranceQ4 = 16);
 
+// Reuse the fixed 64-disparity PL kernel for a second, shifted search band.
+StereoImage shiftStereoRight(const StereoImage& image, int offset);
+DisparityMap offsetDisparities(DisparityMap map, int offset);
+// Conflicting bands must have a clear normalised patch-correlation winner; ambiguous pixels stay invalid.
+DisparityMap mergeDisparityRanges(const StereoImage& left, const StereoImage& right,
+                                   const DisparityMap& low, const DisparityMap& high);
+
 // The two stages of matchSgm, split where the PL/PS boundary lies:
 //  - censusTransform: descriptors (PS today; returns bits and border width).
 //  - sgmRaw: cost, path aggregation, winner-take-all, uniqueness, sub-pixel

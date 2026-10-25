@@ -13,16 +13,23 @@ using namespace theme;
 namespace {
 
 // Indices 0..63: the rectified left image, dimmed, where there is no depth
-// (instead of a field of dark dots); 64..255: depth colours.
+// (instead of a field of dark dots); 64..159: pale estimates;
+// 160..255: measurements. No estimate is exposed through DepthMap::at().
 struct DepthLut {
   uint32_t v[256];
   DepthLut() {
     const uint32_t* heat = heatLut();
     for (uint32_t i = 0; i < 64; ++i) {
-      const uint32_t g = i * 4 * 45 / 100;
+      // Unknown depth retains a clearly visible neutral image, not a black
+      // void and not a fabricated depth colour.
+      const uint32_t g = i * 4 * 75 / 100;
       v[i] = (g << 16) | (g << 8) | g;
     }
-    for (int i = 64; i < 256; ++i) v[i] = heat[1 + (i - 64) * 254 / 191];
+    for (int i = 0; i < 96; ++i) {
+      const uint32_t colour = heat[1 + i * 254 / 95];
+      v[64+i] = mixColor(colour, 0xB0B0B0, 135);
+      v[160+i] = colour;
+    }
   }
 };
 
@@ -54,28 +61,30 @@ bool autoDepthRange(const DepthMap& m, double& lo, double& hi, int& validPct) {
 void depthIndex(const DepthMap& m, double lo, double hi, std::vector<uint8_t>& out) {
   out.resize(m.mm.size());
   const bool image = m.left.size() == m.mm.size();
+  const auto& values = m.displayMm.size() == m.mm.size() ? m.displayMm : m.mm;
+  const auto& estimates = m.displayEstimated.size() == m.mm.size() ? m.displayEstimated : m.filled;
+  const double near = 1.0 / std::max(1.0, lo), far = 1.0 / std::max(lo + 1.0, hi);
   for (size_t i = 0; i < m.mm.size(); ++i) {
-    const uint16_t z = m.mm[i];
+    const uint16_t z = values[i];
     if (!z) {
       out[i] = image ? static_cast<uint8_t>(m.left[i] >> 2) : 0;
       continue;
     }
     // Disparity (inverse depth) preserves the colour contrast of nearby
     // objects even when a few far surfaces have very small disparity.
-    const double near = 1.0 / std::max(1.0, lo), far = 1.0 / std::max(lo + 1.0, hi);
     const double t = std::max(0.0, std::min(1.0, (1.0 / z - far) / (near - far)));
-    out[i] = static_cast<uint8_t>(64 + t * 191.0 + 0.5);
+    out[i] = static_cast<uint8_t>((!estimates.empty() && estimates[i] ? 64 : 160) + t * 95.0 + 0.5);
   }
 }
 
-std::string distanceText(double mm) {
+std::string distanceText(double mm, bool approximate = false) {
   char b[32];
   if (mm >= 1000) {
     snprintf(b, sizeof(b), "%.2f m", mm / 1000);
   } else {
     snprintf(b, sizeof(b), "%.0f mm", mm);
   }
-  return b;
+  return approximate ? std::string("~") + b : std::string(b);
 }
 
 void colourBar(Canvas& c, const Rect& img, const std::string& lo, const std::string& hi, bool nearHot) {
@@ -147,38 +156,71 @@ void renderVisionPage(Ui& ui, const UiData& d) {
     if (haveDepth) {
       snprintf(buf, sizeof(buf), "双目深度 · 有效 %d%%", static_cast<int>(dm->validFraction * 100 + 0.5));
       drawText(c, fontFace(18), right.x + 14, right.y + 8, buf, kText2);
+      size_t estimates = 0;
+      if (dm->displayMm.size() == dm->mm.size() && dm->displayEstimated.size() == dm->mm.size())
+        for (size_t i=0; i<dm->mm.size(); ++i) estimates += dm->displayMm[i] && dm->displayEstimated[i];
+      snprintf(buf, sizeof(buf), "M %d%% E %d%% | PALE=EST GRAY=UNKNOWN", static_cast<int>(dm->validFraction*100+0.5),
+               dm->mm.empty() ? 0 : static_cast<int>(100*estimates/dm->mm.size()));
+      drawText(c, fontFace(14), right.x+14, right.y+30, buf, kText3);
     } else {
       drawText(c, fontFace(18), right.x + 14, right.y + 8, "双目深度", kText2);
     }
-    if (havePreview) {
-      drawPreview(c, li, *d.live.preview, 0, 0, 1, 1);
+    // The depth comparison must show the rectified image of this exact pair,
+    // not a newer, unrectified colour preview from a different instant.
+    if (haveDepth && dm->leftBgr.size() == 3 * dm->mm.size()) {
+      blitBgr(c, li.x, li.y, li.w, li.h, dm->leftBgr.data(), dm->w, dm->h, 0, 0, dm->w, dm->h);
     } else if (haveDepth && dm->left.size() == dm->mm.size()) {
       blitGray(c, li.x, li.y, li.w, li.h, dm->left.data(), dm->w, dm->h, 0, 0, dm->w, dm->h);
+    } else if (havePreview) {
+      drawPreview(c, li, *d.live.preview, 0, 0, 1, 1);
     } else {
       placeholder(c, li, Icon::kCamera, "无画面", "");
     }
     if (haveDepth) {
+      const bool approximate = dm->calibrationId.find("nominal") != std::string::npos;
       double lo = 0, hi = 0;
       int validPct = 0;
       static const double kRanges[4][2] = {{0, 0}, {200, 1000}, {500, 2000}, {1000, 5000}};
       const bool autoOk = autoDepthRange(*dm, lo, hi, validPct);
+      if (autoOk) {
+        ui.st.depthDisplayRange.update(lo, hi, dm->monoNs, dm->calibrationVersion);
+        lo = ui.st.depthDisplayRange.lo;
+        hi = ui.st.depthDisplayRange.hi;
+      }
       if (ui.st.depthRange > 0 && ui.st.depthRange < 4) {
         lo = kRanges[ui.st.depthRange][0];
         hi = kRanges[ui.st.depthRange][1];
       }
-      if (autoOk || ui.st.depthRange > 0) {
+      // Keep the selected scale even through a frame with no valid samples.
+      if (autoOk || ui.st.depthRange > 0 || ui.st.depthDisplayRange.stamp >= 0) {
+        if (!autoOk && ui.st.depthRange == 0) {
+          lo = ui.st.depthDisplayRange.lo;
+          hi = ui.st.depthDisplayRange.hi;
+        }
         std::vector<uint8_t> idx;
         depthIndex(*dm, lo, hi, idx);
         blitGray(c, ri.x, ri.y, ri.w, ri.h, idx.data(), dm->w, dm->h, 0, 0, dm->w, dm->h, depthLut(), 255, true);
-        colourBar(c, ri, "近 " + distanceText(lo), distanceText(hi) + " 远", true);
+        // Same-frame intensity supplies object texture, not invented depth.
+        // Equal-depth surfaces legitimately share a colour; their outlines
+        // should still be recognisable. No blending across invalid borders.
+        if (dm->left.size() == dm->mm.size())
+          blitGray(c, ri.x, ri.y, ri.w, ri.h, dm->left.data(), dm->w, dm->h, 0, 0, dm->w, dm->h, nullptr, 44, true);
+        colourBar(c, ri, "近 " + distanceText(lo, approximate), distanceText(hi, approximate) + " 远", true);
+        if (ui.st.depthRange == 0)
+          drawText(c, fontFace(14), ri.x + 6, ri.y + 4, "AUTO LOCK | TAP AUTO TO RESET", kText2);
       } else {
         placeholder(c, ri, Icon::kLayers, "有效深度太少", "检查双目标定、纹理和照明");
       }
-      const uint16_t roiZ = dm->at(s.roiCx, s.roiCy);
-      probeMarker(c, ri, s.roiCx, s.roiCy, kGreen, roiZ ? "测点 " + distanceText(roiZ) : std::string("测点 无效"));
+      const uint16_t exactRoiZ = dm->at(s.roiCx, s.roiCy);
+      const uint16_t roiZ = exactRoiZ ? exactRoiZ : dm->nearbyMeasured(s.roiCx, s.roiCy);
+      probeMarker(c, ri, s.roiCx, s.roiCy, kGreen,
+                  roiZ ? std::string(exactRoiZ ? "测点 " : "测点 ROI ") + distanceText(roiZ, approximate)
+                       : std::string("测点 无效"));
       if (ui.st.probeX >= 0) {
-        const uint16_t z = dm->at(ui.st.probeX, ui.st.probeY);
-        probeMarker(c, ri, ui.st.probeX, ui.st.probeY, kAmber, z ? distanceText(z) : std::string("无效"));
+        const uint16_t exact = dm->at(ui.st.probeX, ui.st.probeY);
+        const uint16_t z = exact ? exact : dm->nearbyMeasured(ui.st.probeX, ui.st.probeY);
+        probeMarker(c, ri, ui.st.probeX, ui.st.probeY, kAmber,
+                    z ? std::string(exact ? "" : "ROI ") + distanceText(z, approximate) : std::string("无效"));
       }
       ui.hit(ri, uiAction("depth_probe"));
     } else if (d.stereoOn) {

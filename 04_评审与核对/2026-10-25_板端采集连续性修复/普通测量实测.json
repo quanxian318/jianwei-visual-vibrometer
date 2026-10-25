@@ -1,0 +1,94 @@
+{
+  "multipoint": {
+    "signal_windows": 0,
+    "references": [
+      {
+        "x": 426.39569091796875,
+        "y": 348.4281005859375
+      },
+      {
+        "x": 458.39569091796875,
+        "y": 348.4281005859375
+      },
+      {
+        "x": 426.39569091796875,
+        "y": 380.4281005859375
+      },
+      {
+        "x": 458.39569091796875,
+        "y": 380.4281005859375
+      }
+    ],
+    "waveform_reason": null,
+    "rejected_windows": 0,
+    "waveform_valid": true,
+    "core": "AX7010_Vibration_Linux_20261021 (third_party/axvibration)",
+    "frequency_max_hz": null,
+    "layout_hash": "c8e1efb0",
+    "passed_points": 0,
+    "waveform_point": 0,
+    "unit": "projected_pixel_rms",
+    "windows": 11,
+    "baseline_file": "/root/vibmon/baselines/c8e1efb0-M3122135.vbb",
+    "frequency_min_hz": null,
+    "baseline_mismatch_windows": 0,
+    "definition": "team multi-point core: 25x25 templates, background translation removed, 128-frame windows gated against a motor-off baseline (3x); rms_px is the 2D image-plane harmonic RMS, not mm; the waveform and spectrum files and the px metrics above describe waveform_point (null when its waveform failed the checks: waveform_reason)",
+    "points": [
+      {
+        "gate_ratio": 0.0,
+        "valid": true,
+        "rms_px": null,
+        "y": 518.75,
+        "x": 814.0,
+        "above_baseline": false
+      },
+      {
+        "gate_ratio": 0.0,
+        "valid": true,
+        "rms_px": null,
+        "y": 518.75,
+        "x": 942.0,
+        "above_baseline": false
+      },
+      {
+        "gate_ratio": 0.0,
+        "valid": true,
+        "rms_px": null,
+        "y": 560.25,
+        "x": 814.0,
+        "above_baseline": false
+      },
+      {
+        "gate_ratio": 0.0,
+        "valid": true,
+        "rms_px": null,
+        "y": 560.25,
+        "x": 942.0,
+        "above_baseline": false
+      }
+    ],
+    "below_baseline_windows": 11,
+    "frequency_hz": null,
+    "sample_rate_hz": 45.05143356323242
+  },
+  "reason": "no_signal",
+  "record": "/root/vibmon/records/jianwei-ax7010-M3201600/record.json",
+  "quality": {
+    "min_ncc": 1.0,
+    "unconverged_frames": 0,
+    "bad_frames": 0,
+    "saturated_frames": 0,
+    "search_edge_hits": 0
+  },
+  "camera": {
+    "source": "AN5642 PL/VDMA camera 1",
+    "frame_interval_jitter_ms": 0.36511844328903864,
+    "fps_measured": 45.0425873353749,
+    "frames": 452,
+    "exposure_us": null,
+    "width": 1280,
+    "height": 720,
+    "fps_nominal": 45.0,
+    "frames_dropped": 0
+  }
+}

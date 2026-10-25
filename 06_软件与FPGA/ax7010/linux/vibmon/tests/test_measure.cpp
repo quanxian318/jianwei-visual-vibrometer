@@ -292,13 +292,31 @@ void testFieldSpectrum() {
   CHECK(!fs.analyze(30, 0.5, 0).valid);
 }
 
+class CaptureReadSource : public FrameSource {
+ public:
+  explicit CaptureReadSource(const SyntheticConfig& c) : src(makeSyntheticSource(c)) {}
+  bool start() override { return src->start(); }
+  void stop() override { src->stop(); }
+  bool next(GrayFrame& f, int timeout) override {
+    if (engine && engine->state() == MeasurementEngine::State::kCapturing && f.wantColor) ++captureColourReads;
+    return src->next(f, timeout);
+  }
+  std::string describe() const override { return src->describe(); }
+  double nominalFps() const override { return src->nominalFps(); }
+  std::unique_ptr<FrameSource> src;
+  MeasurementEngine* engine = nullptr;
+  std::atomic<int> captureColourReads{0};
+};
+
 void testEngineLkWithReference() {
   SyntheticConfig sc;
   sc.realtime = false;
   sc.fps = 60;
   sc.freqHz = 5;
   sc.amplitudePx = 1.5;
-  MeasurementEngine engine{makeSyntheticSource(sc)};
+  auto source = new CaptureReadSource(sc);
+  MeasurementEngine engine{std::unique_ptr<FrameSource>(source)};
+  source->engine = &engine;
   CHECK(engine.startCamera());
   MeasureConfig cfg;
   cfg.tracker = "lk";
@@ -315,6 +333,7 @@ void testEngineLkWithReference() {
   CHECK(done.load() == 1);
   std::printf("  engine result: %s\n", result.valid ? "valid" : result.reason.c_str());
   engine.stopCamera();
+  CHECK(source->captureColourReads == 0);  // full colour reads cannot interrupt metrology
   CHECK(result.valid);
   CHECK(result.tracker == "lk");
   CHECK(result.reference.used && result.reference.valid);
@@ -328,6 +347,53 @@ void testEngineLkWithReference() {
               result.peakAmpPx, result.reference.ppPx, result.peakSnr, result.field.peakHz);
 }
 
+void testStartDuringColorOnlyRead() {
+  struct Source : FrameSource {
+    std::unique_ptr<FrameSource> inner;
+    std::function<void()> startDuringRead;
+    bool triggered = false;
+    Source() {
+      SyntheticConfig c;
+      c.width = 160; c.height = 120; c.realtime = false;
+      c.fps = 60; c.freqHz = 5; c.amplitudePx = 1; c.noise = 0;
+      inner = makeSyntheticSource(c);
+    }
+    bool start() override { return inner->start(); }
+    void stop() override { inner->stop(); }
+    std::string describe() const override { return "colour-only-start-race"; }
+    double nominalFps() const override { return 60; }
+    bool next(GrayFrame& f, int) override {
+      if (!inner->next(f, 0)) return false;
+      if (f.colorOnly) {
+        f.bgr.resize(f.pixels.size() * 3);
+        for (size_t i = 0; i < f.pixels.size(); ++i)
+          f.bgr[3*i] = f.bgr[3*i+1] = f.bgr[3*i+2] = f.pixels[i];
+        f.pixels.clear();
+        if (!triggered) { triggered = true; startDuringRead(); }
+      }
+      return true;
+    }
+  };
+  auto* src = new Source;
+  MeasurementEngine engine{std::unique_ptr<FrameSource>(src)};
+  engine.setDisplayNeeds(true, false);
+  MeasureConfig cfg;
+  cfg.tracker = "lk"; cfg.roiW = cfg.roiH = 24;
+  cfg.durationS = 4; cfg.fieldSpectrum = false;
+  std::atomic<int> done{0};
+  MeasureResult result;
+  src->startDuringRead = [&] {
+    CHECK(engine.beginCapture(cfg, 0.5, 0.5, [&](const MeasureResult& r) { result = r; ++done; }));
+  };
+  CHECK(engine.startCamera());
+  for (int i = 0; i < 3000 && !done.load(); ++i)
+    std::this_thread::sleep_for(std::chrono::milliseconds(2));
+  engine.stopCamera();
+  CHECK(src->triggered && done.load() == 1);
+  CHECK(result.valid);
+  CHECK_NEAR(result.dominantHz, 5, 0.1);
+}
+
 }  // namespace
 
 int main() {
@@ -335,6 +401,7 @@ int main() {
   testPeakConfidence();
   testFieldSpectrum();
   testEngineLkWithReference();
+  testStartDuringColorOnlyRead();
   testSpectrumSine();
   testResample();
   testTrackingChain();

@@ -287,7 +287,7 @@ bool Application::init() {
                                     std::move(pl)));
     if (stereo_->start()) {
       StereoService* svc = stereo_.get();
-      engine_->setFrameTap([svc](const GrayFrame& f) { svc->offerLeft(f); }, cfg_.stereo.service.rateHz);
+      engine_->setFrameTap([svc](GrayFrame& f) { svc->offerLeft(f); }, cfg_.stereo.service.rateHz);
       stereoStarted_ = true;
     } else {
       LOGW(kTag, "stereo: right camera %s not available", cfg_.stereo.right.device.c_str());

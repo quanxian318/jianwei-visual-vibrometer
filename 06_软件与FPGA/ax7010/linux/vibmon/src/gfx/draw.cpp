@@ -337,18 +337,32 @@ void blitBgr(Canvas& c, int x, int y, int w, int h, const uint8_t* img, int iw, 
   if (cx0 >= cx1) return;
   const int n = cx1 - cx0;
   if (sw >= w && sh >= h) {
+    // A display-only 2x2 area sample avoids point-sampling colour speckle
+    // and aliasing at the normal ~2:1 preview reduction. Raw measurement
+    // pixels and their timestamps never pass through this branch.
+    const bool area2 = sw >= 2.0 * w && sh >= 2.0 * h;
     std::vector<int> xo(n);
     for (int i = 0; i < n; ++i)
-      xo[i] = 3 * std::max(0, std::min(iw - 1, static_cast<int>(sx + (cx0 - x + i + 0.5) * sw / w)));
+      xo[i] = 3 * std::max(0, std::min(iw - 1, static_cast<int>(sx + (cx0 - x + i + 0.5) * sw / w - (area2 ? 0.5 : 0.0))));
     for (int j = 0; j < h; ++j) {
       const int py = y + j;
       if (py < 0 || py >= c.height()) continue;
-      const int iy = std::max(0, std::min(ih - 1, static_cast<int>(sy + (j + 0.5) * sh / h)));
+      const int iy = std::max(0, std::min(ih - 1, static_cast<int>(sy + (j + 0.5) * sh / h - (area2 ? 0.5 : 0.0))));
       const uint8_t* row = img + static_cast<size_t>(iy) * iw * 3;
+      const uint8_t* row2 = img + static_cast<size_t>(std::min(iy + 1, ih - 1)) * iw * 3;
       uint32_t* d = c.data() + static_cast<size_t>(py) * c.width() + cx0;
       for (int i = 0; i < n; ++i) {
         const uint8_t* p = row + xo[i];
-        d[i] = p[0] | (static_cast<uint32_t>(p[1]) << 8) | (static_cast<uint32_t>(p[2]) << 16);
+        if (area2) {
+          const int nx = std::min(xo[i] + 3, 3 * (iw - 1));
+          const uint8_t* q = row2 + xo[i];
+          uint32_t color = 0;
+          for (int k = 0; k < 3; ++k)
+            color |= static_cast<uint32_t>((p[k] + row[nx + k] + q[k] + row2[nx + k] + 2) / 4) << (8 * k);
+          d[i] = color;
+        } else {
+          d[i] = p[0] | (static_cast<uint32_t>(p[1]) << 8) | (static_cast<uint32_t>(p[2]) << 16);
+        }
       }
     }
     return;

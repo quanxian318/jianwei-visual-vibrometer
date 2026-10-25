@@ -25,6 +25,9 @@ struct GrayFrame {
   bool skipPixels = false;
   std::vector<Roi> regions;
   bool wantColor = false;
+  // Optional display-only fast path. No consumer may use pixels from such a
+  // frame; a capture requested during the read must wait for a gray frame.
+  bool colorOnly = false;
   std::vector<uint8_t> bgr;  // width * height * 3, byte 0 = blue
   uint8_t at(int x, int y) const { return pixels[static_cast<size_t>(y) * width + x]; }
 };
@@ -42,6 +45,9 @@ class FrameSource {
   // be one next() returned before); for readers that sample a running camera
   // now and then. Sources that cannot tell when a frame completed use next().
   virtual bool latest(GrayFrame& out, int timeoutMs) { return next(out, timeoutMs); }
+  // Best still-readable completed frame near a partner's capture timestamp.
+  // No source may change its timestamp just to satisfy pairing tolerance.
+  virtual bool nearest(GrayFrame& out, int64_t, int timeoutMs) { return latest(out, timeoutMs); }
   virtual std::string describe() const = 0;
   virtual double nominalFps() const = 0;
 };

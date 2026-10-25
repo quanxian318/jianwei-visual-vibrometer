@@ -67,6 +67,8 @@ class MultiPointTracker {
   // collect: gather a baseline; otherwise baselinePath must hold one for layout.
   bool start(const MultiPointLayout& layout, bool collect, const std::string& baselinePath, std::string& err);
   // Once per captured frame, in order. True when a window was analysed.
+  // Prepare templates before the first timed sample; startup work is not a sample.
+  bool prime(const GrayFrame& frame);
   bool push(const GrayFrame& f);
   const MultiPointWindow& lastWindow() const { return window_; }
   // Last frame: displacement of point i with the reference motion removed.

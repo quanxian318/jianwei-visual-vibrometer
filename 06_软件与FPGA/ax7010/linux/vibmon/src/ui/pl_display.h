@@ -33,16 +33,19 @@ class PlDisplay : public Display {
   int width() const override { return kWidth; }
   int height() const override { return kHeight; }
   void present(const Canvas& c) override;
+  void presentRegion(const Canvas& c, int x, int y, int w, int h) override;
 
  private:
   bool startClock(std::string& err);
   void startTiming();
   bool startDma(std::string& err);
+  void copyAndPresent(const Canvas& c, int x, int y, int w, int h);
 
   PlDisplayConfig cfg_;
   PhysWindow vdma_, vtc_, clk_, mem_;
   std::vector<uint8_t> row_;
   int shown_ = 0;
+  uint64_t generation_ = 1, storeGeneration_[kStores] = {};
 };
 
 }  // namespace vm

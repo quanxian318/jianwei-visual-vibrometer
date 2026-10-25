@@ -1,4 +1,5 @@
 #include "measure/pl_camera_source.h"
+#include "measure/frame_store_policy.h"
 
 #include <pthread.h>
 #include <sched.h>
@@ -65,6 +66,7 @@ struct Capture {
   std::mutex seenMutex;
   int seenStore[2] = {-1, -1};
   int64_t seenNs[2] = {0, 0};
+  std::array<int64_t, 3> completed[2]{};
   int64_t clearedNs[2] = {0, 0}, loggedNs[2] = {0, 0};
 
   void observe() {
@@ -74,6 +76,7 @@ struct Capture {
       if (!active[c]) continue;
       const int s = rig->writingStore(c);
       if (s != seenStore[c]) {
+        if (seenStore[c] >= 0 && s >= 0 && s < 3) completed[c][(s + 2) % 3] = now;
         seenStore[c] = s;
         seenNs[c] = now;
         continue;
@@ -112,6 +115,10 @@ struct Capture {
     std::lock_guard<std::mutex> lock(seenMutex);
     return seenStore[c] == store ? seenNs[c] : 0;
   }
+  std::array<int64_t, 3> completedAt(int c) {
+    std::lock_guard<std::mutex> lock(seenMutex);
+    return completed[c];
+  }
 
   bool start(int cam) {
     std::lock_guard<std::mutex> lock(mutex);
@@ -136,6 +143,7 @@ struct Capture {
     {
       std::lock_guard<std::mutex> seen(seenMutex);
       seenStore[cam] = -1;
+      completed[cam].fill(0);
     }
     active[cam] = true;
     if (!watching.exchange(true)) watcher = std::thread(&Capture::watch, this);
@@ -176,12 +184,13 @@ class PlCameraSource : public FrameSource {
 
   bool next(GrayFrame& out, int timeoutMs) override { return read(out, timeoutMs, false); }
   bool latest(GrayFrame& out, int timeoutMs) override { return read(out, timeoutMs, true); }
+  bool nearest(GrayFrame& out, int64_t target, int timeoutMs) override { return read(out, timeoutMs, true, target); }
 
   std::string describe() const override { return "AN5642 PL/VDMA camera " + std::to_string(cam_); }
   double nominalFps() const override { return cap_->cfg.fps; }
 
  private:
-  bool read(GrayFrame& out, int timeoutMs, bool latest) {
+  bool read(GrayFrame& out, int timeoutMs, bool latest, int64_t target = 0) {
     if (!started_) return false;
     // A store is rewritten two frame times after it completed.
     const int64_t reuseNs = static_cast<int64_t>(2e9 / cap_->cfg.fps) - 4000000;
@@ -196,18 +205,33 @@ class PlCameraSource : public FrameSource {
       }
       sequence_ += (store - lastStore_ + 3) % 3;
       lastStore_ = store;
-      const int done = (store + 2) % 3;
-      const int64_t stamp = moved > 0 ? moved : monoNs();
+      const auto history = cap_->completedAt(cam_);
+      const int done = target > 0 ? nearestCompletedStore(history, store, target, monoNs(), reuseNs) : (store + 2) % 3;
+      if (done < 0) { sleepMs(1); continue; }
+      const int64_t stamp = target > 0 ? history[done] : (moved > 0 ? moved : monoNs());
       out.width = PlCameraRig::kWidth;
       out.height = PlCameraRig::kHeight;
       if (!out.skipPixels) {
         const size_t n = static_cast<size_t>(out.width) * out.height;
         const uint8_t* src = memory_.bytes() + done * cap_->cfg.frameStride;
-        out.pixels.resize(n);
-        if (out.wantColor || out.regions.empty()) {
-          if (out.wantColor) out.bgr.resize(3 * n);
-          bgrToGray(src, out.pixels.data(), out.wantColor ? out.bgr.data() : nullptr, n);
+        if (out.wantColor && out.colorOnly) {
+          out.bgr.resize(3 * n);
+          // A contiguous burst copy is substantially cheaper than deinterleave
+          // plus grayscale conversion when only the colour card is visible.
+          memcpy(out.bgr.data(), src, 3 * n);
+          out.pixels.clear();
+        } else if (out.wantColor || out.regions.empty()) {
+          // Snapshot uncached DDR in a burst first. Doing SIMD arithmetic
+          // directly on device memory delayed pairing and store validation.
+          auto& snapshot = out.wantColor ? out.bgr : snapshot_;
+          snapshot.resize(3 * n);
+          memcpy(snapshot.data(), src, 3 * n);
+          if (cap_->rig->writingStore(cam_) == done || monoNs() - stamp > reuseNs ||
+              (target > 0 && cap_->completedAt(cam_)[done] != stamp)) continue;
+          out.pixels.resize(n);
+          bgrToGray(snapshot.data(), out.pixels.data(), nullptr, n);
         } else {
+          out.pixels.resize(n);
           for (const Roi& r : out.regions) {
             const int x0 = std::max(0, r.x), x1 = std::min(out.width, r.x + r.w);
             const int y0 = std::max(0, r.y), y1 = std::min(out.height, r.y + r.h);
@@ -219,7 +243,10 @@ class PlCameraSource : public FrameSource {
         }
         // The writer comes back to `done` two frame times after it completed;
         // a read that ended later may mix two frames.
-        if (cap_->rig->writingStore(cam_) == done || monoNs() - stamp > reuseNs) continue;
+        // Full snapshots were validated before cached conversion; their
+        // original hardware store can now be reused without corrupting them.
+        if ((out.colorOnly || !out.regions.empty()) &&
+            (cap_->rig->writingStore(cam_) == done || monoNs() - stamp > reuseNs)) continue;
       }
       if (!out.wantColor || out.skipPixels) out.bgr.clear();
       const uint32_t errors = cap_->rig->errors(cam_);
@@ -243,6 +270,7 @@ class PlCameraSource : public FrameSource {
   uint32_t sequence_ = 0;
   bool started_ = false;
   PhysWindow memory_;
+  std::vector<uint8_t> snapshot_;
 };
 
 }  // namespace

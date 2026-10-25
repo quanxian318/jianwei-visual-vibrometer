@@ -199,7 +199,7 @@ class MeasurementEngine {
   void setVision(const VisionConfig& cfg);
   // Called on the camera thread with a preview frame (not during a capture)
   // at most rateHz times a second, e.g. to feed the stereo service the left image.
-  void setFrameTap(std::function<void(const GrayFrame&)> tap, double rateHz);
+  void setFrameTap(std::function<void(GrayFrame&)> tap, double rateHz);
   void setFrameTapRate(double rateHz);  // 0 stops the tap
   // What the display shows. Outside a capture a frame is converted only when
   // something uses it: the preview (when shown), the vision chain (when its
@@ -232,7 +232,7 @@ class MeasurementEngine {
   int64_t lastPreviewNs_ = 0, lastTapNs_ = 0;
   std::atomic<bool> previewWanted_{true}, visionWanted_{true};
   VisionPipeline vision_;
-  std::function<void(const GrayFrame&)> tap_;
+  std::function<void(GrayFrame&)> tap_;
   double tapRateHz_ = 0;
 };
 

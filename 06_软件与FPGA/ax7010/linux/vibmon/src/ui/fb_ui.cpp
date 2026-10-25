@@ -97,6 +97,7 @@ JsonValue FbUi::applyAction(UiState& st, const UiAction& a, const Rect& region, 
     st.visionView = a.arg;
   } else if (a.kind == "depth_range") {
     st.depthRange = a.arg;
+    if (a.arg == 0) st.depthDisplayRange.reset();
   } else if (a.kind == "result_chart") {
     st.resultChart = a.arg;
   } else if (a.kind == "live_heat") {
@@ -332,7 +333,9 @@ void FbUi::gather(UiData& d) {
 void FbUi::updateDisplayNeeds() {
   const bool live = st_.page == Page::kLive, vision = st_.page == Page::kVision;
   const bool depthView = vision && st_.visionView == 2;
-  const int needs = (live || vision ? 1 : 0) | ((vision && !depthView) || (live && st_.liveHeat) ? 2 : 0) |
+  // Depth shows the image belonging to its own pair. Do not keep copying a
+  // separate 1280x720 colour preview that is neither aligned nor displayed.
+  const int needs = (live || (vision && !depthView) ? 1 : 0) | ((vision && !depthView) || (live && st_.liveHeat) ? 2 : 0) |
                     (depthView ? 4 : 0);
   if (needs == needs_) return;
   needs_ = needs;
@@ -348,9 +351,23 @@ void FbUi::run() {
   UiData d;
   int64_t nextFrame = 0, nextCamera = 0, nextTouchScan = 0;
   uint64_t shownImage = 0;
+  std::shared_ptr<const DepthMap> shownDepth;
+  int64_t lastFullDraw = 0;
+  int64_t displayWindow = monoMs(), nextRateLog = 0;
+  int displayImages = 0;
+  double displayFps = 0;
   std::vector<TouchEvent> events;
   while (running_) {
     const int64_t now = monoMs();
+    if (now - displayWindow >= 1000) {
+      displayFps = displayImages * 1000.0 / (now - displayWindow);
+      displayImages = 0;
+      displayWindow = now;
+      if (now >= nextRateLog) {
+        LOGI("ui", "unique preview submissions %.1f fps", displayFps);
+        nextRateLog = now + 10000;
+      }
+    }
     // The panel's USB touch controller may enumerate after the start (or again
     // after an HDMI disturbance): look for it every 3 s while there is none.
     if (touch_.fd() < 0 && now >= nextTouchScan) {
@@ -359,28 +376,44 @@ void FbUi::run() {
       if (touch_.open(cfg.ui.touchDev))
         touch_.setScreen(display_->width(), display_->height(), cfg.ui.swapXY, cfg.ui.invertX, cfg.ui.invertY);
     }
-    if (now >= nextFrame || dirty_) {
+    handleEncoder();
+    const bool depthPage = st_.page == Page::kVision && st_.visionView == 2;
+    bool fullDraw = now >= nextFrame || dirty_;
+    if (fullDraw && depthPage) {
+      const auto newest = app_.depthLive();
+      const bool interactive = dirty_ || fingerDown_ || st_.pressing || st_.dialog != Dialog::kNone || st_.toastUntilMs > now;
+      if (!depthRedrawNeeded(newest != shownDepth, interactive, now - lastFullDraw)) {
+        fullDraw = false;
+        nextFrame = now + 25;
+      }
+    }
+    if (fullDraw) {
       gather(d);
-      handleEncoder();
+      d.previewDisplayFps = displayFps;
       renderUi(canvas_, st_, d, hits_);
       display_->present(canvas_);
+      shownDepth = d.depth;
+      lastFullDraw = now;
+      if (st_.page == Page::kLive && d.live.preview && d.live.preview->frame != shownImage) ++displayImages;
       shownImage = d.live.preview ? d.live.preview->frame : 0;
       dirty_ = false;
       // ~8 fps, touch feedback draws in between; 4 fps on the live page in
       // preview, where the camera card has its own updates.
       if (now >= nextFrame)
-        nextFrame = now + (st_.page == Page::kLive && d.s.measureState == "preview" ? 250 : 125);
+        nextFrame = now + (depthPage ? 25 : (st_.page == Page::kLive && d.s.measureState == "preview" ? 500 : 125));
       updateDisplayNeeds();
     } else if (now >= nextCamera) {
       // Between full frames the camera card follows each new camera image.
-      nextCamera = now + 20;
+      nextCamera = now + 5;
       if (cameraOnly(now)) {
         d.live = app_.cameraLive();
         if (d.live.preview && d.live.preview->frame != shownImage) {
           d.s = app_.snapshot();
           d.nowMs = now;
+          d.previewDisplayFps = displayFps;
           renderLivePreview(canvas_, st_, d);
-          display_->present(canvas_);
+          display_->presentRegion(canvas_, kLiveCameraCard.x, kLiveCameraCard.y, kLiveCameraCard.w, kLiveCameraCard.h);
+          ++displayImages;
           shownImage = d.live.preview->frame;
         }
       }

@@ -1,4 +1,5 @@
 #include "stereo/stereo_service.h"
+#include "stereo/depth_display.h"
 
 #include <algorithm>
 #include <chrono>
@@ -50,7 +51,7 @@ void StereoService::stop() {
   right_->stop();
 }
 
-void StereoService::offerLeft(const GrayFrame& f) {
+void StereoService::offerLeft(GrayFrame& f) {
   // While a pair is processed no frame is copied, so the next pair starts
   // from a fresh left frame (its right frame is read when the pair starts).
   if (!running_ || paused_ || busy_) return;
@@ -58,7 +59,11 @@ void StereoService::offerLeft(const GrayFrame& f) {
   lastOfferNs_ = f.timestampNs;
   {
     std::lock_guard<std::mutex> lock(mutex_);
+    // Colour belongs only to this pending stereo pair. Transfer its storage
+    // rather than copying another 2.7 MB before the right store expires.
+    auto colour = std::move(f.bgr);
     pendingLeft_ = f;
+    pendingLeft_.bgr = std::move(colour);
     havePending_ = true;
     busy_ = true;
   }
@@ -84,7 +89,7 @@ void StereoService::workLoop() {
     // last, or the next one when that is nearer to the left frame's time.
     // Only the right frames of the pairs are converted, at normal priority:
     // a conversion that the busy CPU delays past the store's reuse is lost.
-    bool ok = right_->latest(right, 200);
+    bool ok = right_->nearest(right, left.timestampNs, 200);
     if (ok && left.timestampNs - right.timestampNs > periodNs / 2) ok = right_->next(right, 200);
     const double skewMs = ok ? std::llabs(right.timestampNs - left.timestampNs) * 1e-6 : 0;
     bool pairOk;
@@ -93,7 +98,12 @@ void StereoService::workLoop() {
       stats_.pairs++;
       if (ok) stats_.lastSkewMs = skewMs;
       pairOk = ok && skewMs <= cfg_.maxSkewMs && left.timestampValid && right.timestampValid;
-      if (!pairOk) stats_.skewRejected++;
+      if (!pairOk) {
+        stats_.skewRejected++;
+        if (stats_.skewRejected <= 3)
+          LOGW(kTag, "pair rejected: right %d, skew %.2f ms, left age %.2f ms", ok, skewMs,
+               (monoNs() - left.timestampNs) * 1e-6);
+      }
     }
     if (pairOk) {
       // Depth is display work: it yields the CPU to tracking.
@@ -168,7 +178,16 @@ std::shared_ptr<DepthMap> StereoService::process(const GrayFrame& left, const Gr
     mapSrcH_ = left.height;
   }
   const int factor = std::max(1, left.width / cfg_.workWidth);
-  const StereoImage l = rectifyImage(left, mapL_, factor);
+  GrayFrame derived;
+  const GrayFrame* grayLeft = &left;
+  if (left.pixels.empty() && left.bgr.size() == static_cast<size_t>(left.width) * left.height * 3) {
+    derived.width = left.width; derived.height = left.height;
+    derived.pixels.resize(static_cast<size_t>(left.width) * left.height);
+    for (size_t i = 0; i < derived.pixels.size(); ++i)
+      derived.pixels[i] = (29u*left.bgr[3*i] + 150u*left.bgr[3*i+1] + 77u*left.bgr[3*i+2] + 128u) >> 8;
+    grayLeft = &derived;
+  }
+  const StereoImage l = rectifyImage(*grayLeft, mapL_, factor);
   const StereoImage r = rectifyImage(right, mapR_, factor);
   DisparityMap disp;
   std::string backend = "PS";
@@ -214,21 +233,28 @@ std::shared_ptr<DepthMap> StereoService::process(const GrayFrame& left, const Gr
       }
       return raw;
     };
-    disp = matchRaw(l, r);
-    if (cfg_.plVerticalCheck) {
-      const DisparityMap reverse = matchRaw(flipStereoRows(l), flipStereoRows(r));
-      disp = fuseVerticalPasses(disp, reverse);
-    }
+    auto matchRange = [&](int offset) {
+      const StereoImage shifted = offset ? shiftStereoRight(r, offset) : r;
+      auto raw = matchRaw(l, shifted);
+      if (cfg_.plVerticalCheck)
+        raw = fuseVerticalPasses(raw, matchRaw(flipStereoRows(l), flipStereoRows(shifted)));
+      return offset ? offsetDisparities(std::move(raw), offset) : raw;
+    };
+    disp = matchRange(0);
+    if (cfg_.plSearchRanges > 1)
+      disp = mergeDisparityRanges(l, r, disp, matchRange(64));
     stereoPostProcess(l, r, 4 /* census 9x7 border */, pl, disp);
   } else {
     disp = matchSgm(l, r, cfg_.sgm);
   }
-  if (cfg_.temporal) disp = temporal_.apply(disp);
+  const DisparityMap current = disp;  // independently checked, current-pair preview seeds
+  if (cfg_.temporal) disp = temporal_.apply(disp, left.timestampNs, &l.px);
 
   auto d = std::make_shared<DepthMap>();
   d->w = disp.w;
   d->h = disp.h;
   d->left = l.px;
+  d->leftBgr = rectifyBgrImage(left, mapL_, factor);
   d->dispQ4 = disp.q4;
   d->filled = disp.filled;
   d->backend = backend;
@@ -257,6 +283,16 @@ std::shared_ptr<DepthMap> StereoService::process(const GrayFrame& left, const Gr
     valid = disp.valid();
   }
   d->validFraction = disp.q4.empty() ? 0 : static_cast<double>(valid) / disp.q4.size();
+  std::vector<uint16_t> candidates(d->mm.size(), 0);
+  if (calib_.valid) {
+    const double k = d->focalPx * d->baselineMm * 16;
+    for (size_t i = 0; i < candidates.size(); ++i) {
+      if (!current.measured(i) || current.q4[i] <= 0) continue;
+      const double z = k / current.q4[i];
+      if (z < 65535) candidates[i] = static_cast<uint16_t>(z + 0.5);
+    }
+  }
+  completeDepthForDisplay(*d, candidates);
   d->procMs = std::chrono::duration<double, std::milli>(std::chrono::steady_clock::now() - t0).count();
   return d;
 }
@@ -266,7 +302,8 @@ StereoService::Stats StereoService::stats() {
   return stats_;
 }
 
-DisparityMap TemporalDisparityFilter::apply(const DisparityMap& in) {
+DisparityMap TemporalDisparityFilter::apply(const DisparityMap& in, int64_t timestampNs,
+                                         const std::vector<uint8_t>* image) {
   const size_t n = in.q4.size();
   if (in.w != w_ || in.h != h_ || avg_.size() != n) {
     w_ = in.w;
@@ -274,25 +311,42 @@ DisparityMap TemporalDisparityFilter::apply(const DisparityMap& in) {
     avg_.assign(n, 0);
     count_.assign(n, 0);
     miss_.assign(n, 0);
+    lastStamp_ = 0;
+    lastImage_.clear();
+    measuredImage_.assign(n, 0);
+    measuredStamp_.assign(n, 0);
   }
+  const int64_t dt = lastStamp_ > 0 && timestampNs > lastStamp_ ? std::min<int64_t>(1000000000LL, timestampNs - lastStamp_) : 0;
+  // A fixed 1/4 weight adds multiple seconds of lag at 1--2 depth fps.
+  // Use a 120 ms time constant, with the old weight only for untimed tests.
+  const int weight = dt > 0 ? static_cast<int>(std::max<int64_t>(64, 256 * dt / (120000000LL + dt))) : 64;
+  const bool appearance = image && image->size() == n && lastImage_.size() == n;
   DisparityMap out = in;
   for (size_t i = 0; i < n; ++i) {
     if (!in.measured(i)) {
-      // Invalid this frame: hold a confirmed value, the first frame as a
-      // measurement, then for display only. Filled pixels keep their fill.
-      if (count_[i] >= 2 && miss_[i] < kHoldFrames && in.q4[i] < 0) {
+      // A held value is always display-only, never a measurement. Do not
+      // paint an old object's depth onto a newly exposed/different surface.
+      const bool sameSurface = !appearance || std::abs(static_cast<int>((*image)[i]) - measuredImage_[i]) <= 20;
+      // A low depth fps must not stretch a four-frame hold into seconds.
+      // Compare to the last measured appearance, not the previous invalid
+      // frame: gradual occlusion otherwise sneaks stale depth forward.
+      const bool recent = timestampNs <= 0 || (measuredStamp_[i] > 0 &&
+          timestampNs >= measuredStamp_[i] && timestampNs - measuredStamp_[i] <= kHoldNs);
+      if (sameSurface && recent && count_[i] >= 2 && miss_[i] < kHoldFrames && in.q4[i] < 0) {
         ++miss_[i];
         out.q4[i] = static_cast<int16_t>((avg_[i] + 8) >> 4);
-        if (miss_[i] > 1 && out.filled.empty()) out.filled.assign(n, 0);
-        if (!out.filled.empty()) out.filled[i] = miss_[i] > 1;
+        if (out.filled.empty()) out.filled.assign(n, 0);
+        out.filled[i] = 1;
         continue;
       }
       if (in.q4[i] < 0) count_[i] = 0;
       continue;
     }
     const int32_t v = static_cast<int32_t>(in.q4[i]) << 4;  // Q8
+    measuredStamp_[i] = timestampNs;
+    if (image && image->size() == n) measuredImage_[i] = (*image)[i];
     if (count_[i] > 0 && std::abs(v - avg_[i]) <= 256) {
-      avg_[i] += (v - avg_[i]) / 4;
+      avg_[i] += (v - avg_[i]) * weight / 256;
       if (count_[i] < 255) ++count_[i];
     } else {
       avg_[i] = v;  // first sample or a jump: restart
@@ -302,6 +356,9 @@ DisparityMap TemporalDisparityFilter::apply(const DisparityMap& in) {
     if (count_[i] >= 2) out.q4[i] = static_cast<int16_t>((avg_[i] + 8) >> 4);
     else out.q4[i] = kInvalidDisparity;  // not yet confirmed by a second frame
   }
+  lastStamp_ = timestampNs;
+  if (image && image->size() == n) lastImage_ = *image;
+  else lastImage_.clear();
   return out;
 }
 

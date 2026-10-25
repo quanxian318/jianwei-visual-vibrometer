@@ -86,6 +86,11 @@ void testSameAsWholeFrameBlur() {
   int mismatches = 0, windows = 0;
   for (int k = 0; k < 200; ++k) {
     src->next(f, 0);
+    if (k == 0) {
+      CHECK(t.prime(f));
+      CHECK(t.frames() == 0);
+      CHECK(!t.prime(f));
+    }
     const bool analysed = t.push(f);
     for (size_t i = 0; i < gray.size(); ++i) gray[i] = f.pixels[i];
     vb_blur3(gray.data(), 640, 480, blur.data());

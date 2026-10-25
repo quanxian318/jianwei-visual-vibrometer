@@ -10,6 +10,7 @@
 #include "stereo/stereo_rectify.h"
 #include "stereo/stereo_service.h"
 #include "test_util.h"
+#include "app/config.h"
 #include "util/json_util.h"
 
 using namespace vm;
@@ -204,6 +205,87 @@ GrayFrame toFrame(const StereoImage& im, int64_t t) {
   return f;
 }
 
+void testColourRectification() {
+  GrayFrame f; f.width = f.height = 12; f.bgr.resize(12 * 12 * 3);
+  for (int y = 0; y < 12; ++y) for (int x = 0; x < 12; ++x) {
+    const int i = y * 12 + x;
+    f.bgr[3*i] = 10+x; f.bgr[3*i+1] = 40+y; f.bgr[3*i+2] = 180+x+y;
+  }
+  StereoCalibration c;
+  auto map = buildRectifyMap(c, false, 12, 12, 6, 6);
+  for (auto& x : map.sx) x += .25f;
+  auto bgr = rectifyBgrImage(f, map, 2);
+  CHECK(bgr.size() == 6 * 6 * 3);
+  f.pixels.resize(12 * 12);
+  for (int channel = 0; channel < 3; ++channel) {
+    for (size_t i = 0; i < f.pixels.size(); ++i) f.pixels[i] = f.bgr[3*i+channel];
+    auto gray = rectifyImage(f, map, 2);
+    for (size_t i = 0; i < gray.px.size(); ++i) CHECK(bgr[3*i+channel] == gray.px[i]);
+  }
+  f.bgr.pop_back(); CHECK(rectifyBgrImage(f, map, 2).empty());
+}
+
+void testExtendedPlRange() {
+  Texture texture(921); StereoImage l,r;
+  renderPair(texture,256,144,[](int,int){return 83.25;},l,r);
+  auto match=[&](int offset) {
+    auto shifted=offset ? shiftStereoRight(r,offset) : r;
+    auto d=fuseVerticalPasses(plCoreModel(l,shifted),plCoreModel(flipStereoRows(l),flipStereoRows(shifted)));
+    return offset ? offsetDisparities(std::move(d),offset) : d;
+  };
+  auto low=match(0), high=match(64), wide=mergeDisparityRanges(l,r,low,high);
+  int near=0,bad=0,lowNear=0,availableNear=0;
+  for(int y=16;y<128;++y)for(int x=165;x<242;++x) {
+    const size_t i=static_cast<size_t>(y)*256+x;
+    availableNear+=high.measured(i)&&std::abs(high.q4[i]/16.-83.25)<1;
+    lowNear+=low.measured(i)&&std::abs(low.q4[i]/16.-83.25)<1;
+    if(wide.measured(i)) {++near;bad+=std::abs(wide.q4[i]/16.-83.25)>1;}
+  }
+  CHECK(lowNear==0); CHECK(near>5000); CHECK(bad<near*.02);
+  std::printf("  extended PL: near plane %d valid, %d wrong, %d independently supported\n",near,bad,availableNear);
+  // Check that adding the near band also preserves a separate far surface.
+  renderPair(texture,256,144,[](int,int){return 12.25;},l,r);
+  low=match(0); high=match(64); wide=mergeDisparityRanges(l,r,low,high);
+  int far=0,farBad=0;
+  for(int y=16;y<128;++y)for(int x=165;x<242;++x) {
+    const size_t i=static_cast<size_t>(y)*256+x;
+    if(wide.measured(i)) {++far; farBad+=std::abs(wide.q4[i]/16.-12.25)>1;}
+  }
+  CHECK(far>5000 && farBad<far*.02);
+  l.px.assign(l.px.size(),128); r.px=l.px;
+  low.q4.assign(low.q4.size(),-1); high.q4.assign(high.q4.size(),1024);
+  CHECK(mergeDisparityRanges(l,r,low,high).valid()==0); // textureless area is never fabricated
+}
+
+void testSearchRangeSettingsOverlay() {
+  AppConfig config;
+  const std::string path=writeCalibration(321.5,40); std::string err;
+  CHECK(writeFileAtomic(path,"{\"stereo\":{\"pl_search_ranges\":2}}"));
+  CHECK(loadConfig(path,config,err) && config.stereo.service.plSearchRanges==2);
+  CHECK(writeFileAtomic(path,"{\"measurement\":{\"duration_s\":10}}"));
+  CHECK(loadConfig(path,config,err) && config.stereo.service.plSearchRanges==2);
+  std::remove(path.c_str());
+}
+
+void testTwentyCentimetreProfile() {
+  const std::string path = writeCalibration(321.5, 40);
+  StereoConfig cfg; cfg.calibrationFile = path;
+  cfg.workWidth = 256; cfg.workHeight = 144;
+  cfg.temporal = false; cfg.sgm.refineLk = false;
+  Texture texture(271);
+  StereoImage l, r;
+  const double disparity = (321.5 * 256 / 320) * 40 / 200;
+  CHECK(disparity < 63);  // 20 cm stays inside the existing PL search range
+  renderPair(texture, 256, 144, [=](int,int){ return disparity; }, l, r);
+  StereoService service(cfg, nullptr, nullptr);
+  auto d = service.process(toFrame(l,0),toFrame(r,0));
+  double scale=0, z=0;
+  CHECK(stereoScaleAt(*d,.6,.5,.1,.1,1286,scale,z,16));
+  CHECK_NEAR(z,200,8);
+  CHECK(d->w==256 && d->h==144);
+  std::remove(path.c_str());
+}
+
 void testCalibrationAndService() {
   StereoCalibration c;
   std::string err;
@@ -222,7 +304,19 @@ void testCalibrationAndService() {
   std::vector<std::shared_ptr<const DepthMap>> published;
   StereoService svc(sc, nullptr, [&](std::shared_ptr<const DepthMap> d) { published.push_back(d); });
   CHECK(svc.stats().calibrated);
-  svc.process(toFrame(l, 0), toFrame(r, 0));  // temporal filter: a value is shown from the second frame on
+  auto colour = toFrame(l, 0);
+  colour.bgr.resize(colour.pixels.size() * 3);
+  for (size_t i = 0; i < colour.pixels.size(); ++i) {
+    colour.bgr[3*i] = colour.pixels[i];
+    colour.bgr[3*i+1] = colour.pixels[i];
+    colour.bgr[3*i+2] = colour.pixels[i];
+  }
+  colour.pixels.clear(); colour.colorOnly = true;  // fast capture path: gray derived only after pairing
+  auto first = svc.process(colour, toFrame(r, 0));
+  CHECK(first->leftBgr.size() == first->mm.size()*3);
+  CHECK(first->validFraction == 0);  // temporal confirmation still required for measurements
+  CHECK(std::count_if(first->displayMm.begin(), first->displayMm.end(), [](uint16_t z){return z>0;}) > 1000);
+  CHECK(first->at(.5,.5) == 0);  // a colourful preview cannot fabricate a distance reading
   auto d = svc.process(toFrame(l, 1000), toFrame(r, 1000));
   CHECK(d->backend == "PL-model");
   CHECK(d->validFraction > 0.6);
@@ -287,9 +381,7 @@ void testTemporalHold() {
   m.q4[1] = kInvalidDisparity;
   for (int k = 1; k <= TemporalDisparityFilter::kHoldFrames + 1; ++k) {
     out = tf.apply(m);
-    if (k == 1) {
-      CHECK(out.measured(1) && out.q4[1] == 160);
-    } else if (k <= TemporalDisparityFilter::kHoldFrames) {
+    if (k <= TemporalDisparityFilter::kHoldFrames) {
       CHECK(!out.measured(1) && out.q4[1] == 160);
     } else {
       CHECK(out.q4[1] < 0);
@@ -399,6 +491,10 @@ static void testVerticalPasses() {
 }
 
 int main() {
+  testColourRectification();
+  testSearchRangeSettingsOverlay();
+  testExtendedPlRange();
+  testTwentyCentimetreProfile();
   testVerticalPasses();
   testPlane();
   testSubpixelBias();

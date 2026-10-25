@@ -1,0 +1,27 @@
+g++ -Isrc -I../../../shared/vibproto/src -Isrc/drv/vl53l1x_uld_port -Ithird_party/axvibration -O2 -g -std=c++17 -Wall -Wextra -pthread -MMD -MP -c tests/test_measure.cpp -o build/obj/test_measure.o
+g++ -Isrc -I../../../shared/vibproto/src -Isrc/drv/vl53l1x_uld_port -Ithird_party/axvibration -O2 -g -std=c++17 -Wall -Wextra -pthread -MMD -MP -c src/measure/multipoint.cpp -o build/obj/multipoint.o
+g++ -Isrc -I../../../shared/vibproto/src -Isrc/drv/vl53l1x_uld_port -Ithird_party/axvibration -O2 -g -std=c++17 -Wall -Wextra -pthread -MMD -MP -c src/measure/session.cpp -o build/obj/session.o
+g++ -Isrc -I../../../shared/vibproto/src -Isrc/drv/vl53l1x_uld_port -Ithird_party/axvibration -O2 -g -std=c++17 -Wall -Wextra -pthread -MMD -MP -c src/app/alarm_service.cpp -o build/obj/alarm_service.o
+g++ -Isrc -I../../../shared/vibproto/src -Isrc/drv/vl53l1x_uld_port -Ithird_party/axvibration -O2 -g -std=c++17 -Wall -Wextra -pthread -MMD -MP -c src/app/app.cpp -o build/obj/app.o
+g++ -Isrc -I../../../shared/vibproto/src -Isrc/drv/vl53l1x_uld_port -Ithird_party/axvibration -O2 -g -std=c++17 -Wall -Wextra -pthread -MMD -MP -c src/app/board_service.cpp -o build/obj/board_service.o
+g++ -Isrc -I../../../shared/vibproto/src -Isrc/drv/vl53l1x_uld_port -Ithird_party/axvibration -O2 -g -std=c++17 -Wall -Wextra -pthread -MMD -MP -c src/app/config.cpp -o build/obj/config.o
+g++ -Isrc -I../../../shared/vibproto/src -Isrc/drv/vl53l1x_uld_port -Ithird_party/axvibration -O2 -g -std=c++17 -Wall -Wextra -pthread -MMD -MP -c src/app/panel_service.cpp -o build/obj/panel_service.o
+g++ -Isrc -I../../../shared/vibproto/src -Isrc/drv/vl53l1x_uld_port -Ithird_party/axvibration -O2 -g -std=c++17 -Wall -Wextra -pthread -MMD -MP -c src/app/printer_service.cpp -o build/obj/printer_service.o
+g++ -Isrc -I../../../shared/vibproto/src -Isrc/drv/vl53l1x_uld_port -Ithird_party/axvibration -O2 -g -std=c++17 -Wall -Wextra -pthread -MMD -MP -c src/app/sensor_service.cpp -o build/obj/sensor_service.o
+g++ -Isrc -I../../../shared/vibproto/src -Isrc/drv/vl53l1x_uld_port -Ithird_party/axvibration -O2 -g -std=c++17 -Wall -Wextra -pthread -MMD -MP -c src/app/storage.cpp -o build/obj/storage.o
+g++ -Isrc -I../../../shared/vibproto/src -Isrc/drv/vl53l1x_uld_port -Ithird_party/axvibration -O2 -g -std=c++17 -Wall -Wextra -pthread -MMD -MP -c src/ui/fb_ui.cpp -o build/obj/fb_ui.o
+g++ -Isrc -I../../../shared/vibproto/src -Isrc/drv/vl53l1x_uld_port -Ithird_party/axvibration -O2 -g -std=c++17 -Wall -Wextra -pthread -MMD -MP -c src/ui/ui_core.cpp -o build/obj/ui_core.o
+g++ -Isrc -I../../../shared/vibproto/src -Isrc/drv/vl53l1x_uld_port -Ithird_party/axvibration -O2 -g -std=c++17 -Wall -Wextra -pthread -MMD -MP -c src/ui/ui_pages.cpp -o build/obj/ui_pages.o
+g++ -Isrc -I../../../shared/vibproto/src -Isrc/drv/vl53l1x_uld_port -Ithird_party/axvibration -O2 -g -std=c++17 -Wall -Wextra -pthread -MMD -MP -c src/ui/ui_pages2.cpp -o build/obj/ui_pages2.o
+g++ -Isrc -I../../../shared/vibproto/src -Isrc/drv/vl53l1x_uld_port -Ithird_party/axvibration -O2 -g -std=c++17 -Wall -Wextra -pthread -MMD -MP -c src/ui/ui_vision.cpp -o build/obj/ui_vision.o
+g++ -Isrc -I../../../shared/vibproto/src -Isrc/drv/vl53l1x_uld_port -Ithird_party/axvibration -O2 -g -std=c++17 -Wall -Wextra -pthread -MMD -MP -c tests/test_multipoint.cpp -o build/obj/test_multipoint.o
+ar rcs build/libvibmon.a build/obj/clock.o build/obj/event_loop.o build/obj/json_util.o build/obj/log.o build/obj/wav.o build/obj/i2c_bus.o build/obj/phys_window.o build/obj/serial_port.o build/obj/spi_dev.o build/obj/sysfs_find.o build/obj/uio.o build/obj/adxl345.o build/obj/carrier_ctrl.o build/obj/ds3231.o build/obj/escpos.o build/obj/ina226.o build/obj/lsm6dsv.o build/obj/pdm_mic.o build/obj/pl_camera.o build/obj/sht40.o build/obj/stereo_pl.o build/obj/tca9555.o build/obj/vl53l1x.o build/obj/vl53l1_platform_linux.o build/obj/nano_link.o build/obj/acoustic.o build/obj/field_spectrum.o build/obj/lk_core.o build/obj/lk_tracker.o build/obj/multipoint.o build/obj/pdm_model.o build/obj/pl_camera_source.o build/obj/session.o build/obj/spectrum.o build/obj/synthetic_source.o build/obj/tracker.o build/obj/v4l2_source.o build/obj/vision.o build/obj/depth_display.o build/obj/stereo_match.o build/obj/stereo_rectify.o build/obj/stereo_service.o build/obj/canvas.o build/obj/draw.o build/obj/font.o build/obj/plot.o build/obj/acoustic_service.o build/obj/alarm_service.o build/obj/app.o build/obj/board_service.o build/obj/config.o build/obj/control_server.o build/obj/panel_service.o build/obj/printer_service.o build/obj/report.o build/obj/sensor_service.o build/obj/storage.o build/obj/fb_display.o build/obj/fb_ui.o build/obj/icons.o build/obj/pl_display.o build/obj/ui_core.o build/obj/ui_pages.o build/obj/ui_pages2.o build/obj/ui_vision.o build/obj/vp_json.o build/obj/vp_frame.o build/obj/portable_vibration.o build/obj/spatial_core.o build/obj/vb_runtime.o
+g++ -pthread build/obj/test_measure.o build/libvibmon.a -o build/test_measure 
+g++ -pthread build/obj/test_multipoint.o build/libvibmon.a -o build/test_multipoint 
+[    59.538] W measure: no frames from stallable-test
+  field: 4.218 Hz, fraction 0.221, grid 64x48
+  engine result: valid
+  engine lk+ref: 5.000 Hz, peak 1.501 px, ref p-p 0.0352 px, snr 1396, field 4.92 Hz
+  moving ROI: 5.000 Hz, peak 2.052 px, p-p 4.079 px, rms 1.448 px, min NCC 0.974
+measure: all checks passed
+multipoint: all checks passed

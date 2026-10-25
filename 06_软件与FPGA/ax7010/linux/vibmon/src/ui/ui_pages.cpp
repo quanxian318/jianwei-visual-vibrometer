@@ -419,7 +419,8 @@ void livePreviewCard(Ui& ui, const UiData& d) {
     // Frame size and rate; while capturing also the measurement work per frame, amber when it
     // takes longer than a frame interval (frames would be dropped).
     const FontFace& f = fontFace(14);
-    snprintf(buf, sizeof(buf), "%d×%d · %.1f fps", live.frameW, live.frameH, live.fps);
+    snprintf(buf, sizeof(buf), "%d×%d · 采集 %.1f / 预览 %.1f fps", live.frameW, live.frameH, live.fps,
+             d.previewDisplayFps);
     const std::string frameInfo = buf;
     std::string work;
     if (capturing && live.procMs > 0) {
@@ -575,7 +576,7 @@ void renderLivePage(Ui& ui, const UiData& d) {
       ui.metric(r.x + 160, y1, "相关度", track ? buf : "--", "", track && live.lastScore < 0.6 ? kAmber : kText);
     }
     snprintf(buf, sizeof(buf), "%.1f", live.fps);
-    ui.metric(r.x + 18, y2, "帧率", live.fps > 0 ? buf : "--", "fps");
+    ui.metric(r.x + 18, y2, "采集帧率", live.fps > 0 ? buf : "--", "fps");
     if (s.distanceValid) {
       snprintf(buf, sizeof(buf), "%d", s.distanceMm);
       ui.metric(r.x + 160, y2, "工作距离", buf, "mm");

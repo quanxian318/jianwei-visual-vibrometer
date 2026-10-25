@@ -252,6 +252,56 @@ DisparityMap fuseVerticalPasses(const DisparityMap& a, const DisparityMap& flipp
   return out;
 }
 
+StereoImage shiftStereoRight(const StereoImage& image, int offset) {
+  StereoImage out; out.w=image.w; out.h=image.h; out.px.assign(image.px.size(),0);
+  if (offset<0 || offset>=image.w) return out;
+  for (int y=0;y<image.h;++y)
+    std::copy_n(image.px.data()+static_cast<size_t>(y)*image.w,image.w-offset,
+                out.px.data()+static_cast<size_t>(y)*image.w+offset);
+  return out;
+}
+
+DisparityMap offsetDisparities(DisparityMap map, int offset) {
+  for (int y=0;y<map.h;++y) for (int x=0;x<map.w;++x) {
+    auto& q=map.q4[static_cast<size_t>(y)*map.w+x];
+    if(q<0) continue;
+    q=static_cast<int16_t>(q+offset*16);
+    if(x-((q+8)>>4)<4) q=kInvalidDisparity; // padded part is not a real right-image sample
+  }
+  return map;
+}
+
+DisparityMap mergeDisparityRanges(const StereoImage& left, const StereoImage& right,
+                                  const DisparityMap& low, const DisparityMap& high) {
+  DisparityMap out=low;
+  // Each band has already passed the PL's uniqueness/LR checks and the
+  // vertical-pass check. Compare independent 11x11 image patches across bands:
+  // a local Census descriptor alone cannot disambiguate repeated gradients.
+  auto correlation=[&](int x,int y,int q) {
+    const int xr=x-((q+8)>>4),radius=5,n=121;
+    if(x<radius || xr<radius || x>=left.w-radius || y<radius || y>=left.h-radius) return -1.0;
+    int a=0,b=0,aa=0,bb=0,ab=0;
+    for(int dy=-radius;dy<=radius;++dy) for(int dx=-radius;dx<=radius;++dx) {
+      const int u=left.at(x+dx,y+dy),v=right.at(xr+dx,y+dy);
+      a+=u; b+=v; aa+=u*u; bb+=v*v; ab+=u*v;
+    }
+    const int va=aa*n-a*a,vb=bb*n-b*b;
+    if(va<4*n*n || vb<4*n*n) return -1.0;
+    return (ab*double(n)-double(a)*b)/std::sqrt(double(va)*vb);
+  };
+  for(int y=0;y<low.h;++y) for(int x=0;x<low.w;++x) {
+    const size_t i=static_cast<size_t>(y)*low.w+x;
+    if(!high.measured(i)) continue;
+    const double b=correlation(x,y,high.q4[i]);
+    if(b<.80) continue;
+    if(!low.measured(i)) {out.q4[i]=high.q4[i];continue;}
+    const double a=correlation(x,y,low.q4[i]);
+    if(b>a+.03) out.q4[i]=high.q4[i];
+    else if(a<b+.03) out.q4[i]=kInvalidDisparity;
+  }
+  return out;
+}
+
 namespace {
 void fillHoles(DisparityMap& m, int maxRun) {
   m.filled.assign(m.q4.size(), 0);

@@ -1,0 +1,75 @@
+{
+  "storage": {
+    "records_dir": "/root/vibmon/records",
+    "settings_file": "/root/vibmon/settings_an5642.json"
+  },
+  "acoustic": {
+    "enabled": true
+  },
+  "camera": {
+    "pl_vdma": {
+      "left_camera": 1,
+      "fps": 45
+    },
+    "source": "pl_vdma"
+  },
+  "stereo": {
+    "pl_vertical_check": true,
+    "pl_search_ranges": 2,
+    "max_skew_ms": 15,
+    "refine_lk": false,
+    "work_height": 144,
+    "pl_verify_every": 0,
+    "calibration_file": "/root/vibmon_cam/an5642_stereo_nominal.json",
+    "pl_buffer_base": "0x1F800000",
+    "pl_buffer_size": "0x100000",
+    "work_width": 256,
+    "pl_dma_base": "0x40400000",
+    "enabled": true,
+    "pl_core_base": "0x43C20000"
+  },
+  "poweroff_on_shutdown": false,
+  "device_id": "jianwei-ax7010",
+  "ui": {
+    "touch_device": "auto",
+    "display": "pl_vdma",
+    "enabled": true
+  },
+  "sensors": {
+    "tof": {
+      "enabled": false
+    },
+    "imu": {
+      "enabled": false
+    },
+    "adxl345": {
+      "enabled": false
+    },
+    "sht40": {
+      "enabled": false
+    }
+  },
+  "measurement": {
+    "multipoint": {
+      "baseline_dir": "/root/vibmon/baselines",
+      "max_points": 4
+    },
+    "tracker": "lk",
+    "calibration_file": "/root/vibmon/calibration.json",
+    "duration_s": 10,
+    "method": "multipoint"
+  },
+  "vision": {
+    "gain": 20,
+    "enabled": true,
+    "high_hz": 2,
+    "low_hz": 0.5
+  },
+  "printer": {
+    "enabled": false
+  },
+  "voice": {
+    "enabled": false
+  },
+  "control_socket": "/tmp/vibmon.sock"
+}

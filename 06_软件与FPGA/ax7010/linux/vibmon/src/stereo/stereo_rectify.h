@@ -42,6 +42,9 @@ RectifyMap buildRectifyMap(const StereoCalibration& c, bool rightCamera, int src
 // Box pre-scale by `factor` then bilinear remap; out-of-image samples become 0.
 StereoImage rectifyImage(const GrayFrame& src, const RectifyMap& m, int factor);
 
+// Same geometry and pre-scale as rectifyImage; empty if no complete BGR image.
+std::vector<uint8_t> rectifyBgrImage(const GrayFrame& src, const RectifyMap& m, int factor);
+
 // Rectified focal length (px) at the working width.
 double rectifiedFocalPx(const StereoCalibration& c, int workW);
 

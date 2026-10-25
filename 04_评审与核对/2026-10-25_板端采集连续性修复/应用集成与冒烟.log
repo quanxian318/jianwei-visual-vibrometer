@@ -1,0 +1,208 @@
+g++ -Isrc -I../../../shared/vibproto/src -Isrc/drv/vl53l1x_uld_port -Ithird_party/axvibration -O2 -g -std=c++17 -Wall -Wextra -pthread -MMD -MP -c src/app/main.cpp -o build/obj/main.o
+g++ -pthread build/obj/vibmonctl.o build/libvibmon.a -o build/vibmonctl 
+g++ -Isrc -I../../../shared/vibproto/src -Isrc/drv/vl53l1x_uld_port -Ithird_party/axvibration -O2 -g -std=c++17 -Wall -Wextra -pthread -MMD -MP -c tools/carrier_test.cpp -o build/obj/carrier_test.o
+g++ -pthread build/obj/vision_ref.o build/libvibmon.a -o build/vision_ref 
+g++ -Isrc -I../../../shared/vibproto/src -Isrc/drv/vl53l1x_uld_port -Ithird_party/axvibration -O2 -g -std=c++17 -Wall -Wextra -pthread -MMD -MP -c tools/clip_track.cpp -o build/obj/clip_track.o
+g++ -pthread build/obj/lk_vectors.o build/libvibmon.a -o build/lk_vectors 
+g++ -pthread build/obj/stereo_eval.o build/libvibmon.a -o build/stereo_eval 
+g++ -pthread build/obj/sgm_vectors.o build/libvibmon.a -o build/sgm_vectors 
+g++ -pthread build/obj/plcam.o build/libvibmon.a -o build/plcam 
+g++ -Isrc -I../../../shared/vibproto/src -Isrc/drv/vl53l1x_uld_port -Ithird_party/axvibration -O2 -g -std=c++17 -Wall -Wextra -pthread -MMD -MP -c tools/clip_multipoint.cpp -o build/obj/clip_multipoint.o
+g++ -pthread build/obj/pdm_vectors.o build/libvibmon.a -o build/pdm_vectors 
+g++ -pthread build/obj/wav_acoustic.o build/libvibmon.a -o build/wav_acoustic 
+g++ -pthread build/obj/main.o build/libvibmon.a -o build/vibmond 
+g++ -pthread build/obj/carrier_test.o build/libvibmon.a -o build/carrier_test 
+g++ -pthread build/obj/clip_track.o build/libvibmon.a -o build/clip_track 
+g++ -pthread build/obj/clip_multipoint.o build/libvibmon.a -o build/clip_multipoint 
+python3 tests/test_prepare_an5642_image.py
+...
+----------------------------------------------------------------------
+Ran 3 tests in 0.001s
+
+OK
+python3 tests/test_app_host.py build/vibmond
+PASS point: starts without crashing
+PASS measuring box accepts width and height
+PASS a box below 16 px is refused and leaves the size unchanged
+PASS capture accepted
+PASS capture refuses resizing the measuring box
+PASS record keeps the point selected at capture start
+PASS a clean line is reported as a clear dominant frequency
+PASS capture tracks the box size set by the operator
+PASS point: SIGTERM follows orderly exit
+PASS pixel: starts without crashing
+PASS startup has no normal vibration judgment
+PASS uncalibrated pixels do not use mm alarm thresholds
+PASS pixel: SIGTERM follows orderly exit
+PASS startup: starts without crashing
+PASS PFAIL low at boot is retained
+PASS startup: SIGTERM follows orderly exit
+PASS lighting: starts without crashing
+PASS automatic light is on during capture
+PASS record retains automatic light state after it is switched off
+PASS lighting: SIGTERM follows orderly exit
+PASS laser: starts without crashing
+PASS laser projector switches on
+PASS lighting and laser are separate outputs
+PASS laser is off while displacement is tracked
+PASS capture refuses manually re-enabling the projector
+PASS a refused projector command leaves LED2 off
+PASS capture refuses changing the projector interlock policy
+PASS record notes the laser switched off for the capture
+PASS laser is back on after the capture
+PASS laser: SIGTERM follows orderly exit
+PASS shutdown: starts without crashing
+PASS shutdown completes during capture
+PASS cancelled capture produces no late result
+PASS shutdown: SIGTERM follows orderly exit
+PASS settings: starts without crashing
+PASS the zoomed view can be moved
+PASS the zoomed view stays inside the image
+PASS settings are applied
+PASS warning threshold above the alarm threshold is refused
+PASS a refused change leaves the settings unchanged
+PASS settings are written to the settings file
+PASS settings and the box size survive a restart
+PASS settings: SIGTERM follows orderly exit
+PASS multipoint: starts
+PASS multipoint: valid layout, no baseline yet
+PASS multipoint: measuring needs a baseline
+PASS multipoint: baseline capture starts
+PASS multipoint: baseline saved for this layout
+PASS multipoint: one baseline file
+PASS multipoint: a baseline is not a measurement record
+PASS multipoint: restarts
+PASS multipoint: baseline found again after a restart
+PASS multipoint: measurement starts
+PASS multipoint: 7 Hz found above the baseline
+PASS multipoint: record lists the points above the baseline
+PASS multipoint: pixels, no mm alarm level
+PASS multipoint: moving the box needs a new baseline
+PASS multipoint: SIGTERM follows orderly exit
+PASS acoustic: starts
+PASS acoustic: synthetic source ready at 31.25 kS/s
+PASS acoustic: capture accepted
+PASS acoustic: the envelope agrees with the camera at 12 Hz
+PASS acoustic: record holds the capture window
+PASS acoustic: WAV and envelope spectrum saved
+PASS acoustic: SIGTERM follows orderly exit
+sh tests/smoke_host.sh build
+{
+  "ok": true
+}
+{
+  "ok": true,
+  "data": {
+    "init_done": true,
+    "carrier_ok": false,
+    "tca_ok": false,
+    "ina_ok": false,
+    "rtc_ok": false,
+    "power": {
+      "bus_v": 0.0,
+      "current_a": 0.0,
+      "power_w": 0.0,
+      "warn": false,
+      "deny_heavy_loads": false,
+      "over_current_latched": false,
+      "pfail": false
+    },
+    "light": {
+      "allowed_by_sw301": false,
+      "on": false,
+      "percent": 100.0
+    },
+    "laser": {
+      "on": false,
+      "off_during_measurement": true
+    },
+    "time": {
+      "valid": false,
+      "source": "none",
+      "utc": "2026-10-25T08:50:49.457Z"
+    },
+    "nano": {
+      "online": false,
+      "wifi": "UNKNOWN",
+      "ssid": "",
+      "ip": "",
+      "sd_mounted": false,
+      "nfc_ready": false,
+      "requests": 5,
+      "retries": 9,
+      "timeouts": 4,
+      "events": 0,
+      "event_gaps": 0,
+      "crc_errors": 0
+    },
+    "point": {
+      "uid": "",
+      "id": "",
+      "name": ""
+    },
+    "sensors": {
+      "imu_ok": false,
+      "adxl345_ok": false,
+      "tof": "",
+      "distance_mm": null,
+      "temperature_c": null,
+      "humidity_percent": null,
+      "tach_hz": null
+    },
+    "measurement": {
+      "state": "preview",
+      "elapsed_s": 4.016666506,
+      "camera_ok": true,
+      "camera_source": "synthetic",
+      "frame_width": 640,
+      "frame_height": 480,
+      "frames": 480,
+      "fps": 61.22132474612751,
+      "proc_ms": 0.0,
+      "vision": {
+        "backend": "PS",
+        "width": 160,
+        "height": 120,
+        "fps": 30.00000120000005,
+        "proc_ms": 0.5536881215704281,
+        "settled": true,
+        "paused": false
+      },
+      "stereo": {
+        "enabled": false,
+        "scale_source": "file"
+      },
+      "acoustic": {
+        "enabled": false
+      },
+      "roi_center_x": 0.5,
+      "roi_center_y": 0.5,
+      "zoom": 1.0,
+      "zoom_center_x": 0.5,
+      "zoom_center_y": 0.5,
+      "method": "roi",
+      "last": {
+        "measurement_id": "smoke-M210609",
+        "valid": true,
+        "reason": "",
+        "unit": "mm",
+        "dominant_hz": 4.999691390685706,
+        "peak_clear": true,
+        "peak_to_peak": 0.20733743743569086,
+        "rms": 0.07226380378659353,
+        "level": "预警",
+        "saved": true
+      }
+    },
+    "alarm_level": "预警",
+    "alarm_muted": false,
+    "printer": "idle",
+    "printer_error": "",
+    "message": "主频 5.00 Hz, 峰峰值 0.2073 mm, 预警",
+    "shutdown_prepared": false
+  }
+}
+{
+  "ok": true
+}
+smoke test passed (smoke-M210609)

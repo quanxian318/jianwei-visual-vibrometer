@@ -1,6 +1,7 @@
 #include "ui/pl_display.h"
 
 #include <cmath>
+#include <algorithm>
 #include <cstring>
 #if defined(__ARM_NEON)
 #include <arm_neon.h>
@@ -168,13 +169,41 @@ bool PlDisplay::startDma(std::string& err) {
 }
 
 void PlDisplay::present(const Canvas& c) {
-  const int next = (shown_ + 1) % kStores;
+  ++generation_;  // controls or another page changed outside the camera card
+  copyAndPresent(c, 0, 0, kWidth, kHeight);
+}
+
+void PlDisplay::presentRegion(const Canvas& c, int x, int y, int w, int h) {
+  copyAndPresent(c, x, y, w, h);
+}
+
+void PlDisplay::copyAndPresent(const Canvas& c, int x, int y, int width, int height) {
+  // A requested park slot is not necessarily the slot being scanned yet.
+  // Exclude BOTH until VDMA acknowledges the switch; CPU-side rotation alone
+  // can wrap around and overwrite an image still being sent to HDMI.
+  const uint32_t park = vdma_.read32(kParkPtr);
+  const int scanning = (park >> 16) & 31;
+  const int requested = park & 31;
+  int next = (shown_ + 1) % kStores;
+  for (int i = 0; i < kStores; ++i) {
+    const int candidate = (shown_ + 1 + i) % kStores;
+    if (candidate != scanning && candidate != requested) { next = candidate; break; }
+  }
   uint8_t* store = mem_.data() + next * cfg_.bufferStride;
-  const int w = c.width() < kWidth ? c.width() : kWidth;
-  const int h = c.height() < kHeight ? c.height() : kHeight;
-  for (int y = 0; y < h; ++y) {
+  // Every store must receive the latest full-page state before region copies
+  // can reuse it. Otherwise triple-buffer rotation resurrects old controls.
+  if (storeGeneration_[next] != generation_) {
+    x = y = 0;
+    width = kWidth;
+    height = kHeight;
+  }
+  const int x0 = std::max(0, x), y0 = std::max(0, y);
+  const int x1 = std::min({c.width(), kWidth, x + width});
+  const int y1 = std::min({c.height(), kHeight, y + height});
+  const int w = std::max(0, x1 - x0);
+  for (int y = y0; y < y1; ++y) {
     // 0x00RRGGBB in memory is B, G, R, 0: drop every fourth byte.
-    const uint8_t* src = reinterpret_cast<const uint8_t*>(c.data() + static_cast<size_t>(y) * c.width());
+    const uint8_t* src = reinterpret_cast<const uint8_t*>(c.data() + static_cast<size_t>(y) * c.width() + x0);
     uint8_t* dst = row_.data();
     int x = 0;
 #if defined(__ARM_NEON)
@@ -184,8 +213,16 @@ void PlDisplay::present(const Canvas& c) {
     }
 #endif
     for (; x < w; ++x) memcpy(dst + 3 * x, src + 4 * x, 3);
-    memcpy(store + static_cast<size_t>(y) * kWidth * 3, row_.data(), static_cast<size_t>(w) * 3);  // burst into WC memory
+    memcpy(store + (static_cast<size_t>(y) * kWidth + x0) * 3, row_.data(), static_cast<size_t>(w) * 3);
   }
+  storeGeneration_[next] = generation_;
+  // Reserved DDR is write-combined, whereas VDMA registers are device MMIO.
+  // Finish all pixel writes before publishing the new park slot to hardware.
+#if defined(__arm__)
+  asm volatile("dsb sy" ::: "memory");
+#else
+  __sync_synchronize();
+#endif
   // The reader switches at the next frame start, so the shown store is never written.
   vdma_.write32(kParkPtr, (vdma_.read32(kParkPtr) & ~31u) | static_cast<uint32_t>(next));
   shown_ = next;

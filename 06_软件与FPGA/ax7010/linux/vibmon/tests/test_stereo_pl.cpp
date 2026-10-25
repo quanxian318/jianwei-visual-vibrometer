@@ -291,7 +291,8 @@ void testServiceUsesPl() {
     auto d = svc.process(frame(l, 0), frame(r, 0));
     CHECK(d->backend == "PL");
     const StereoService::Stats st = svc.stats();
-    CHECK(st.plFrames == 1 && st.plVerified == 1 && st.plMismatchFrames == 0 && st.plFailures == 0);
+    const uint64_t passes = sc.plVerticalCheck ? 2 : 1;
+    CHECK(st.plFrames == passes && st.plVerified == passes && st.plMismatchFrames == 0 && st.plFailures == 0);
   }
   {
     auto hw = std::make_shared<FakeHw>();
@@ -301,7 +302,7 @@ void testServiceUsesPl() {
     pl->probe(err);
     StereoService svc(sc, nullptr, nullptr, std::move(pl));
     svc.process(frame(l, 0), frame(r, 0));
-    CHECK(svc.stats().plMismatchFrames == 1);
+    CHECK(svc.stats().plMismatchFrames == (sc.plVerticalCheck ? 2u : 1u));
   }
   {
     auto hw = std::make_shared<FakeHw>();
@@ -312,7 +313,7 @@ void testServiceUsesPl() {
     StereoService svc(sc, nullptr, nullptr, std::move(pl));
     auto d = svc.process(frame(l, 0), frame(r, 0));
     CHECK(d->backend == "PL-model");
-    CHECK(svc.stats().plFailures == 1);
+    CHECK(svc.stats().plFailures == (sc.plVerticalCheck ? 2u : 1u));
   }
   {
     StereoService svc(sc, nullptr, nullptr);  // no device

@@ -1,8 +1,10 @@
 # 06_软件与FPGA
 
+当前板端冻结状态见 [2026-10-25冻结说明](../04_评审与核对/2026-10-25_冻结_彩色与近景双目/冻结说明与当前事实.md)。4测点4参考、同帧彩色、256×144及PL两段0–127视差搜索；20cm近景尚未完成可靠性与精度验收。
+
 按 09_团队开发资料_20261020 的引脚表、协议 V1 和开发说明编写。三部分共用 `shared/vibproto`（协议 V1 帧编解码、CRC、严格 JSON，C++11）。
 
-当前开发的职责边界见 [PL、PS 与 ESP32 分工](../00_当前设计方案/PL_PS_ESP32职责与接口分工.md)：PL 的目标核心为实时 ROI 位移提取，PS 负责测量状态、背景补偿、标定/FFT、UI 和主记录，ESP32 负责 NFC、辅助 SD、语音与 Wi-Fi/NTP。本轮只明确分工，没有实现新的位移硬件或改变现有接线。
+当前开发的职责边界见 [PL、PS 与 ESP32 分工](../00_当前设计方案/PL_PS_ESP32职责与接口分工.md)：PL 的目标核心为实时 ROI 位移提取，PS 负责测量状态、背景补偿、标定/FFT、UI 和主记录，ESP32 负责 NFC、辅助 SD、语音与 Wi-Fi/NTP。实时位移仍由PS提取；双目PL已在当前裸板运行，位移PL尚未完整接入。
 
 当前代码逻辑、审查结论与待实现项见 [代码审查与状态机说明](docs/代码审查与状态机说明_20261021.html)（[Markdown](docs/代码审查与状态机说明_20261021.md)）。测振有两种方式（`measurement.method`）：`roi` 为 PS 单框软件基线（NCC 或 LK）；`multipoint` 为队友的多点测振核（`ax7010/linux/vibmon/third_party/axvibration`，AN5642 板卡配置默认），测点框内网格测点加背景参考点，与停机基线比较后给出主频和各点像素 RMS；显示用的视觉处理链（金字塔降采样、时间带通、欧拉运动放大、振动能量）有 PS 实现和逐位一致的 PL RTL，PL 尚未接入厂家视频工程，见 [FPGA 视觉处理方案](docs/FPGA视觉处理方案_20261021.md)。
 
@@ -10,7 +12,7 @@
 
 最新 LED2 互锁修正与用户视频结果见 [视频验证报告](../12_视频验证_20261021/README.md)。测振算法推进（逆组合 LK 位移核、PL `lk_accum` 累加核 RTL、背景参考补偿、谱峰置信度、全视场谱线）见 [测振算法推进](../13_测振算法推进_20261021/README.md)。双目深度改进（PL 双目核 Census＋SGM＋左右校验、标定校正、PS 后处理与填补、真值评测）见 [双目深度改进](../14_双目深度改进_20261021/README.md)。
 
-声学辅助：[MP34DT01 音频辅助测振](../00_当前设计方案/MP34DT01音频辅助测振与J706复用方案.md)。J706 原 I2C2 两脚改作 PDM：PL 接收核 `pdm_mic` 输出 2 MHz 时钟、按有效半周期采样并缓存原始码流与计时，PS 抽取为 31,250 S/s、求包络谱并与视觉主频对照，结果写入记录（`acoustic` 段、`acoustic.wav`、`acoustic_spectrum.csv`）并在界面显示；未上板。
+声学辅助：[MP34DT01 音频辅助测振](../00_当前设计方案/MP34DT01音频辅助测振与J706复用方案.md)。J706 原 I2C2 两脚改作 PDM：PL 接收核 `pdm_mic` 输出 2 MHz 时钟、按有效半周期采样并缓存原始码流与计时，PS 抽取为 31,250 S/s、求包络谱并与视觉主频对照，结果写入记录（`acoustic` 段、`acoustic.wav`、`acoustic_spectrum.csv`）并在界面显示；PL接收核随当前位流上板，麦克风未接，声学实采未验证。
 
 ## 目录与验证状态
 
@@ -21,10 +23,10 @@
 | ax7010/pl | carrier_ctrl RTL、Vivado 集成脚本（载板设计用 pdm_mic 取代原 J706 的 I2C2）、约束、自检测试平台 | WSL Icarus 行为仿真通过：AXI 分离握手/背压/WSTRB、PWM、按键、事件 FIFO、WS2812、看门狗、PFAIL 停麦克风时钟 | Vivado 综合、实现、上板 |
 | ax7010/pl/audio | MP34DT01 PDM 接收核 `pdm_mic`：2 MHz 时钟、有效半周期采样、32 位字 8192 深 FIFO（131 ms）、溢出冻结与丢字计数、读 WORDS 锁存字序号与时钟戳，AXI-Lite 0x44030000、无中断；`bd/team_add_pdm.tcl` 加入队友 AN5642 双目工程（`bd/team_design.tcl` 依次执行双目、PDM 和构建三步），载板设计由 `bd/add_carrier.tcl` 接入并用 PFAIL 硬件停钟 | Icarus 测试平台按 PS 的轮询方式读 1200 字 Σ-Δ 码流逐字一致，锁存覆盖 PDM 周期内全部 50 个时钟相位，含溢出冻结与缺口、清空、kill、两种相位（`sh pl/audio/sim/run_tests.sh`）；Vivado 2025.2 在队友工程中实现：接收核 251 LUT、352 FF、8 BRAM36，全设计时序满足（见双目一行） | 上板（线束波形、SAMPLE_AT 余量、连续采集）；载板设计尚未在 Vivado 中运行 |
 | ax7010/pl/displacement | 位移引擎 `lk_accum`：双线性插值＋5 路 48 位乘加，整数 ZNCC 搜索与 LK 亚像素更新共用；自检测试平台与黄金向量 | 与 C++ 位精确模型 `lkAccumulate()` 逐位一致（合成纹理 8 例＋用户视频帧 8 例，Icarus 12，`sh pl/displacement/sim/run_tests.sh`） | 搜索序列器、窗口装载（roi_capture）、AXI 封装、综合、上板 |
-| ax7010/pl/stereo | 双目核 `stereo_core` = `census_cs97`（9×7 中心对称 Census）＋`sgm_core`（Hamming 代价、2 路径 SGM、唯一性、亚像素、左右校验）；块设计封装 `stereo_axi`（AXI-Lite＋AXI-Stream＋中断），`bd/add_stereo.tcl` 接 AXI DMA/HP2 并生成设备树；`bd/team_bm_to_stereo.tcl` 把队友 AN5642 工程里闲置的 BM 换成本核＋AXI DMA（HP1，DMA 存储侧 64 位，本核、DMA 与 HP1 同为 FCLK2 40 MHz，vibmond 经 /dev/mem 访问，位流用 `tools/bit_to_bin.py` 转换）；测试平台与黄金向量 | 与 C++ `sgmRaw()` 逐位一致（合成台阶 96×40、Cones 裁剪 112×48；Census 入、灰度入、AXI 封装三级，后者含随机流停顿与两帧，Icarus 12，`sh pl/stereo/sim/run_tests.sh`）；Vivado 2025.2 在队友工程中与麦克风接收核一起实现：13.5k LUT（76.7%）、slice 98.6%、41.5 BRAM36，全设计 WNS +0.462 ns、WHS +0.007 ns（40 MHz 域最长路径 22.8 ns），位流 `an5642_stereo_sgm40_pdm.bit.bin` 与报告在 `pl/stereo/bitstream` | 上板、AN5642 实拍标定；100 MHz 需给 SGM 扫描加流水 |
+| ax7010/pl/stereo | 双目核 `stereo_core` = `census_cs97`（9×7 中心对称 Census）＋`sgm_core`（Hamming 代价、2 路径 SGM、唯一性、亚像素、左右校验）；块设计封装 `stereo_axi`（AXI-Lite＋AXI-Stream＋中断），`bd/add_stereo.tcl` 接 AXI DMA/HP2 并生成设备树；`bd/team_bm_to_stereo.tcl` 把队友 AN5642 工程里闲置的 BM 换成本核＋AXI DMA（HP1，DMA 存储侧 64 位，本核、DMA 与 HP1 同为 FCLK2 40 MHz，vibmond 经 /dev/mem 访问，位流用 `tools/bit_to_bin.py` 转换）；测试平台与黄金向量 | 与 C++ `sgmRaw()` 逐位一致（合成台阶 96×40、Cones 裁剪 112×48；Census 入、灰度入、AXI 封装三级，后者含随机流停顿与两帧，Icarus 12，`sh pl/stereo/sim/run_tests.sh`）；Vivado 2025.2 在队友工程中与麦克风接收核一起实现：13.5k LUT（76.7%）、slice 98.6%、41.5 BRAM36，全设计 WNS +0.462 ns、WHS +0.007 ns（40 MHz 域最长路径 22.8 ns），位流 `an5642_stereo_sgm40_pdm.bit.bin` 与报告在 `pl/stereo/bitstream` | 正式AN5642棋盘格标定；100 MHz 需给 SGM 扫描加流水 |
 | ax7010/pl/vision | 视觉处理 RTL：`vp_reduce` 流式降采样、`vp_core` 时间带通/运动放大/振动能量；测试平台 | 与 Python 模型逐位一致（合成帧和电脑摄像头实拍帧，含奇数高度、随机输入间隔） | AXI 接口封装、接入厂家工程、综合、上板 |
 | pc_sim | 电脑摄像头实验台、位精确模型、Python/C++/RTL 比对脚本 | 摄像头实拍和合成数据下三方逐位一致；实验台自检运行 | — |
-| ax7010/linux/vibmon | AX7010 Linux 程序 vibmond（六页触摸界面、PS 视觉处理线程、运行时设置、AN5642 相机与 PL 视频输出）、命令行 vibmonctl、联调工具 carrier_test、plcam、视觉参考工具 vision_ref、声学离线分析 wav_acoustic | WSL x86-64（g++ 13）编译无警告；11 组单元测试（含界面各页渲染与点按、视觉处理、LK 位移核、双目匹配与深度服务、PL 双目驱动对仿真硬件及寄存器表对 RTL 的核对、多点测振封装与原整帧算法逐帧逐位一致及基线/7 Hz 合成振动、PDM 驱动对仿真接收核及寄存器表对 RTL、抽取逐位一致、声学采集服务与分析）、65 项应用集成检查（含设置保存与重启生效、测点框尺寸、多点基线→测量→记录、合成音源的声学参考→记录与 WAV）、端到端冒烟测试；ARM 静态交叉编译无警告 | 上板：多点每帧耗时与 45 fps 是否丢帧、PL 双目核、麦克风连续采集与抽取耗时 |
+| ax7010/linux/vibmon | PS整机、采集、多点测振、PL双目与同帧彩色、触摸UI和外设服务 | 12组单测、65项集成与冒烟；裸板45fps采集、83次PL/PS核对0差异，见当前冻结说明 | 实际棋盘格标定、20cm可靠性/毫米精度、载板与外设整机实测 |
 | ax7010/linux/petalinux | 设备树片段、内核配置、Yocto 配方、开机自启 | 源码包可独立编译 | 在 PetaLinux 工程中构建 |
 
 ## Nano ESP32 固件

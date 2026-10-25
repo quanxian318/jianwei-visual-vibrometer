@@ -135,6 +135,43 @@ StereoImage rectifyImage(const GrayFrame& src, const RectifyMap& m, int factor) 
   return out;
 }
 
+std::vector<uint8_t> rectifyBgrImage(const GrayFrame& src, const RectifyMap& m, int factor) {
+  const size_t n = static_cast<size_t>(src.width) * src.height;
+  if (src.width <= 0 || src.height <= 0 || src.bgr.size() != 3 * n) return {};
+  factor = std::max(1, factor);
+  const int pw = src.width / factor, ph = src.height / factor;
+  std::vector<uint8_t> pre;
+  const uint8_t* base = src.bgr.data();
+  if (factor > 1) {
+    pre.resize(static_cast<size_t>(pw) * ph * 3);
+    const int area = factor * factor;
+    for (int y = 0; y < ph; ++y) for (int x = 0; x < pw; ++x) {
+      int b = 0, g = 0, r = 0;
+      for (int j = 0; j < factor; ++j) {
+        const uint8_t* row = &src.bgr[(static_cast<size_t>(y * factor + j) * src.width + x * factor) * 3];
+        for (int i = 0; i < factor; ++i) { b += row[3*i]; g += row[3*i+1]; r += row[3*i+2]; }
+      }
+      const size_t at = (static_cast<size_t>(y) * pw + x) * 3;
+      pre[at] = (b + area/2) / area; pre[at+1] = (g + area/2) / area; pre[at+2] = (r + area/2) / area;
+    }
+    base = pre.data();
+  }
+  std::vector<uint8_t> out(static_cast<size_t>(m.w) * m.h * 3, 0);
+  for (size_t i = 0; i < static_cast<size_t>(m.w) * m.h; ++i) {
+    const float x = m.sx[i], y = m.sy[i];
+    const int x0 = static_cast<int>(std::floor(x)), y0 = static_cast<int>(std::floor(y));
+    if (x0 < 0 || y0 < 0 || x0 + 1 >= pw || y0 + 1 >= ph) continue;
+    const float ax = x - x0, ay = y - y0;
+    const uint8_t* r0 = base + (static_cast<size_t>(y0) * pw + x0) * 3;
+    const uint8_t* r1 = r0 + pw * 3;
+    for (int c = 0; c < 3; ++c) {
+      const float v = (1-ay)*((1-ax)*r0[c]+ax*r0[3+c]) + ay*((1-ax)*r1[c]+ax*r1[3+c]);
+      out[3*i+c] = static_cast<uint8_t>(v + .5f);
+    }
+  }
+  return out;
+}
+
 bool distanceOffsetPx(const DepthMap& d, int calibWidth, double nx, double ny, double distanceMm, double& offsetPx,
                       std::string& err) {
   if (!(distanceMm > 0) || d.w <= 0 || d.h <= 0 || !(d.focalPx > 0) || !(d.baselineMm > 0) || calibWidth <= 0 ||

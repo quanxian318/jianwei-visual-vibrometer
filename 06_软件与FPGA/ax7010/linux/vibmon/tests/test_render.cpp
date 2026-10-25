@@ -11,6 +11,7 @@
 
 #include "app/report.h"
 #include "gfx/font.h"
+#include "gfx/draw.h"
 #include "test_util.h"
 #include "ui/fb_ui.h"
 #include "ui/ui_core.h"
@@ -66,6 +67,26 @@ bool refused(const UiAction& a) { return a.kind == "why" && !a.text.empty(); }
 
 int main(int argc, char** argv) {
   const std::string out = argc > 1 ? argv[1] : "";
+  {
+    // Display-only spatial averaging: a checkerboard must not alias into
+    // coloured snow; source data stays byte-for-byte unchanged.
+    std::vector<uint8_t> bgr(8 * 8 * 3);
+    for (int y = 0; y < 8; ++y)
+      for (int x = 0; x < 8; ++x)
+        for (int k = 0; k < 3; ++k) bgr[3 * (y * 8 + x) + k] = (x + y) % 2 ? 240 : 16;
+    const auto before = bgr;
+    Canvas dst(4, 4);
+    blitBgr(dst, 0, 0, 4, 4, bgr.data(), 8, 8, 0, 0, 8, 8);
+    for (int y = 0; y < 4; ++y)
+      for (int x = 0; x < 4; ++x) CHECK(dst.get(x, y) == 0x808080);
+    CHECK(bgr == before);
+    Canvas clipped(3, 3);
+    blitBgr(clipped, -1, -1, 4, 4, bgr.data(), 8, 8, 0, 0, 8, 8);
+    CHECK(clipped.get(0, 0) == 0x808080);
+    const uint8_t red[] = {0, 0, 255};
+    blitBgr(clipped, 0, 0, 3, 3, red, 1, 1, 0, 0, 1, 1);
+    CHECK(clipped.get(2, 2) == 0xff0000);
+  }
 
   // ---------------------------------------------------------------- sample data
   UiData d;
@@ -563,6 +584,20 @@ int main(int argc, char** argv) {
     CHECK_NEAR(vs.probeX, 0.5, 0.01);
     CHECK_NEAR(vs.probeY, 0.5, 0.01);
     CHECK(d.depth->at(0.5, 0.5) == 600);
+    UiData colourData = d;
+    auto colour = std::make_shared<DepthMap>(*d.depth);
+    colour->leftBgr.resize(colour->mm.size()*3);
+    for (size_t i=0;i<colour->mm.size();++i) {
+      colour->leftBgr[3*i]=20; colour->leftBgr[3*i+1]=60; colour->leftBgr[3*i+2]=220;
+    }
+    colourData.depth = colour;
+    Canvas canvas(1024,600); std::vector<HitRegion> hits;
+    renderUi(canvas, vs, colourData, hits);
+    int red=0;
+    for(int y=145;y<340;y+=10) for(int x=125;x<515;x+=10) {
+      uint32_t p=canvas.get(x,y); red+=int((p>>16)&255)>int(p&255)+100;
+    }
+    CHECK(red>500); // depth left card must show same-pair BGR, never gray/latest unrelated preview
   }
   // A grey control says why next to it and sends nothing: the gain only applies to motion magnification.
   {

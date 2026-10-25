@@ -11,6 +11,7 @@
     "duration_s": 10,
     "method": "multipoint",
     "multipoint": {
+      "max_points": 4,
       "baseline_dir": "/root/vibmon/baselines"
     },
     "tracker": "lk",
@@ -23,6 +24,9 @@
     "gain": 20
   },
   "stereo": {
+    "work_width": 256,
+    "pl_search_ranges": 2,
+    "work_height": 144,
     "enabled": true,
     "calibration_file": "/root/vibmon_cam/an5642_stereo_nominal.json",
     "pl_core_base": "0x43C20000",

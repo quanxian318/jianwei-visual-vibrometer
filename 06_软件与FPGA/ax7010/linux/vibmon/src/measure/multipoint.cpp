@@ -126,7 +126,7 @@ struct MultiPointTracker::Impl {
   VRBaseline b;
   bool collect = false, haveTime = false;
   double firstTime = 0, lastTime = 0;
-  std::vector<float> blurred, tmpIn, tmpOut;
+  std::vector<float> blurred;
 };
 
 MultiPointTracker::MultiPointTracker() = default;
@@ -161,6 +161,11 @@ bool MultiPointTracker::start(const MultiPointLayout& l, bool collect, const std
 void MultiPointTracker::blurAround(const GrayFrame& f) {
   Impl& m = *impl_;
   const int w = m.cfg.width, h = m.cfg.height;
+  // Merge the overlapping template rectangles before filtering. Read the
+  // byte image directly, retaining vb_blur3's nine taps and addition order
+  // exactly; no separable approximation and no change to the tracking core.
+  std::vector<Roi> boxes;
+  int top = h, bottom = 0;
   for (int i = 0; i < m.cfg.nroi + m.cfg.nref; ++i) {
     const float cx = m.cfg.xy[i][0] + (m.s.initialized ? m.s.patch[i].u : 0.f);
     const float cy = m.cfg.xy[i][1] + (m.s.initialized ? m.s.patch[i].v : 0.f);
@@ -169,22 +174,52 @@ void MultiPointTracker::blurAround(const GrayFrame& f) {
     const int y0 = std::max(0, static_cast<int>(std::floor(cy)) - kReach);
     const int y1 = std::min(h - 1, static_cast<int>(std::ceil(cy)) + kReach);
     if (x1 < x0 || y1 < y0) continue;
-    // One more pixel around it: vb_blur3 mirrors at the edges of what it is given.
-    const int ex0 = std::max(0, x0 - 1), ex1 = std::min(w - 1, x1 + 1);
-    const int ey0 = std::max(0, y0 - 1), ey1 = std::min(h - 1, y1 + 1);
-    const int rw = ex1 - ex0 + 1, rh = ey1 - ey0 + 1;
-    m.tmpIn.resize(static_cast<size_t>(rw) * rh);
-    m.tmpOut.resize(m.tmpIn.size());
-    for (int y = ey0; y <= ey1; ++y) {
-      const uint8_t* src = &f.pixels[static_cast<size_t>(y) * w + ex0];
-      float* dst = &m.tmpIn[static_cast<size_t>(y - ey0) * rw];
-      for (int x = 0; x < rw; ++x) dst[x] = src[x];
-    }
-    vb_blur3(m.tmpIn.data(), rw, rh, m.tmpOut.data());
-    for (int y = y0; y <= y1; ++y)
-      memcpy(&m.blurred[static_cast<size_t>(y) * w + x0], &m.tmpOut[static_cast<size_t>(y - ey0) * rw + (x0 - ex0)],
-             sizeof(float) * (x1 - x0 + 1));
+    boxes.push_back(Roi{x0, y0, x1 - x0 + 1, y1 - y0 + 1});
+    top = std::min(top, y0);
+    bottom = std::max(bottom, y1 + 1);
   }
+  constexpr float a = .20945361f, b = .58109278f;
+  constexpr float corner = a * a, side = a * b, centre = b * b;
+  std::vector<std::pair<int, int>> spans;
+  spans.reserve(boxes.size());
+  for (int y = top; y < bottom; ++y) {
+    spans.clear();
+    for (const auto& r : boxes)
+      if (y >= r.y && y < r.y + r.h) spans.emplace_back(r.x, r.x + r.w);
+    std::sort(spans.begin(), spans.end());
+    const uint8_t* up = &f.pixels[static_cast<size_t>(y ? y - 1 : 1) * w];
+    const uint8_t* mid = &f.pixels[static_cast<size_t>(y) * w];
+    const uint8_t* down = &f.pixels[static_cast<size_t>(y + 1 < h ? y + 1 : h - 2) * w];
+    int covered = 0;
+    for (const auto& span : spans) {
+      for (int x = std::max(covered, span.first); x < span.second; ++x) {
+        const int left = x ? x - 1 : 1, right = x + 1 < w ? x + 1 : w - 2;
+        float v = 0;
+        v += corner * up[left];
+        v += side * up[x];
+        v += corner * up[right];
+        v += side * mid[left];
+        v += centre * mid[x];
+        v += side * mid[right];
+        v += corner * down[left];
+        v += side * down[x];
+        v += corner * down[right];
+        m.blurred[static_cast<size_t>(y) * w + x] = v;
+      }
+      covered = std::max(covered, span.second);
+    }
+  }
+}
+
+bool MultiPointTracker::prime(const GrayFrame& f) {
+  if (!impl_ || impl_->s.frames || impl_->s.initialized || f.width != impl_->cfg.width ||
+      f.height != impl_->cfg.height || f.pixels.size() != impl_->blurred.size()) return false;
+  Impl& m = *impl_;
+  blurAround(f);
+  for (int i = 0; i < m.cfg.nroi + m.cfg.nref; ++i)
+    vb_patch_init(&m.s.patch[i], m.blurred.data(), m.cfg.width, m.cfg.height, m.cfg.xy[i][0], m.cfg.xy[i][1]);
+  m.s.initialized = 1;
+  return true;
 }
 
 bool MultiPointTracker::push(const GrayFrame& f) {

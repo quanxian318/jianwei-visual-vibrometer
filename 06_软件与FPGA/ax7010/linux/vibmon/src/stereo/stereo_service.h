@@ -19,20 +19,26 @@ namespace vm {
 // Per-pixel temporal consistency for a static or slowly changing scene:
 // a measured disparity is shown once two consecutive frames agree within
 // 1 px; agreeing values are averaged (IIR, weight 1/4), a jump restarts the
-// pixel. A confirmed pixel that is invalid in a frame keeps its value for
-// kHoldFrames frames: the first as a measurement, the others for display
-// only (marked filled). Suppresses flicker of isolated wrong matches and of
-// pixels that drop out now and then.
+// pixel. Timed input uses a 120 ms IIR time constant (untimed input uses 1/4).
+// Invalid pixels retain a confirmed value for at most kHoldFrames, DISPLAY
+// ONLY (also at most 750 ms for timed input), while intensity matches the LAST MEASURED
+// surface. No retained value is counted as a fresh measurement.
 class TemporalDisparityFilter {
  public:
-  static constexpr int kHoldFrames = 4;  // about 1 s at 4 depth maps per second
-  void reset() { avg_.clear(); }
-  DisparityMap apply(const DisparityMap& in);
+  static constexpr int kHoldFrames = 4;  // count limit for untimed/high-rate input
+  static constexpr int64_t kHoldNs = 750000000LL;
+  void reset() { avg_.clear(); lastStamp_ = 0; lastImage_.clear(); }
+  DisparityMap apply(const DisparityMap& in, int64_t timestampNs = 0,
+                     const std::vector<uint8_t>* image = nullptr);
 
  private:
   int w_ = 0, h_ = 0;
   std::vector<int32_t> avg_;   // Q8 of px
   std::vector<uint8_t> count_, miss_;
+  int64_t lastStamp_ = 0;
+  std::vector<uint8_t> lastImage_;
+  std::vector<uint8_t> measuredImage_;
+  std::vector<int64_t> measuredStamp_;
 };
 
 struct StereoConfig {
@@ -50,6 +56,7 @@ struct StereoConfig {
   uint64_t plBufferBase = 0;
   uint32_t plBufferSize = 0x100000;
   int plVerifyEvery = 0;             // >0: every N-th PL frame is recomputed on the PS and compared
+  int plSearchRanges = 1;            // 1: d 0..63; 2: reuse PL for d 64..127 as well
   bool plVerticalCheck = true;       // two PL passes: top/left and bottom/left consistency
   bool temporal = true;  // TemporalDisparityFilter on the published map
   std::string calibrationFile = "/etc/vibmon/stereo_calibration.json";
@@ -99,7 +106,7 @@ class StereoService {
   // (err = "depth_stale"), so a repeated tap cannot apply one offset twice.
   bool correctOffset(double offsetPx, uint64_t mapVersion, const std::string& tag, std::string& err);
   // Called from the camera thread with every left frame; cheap when not due.
-  void offerLeft(const GrayFrame& f);
+  void offerLeft(GrayFrame& f);  // consumes colour storage, leaves gray samples untouched
   Stats stats();
   StereoCalibration calibration();  // a copy: the work thread may replace it
   uint64_t calibrationVersion();    // newest calibration, a pending correction included

@@ -1,0 +1,27 @@
+{
+  "freeze_tag": "freeze-20261025-capture-near-stereo",
+  "date": "2026-10-25",
+  "binary_sha256": "e3e94a0db5165401b15a468f817d4022888bf591b7c0879f8668c2cbcd630fe9",
+  "runtime_config_sha256": "c79a705e4ccf5dfc1f72dc295a11fa47aa6d3ccd29b5e73cb42074b28adb5679",
+  "runtime_calibration_sha256": "377d8c9c97bfc150296d16be62d08887e088d612dbb99b91c6ba19092f2e6fa9",
+  "unit_suites_passed": [
+    "acoustic",
+    "depth_capture",
+    "drivers",
+    "lk",
+    "measure",
+    "multipoint",
+    "nano_link",
+    "render",
+    "serial",
+    "stereo",
+    "stereo_pl",
+    "vision"
+  ],
+  "integration_checks_passed": 65,
+  "smoke_passed": true,
+  "compiler": "GCC13 ARM hard-float",
+  "compile_flags": "-O2 -mcpu=cortex-a9 -mfpu=neon -mfloat-abi=hard; static pthread",
+  "pl_bitstream_changed": false,
+  "physical_20cm_acceptance_complete": false
+}

@@ -1,0 +1,38 @@
+[  3115.124] W app: no valid calibration (cannot read /root/vibmon/calibration.json): results stay in pixels
+[  3115.125] E app: carrier_ctrl UIO device not found (AXI 0x44000000)
+[  3115.125] E app: management I2C (I2C0) not available
+[  3115.125] W app: sensor I2C (I2C1) not available
+[  3115.129] E app: Nano UART not available
+[  3115.132] W app: printer UART not found
+[  3119.431] I app: stereo: PL core found (max width 320)
+[  3119.432] I stereo: calibration an5642-nominal-20261022-dist2500: baseline 40.0 mm, rms 0.00 px
+[  3119.445] I ui: PL video 1024x600@60 at 0x1F200000
+[  3119.520] I ui: touch /dev/input/event0 (single, x 0..1024, y 0..600)
+[  3119.520] I app: vibmon 0.2.0 started
+[  3119.531] W plcam: camera 1 writer stopped on VDMA errors 0x990; cleared
+[  3119.533] W plcam: camera 0 writer stopped on VDMA errors 0x990; cleared
+[  3120.544] I ui: unique preview submissions 22.5 fps
+[  3122.135] W app: light not switched on: no_carrier
+[  3122.135] I app: 采集停机基线...
+[  3130.590] I ui: unique preview submissions 0.0 fps
+[  3137.309] I measure: multi-point frames 677: dropped 0, irregular intervals 0, reference lost 0, points lost 0
+[  3137.310] I app: 停机基线已保存 (69 个窗口)
+[  3140.673] I ui: unique preview submissions 25.6 fps
+[  3150.825] I ui: unique preview submissions 24.2 fps
+[  3161.016] I ui: unique preview submissions 23.5 fps
+[  3171.236] I ui: unique preview submissions 23.3 fps
+[  3181.489] I ui: unique preview submissions 24.4 fps
+[  3191.449] W app: light not switched on: no_carrier
+[  3191.450] I app: 测量中...
+[  3191.814] I ui: unique preview submissions 12.9 fps
+[  3201.663] I app: 测量无效: no_signal
+[  3201.897] I ui: unique preview submissions 3.8 fps
+[  3212.185] I ui: unique preview submissions 24.5 fps
+[  3222.609] I ui: unique preview submissions 24.5 fps
+[  3233.033] I ui: unique preview submissions 24.4 fps
+[  3240.004] W nano: TX backlog full (link stalled?), dropping 16340 bytes
+[  3243.495] I ui: unique preview submissions 23.6 fps
+[  3253.925] I ui: unique preview submissions 24.6 fps
+[  3264.465] I ui: unique preview submissions 24.4 fps
+[  3274.873] I ui: unique preview submissions 23.0 fps
+[  3285.392] I ui: unique preview submissions 23.3 fps
