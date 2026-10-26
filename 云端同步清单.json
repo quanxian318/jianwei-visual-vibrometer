@@ -1,8 +1,8 @@
 {
   "date": "2026-10-26",
   "project": "见微视觉测振仪",
-  "files": 4429,
-  "total_bytes": 964873845,
+  "files": 4436,
+  "total_bytes": 971255231,
   "excluded": [
     ".git/",
     ".agents/",
@@ -6472,6 +6472,11 @@
       "path": "06_软件与FPGA/mobile_app/android/res/values/styles.xml",
       "bytes": 493,
       "sha256": "8604d81df2b7f80a11e07ad3b18db2bfa5eda3dc3d00be950ed6ad0eaa30aaac"
+    },
+    {
+      "path": "06_软件与FPGA/mobile_app/dist/JianweiVibro-1.0.5-ios-unsigned.ipa",
+      "bytes": 1173917,
+      "sha256": "a7d2e1f7b311bd74a27e847073b5929cc933ce994e1b20674de4038d8208a32d"
     },
     {
       "path": "06_软件与FPGA/mobile_app/dist/JianweiVibro-1.0.5-windows-x64.zip",
@@ -22105,8 +22110,8 @@
     },
     {
       "path": "15_手机APP_20261025/README.md",
-      "bytes": 23383,
-      "sha256": "9685db25749e59fd1423f5ee1009de9b3b1923ef60e7f06260cf138f03976528"
+      "bytes": 24044,
+      "sha256": "29e3432a8e1a42584312149d632921519e835eb5bbaf37ad4913073619758f00"
     },
     {
       "path": "15_手机APP_20261025/截图/01_连接_总览_测量_记录.jpg",
@@ -22132,6 +22137,36 @@
       "path": "15_手机APP_20261025/截图/05_3D模型多角度.jpg",
       "bytes": 256385,
       "sha256": "65073017aec8e2c8a47bf6fac0cb15f25036af5a44088ab58e1f623799afe4b5"
+    },
+    {
+      "path": "15_手机APP_20261025/构建验证/ios_connect.png",
+      "bytes": 1133603,
+      "sha256": "6ad6b909fbafd1722aa427ec1fd94ab27784b0076237801ecff9230a46d25f04"
+    },
+    {
+      "path": "15_手机APP_20261025/构建验证/ios_device.png",
+      "bytes": 1202408,
+      "sha256": "eeb0fa7a0b95d15e74a3ba7eecfef249dac748681d75b7b36b042dbc55fadcca"
+    },
+    {
+      "path": "15_手机APP_20261025/构建验证/ios_home.png",
+      "bytes": 1196764,
+      "sha256": "f1f2b4bd5fe4634144e8a2a30ed87596289cd89dce4ba89e4a09a125f1016c47"
+    },
+    {
+      "path": "15_手机APP_20261025/构建验证/ios_measure.png",
+      "bytes": 1580787,
+      "sha256": "d524afc420b8e0b3b60527556e73914d79b85ce17e160d6c7d86bc6ebbd0dd15"
+    },
+    {
+      "path": "15_手机APP_20261025/构建验证/windows_hero.png",
+      "bytes": 92883,
+      "sha256": "219947cc7d75e6575e2dd39edb47f574ffadfbeb9b64c0612fe7120f3d1c9bbb"
+    },
+    {
+      "path": "15_手机APP_20261025/构建验证/windows_selftest.json",
+      "bytes": 363,
+      "sha256": "6784ba043adc60316340c9b20a243114b2b75131b540527d686aac3f01585fb5"
     },
     {
       "path": "AGENTS.md",

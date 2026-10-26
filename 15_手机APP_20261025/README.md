@@ -4,7 +4,7 @@
 
 - Android：[`dist/JianweiVibro-1.0.5.apk`](../06_软件与FPGA/mobile_app/dist/JianweiVibro-1.0.5.apk)（约 940 KB，Android 7.0 及以上，v2 签名；1.0.x 同一签名，可直接覆盖安装）
 - Windows：[`dist/JianweiVibro-1.0.5-windows-x64.zip`](../06_软件与FPGA/mobile_app/dist/JianweiVibro-1.0.5-windows-x64.zip)（约 870 KB，Windows 10/11 x64，解压后运行 `JianweiVibro.exe`，需系统自带的 Edge WebView2 运行时）
-- iOS：`dist/JianweiVibro-1.0.5-ios-unsigned.ipa`，由 GitHub Actions 在 macOS 上编译后提交（见 §5.3）。**未签名**，需用自己的 Apple ID 通过 Sideloadly / AltStore 等工具重签安装，或在 Mac 上用 Xcode 打开 `ios/` 工程直接装到手机
+- iOS：[`dist/JianweiVibro-1.0.5-ios-unsigned.ipa`](../06_软件与FPGA/mobile_app/dist/JianweiVibro-1.0.5-ios-unsigned.ipa)（约 1.1 MB，iOS 14 及以上），由 GitHub Actions 在 macOS 上编译后提交（见 §5.3）。**未签名**，需用自己的 Apple ID 通过 Sideloadly / AltStore 等工具重签安装，或在 Mac 上用 Xcode 打开 `ios/` 工程直接装到手机
 - 源码：[`06_软件与FPGA/mobile_app`](../06_软件与FPGA/mobile_app)
 - 截图：[截图](截图)，用演示模式在 390×844 手机视口中渲染
 
@@ -134,6 +134,8 @@ tools/build_windows.sh      # -> dist/JianweiVibro-<版本>-windows-x64.zip
 | Nano 改动的 Arduino 源 | 只用主机桩头文件做语法检查（net_service、http_gateway、settings、router、app_gateway）。云端无法下载 Xtensa 工具链，**未做真实板包编译** |
 | APK | aapt2 读取包信息：com.jianwei.vibro 1.0.0，minSdk 24，targetSdk 34；apksig 校验 v2 签名通过 |
 | 界面 | 在 Chromium 手机视口中走查各页面（演示模式，浅色/深色），无脚本错误 |
+| Windows 1.0.5 | GitHub Actions 的 Windows 机器上运行提交的 zip（`--selftest`）：约 8 s 内加载页面，主载板/前面板板图、3D 首屏与 8 个原生接口均就绪，原生 UDP 发现执行完成（该机器无设备，返回空）；结果与首屏截图见 [构建验证](构建验证) |
+| iOS 1.0.5 | GitHub macOS 机器上 XcodeGen 生成工程，编译出未签名 IPA；模拟器 iPhone 中安装运行，连接页、总览、测量、设备爆炸视图截图见 [构建验证](构建验证)（CI 运行 40313377113） |
 
 ## 7. 1.0.1 修复（2026-10-25）
 
