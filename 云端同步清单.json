@@ -1,8 +1,8 @@
 {
-  "date": "2026-10-25",
+  "date": "2026-10-26",
   "project": "见微视觉测振仪",
-  "files": 4409,
-  "total_bytes": 963111505,
+  "files": 4429,
+  "total_bytes": 964873365,
   "excluded": [
     ".git/",
     ".agents/",
@@ -24,9 +24,14 @@
       "sha256": "9fa9913971778b1f38f5c6495d41cc86a6e024ac3f3c98863fae6a31b4dc7aec"
     },
     {
+      "path": ".github/workflows/app-builds.yml",
+      "bytes": 4933,
+      "sha256": "44797e105e53e751a291780b624abda1d844151dd19a57edc25baadd63535449"
+    },
+    {
       "path": ".gitignore",
-      "bytes": 234,
-      "sha256": "e9ae79195b7811611c756589f85368607283652e651119289d4e76c754e071ca"
+      "bytes": 351,
+      "sha256": "ab24afdc94226b66473a282ca41837bf1703eaa0e7844321cc990377f27f412e"
     },
     {
       "path": "00_当前设计方案/AX7010_carrier_V1.10.xdc",
@@ -6469,9 +6474,14 @@
       "sha256": "8604d81df2b7f80a11e07ad3b18db2bfa5eda3dc3d00be950ed6ad0eaa30aaac"
     },
     {
-      "path": "06_软件与FPGA/mobile_app/dist/JianweiVibro-1.0.4.apk",
-      "bytes": 649177,
-      "sha256": "8d3475f0150e57321afbb1d1cdbdaba3b7c25d5a1460a408e9c02ea205f2d569"
+      "path": "06_软件与FPGA/mobile_app/dist/JianweiVibro-1.0.5-windows-x64.zip",
+      "bytes": 891571,
+      "sha256": "32ba0f2afd2c899b62f93e08ffcdb641094b3040131bba1ccd4c7518898b06b8"
+    },
+    {
+      "path": "06_软件与FPGA/mobile_app/dist/JianweiVibro-1.0.5.apk",
+      "bytes": 961516,
+      "sha256": "22d27ca01f84762769df4c89b3d7a1007ab9420ea51570e3aa45d1e4a8eb505b"
     },
     {
       "path": "06_软件与FPGA/mobile_app/docs/icon_512.png",
@@ -6484,6 +6494,46 @@
       "sha256": "96412cde8e46361e421debc579771ebde1748ef2002271099a63459db1974c17"
     },
     {
+      "path": "06_软件与FPGA/mobile_app/ios/JianweiVibro/AppDelegate.swift",
+      "bytes": 458,
+      "sha256": "52a20aec684fda5459cd9b20269d337cc5ceec1339541dbfa4aee0b4d8c74858"
+    },
+    {
+      "path": "06_软件与FPGA/mobile_app/ios/JianweiVibro/Assets.xcassets/AppIcon.appiconset/Contents.json",
+      "bytes": 204,
+      "sha256": "c8f778912a6100738acf94578431e6d28097b7e3bbc52095161907de9e5b65cf"
+    },
+    {
+      "path": "06_软件与FPGA/mobile_app/ios/JianweiVibro/Assets.xcassets/AppIcon.appiconset/icon_1024.png",
+      "bytes": 173666,
+      "sha256": "ae4add6eb136552c00e4a2a8e2eed9b0e7f179892d144e863c1c963a4ee352aa"
+    },
+    {
+      "path": "06_软件与FPGA/mobile_app/ios/JianweiVibro/Assets.xcassets/Contents.json",
+      "bytes": 59,
+      "sha256": "a3393322cd7b4c1e0aa93bebe09abaa91ad891290d1225b0b5d10b5c6f216025"
+    },
+    {
+      "path": "06_软件与FPGA/mobile_app/ios/JianweiVibro/Discovery.swift",
+      "bytes": 4181,
+      "sha256": "73ab8c2b9956bf583333230dcb2a08ff8b20baba838cf512fe539164bc5b32be"
+    },
+    {
+      "path": "06_软件与FPGA/mobile_app/ios/JianweiVibro/Info.plist",
+      "bytes": 1756,
+      "sha256": "c2ddb6b8232dce3042be543edd6f54b57fd32a19d94c3a3ab5730b6940526997"
+    },
+    {
+      "path": "06_软件与FPGA/mobile_app/ios/JianweiVibro/WebViewController.swift",
+      "bytes": 6175,
+      "sha256": "7d5037a24f7881a28040cadffafdb109516a27f0ccda6b9d93e5d22e2b96c1b2"
+    },
+    {
+      "path": "06_软件与FPGA/mobile_app/ios/project.yml",
+      "bytes": 850,
+      "sha256": "9ec636ecd9cba9aae1d9eb2bf90cf7c7b9f5b8f62524a22de2d3d7c811c28afd"
+    },
+    {
       "path": "06_软件与FPGA/mobile_app/tools/apk_pack.py",
       "bytes": 1408,
       "sha256": "0d3f274285fad2226ff586455926425f8491f1bba638bc99cf2576f8dd34ff7f"
@@ -6491,7 +6541,17 @@
     {
       "path": "06_软件与FPGA/mobile_app/tools/build_apk.sh",
       "bytes": 3122,
-      "sha256": "d35c23cbb74d92609d5a934eb559a4a723186ed22527060e099635fea318601f"
+      "sha256": "df583cf784e4ee77bab62eafa9a8f783d29336004db917f65492217189d301c1"
+    },
+    {
+      "path": "06_软件与FPGA/mobile_app/tools/build_windows.sh",
+      "bytes": 3835,
+      "sha256": "95d5c2e684aebbbca9a0be6702a7cbed2d035ee03eb3ec7bfff315796be3db95"
+    },
+    {
+      "path": "06_软件与FPGA/mobile_app/tools/gen_pcb_twin.py",
+      "bytes": 12878,
+      "sha256": "255870442effed4e1fe8ec86688a780e0458ba1dc414ceb9c5cbdbf40cb21a77"
     },
     {
       "path": "06_软件与FPGA/mobile_app/tools/make_fonts.py",
@@ -6510,8 +6570,8 @@
     },
     {
       "path": "06_软件与FPGA/mobile_app/web/css/app.css",
-      "bytes": 29228,
-      "sha256": "65233b6cfedf4ddd6c3f225c64fa0e7e2313b2af2d0dcc5cf5cb071450524795"
+      "bytes": 29752,
+      "sha256": "75aaca2cdd6b37c6107a21810dbe4f4a36ea893456551453dc339f765ab5b7d2"
     },
     {
       "path": "06_软件与FPGA/mobile_app/web/fonts/Inter-var.woff2",
@@ -6544,9 +6604,19 @@
       "sha256": "18aabf190848725e2576eefb5c29ba06aac1029d02132252a7f312eac2e50cf3"
     },
     {
+      "path": "06_软件与FPGA/mobile_app/web/img/pcb_front.webp",
+      "bytes": 35692,
+      "sha256": "93269186ca18029f3c0dd08c18968cbebcb91fdeb3d2cbb208fc328fb33c8798"
+    },
+    {
+      "path": "06_软件与FPGA/mobile_app/web/img/pcb_main.webp",
+      "bytes": 268344,
+      "sha256": "8deaa94f900d3d4e5e7642311b9b7b39414e4fb666153c01354e5c955b24caca"
+    },
+    {
       "path": "06_软件与FPGA/mobile_app/web/index.html",
-      "bytes": 2752,
-      "sha256": "0698fd70b49d470f1827c43b2b333372cf9ae2633d7c1a5c316eb8f8cabe8256"
+      "bytes": 2831,
+      "sha256": "4229b815e36b7932e9c06496355ade3acfccc780c29e21a1526a665857a91bdd"
     },
     {
       "path": "06_软件与FPGA/mobile_app/web/js/api.js",
@@ -6555,8 +6625,8 @@
     },
     {
       "path": "06_软件与FPGA/mobile_app/web/js/app.js",
-      "bytes": 17080,
-      "sha256": "c58c0c60c511f0de6e68d57a26e6d6761d5595f44b056ed7343f9095be95574e"
+      "bytes": 17519,
+      "sha256": "efbbffbd27c2857463eec68c86ae298c807357fb7671e731640a6802bd02578b"
     },
     {
       "path": "06_软件与FPGA/mobile_app/web/js/charts.js",
@@ -6580,13 +6650,13 @@
     },
     {
       "path": "06_软件与FPGA/mobile_app/web/js/page_connect.js",
-      "bytes": 5322,
-      "sha256": "0d97f1b429f98f310ae34f69434521f824e1a17c26f390475fd0cfddf5c7b1f0"
+      "bytes": 5561,
+      "sha256": "9ee93c6d727f9d7d475dbc3a1253738f4d313b0f78762efc2b7ecfaa1eae133e"
     },
     {
       "path": "06_软件与FPGA/mobile_app/web/js/page_device.js",
-      "bytes": 16268,
-      "sha256": "b5b69535c683c80332bc2526e9703b17db4989ed408b927418b35d7737c847d1"
+      "bytes": 16296,
+      "sha256": "0da6c99cd995891ab764ee27511699127e13df6b43fca7a795baff2a4e4d103f"
     },
     {
       "path": "06_软件与FPGA/mobile_app/web/js/page_home.js",
@@ -6614,14 +6684,44 @@
       "sha256": "0eb9a974a805b3c01b4d782e414cfd970857f09aef0401950706fc37342d6a95"
     },
     {
+      "path": "06_软件与FPGA/mobile_app/web/js/pcb_front.js",
+      "bytes": 1035,
+      "sha256": "308247b2a27deaebca73f743649872fd8fbe44ea6d228b4f2041934d308d4336"
+    },
+    {
+      "path": "06_软件与FPGA/mobile_app/web/js/pcb_main.js",
+      "bytes": 4432,
+      "sha256": "b8026a51eeac342b2b348b071a75f84fc94234382ef38ebea7c41bd3fee0a90b"
+    },
+    {
       "path": "06_软件与FPGA/mobile_app/web/js/twin3d.js",
-      "bytes": 41567,
-      "sha256": "b8345fbb5b40b806dcf3f50dbfd69cfe1509193dd95cdb9c219504e654902b21"
+      "bytes": 59502,
+      "sha256": "1067753e7dcccc82f5df4c0d133c557616b896a8cf8205d96c661a9fd3141e8e"
     },
     {
       "path": "06_软件与FPGA/mobile_app/web/js/util.js",
       "bytes": 6781,
       "sha256": "1d3288ead6cc23f90ba6a6f7563fa2764264751b5b049ba1ebbfc8fc8784f53f"
+    },
+    {
+      "path": "06_软件与FPGA/mobile_app/windows/app.manifest",
+      "bytes": 942,
+      "sha256": "d4a93e48f68e55162ad118b8e8e8e902a621047a481ce39072626395200f1a35"
+    },
+    {
+      "path": "06_软件与FPGA/mobile_app/windows/app.rc",
+      "bytes": 835,
+      "sha256": "894491c15686c28e2d71bd88c16b92aa96049bbcd8ad823fe82867f100894a7c"
+    },
+    {
+      "path": "06_软件与FPGA/mobile_app/windows/compat/EventToken.h",
+      "bytes": 170,
+      "sha256": "ab8afc6cdb2125cc19d17723352e3b001a66870056eab71867d7b52c7cb701dd"
+    },
+    {
+      "path": "06_软件与FPGA/mobile_app/windows/main.cpp",
+      "bytes": 11846,
+      "sha256": "ed0fd75188fbaa89b6bf756e9770224a076084766fff0e7ab6299c1f93afde4a"
     },
     {
       "path": "06_软件与FPGA/nano_esp32/bin/README_当前固件状态.md",
@@ -22005,8 +22105,8 @@
     },
     {
       "path": "15_手机APP_20261025/README.md",
-      "bytes": 18069,
-      "sha256": "6fcbe8c26d378a298acdc8a71dbb8248fa16ad316845a41a8d6e45407f5c4bdd"
+      "bytes": 23383,
+      "sha256": "9685db25749e59fd1423f5ee1009de9b3b1923ef60e7f06260cf138f03976528"
     },
     {
       "path": "15_手机APP_20261025/截图/01_连接_总览_测量_记录.jpg",
@@ -22035,8 +22135,8 @@
     },
     {
       "path": "AGENTS.md",
-      "bytes": 38610,
-      "sha256": "96f9666ddb9af41311e44b508bb650ce4caa4f8eba23eebb5ebf9d2ce52088cf"
+      "bytes": 39594,
+      "sha256": "d345f2d26b330fbcecb6b57a109e0d4a2c567bcc41ef50261b98eb138240c98e"
     },
     {
       "path": "README.md",

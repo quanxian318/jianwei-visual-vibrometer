@@ -98,6 +98,7 @@
       if (!el) return;
       this.sm = statusMap(l);
       this.twin.setStatus(this.sm);
+      this.twin.setLive(l);
       if (l) {
         const k = l.mmpx || 1, w = (l.wave || []).slice(-90).map((v) => v * k);
         const m = w.length ? Math.max.apply(null, w.map(Math.abs)) || 1 : 1;

@@ -332,11 +332,21 @@ input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 26p
 
 /* ---------- connect ---------- */
 .welcome { min-height: 100%; display: flex; flex-direction: column; }
-.brand { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 40px 0 4px; }
+#view-connect { padding-bottom: calc(var(--sab) + 12px); }  /* no tab bar on this screen */
+.brand { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 36px 0 0; }
 .brand .logo { width: 84px; height: 84px; border-radius: 26px; box-shadow: 0 20px 44px var(--glow); }
 .brand h1 { font-size: 28px; margin: 22px 0 6px; letter-spacing: 0.16em; font-weight: 600; }
 .brand p { margin: 0; color: var(--text-3); font-size: 14px; letter-spacing: 0.06em; }
-.stage { position: relative; height: 250px; margin: 6px -22px 0; }
+/* The hero takes the free height, so the buttons sit low and the model has
+   room above and below whatever the screen height. */
+.stage { position: relative; flex: 1 1 0; min-height: 230px; max-height: 440px; margin: 6px -22px 0; }
+@media (max-height: 700px) {
+  .brand { padding-top: 18px; }
+  .brand .logo { width: 64px; height: 64px; border-radius: 20px; }
+  .brand h1 { font-size: 24px; margin-top: 14px; }
+  .welcome .center-note { padding-top: 14px; }
+}
+.welcome .actions { margin-top: 8px; }
 .stage canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
 .scan-note { text-align: center; color: var(--text-2); font-size: 14px; margin: 0 0 20px; min-height: 22px; }
 .center-note { text-align: center; color: var(--text-3); font-size: 12.5px; padding: 26px 0 6px; }

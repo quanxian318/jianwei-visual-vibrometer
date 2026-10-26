@@ -9,3 +9,7 @@ Desktop.ini
 # Local build outputs of the Linux program.
 **/vibmon/build/
 **/vibmon/build_arm/
+**/mobile_app/windows/build/
+**/mobile_app/windows/version.h
+**/mobile_app/ios/build/
+**/mobile_app/ios/*.xcodeproj/

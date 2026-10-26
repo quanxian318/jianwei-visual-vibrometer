@@ -1,8 +1,10 @@
 # 见微测振 手机 APP（2026-10-25）
 
-配套见微视觉测振仪的 Android APP，以及为它新增的设备侧接口：AX7010 局域网 API 和 Nano ESP32 Wi-Fi 网关。
+配套见微视觉测振仪的 APP（Android、iOS、Windows 三个版本共用同一套界面），以及为它新增的设备侧接口：AX7010 局域网 API 和 Nano ESP32 Wi-Fi 网关。
 
-- 安装包：[`06_软件与FPGA/mobile_app/dist/JianweiVibro-1.0.4.apk`](../06_软件与FPGA/mobile_app/dist/JianweiVibro-1.0.4.apk)（约 630 KB，Android 7.0 及以上，v2 签名；1.0.x 同一签名，可直接覆盖安装）
+- Android：[`dist/JianweiVibro-1.0.5.apk`](../06_软件与FPGA/mobile_app/dist/JianweiVibro-1.0.5.apk)（约 940 KB，Android 7.0 及以上，v2 签名；1.0.x 同一签名，可直接覆盖安装）
+- Windows：[`dist/JianweiVibro-1.0.5-windows-x64.zip`](../06_软件与FPGA/mobile_app/dist/JianweiVibro-1.0.5-windows-x64.zip)（约 870 KB，Windows 10/11 x64，解压后运行 `JianweiVibro.exe`，需系统自带的 Edge WebView2 运行时）
+- iOS：`dist/JianweiVibro-1.0.5-ios-unsigned.ipa`，由 GitHub Actions 在 macOS 上编译后提交（见 §5.3）。**未签名**，需用自己的 Apple ID 通过 Sideloadly / AltStore 等工具重签安装，或在 Mac 上用 Xcode 打开 `ios/` 工程直接装到手机
 - 源码：[`06_软件与FPGA/mobile_app`](../06_软件与FPGA/mobile_app)
 - 截图：[截图](截图)，用演示模式在 390×844 手机视口中渲染
 
@@ -89,7 +91,9 @@ Nano 在 HELLO 的 capabilities 中声明 `app_gateway`；AX 只向声明了它�
   - `android/`：Java 外壳与资源。
   - `tools/`：图标、字体与 APK 构建脚本。
 
-## 5. 构建 APK
+## 5. 构建
+
+### 5.1 Android
 
 ```bash
 cd 06_软件与FPGA/mobile_app
@@ -101,6 +105,22 @@ tools/build_apk.sh          # -> dist/JianweiVibro-<版本>.apk
 签名密钥 `android/keystore/release.p12` 在首次构建时生成，不提交到仓库。之后的构建必须使用同一把密钥，才能覆盖安装；本次的 APK 由云端生成的密钥签名，以后在本机重新构建会生成新密钥，需要先卸载旧版再安装。应用商店上架需要换成正式密钥和 AAB 格式。
 
 图标和字体的源脚本是 `tools/make_icons.py` 与 `tools/make_fonts.py`（需要 Pillow 与 fonttools）；界面新增中文后，需重新运行 make_fonts。
+
+3D 模型里主载板与前面板的板图由 `tools/gen_pcb_twin.py` 从仓库中的真实制造文件生成（`09_团队开发资料_20261020/01_硬件工程与制造` 的两份 Gerber 压缩包与其中的 FlyingProbeTesting.json 元件坐标、`00_当前设计方案` 的两份 BOM 和连接器本体尺寸），输出 `web/img/pcb_main.webp`、`pcb_front.webp` 与 `web/js/pcb_main.js`、`pcb_front.js` 并入库；改板后重新运行即可（需要 `pip install gerbonara cairosvg pillow`）。
+
+### 5.2 Windows
+
+```bash
+tools/build_windows.sh      # -> dist/JianweiVibro-<版本>-windows-x64.zip
+```
+
+`windows/main.cpp` 用 webview 0.12.0（MIT）创建 Edge WebView2 窗口，加载同目录下的 `web/`，并提供与 Android 相同的 `VibmonNative` 原生接口：UDP 发现（向每个网卡的广播地址和 192.168.4.1 发送）、导出到「下载」文件夹、分享改为复制到剪贴板、深色标题栏、采集时保持屏幕常亮。在 Linux 上用 MinGW-w64 交叉编译（静态链接，单个 exe，不需要 WebView2Loader.dll）。WebView2.h 取自 webview_go 随附的微软 SDK 1.0.1150.38，其 133 个接口 ID 已与 windows-rs 的 webview2-com-sys 绑定逐一比对一致；两个头文件按 SHA256 固定。
+
+### 5.3 iOS
+
+`ios/` 是 Swift 外壳（WKWebView＋同名原生接口）：分享与导出走系统分享面板（可存到「文件」），常亮用 `isIdleTimerDisabled`。iOS 发送广播需要苹果单独批准的组播权限，所以发现时除受限广播与 192.168.4.1 外，还向当前 Wi-Fi 网段（不超过 /22）逐个单播探测，只需「本地网络」授权。工程由 XcodeGen 从 `ios/project.yml` 生成，云端没有 macOS，编译由 `.github/workflows/app-builds.yml` 在 GitHub 的 macOS 机器上完成：生成未签名 IPA，在模拟器中安装运行并截图，再把 IPA 和截图提交回分支（`15_手机APP_20261025/构建验证/`）。同一流程还在 Windows 机器上运行 Windows 包的 `--selftest`（加载页面、3D 模型与原生接口后自报结果和首屏 3D 截图）。
+
+在 Mac 上自行编译：`brew install xcodegen && cd ios && xcodegen generate`，用 Xcode 打开 `JianweiVibro.xcodeproj`，选择自己的开发团队后运行到手机。
 
 ## 6. 验证
 
@@ -141,9 +161,18 @@ tools/build_apk.sh          # -> dist/JianweiVibro-<版本>.apk
 - **测量页「开始测量」圆形按钮左上角的图标错位、压在按钮上**：按钮样式里给外圈进度环写的 `.go svg`（绝对定位铺满、旋转 −90°）同时命中了按钮中间的播放／分析中图标，图标于是被挪到中心圆的左上角并转了 90°。改为只作用于按钮直接子元素的进度环（`.go > svg`），图标回到文字上方居中。已截图复核空闲、采集倒计时、分析中三种状态，进度环仍从正上方开始走。
 - **首页「静音」按下变蓝后再按没反应**：设备端 `mute` 命令原本只能静音（确认报警），没有取消，App 再按一次只是重复静音。vibmond 的 `mute` 命令新增 `on` 参数（默认 true，屏幕 K1 与旧客户端行为不变），`{"on":false}` 恢复报警声；首页按钮按当前状态切换静音／恢复，提示语随之变化；Nano 网关原样转发参数，固件无需改动。新增驱动单测（取消静音后蜂鸣器重新按节拍响）和 2 项集成检查（共 105 项通过），ARM 交叉编译无警告；演示模式已在浏览器中连按四次复核开关交替。若板上仍是旧版 vibmond，按钮只能静音，需同步更新设备程序。
 
+### 1.0.5（2026-10-26）
+
+- **正面右下角 JIANWEI 字样随视角异常转动**：字是按屏幕水平方向绘制在投影中心的，不随面板转动。改为用面板在屏幕上的 u、v 轴构造画布变换，文字贴在面板上随之转动和透视缩短；侧面接口开口同样改为在面内描出。
+- **绑定设备页**：拖动松手后模型不再自动旋转——拖动会永久关闭自动旋转；现在松手约 1.8 s、惯性停下后恢复旋转，并平滑回到默认俯角。点击模型会爆炸且无法恢复——该页没有爆炸滑动条；首页模型改为只能旋转缩放，不响应点击。模型上下被遮挡——限制俯仰角，并按每帧投影外廓自动缩小，任何角度都不出画布（三种屏幕、120 种角度/缩放组合逐像素检查边缘为 0）；模型区改为占满剩余高度，三个按钮下移到靠近底部，去掉视图为标签栏预留的 120 px 底边距后 360×640 屏不再滚动。
+- **3D 模型细化**：主载板改用仓库中的真实工程——由 Gerber 渲染的 100×100 mm 板图（阻焊下铜皮、ENIG 焊盘、丝印、过孔与安装孔）贴在板上，板上 47 个立体元件按飞针文件的真实坐标与 BOM 封装放置（连接器用实测本体外框；0603 等小元件画在板图上；BOM 标「可选」的 C608 不装）；四角加铜柱与螺钉；ESP32 按 J604/J606 插座位置插在载板上（8.5 mm 插座＋2.5 mm 排针高）。前面板同样用真实 Gerber 与坐标，旋钮、K1 与五个状态灯窗口分别位于 ENC101、K101、HL101–HL105 正上方；五个灯按 panel_service.cpp 的语义点亮（系统、网络、测量、外设、报警判级）。其他外购模块（相机、AX7010、传感器、麦克风、电源）的电路板改为按各自元件生成的布局：焊盘、丝印框、45° 平行走线、过孔，不再把同一组随机线拉伸到每块板上。板图按透视切分三角形贴图。
+- **侧面蓝色条**：前后壳之间的分型线原用强调蓝色，看起来像不明部件；改为中性色的细凹槽。旧的顶部蓝色灯条换成上面的五个状态灯。
+- 新增 Windows 与 iOS 版本（§5.2、§5.3）。
+
 ## 8. 未验证与限制
 
 - **未在 Android 真机或模拟器上运行**；WebView 内 UDP 广播、保存到「下载」、状态栏配色和返回键需在手机上确认。
+- Windows 版在 Linux 上交叉编译，未在本机运行，实际运行依赖 GitHub Windows 机器上的自检；iOS 版只在模拟器中运行，未在 iPhone 真机上安装，局域网单播发现与分享面板需真机确认。IPA 未签名，不能直接安装。
 - **未与 AX7010 板子或 Nano 实物联调**；局域网 API 只在 x86 主机上用合成相机测试。
 - Nano 固件需在本机用 `build_nano.ps1` 完整编译和烧录；`bin/` 中仍是旧固件，不含网关。
 - 热点与站点同时开启时，站点重连的扫描会让热点短暂掉线；现场无路由器时，可不配置站点 Wi-Fi。

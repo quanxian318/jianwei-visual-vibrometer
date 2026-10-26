@@ -9,10 +9,10 @@
         '<div class="stage no-swipe"><canvas id="heroTwin"></canvas></div>' +
         '<div class="scan-note" id="scanNote"></div>' +
         '<div class="list found" id="found"></div>' +
-        '<button class="btn primary block" id="rescan">' + Icon('search', 's') + '<span>搜索设备</span></button>' +
+        '<div class="actions"><button class="btn primary block" id="rescan">' + Icon('search', 's') + '<span>搜索设备</span></button>' +
         '<div class="grid2 mt12"><button class="btn" id="manual">' + Icon('edit', 's') + '输入地址</button>' +
-        '<button class="btn" id="demo">' + Icon('sparkle', 's') + '演示模式</button></div>' +
-        '<div style="flex:1"></div><div class="center-note">v' + App.version + '</div>' +
+        '<button class="btn" id="demo">' + Icon('sparkle', 's') + '演示模式</button></div></div>' +
+        '<div class="center-note">v' + App.version + '</div>' +
         '</div>';
       U.$('#rescan', el).onclick = () => this.scan();
       U.$('#manual', el).onclick = () => this.manual();
@@ -21,8 +21,10 @@
         const r = e.target.closest('[data-i]');
         if (r) this.pick(this.items[+r.getAttribute('data-i')]);
       });
-      this.hero = new Twin3D.Twin(U.$('#heroTwin', el), {});
-      this.hero.zoom = 0.92;
+      // A showpiece: turn it, but no taps (there is no slider here to close
+      // an exploded model) and it starts spinning again after a drag.
+      this.hero = new Twin3D.Twin(U.$('#heroTwin', el), { tap: false, autoFit: true, resumeMs: 1800, rxRange: [-0.75, 0.3], zoomRange: [0.75, 1.15] });
+      this.hero.zoom = 0.9;
       this.hero.kick();
       this.items = [];
       this.showSaved();

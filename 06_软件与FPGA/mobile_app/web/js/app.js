@@ -8,7 +8,7 @@
     { id: 'device', t: '设备', ic: 'device' },
   ];
   const App = {
-    version: '1.0.4',
+    version: '1.0.5',
     pages: {},
     dev: null,
     live: null,
@@ -368,7 +368,13 @@
     App.renderTabs();
     const last = U.store.get('last', null);
     const splash = U.$('#splash');
-    if (last && (await App.connect(last, true))) { /* reconnected */ } else App.showConnect();
+    // #shot=<tab>: demo device on that tab (build-machine screenshots).
+    const shot = /[#&]shot=(\w+)/.exec(location.hash);
+    if (shot) {
+      await App.connect({ kind: 'demo', host: 'demo', port: 0, name: '演示设备' }, true);
+      App.go(shot[1], true);
+      if (shot[1] === 'device') setTimeout(() => { const t = App.pages.device.twin; if (t) { t.setExplode(1); t.auto = false; t.ry = -0.95; t.rx = -0.42; } }, 300);
+    } else if (last && (await App.connect(last, true))) { /* reconnected */ } else App.showConnect();
     if (splash) { splash.classList.add('gone'); setTimeout(() => splash.remove(), 600); }
   };
   window.App = App;

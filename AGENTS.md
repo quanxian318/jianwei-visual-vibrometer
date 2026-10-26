@@ -1,7 +1,7 @@
 # 当前项目事实
 
 2026-10-25新增配套手机APP，见15_手机APP_20261025/README.md。
-- APK：06_软件与FPGA/mobile_app/dist/JianweiVibro-1.0.4.apk，包名com.jianwei.vibro，minSdk24/target34，apksig v2签名校验通过。界面为WebView＋HTML，默认浅色，可选深色/跟随系统；内置Inter与Noto Sans SC子集字体；3D数字孪生可旋转缩放、滑动条调节爆炸程度、点击部件看状态；记录详情含3D时频瀑布；有演示模式。
+- 安装包：Android 06_软件与FPGA/mobile_app/dist/JianweiVibro-1.0.5.apk；Windows 同目录JianweiVibro-1.0.5-windows-x64.zip（MinGW交叉编译WebView2外壳windows/main.cpp，同名VibmonNative接口）；iOS ios/（Swift WKWebView，XcodeGen），由.github/workflows/app-builds.yml在macOS上编出未签名IPA并提交dist、模拟器截图与Windows自检结果提交15_手机APP_20261025/构建验证。APK 包名com.jianwei.vibro，minSdk24/target34，apksig v2签名校验通过。界面为WebView＋HTML，默认浅色，可选深色/跟随系统；内置Inter与Noto Sans SC子集字体；3D数字孪生可旋转缩放、滑动条调节爆炸程度、点击部件看状态；记录详情含3D时频瀑布；有演示模式。
 - 构建：无Android SDK，tools/build_apk.sh用Maven Central上的aapt2/dx/apksig/android-all。签名密钥android/keystore不入库，本地重建换钥后需先卸载旧版。
 - 连接：局域网直连vibmond新增HTTP API（app_api，默认8080端口、UDP 48300发现，默认免配对——用户说明仅私下使用，可选require_pairing用屏幕6位码）。另可经Nano ESP32网关：热点VIBMON-xxxx/vibmon2026，地址192.168.4.1:80，可与站点Wi-Fi同时开启，mDNS为vibmon-xxxx.local。
 - 协议：V1.1新增PUBLISH 0x60（status/settings/points/records/curves快照，每帧≤900B）、COMMAND_RESULT 0x62、事件APP_COMMAND/APP_CLIENT，HELLO能力声明app_gateway；Nano固件升为0.2.0。
@@ -10,7 +10,8 @@
 - 1.0.2：背面触摸屏上的界面块原按屏幕坐标轴对齐矩形绘制、转动时滑动变形，改为全部在屏幕平面(u,v)内绘制，且(u,v)点先在三维面上插值再投影（原来对投影后四角做双线性插值，绿色状态环在斜视角下偏移约3px）；同处叠放的外装件加层序（窗＜边框＜镜片）。模型加细：双目黑色视窗与三级镜头圈、灯条亮芯、ToF窗、后盖四颗螺丝、底部四个橡胶脚、两侧挂绳耳、DC插座与SD卡槽、旋钮指示线与底圈、电源键圈，板上增加排针、电解电容、电感与芯片。
 - 1.0.3：顶部消息提示到时不消失、卡在屏幕顶端——隐藏位置只上移自身高度160%，手机有状态栏（--sat≥24px）时单行提示仍露出10–34px；改为上移自身高度＋状态栏＋60px并淡出、隐藏后不可见不可点。已按0/24/30/48px状态栏与长短文案复测。
 - 1.0.4：测量页开始测量按钮内图标错位压在按钮左上角——外圈进度环样式.go svg同时命中按钮内图标（绝对定位并旋转），改为.go > svg，图标回到文字上方居中，空闲/采集/分析三态截图复核；首页静音按钮再按无反应——设备mute命令原只能静音，vibmond新增mute on=false取消静音（默认静音，K1不变，Nano原样转发），App按状态切换，105项集成通过、ARM交叉编译无警告，板上需更新vibmond。
-- 未验证：未在Android真机运行，未与板卡或Nano实物联调。
+- 1.0.5：正面JIANWEI字改为贴面变换；绑定页拖动松手1.8s后恢复自转、不响应点击（原点击爆炸无法恢复）、按投影外廓自动缩放不出画布、按钮下移；3D主载板与前面板改用真实Gerber板图（tools/gen_pcb_twin.py生成web/img与web/js/pcb_*.js）和飞针坐标/BOM放置元件，ESP32插在J604/J606位置，顶面五个状态灯对应HL101–105并按panel_service语义点亮；外购模块电路板改为按元件生成的布局；分型线由强调蓝改为中性凹槽。
+- 未验证：未在Android真机运行，未与板卡或Nano实物联调；Windows版未在本机运行（依赖CI自检），iOS只在模拟器运行、IPA未签名。
 
 2026-10-25当前冻结标记freeze-20261025-capture-near-stereo，事实见04_评审与核对/2026-10-25_冻结_彩色与近景双目/冻结说明与当前事实.md及冻结清单.json。运行程序SHA256 e3e94a0db5165401b15a468f817d4022888bf591b7c0879f8668c2cbcd630fe9。保留4测点4参考45fps采集修复；同帧彩色、先配对后转灰度；双目256x144，pl_search_ranges=2，复用PL搜索0–127（共4次调用），PS11x11相关性跨段核对。修复部分用户设置重置搜索段参数。83次PL/PS逐位核对0差异/0PL失败，最终pl_verify_every=0，455–470ms/幅、深度约1.7fps、该场景真实有效约37%。预览估计不进测量，UI邻域读取需6个同层真实点并标ROI。12组单测65项集成和冒烟通过。20/50cm图已保存；20cm仍有无效，未验收稳定准确测距，需要核对对焦并做真实棋盘格标定。保留名义标定+单点偏移dist1000（右cx637.9826667、cy390），未盲改焦距/外参，PL位流未变。机位/ROI已变，测振需重采停机基线。按用户要求本轮结束后冻结，不继续改代码。
 
