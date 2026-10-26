@@ -1,0 +1,25 @@
+{
+  "version": "1.0.5",
+  "title": "见微测振",
+  "connect": true,
+  "hero": true,
+  "heroSize": [
+    440,
+    279
+  ],
+  "boards": [
+    "main",
+    "front"
+  ],
+  "bridge": [
+    "discover",
+    "saveFile",
+    "shareText",
+    "setTheme",
+    "keepScreenOn",
+    "vibrate",
+    "appVersion",
+    "deviceName"
+  ],
+  "discover": []
+}
