@@ -2,7 +2,7 @@
   "date": "2026-10-26",
   "project": "见微视觉测振仪",
   "files": 4429,
-  "total_bytes": 964873365,
+  "total_bytes": 964873826,
   "excluded": [
     ".git/",
     ".agents/",
@@ -25,8 +25,8 @@
     },
     {
       "path": ".github/workflows/app-builds.yml",
-      "bytes": 4933,
-      "sha256": "44797e105e53e751a291780b624abda1d844151dd19a57edc25baadd63535449"
+      "bytes": 5394,
+      "sha256": "d9b56ddb319646c86cca57ecb2ef3603ebe7e95b98c671c996de35e6fc751966"
     },
     {
       "path": ".gitignore",

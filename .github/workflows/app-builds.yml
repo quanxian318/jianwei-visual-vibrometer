@@ -19,6 +19,10 @@ jobs:
     runs-on: macos-15
     steps:
       - uses: actions/checkout@v4
+        with:
+          # Only the app: the full tree has Vitis paths longer than Windows' 260 characters.
+          sparse-checkout: |
+            06_软件与FPGA/mobile_app
       - name: Version
         run: echo "VER=$(sed -n 's/^VERSION_NAME=//p' "$APP/tools/build_apk.sh")" >> "$GITHUB_ENV"
       - name: Generate Xcode project
@@ -54,6 +58,10 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          # Only the app: the full tree has Vitis paths longer than Windows' 260 characters.
+          sparse-checkout: |
+            06_软件与FPGA/mobile_app
       - name: Run the Windows build (--selftest)
         shell: bash
         run: |
@@ -77,7 +85,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with: { ref: '${{ github.ref_name }}' }
+        with:
+          ref: '${{ github.ref_name }}'
+          sparse-checkout: |
+            06_软件与FPGA/mobile_app
+            15_手机APP_20261025
       - uses: actions/download-artifact@v4
         with: { path: '${{ runner.temp }}/a' }
       - name: Commit the iOS package and run evidence
