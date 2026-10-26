@@ -74,7 +74,7 @@ jobs:
           png = d.pop('png', None)
           if png: open(r'C:\jwout\windows_hero.png', 'wb').write(base64.b64decode(png.split(',', 1)[1]))
           json.dump(d, open(r'C:\jwout\windows_selftest.json', 'w', encoding='utf-8'), ensure_ascii=False, indent=2)
-          print(json.dumps(d, ensure_ascii=False, indent=2))
+          print(json.dumps(d, indent=2))  # ASCII: the runner console is cp1252
           assert d['connect'] and d['hero'] and 'discover' in d['bridge'] and 'main' in d['boards']
           PY
       - uses: actions/upload-artifact@v4
