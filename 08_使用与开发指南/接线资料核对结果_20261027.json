@@ -1,0 +1,121 @@
+{
+  "date": "2026-10-27",
+  "base_commit": "b89583744287a421303373009ed113a8bd004810",
+  "scope": "documentation_only",
+  "code_and_board_changed": false,
+  "wire_rows": 165,
+  "unique_board_connector_pin_keys": 165,
+  "procurement_links": 12,
+  "local_links_missing": [],
+  "pin_source_hash_checks": [
+    {
+      "file": "09_团队开发资料_20261020/02_网表与逐脚查询/最新工程提取/主载板PCB_逐引脚网表.csv",
+      "github_blob_sha1": "f595838fa2fe250796b186de4a2f20343fafd5aa",
+      "matches_remote": true
+    },
+    {
+      "file": "09_团队开发资料_20261020/02_网表与逐脚查询/最新工程提取/前面板PCB_逐引脚网表.csv",
+      "github_blob_sha1": "9378199ae8efd1805e22d49709aabbfd3d0f1f62",
+      "matches_remote": true
+    }
+  ],
+  "module_physical_pin_numbers_complete": false,
+  "files": [
+    {
+      "path": "08_使用与开发指南/整机装配_逐引脚接线与模块互连.md",
+      "sha256": "27bcc06eeae5a4854a493a0f55dd207dc292c9bef9e422f64d41e0b584b2ca5a"
+    },
+    {
+      "path": "08_使用与开发指南/整机装配_逐引脚线束表.csv",
+      "sha256": "d3fddb6a970051ecf68b2fc5f4d49b1d759733c272f269d4fce478051af561c5"
+    },
+    {
+      "path": "08_使用与开发指南/已选模块_采购链接与规格.md",
+      "sha256": "b5352d32157873cfe34e7f2a979b56e1490ac2acc25fb1289b6b7030a241bae4"
+    },
+    {
+      "path": "08_使用与开发指南/已选模块_采购链接.csv",
+      "sha256": "301cff8cc24817b414085844ce142f86cbd83ee2bdf82b5043bd6ccbf0a4d8e3"
+    },
+    {
+      "path": "08_使用与开发指南/数据手册与资料覆盖核对.md",
+      "sha256": "3b5094e62d3230b882c671d3e839d03883fe6177c6cf29bcd2f80ca36fab946c"
+    },
+    {
+      "path": "README.md",
+      "sha256": "54a033068e1b3269e0fefba5ca20be14807172cf44c2c72ae3c8baf9872ce330"
+    },
+    {
+      "path": "云端资料入口.md",
+      "sha256": "5ee41800d9c08cc816b133bd12c0fa9aab810649830aa938fc504aa3c6374a3d"
+    },
+    {
+      "path": "08_使用与开发指南/README.md",
+      "sha256": "2eebf74dceaaa0741c30ba56b2a88c42c9dcf8e10cce2d4aa790b9306fa51ca5"
+    },
+    {
+      "path": "08_使用与开发指南/主载板与前面板成品使用及开发指南_V1.0.md",
+      "sha256": "a1996e45c6f6bb96b15d5fadb79aa71e0d204889739740b6dd82c6572723d188"
+    },
+    {
+      "path": "09_团队开发资料_20261020/README.md",
+      "sha256": "cbfefaa4600e8aaeb2f43d23932ff5e2b1b32af11a060e749013db5a45af05e5"
+    },
+    {
+      "path": "09_团队开发资料_20261020/07_模块和IC资料/已选模块接入与驱动.md",
+      "sha256": "eaa8dce8edc2dfc5089edb1000203fa4d4638be92836b2248a2f1157ffb20293"
+    },
+    {
+      "path": "09_团队开发资料_20261020/07_模块和IC资料/资料索引与官网.md",
+      "sha256": "def996b350642d3c4091c3134f50fe376f080a1411bd32ca456239c57cc93ac1"
+    },
+    {
+      "path": "09_团队开发资料_20261020/03_安装与使用/两块PCB成品使用手册.md",
+      "sha256": "af9e25aaa860a06ea4bbac08cfdb9c13a961cb22a843bd2cd87a7431d4ccbc4a"
+    },
+    {
+      "path": "09_团队开发资料_20261020/05_AX7010开发/AX7010逐针定义.md",
+      "sha256": "6f45f7eb4998b1c29d047aa9e391903ed192f4f1930497297e6223366a3a5b95"
+    },
+    {
+      "path": "08_使用与开发指南/整机装配_逐引脚接线与模块互连.html",
+      "sha256": "90d6b5cc6c3aa2dcf770303ce9dc09ffaa65ad1761555bd8f17b995710967746"
+    },
+    {
+      "path": "08_使用与开发指南/已选模块_采购链接与规格.html",
+      "sha256": "3ae1ed30ced888befd6dc1d9d8a0295ad9e83a3b8c25fdb1833c0aac2e23b8d2"
+    },
+    {
+      "path": "08_使用与开发指南/数据手册与资料覆盖核对.html",
+      "sha256": "cae1702c52350b4849e5ff5d2ff0aceb61419a2a78a30c4bc66517e2626c29f7"
+    },
+    {
+      "path": "08_使用与开发指南/README.html",
+      "sha256": "2c505b850f42782b2c6e1b1777f2afcf16a5cecb4f940748e705c3907094fe03"
+    },
+    {
+      "path": "08_使用与开发指南/主载板与前面板成品使用及开发指南_V1.0.html",
+      "sha256": "6ee19beb64440559d417322d3f16a34111b42d5d510c0d2c5146317346e8a6ec"
+    },
+    {
+      "path": "09_团队开发资料_20261020/README.html",
+      "sha256": "8c2dfa07a030fa2cf783c3b7f9a84f770827df641599ef56a04ee393145dcb8f"
+    },
+    {
+      "path": "09_团队开发资料_20261020/07_模块和IC资料/已选模块接入与驱动.html",
+      "sha256": "f195a4404c91c380a00f62c8559753e840a7a215c9382974026fcd9ae58a6d64"
+    },
+    {
+      "path": "09_团队开发资料_20261020/07_模块和IC资料/资料索引与官网.html",
+      "sha256": "c34a0d05a79e5a6681b1490f52862688a07c18182a8e557b64187bccbbbf3089"
+    },
+    {
+      "path": "09_团队开发资料_20261020/03_安装与使用/两块PCB成品使用手册.html",
+      "sha256": "f6b5a0670caa8afe785b6388d12fa0c60cd4ed045d4b5eec6c1e2a556dee8880"
+    },
+    {
+      "path": "09_团队开发资料_20261020/05_AX7010开发/AX7010逐针定义.html",
+      "sha256": "a9ed393210472acaf4618c92ca0e759224ae0f480a845aae39d8989883f1f1f9"
+    }
+  ]
+}
