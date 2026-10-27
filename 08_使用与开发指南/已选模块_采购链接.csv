@@ -1,5 +1,5 @@
 ﻿编号,配件,用户提供的原始链接,接口,规格及缺口
-01,MP34DT01/MP34DT05 PDM麦克风,https://c.tb.cn/h.j3HadfARJGUp9LN?tk=SjC6TwmhEcr,J706,接3.3V、GND、CLK、DAT；实际发货芯片后缀、L/R固定方式待实物确认。现有离线手册是MP34DT01，不冒充MP34DT05手册。
+01,MP34DT01 PDM麦克风,https://c.tb.cn/h.j3HadfARJGUp9LN?tk=SjC6TwmhEcr,J706,接3.3V、GND、CLK、DAT；用户已确认型号MP34DT01；L/R固定方式及模块电路待实物核对，现有MP34DT01离线手册适用该芯片型号。
 02,12V/650nm十字线红光投影,https://c.tb.cn/h.jWR2SRAIC5UCfys?tk=1EehTwmSk9m,J304 / LED2,用户既定12V、650nm十字线；商品有3–12V等选项，保存订单规格及额定电流。
 03,普莱特三色声光警示灯,https://c.tb.cn/h.jWR2oLPQHkXsLb6?tk=z7QBTwm7nYm,J302-1…5，经SW302,需要12V、公共正极、红黄绿及蜂鸣器四路独立负端；实际线色、是否含蜂鸣器、公共极性待该款接线图。
 04,GY-291 ADXL345,https://c.tb.cn/h.jWRWL0xm218O5gE?tk=2ASYTwmRxEn,J703,用户本轮确认标题24对应本模块；选可用4线SPI的版本，核对SDO没有硬接GND及3.3V供电路径。

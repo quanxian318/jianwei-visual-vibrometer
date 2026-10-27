@@ -1,6 +1,6 @@
 {
   "date": "2026-10-27",
-  "base_commit": "b89583744287a421303373009ed113a8bd004810",
+  "base_commit": "8c9913e31044831cd1beefff74773a52ca01150b",
   "scope": "documentation_only",
   "code_and_board_changed": false,
   "wire_rows": 165,
@@ -23,23 +23,23 @@
   "files": [
     {
       "path": "08_使用与开发指南/整机装配_逐引脚接线与模块互连.md",
-      "sha256": "27bcc06eeae5a4854a493a0f55dd207dc292c9bef9e422f64d41e0b584b2ca5a"
+      "sha256": "e323b45099fe7c6ace27fe45b789d39b482be4354e5844d5b59d836676226a62"
     },
     {
       "path": "08_使用与开发指南/整机装配_逐引脚线束表.csv",
-      "sha256": "d3fddb6a970051ecf68b2fc5f4d49b1d759733c272f269d4fce478051af561c5"
+      "sha256": "fdd41d4a904186d3a209134a35e47a40c5402b5082073d37471f534eefe09bbe"
     },
     {
       "path": "08_使用与开发指南/已选模块_采购链接与规格.md",
-      "sha256": "b5352d32157873cfe34e7f2a979b56e1490ac2acc25fb1289b6b7030a241bae4"
+      "sha256": "27e388a42181e9cbc5bf898e7493282e6f85a09b8e6ab9d30f4f5a4cccc681c8"
     },
     {
       "path": "08_使用与开发指南/已选模块_采购链接.csv",
-      "sha256": "301cff8cc24817b414085844ce142f86cbd83ee2bdf82b5043bd6ccbf0a4d8e3"
+      "sha256": "1acaf0deb8520c52b7d3287c37766ee820eac2e5dde0c6801c441c3afc4ca971"
     },
     {
       "path": "08_使用与开发指南/数据手册与资料覆盖核对.md",
-      "sha256": "3b5094e62d3230b882c671d3e839d03883fe6177c6cf29bcd2f80ca36fab946c"
+      "sha256": "703cadc81330d424bbc418024582255c70d4ab8c294ae65856e003683c8d4d33"
     },
     {
       "path": "README.md",
@@ -59,11 +59,11 @@
     },
     {
       "path": "09_团队开发资料_20261020/README.md",
-      "sha256": "cbfefaa4600e8aaeb2f43d23932ff5e2b1b32af11a060e749013db5a45af05e5"
+      "sha256": "6f98897c57d3ae7c1f1309d43b34cafec62149ca62781ea7c235e444e5248099"
     },
     {
       "path": "09_团队开发资料_20261020/07_模块和IC资料/已选模块接入与驱动.md",
-      "sha256": "eaa8dce8edc2dfc5089edb1000203fa4d4638be92836b2248a2f1157ffb20293"
+      "sha256": "bbcc768503d75f2136f7a0eede9d2d8914841f3a63429d7ff126041d15021e5c"
     },
     {
       "path": "09_团队开发资料_20261020/07_模块和IC资料/资料索引与官网.md",
@@ -71,7 +71,7 @@
     },
     {
       "path": "09_团队开发资料_20261020/03_安装与使用/两块PCB成品使用手册.md",
-      "sha256": "af9e25aaa860a06ea4bbac08cfdb9c13a961cb22a843bd2cd87a7431d4ccbc4a"
+      "sha256": "2c9dfba3dda6010d0039bd69af60b7b8baa631b5832db32284623f0fcc38128e"
     },
     {
       "path": "09_团队开发资料_20261020/05_AX7010开发/AX7010逐针定义.md",
@@ -79,15 +79,15 @@
     },
     {
       "path": "08_使用与开发指南/整机装配_逐引脚接线与模块互连.html",
-      "sha256": "90d6b5cc6c3aa2dcf770303ce9dc09ffaa65ad1761555bd8f17b995710967746"
+      "sha256": "54eaec666b04b83c111f614722a49446969cdb2e16149e1e7934f9b77d904ea0"
     },
     {
       "path": "08_使用与开发指南/已选模块_采购链接与规格.html",
-      "sha256": "3ae1ed30ced888befd6dc1d9d8a0295ad9e83a3b8c25fdb1833c0aac2e23b8d2"
+      "sha256": "886b5b11ac8411497cd2cff10900715e14ba6d7e138715006a0dfdb2973060d7"
     },
     {
       "path": "08_使用与开发指南/数据手册与资料覆盖核对.html",
-      "sha256": "cae1702c52350b4849e5ff5d2ff0aceb61419a2a78a30c4bc66517e2626c29f7"
+      "sha256": "a0e2fc964234701c54d008094ee02a60bfbcd729f45e79d99bc862733da632f6"
     },
     {
       "path": "08_使用与开发指南/README.html",
@@ -99,11 +99,11 @@
     },
     {
       "path": "09_团队开发资料_20261020/README.html",
-      "sha256": "8c2dfa07a030fa2cf783c3b7f9a84f770827df641599ef56a04ee393145dcb8f"
+      "sha256": "1dc788c5dcff1c6517d9e04717d7afa18f6f599c8e05e326d3099c5cc74c2157"
     },
     {
       "path": "09_团队开发资料_20261020/07_模块和IC资料/已选模块接入与驱动.html",
-      "sha256": "f195a4404c91c380a00f62c8559753e840a7a215c9382974026fcd9ae58a6d64"
+      "sha256": "9ecb7425e47dbf45de5f52822d8aa7ec506886a6d76753a96ba777b572f674f8"
     },
     {
       "path": "09_团队开发资料_20261020/07_模块和IC资料/资料索引与官网.html",
@@ -111,11 +111,13 @@
     },
     {
       "path": "09_团队开发资料_20261020/03_安装与使用/两块PCB成品使用手册.html",
-      "sha256": "f6b5a0670caa8afe785b6388d12fa0c60cd4ed045d4b5eec6c1e2a556dee8880"
+      "sha256": "c8f4c220ba1c3699d8c026d4ce6ad816a4815d634632f5903bd39ee7c6225cd0"
     },
     {
       "path": "09_团队开发资料_20261020/05_AX7010开发/AX7010逐针定义.html",
       "sha256": "a9ed393210472acaf4618c92ca0e759224ae0f480a845aae39d8989883f1f1f9"
     }
-  ]
+  ],
+  "confirmed_microphone_model": "MP34DT01",
+  "microphone_confirmation_source": "用户2026-10-27直接确认；L/R与模块电路仍待实物核对"
 }
