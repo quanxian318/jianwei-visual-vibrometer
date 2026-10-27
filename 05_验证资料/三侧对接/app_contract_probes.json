@@ -1,0 +1,25 @@
+{
+  "settings_changed": [
+    "voice=true",
+    "buzzer=false"
+  ],
+  "commands_sent": [
+    {
+      "cmd": "set",
+      "args": {
+        "buzzer": false
+      }
+    }
+  ],
+  "reproduced_lost_setting": true,
+  "acoustic_record": {
+    "available": true,
+    "valid": true,
+    "visual": {
+      "relation": "differ",
+      "acoustic_hz": 20
+    }
+  },
+  "acoustic_row_shown": false,
+  "reproduced_hidden_acoustic": true
+}

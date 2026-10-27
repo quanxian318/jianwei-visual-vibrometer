@@ -1,0 +1,105 @@
+PASS point: starts without crashing
+PASS measuring box accepts width and height
+PASS a box below 16 px is refused and leaves the size unchanged
+PASS capture accepted
+PASS capture refuses resizing the measuring box
+PASS record keeps the point selected at capture start
+PASS a clean line is reported as a clear dominant frequency
+PASS capture tracks the box size set by the operator
+PASS point: SIGTERM follows orderly exit
+PASS pixel: starts without crashing
+PASS startup has no normal vibration judgment
+PASS uncalibrated pixels do not use mm alarm thresholds
+PASS pixel: SIGTERM follows orderly exit
+PASS startup: starts without crashing
+PASS PFAIL low at boot is retained
+PASS startup: SIGTERM follows orderly exit
+PASS lighting: starts without crashing
+PASS automatic light is on during capture
+PASS record retains automatic light state after it is switched off
+PASS lighting: SIGTERM follows orderly exit
+PASS laser: starts without crashing
+PASS laser projector switches on
+PASS lighting and laser are separate outputs
+PASS laser is off while displacement is tracked
+PASS capture refuses manually re-enabling the projector
+PASS a refused projector command leaves LED2 off
+PASS capture refuses changing the projector interlock policy
+PASS record notes the laser switched off for the capture
+PASS laser is back on after the capture
+PASS mute silences the alarm
+PASS mute with on=false undoes it
+PASS laser: SIGTERM follows orderly exit
+PASS shutdown: starts without crashing
+PASS shutdown completes during capture
+PASS cancelled capture produces no late result
+PASS shutdown: SIGTERM follows orderly exit
+PASS settings: starts without crashing
+PASS the zoomed view can be moved
+PASS the zoomed view stays inside the image
+PASS settings are applied
+PASS warning threshold above the alarm threshold is refused
+PASS a refused change leaves the settings unchanged
+PASS settings are written to the settings file
+PASS settings and the box size survive a restart
+PASS settings: SIGTERM follows orderly exit
+PASS multipoint: starts
+PASS multipoint: valid layout, no baseline yet
+PASS multipoint: measuring needs a baseline
+PASS multipoint: baseline capture starts
+PASS multipoint: baseline saved for this layout
+PASS multipoint: one baseline file
+PASS multipoint: a baseline is not a measurement record
+PASS multipoint: restarts
+PASS multipoint: baseline found again after a restart
+PASS multipoint: measurement starts
+PASS multipoint: 7 Hz found above the baseline
+PASS multipoint: record lists the points above the baseline
+PASS multipoint: pixels, no mm alarm level
+PASS multipoint: moving the box needs a new baseline
+PASS multipoint: SIGTERM follows orderly exit
+PASS acoustic: starts
+PASS acoustic: synthetic source ready at 31.25 kS/s
+PASS acoustic: capture accepted
+PASS acoustic: the envelope agrees with the camera at 12 Hz
+PASS acoustic: record holds the capture window
+PASS acoustic: WAV and envelope spectrum saved
+PASS acoustic: SIGTERM follows orderly exit
+PASS app api: starts
+PASS app api: UDP discovery answers with the HTTP port
+PASS app api: unpaired requests are refused (with CORS)
+PASS app api: pairing without a shown code fails
+PASS app api: pairing code requested
+PASS app api: the code is shown on the device screen
+PASS app api: a wrong code is refused
+PASS app api: the right code returns a token
+PASS app api: token kept on disk
+PASS app api: live state with the recent waveform
+PASS app api: live state without the waveform fits a gateway frame
+PASS app api: commands outside the app list are refused
+PASS app api: command applied
+PASS app api: measurement started from the app
+PASS app api: live state carries the result level
+PASS app api: record list
+PASS app api: record detail with decimated curves
+PASS app api: decimated spectrum keeps the 9 Hz peak
+PASS app api: raw CSV download
+PASS app api: record ids cannot leave the records folder
+PASS app api: camera preview as BMP
+PASS app api: unpair revokes the token
+PASS app api: SIGTERM follows orderly exit
+PASS app api open: starts
+PASS app api open: live state without pairing
+PASS gateway: starts
+PASS gateway: status and settings published
+PASS gateway: published status carries the live state
+PASS gateway: APP_COMMAND executed and answered
+PASS gateway: status republished after the command
+PASS gateway: commands outside the gateway list are refused
+PASS gateway: a new phone is shown on the device screen
+PASS gateway: measurement started through the gateway
+PASS gateway: result curves and records published
+PASS gateway: published spectrum keeps the 7 Hz peak
+PASS gateway: newest record first
+PASS gateway: every PUBLISH fits one frame
+PASS gateway: SIGTERM follows orderly exit

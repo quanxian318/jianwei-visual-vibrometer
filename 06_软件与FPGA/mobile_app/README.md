@@ -1,8 +1,10 @@
-# mobile_app — 见微测振 Android APP
+# 见微测振APP
 
-说明、接口与验证结果见 [15_手机APP_20261025](../../15_手机APP_20261025/README.md)。
+[使用、安装、三平台构建及API说明](../../04_使用指南/APP使用与开发.md)。
 
-- `web/`：界面（HTML/CSS/JS，无构建步骤）。桌面浏览器打开 `web/index.html` 可直接试用演示模式。
-- `android/`：Java WebView 外壳（`MainActivity` 与 `VibmonNative` 桥：UDP 发现、振动、分享、保存到下载、状态栏配色）、清单与资源。
-- `tools/build_apk.sh`：无需 Android SDK 的构建脚本，输出 `dist/JianweiVibro-<版本>.apk`。`make_icons.py` 生成图标，`make_fonts.py` 生成字体子集，`apk_pack.py` 负责对齐，`signer/ApkSign.java` 负责签名。
-- `docs/`：512 px 商店图标等。
+- `web`：三平台共用界面与HTTP客户端。
+- `android`、`ios`、`windows`：各自原生外壳。
+- `dist`：当前安装包；iOS包需自行签名安装。
+- `tools`：构建与PCB纹理生成脚本。
+
+[三侧对接审查](../../05_验证资料/三侧对接/三侧对接审查.md)记录已复现的声学字段和连续设置问题，本次目录整理未修改界面逻辑。PCB纹理生成脚本读取根目录`01_硬件工程`的Gerber、BOM及丝印坐标。

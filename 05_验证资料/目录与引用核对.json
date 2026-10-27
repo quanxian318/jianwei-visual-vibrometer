@@ -1,0 +1,14 @@
+{
+  "base_commit": "7a2bb767785b2bf3d1d557239eceefc233d50ba3",
+  "protected_runtime_files": 261,
+  "runtime_files_changed": [],
+  "unchanged_binary_and_hardware_assets": 545,
+  "missing_links": [],
+  "pdf_count": 55,
+  "all_existing_runtime_and_config_files_unchanged": 410,
+  "vivado_explicit_inputs_present": 29,
+  "pcb_texture_generator_inputs_present": true,
+  "ci_yaml_parse": "parser unavailable; affected path references checked",
+  "empty_directories": [],
+  "native_project_sha256": "1ae30e0f047ea569a36b49f48bcf373e2a66ce3385fbe8c1cd8e1e7a64d261be"
+}

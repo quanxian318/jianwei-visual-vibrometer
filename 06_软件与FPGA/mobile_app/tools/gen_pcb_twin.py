@@ -33,13 +33,13 @@ from PIL import Image, ImageChops, ImageDraw, ImageFilter
 HERE = os.path.dirname(os.path.abspath(__file__))
 APP = os.path.dirname(HERE)
 ROOT = os.path.abspath(os.path.join(APP, '..', '..'))
-HW = os.path.join(ROOT, '09_团队开发资料_20261020', '01_硬件工程与制造')
-DESIGN = os.path.join(ROOT, '00_当前设计方案')
+HW = os.path.join(ROOT, '01_硬件工程')
+DESIGN = HW
 PX_MM = 14  # texture resolution
 
 BOARDS = {
     'main': dict(zip='Gerber_主载板PCB_2026-10-20.zip', bom='主载板_BOM_V1.10.csv',
-                 bodies=os.path.join('PCB背面丝印_1比1底面投影_20261020', '模块导入尺寸与坐标.json')),
+                 bodies=os.path.join('丝印', '主载板', '模块导入尺寸与坐标.json')),
     'front': dict(zip='Gerber_前面板PCB_2026-10-20.zip', bom='前面板小板_BOM_V1.10.csv', bodies=None),
 }
 

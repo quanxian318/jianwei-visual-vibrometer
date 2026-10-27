@@ -1,8 +1,0 @@
-{
-  "result": "PASS",
-  "module_svg_pairs": 8,
-  "pin_csv_to_gerber": 43,
-  "mirrored_coordinates_checked": true,
-  "individual_to_full_board_coordinates_checked": true,
-  "pcb_drc_run": false
-}

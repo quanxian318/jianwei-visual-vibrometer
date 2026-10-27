@@ -89,13 +89,13 @@ jobs:
           ref: '${{ github.ref_name }}'
           sparse-checkout: |
             06_软件与FPGA/mobile_app
-            15_手机APP_20261025
+            05_验证资料/APP验证
       - uses: actions/download-artifact@v4
         with: { path: '${{ runner.temp }}/a' }
       - name: Commit the iOS package and run evidence
         run: |
           VER=$(sed -n 's/^VERSION_NAME=//p' "$APP/tools/build_apk.sh")
-          CI="15_手机APP_20261025/构建验证"
+          CI="05_验证资料/APP验证/构建验证"
           rm -f "$APP"/dist/JianweiVibro-*-ios-unsigned.ipa && mkdir -p "$CI"
           cp "$RUNNER_TEMP/a/ios/JianweiVibro-$VER-ios-unsigned.ipa" "$APP/dist/"
           cp "$RUNNER_TEMP"/a/ios/*.png "$RUNNER_TEMP"/a/windows/* "$CI/"
