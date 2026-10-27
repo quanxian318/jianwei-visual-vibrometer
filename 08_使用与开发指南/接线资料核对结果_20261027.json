@@ -1,6 +1,6 @@
 {
   "date": "2026-10-27",
-  "base_commit": "8c9913e31044831cd1beefff74773a52ca01150b",
+  "base_commit": "f02d0c52a0e7c937b3a2e64d2e61e34140632106",
   "scope": "documentation_only",
   "code_and_board_changed": false,
   "wire_rows": 165,
@@ -23,7 +23,7 @@
   "files": [
     {
       "path": "08_使用与开发指南/整机装配_逐引脚接线与模块互连.md",
-      "sha256": "e323b45099fe7c6ace27fe45b789d39b482be4354e5844d5b59d836676226a62"
+      "sha256": "d90b03d78dcad16443aa741ce6a871c613bc5f5f5600d07dbc4bb75db509656a"
     },
     {
       "path": "08_使用与开发指南/整机装配_逐引脚线束表.csv",
@@ -31,15 +31,15 @@
     },
     {
       "path": "08_使用与开发指南/已选模块_采购链接与规格.md",
-      "sha256": "27e388a42181e9cbc5bf898e7493282e6f85a09b8e6ab9d30f4f5a4cccc681c8"
+      "sha256": "0defeba206afed0f4703b9593cd608f2697f809d3d68a46b4749fac23ac430bd"
     },
     {
       "path": "08_使用与开发指南/已选模块_采购链接.csv",
-      "sha256": "1acaf0deb8520c52b7d3287c37766ee820eac2e5dde0c6801c441c3afc4ca971"
+      "sha256": "76387128e90b76b320bd0355c1693dd0b12eb16c8a0a3d1f53b6e4877b777974"
     },
     {
       "path": "08_使用与开发指南/数据手册与资料覆盖核对.md",
-      "sha256": "703cadc81330d424bbc418024582255c70d4ab8c294ae65856e003683c8d4d33"
+      "sha256": "48d1cbd68424ad3f60ada451acc650487f911d0a236a1d3304447f777eb614b6"
     },
     {
       "path": "README.md",
@@ -51,11 +51,11 @@
     },
     {
       "path": "08_使用与开发指南/README.md",
-      "sha256": "2eebf74dceaaa0741c30ba56b2a88c42c9dcf8e10cce2d4aa790b9306fa51ca5"
+      "sha256": "df06aa7459b8d457cc7998d131473cc7651982cd309d84296a75e2a6980002c5"
     },
     {
       "path": "08_使用与开发指南/主载板与前面板成品使用及开发指南_V1.0.md",
-      "sha256": "a1996e45c6f6bb96b15d5fadb79aa71e0d204889739740b6dd82c6572723d188"
+      "sha256": "782fe1d3e3e3a9a529aae57d077d431d577853b405684368755985685dfeb8b9"
     },
     {
       "path": "09_团队开发资料_20261020/README.md",
@@ -63,7 +63,7 @@
     },
     {
       "path": "09_团队开发资料_20261020/07_模块和IC资料/已选模块接入与驱动.md",
-      "sha256": "bbcc768503d75f2136f7a0eede9d2d8914841f3a63429d7ff126041d15021e5c"
+      "sha256": "d73a9d889dd576cb539af59b1f809c2b08878dd1152ff2abf04ef6f30250f14f"
     },
     {
       "path": "09_团队开发资料_20261020/07_模块和IC资料/资料索引与官网.md",
@@ -71,7 +71,7 @@
     },
     {
       "path": "09_团队开发资料_20261020/03_安装与使用/两块PCB成品使用手册.md",
-      "sha256": "2c9dfba3dda6010d0039bd69af60b7b8baa631b5832db32284623f0fcc38128e"
+      "sha256": "b03c74fab8cc7f018edfe684c9df75fc3ab5a44ef3e289b310c060df88106d56"
     },
     {
       "path": "09_团队开发资料_20261020/05_AX7010开发/AX7010逐针定义.md",
@@ -79,23 +79,23 @@
     },
     {
       "path": "08_使用与开发指南/整机装配_逐引脚接线与模块互连.html",
-      "sha256": "54eaec666b04b83c111f614722a49446969cdb2e16149e1e7934f9b77d904ea0"
+      "sha256": "41826664b607bf47ecffaf1496becf677cba3557fa1b0c873fd992899f6753b6"
     },
     {
       "path": "08_使用与开发指南/已选模块_采购链接与规格.html",
-      "sha256": "886b5b11ac8411497cd2cff10900715e14ba6d7e138715006a0dfdb2973060d7"
+      "sha256": "af957f8676cfffae923a51709342d4c115154d5942aa946cb0f9b6631e21882a"
     },
     {
       "path": "08_使用与开发指南/数据手册与资料覆盖核对.html",
-      "sha256": "a0e2fc964234701c54d008094ee02a60bfbcd729f45e79d99bc862733da632f6"
+      "sha256": "7426e76c12dd634f16b2df1e69b794d4a14a104be095da9fb1034751296bdfd1"
     },
     {
       "path": "08_使用与开发指南/README.html",
-      "sha256": "2c505b850f42782b2c6e1b1777f2afcf16a5cecb4f940748e705c3907094fe03"
+      "sha256": "f1a297ff02d13f1f69c106a87210934048df0433293b0c604f6052c299d719c2"
     },
     {
       "path": "08_使用与开发指南/主载板与前面板成品使用及开发指南_V1.0.html",
-      "sha256": "6ee19beb64440559d417322d3f16a34111b42d5d510c0d2c5146317346e8a6ec"
+      "sha256": "8dacc5581640380be0a58cabd352a3b74da29391047844034073a7bbffb13e41"
     },
     {
       "path": "09_团队开发资料_20261020/README.html",
@@ -103,7 +103,7 @@
     },
     {
       "path": "09_团队开发资料_20261020/07_模块和IC资料/已选模块接入与驱动.html",
-      "sha256": "9ecb7425e47dbf45de5f52822d8aa7ec506886a6d76753a96ba777b572f674f8"
+      "sha256": "5708ce22752682c8816b4531c6f53474831412d47093037bcf2dfd53851d370c"
     },
     {
       "path": "09_团队开发资料_20261020/07_模块和IC资料/资料索引与官网.html",
@@ -111,13 +111,38 @@
     },
     {
       "path": "09_团队开发资料_20261020/03_安装与使用/两块PCB成品使用手册.html",
-      "sha256": "c8f4c220ba1c3699d8c026d4ce6ad816a4815d634632f5903bd39ee7c6225cd0"
+      "sha256": "6de6c23ad5753d44ffd2b475dbb884f77993072dc6f88a3ba46b3172e58df513"
     },
     {
       "path": "09_团队开发资料_20261020/05_AX7010开发/AX7010逐针定义.html",
       "sha256": "a9ed393210472acaf4618c92ca0e759224ae0f480a845aae39d8989883f1f1f9"
+    },
+    {
+      "path": "08_使用与开发指南/模块上电前设置_SEL与NFC拨码.md",
+      "sha256": "d19d43a146231404779ce94a4f158212a47604e6c6dd017393fa6d0ac6f53e92"
+    },
+    {
+      "path": "08_使用与开发指南/模块上电前设置_SEL与NFC拨码.html",
+      "sha256": "d28db34270d51d157b4334965fa61518c5cdd4de9dec82df5e1389abef934bdd"
     }
   ],
   "confirmed_microphone_model": "MP34DT01",
-  "microphone_confirmation_source": "用户2026-10-27直接确认；L/R与模块电路仍待实物核对"
+  "microphone_confirmation_source": "用户2026-10-27直接确认；L/R与模块电路仍待实物核对",
+  "microphone_sel": "SEL/LR direct-connected module: tie to module GND; check existing strap first",
+  "pn532_spi_dip": {
+    "1": "OFF",
+    "2": "ON",
+    "reference": "Elechouse V3 manual p3; use physical ON marking; power cycle"
+  },
+  "native_epro2_verified": {
+    "size": 2689861,
+    "git_blob_sha1": "b5e2830cbe0dc55166b604559171f8f93acb0728",
+    "zip_integrity": true,
+    "document_titles": [
+      "主载板原理图",
+      "主载板PCB",
+      "前面板原理图",
+      "前面板PCB"
+    ]
+  }
 }
