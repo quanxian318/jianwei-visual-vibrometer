@@ -1,0 +1,53 @@
+{
+  "provider": "百度智能云语音合成",
+  "voice": "度清影-甜美女声",
+  "selected_style": "3 清甜灵动",
+  "per": 4196,
+  "spd": 5,
+  "pit": 5,
+  "vol": 5,
+  "format": "PCM WAV, 16000Hz, 16bit, mono",
+  "processing": "100ms leading silence + 180ms trailing silence; no speed or pitch postprocessing",
+  "credentials_included": false,
+  "entries": [
+    {
+      "asset_id": "measure_done",
+      "spoken_text": "测量完成了，您可以查看结果。",
+      "emotion": "happy",
+      "seconds": 3.13,
+      "sha256": "57c01bfe7233bd09c36647d736cf5cd4251b906bc4e939de5e1856ec137b2244"
+    },
+    {
+      "asset_id": "vibration_warn",
+      "spoken_text": "检测到振动偏大，请留意设备状态。",
+      "emotion": "neutral",
+      "seconds": 4.577,
+      "sha256": "d6b07a21b440c3a3315c7629365b1de4a2d205bf38e8e6604e43118c044c66c4"
+    },
+    {
+      "asset_id": "vibration_alarm",
+      "spoken_text": "振动异常，请及时检查设备。",
+      "emotion": "neutral",
+      "seconds": 3.164,
+      "sha256": "e9c60883e089ab9313f543d32ce61e04be3362aa47b0626dab8e96df1a408dd3"
+    },
+    {
+      "asset_id": "print_failed",
+      "spoken_text": "这次没有打印成功，请检查打印机和纸张。",
+      "emotion": "neutral",
+      "seconds": 4.315,
+      "sha256": "4c99f52a14bd84140055fec4468329b27232e4f4d99cff247a1e2afc8d692094"
+    },
+    {
+      "asset_id": "storage_error",
+      "spoken_text": "存储卡出现异常，请检查一下。",
+      "emotion": "neutral",
+      "seconds": 3.665,
+      "sha256": "ea9720697e69f5ee2c45300eb4796d524d0864d928e9415b73415bfaa2ee1dd1"
+    }
+  ],
+  "measure_done_reused_from": "User-selected third preview; reused byte-for-byte",
+  "review": "Voice selected by user; all five WAVs validated; board playback not yet tested",
+  "voice_catalog": "https://cloud.baidu.com/doc/SPEECH/s/Rluv3uq3d",
+  "generated_at": "2026-10-28T13:37:31.060327+08:00"
+}
