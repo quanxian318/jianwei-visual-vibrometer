@@ -2,10 +2,13 @@
 #include <stddef.h>
 #include <stdint.h>
 
-#define VIBMON_NANO_VERSION "0.2.0"
+#define VIBMON_NANO_VERSION "0.2.1"
 #define VIBMON_NANO_PROFILE "carrier-2026-10-20"
 
 namespace cfg {
+
+// USB CDC console and J605 UART0. Independent of the AX UART1/NVS settings.
+constexpr uint32_t kDebugBaud = 115200;
 
 // AX link (protocol V1). Both ends must use the same baud; it is stored in
 // NVS and can be changed from the USB console ("baud <rate>", then reboot).

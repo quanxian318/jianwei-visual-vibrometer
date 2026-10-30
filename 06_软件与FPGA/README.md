@@ -6,7 +6,7 @@
 |---|---|---|
 | AX7010 PS Linux | [ax7010/linux/vibmon](ax7010/linux/vibmon/) | 相机采集、多点测振、PL双目/声学服务、触屏UI、记录和APP API；105项主机集成检查通过 |
 | AX7010 PL | [ax7010/pl](ax7010/pl/) | 视频/HDMI、Census/SGM双目、PDM接收；完整PL位移链和载板外设集成仍待完成 |
-| Nano ESP32 ABX00083 | [nano_esp32](nano_esp32/README.md) | NFC、辅助SD、I2S语音、Wi-Fi/NTP、掉电和APP网关；0.2.0完整编译通过，bin与语音卡文件已更新；烧录/实物联调待验收 |
+| Nano ESP32 ABX00083 | [nano_esp32](nano_esp32/README.md) | NFC、辅助SD、I2S语音、Wi-Fi/NTP、掉电和APP网关；0.2.1增加J605/USB双控制台，当前bin与构建验证见链接；该版本尚未烧录或实物联调 |
 | APP Android/iOS/Windows | [mobile_app](mobile_app/README.md) | 共用Web界面、设备发现、HTTP API、网关控制；[安装与接口说明](../04_使用指南/APP使用与开发.md) |
 | 共用协议 | [shared/vibproto](shared/vibproto/) | 帧、CRC、JSON及0x60/0x62 APP扩展；[基础协议说明](../04_使用指南/PS_Nano基础协议.md) |
 | Vivado重建基础 | [ax7010/vivado](ax7010/vivado/README.md) | 当前team_design脚本依赖的两个基础工程目录，保持相互路径 |

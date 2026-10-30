@@ -1,0 +1,4 @@
+2026-10-30; WSL g++ host tests; not a hardware test
+console_io: 10 scenarios passed (400 concurrent log lines)
+wav parser checks passed
+app_gateway: all checks passed

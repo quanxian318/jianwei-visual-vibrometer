@@ -2,22 +2,14 @@
 
 #include <stdarg.h>
 
-#include "freertos/FreeRTOS.h"
-#include "freertos/semphr.h"
+#include "console_io.h"
 
 namespace {
-SemaphoreHandle_t g_logMutex = nullptr;
 LogLevel g_level = LogLevel::kInfo;
-
-void writeNonBlocking(const char* text, size_t len) {
-  if (!Serial) return;  // no host has the port open
-  if (static_cast<size_t>(Serial.availableForWrite()) < len) return;
-  Serial.write(reinterpret_cast<const uint8_t*>(text), len);
-}
 }  // namespace
 
 void logBegin() {
-  if (g_logMutex == nullptr) g_logMutex = xSemaphoreCreateMutex();
+  console_io::begin();
 }
 
 void logSetLevel(LogLevel level) { g_level = level; }
@@ -41,13 +33,9 @@ void logPrintf(LogLevel level, const char* tag, const char* fmt, ...) {
   line[len++] = '\r';
   line[len++] = '\n';
   line[len] = 0;
-  if (g_logMutex) xSemaphoreTake(g_logMutex, portMAX_DELAY);
-  writeNonBlocking(line, len);
-  if (g_logMutex) xSemaphoreGive(g_logMutex);
+  console_io::write(line, len);
 }
 
 void logRaw(const char* text) {
-  if (g_logMutex) xSemaphoreTake(g_logMutex, portMAX_DELAY);
-  writeNonBlocking(text, strlen(text));
-  if (g_logMutex) xSemaphoreGive(g_logMutex);
+  console_io::write(text, strlen(text));
 }

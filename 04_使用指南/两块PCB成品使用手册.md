@@ -513,7 +513,7 @@ DS3231：0x68，配置INTCN=0、RS=00输出1Hz，BBSQW=0；校时前检查振荡
 
 | 接口 | 针序/用法 |
 |---|---|
-| J605 Nano UART | 1=GND；2=NANO_TX/D1；3=NANO_RX/D0。USB-TTL RX接2，TX接3，3.3V信号，供电脚不接 |
+| J605 Nano UART | 1=GND；2=NANO_TX/D1；3=NANO_RX/D0。USB-TTL RX接2，TX接3，3.3V信号，供电脚不接。固件0.2.1默认启用115200、8N1、无流控，`ping`/`help`/`status`等命令与USB-C共用 |
 | Nano USB-C | 下载及串口调试；本机约定调试时载板12V同时接通，避免单独USB供电牵动外围 |
 | AX7010原调试口 | 使用原板JTAG/UART及其官方接法，不从J801推断JTAG针序 |
 | J802板内I2C | 1=AX_3V3参考；2=GND；3=I2C0_SCL；4=I2C0_SDA。参考电压脚不作外设电源输出，不接调试器强供电 |

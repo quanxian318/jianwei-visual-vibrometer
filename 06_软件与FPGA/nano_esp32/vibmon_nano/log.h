@@ -1,8 +1,9 @@
 #pragma once
 #include <Arduino.h>
 
-// USB CDC logging that never blocks: lines are dropped when no host reads the
-// port. Never call from an ISR. Passwords and binary frames are not logged.
+// Queued USB CDC + J605 logging. loop() drains each port without waiting for
+// a terminal; whole new lines are dropped only when that port's queue is full.
+// Never call from an ISR. Passwords and binary frames are not logged.
 enum class LogLevel : uint8_t { kError = 0, kWarn = 1, kInfo = 2, kDebug = 3 };
 
 void logBegin();

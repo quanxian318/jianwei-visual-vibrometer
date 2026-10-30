@@ -75,8 +75,6 @@ bool g_irqLevel = false;
 
 void setup() {
   safeOutputs();
-  Serial.begin(115200);
-  Serial.setTxTimeoutMs(0);  // never block when no host reads the USB port
   logBegin();
   delay(50);
 

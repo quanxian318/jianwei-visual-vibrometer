@@ -9,6 +9,7 @@
 
 #include "app_config.h"
 #include "app_gateway.h"
+#include "console_io.h"
 #include "audio_service.h"
 #include "event_store.h"
 #include "link.h"
@@ -23,7 +24,6 @@
 namespace console {
 namespace {
 
-std::string g_line;
 uint32_t g_jobCounter = 0;
 
 void println(const std::string& s) {
@@ -95,9 +95,11 @@ void handle(const std::string& line) {
   if (a.empty()) return;
   const std::string& c = a[0];
   if (c == "help") {
-    println("help status events sd nfc | play <asset_id> [volume] | stop | wifi <ssid> [password] | wifi off");
+    println("help ping status events sd nfc | play <asset_id> [volume] | stop | wifi <ssid> [password] | wifi off");
     println("ap on|off | ap pass <8..63 chars> (phone app access point)");
     println("baud <rate> | flow on|off | log error|warn|info|debug | reboot");
+  } else if (c == "ping") {
+    println("pong");
   } else if (c == "status") {
     cmdStatus();
   } else if (c == "events") {
@@ -168,7 +170,7 @@ void handle(const std::string& line) {
     println("ok");
   } else if (c == "reboot") {
     println("rebooting");
-    delay(100);
+    console_io::drainBeforeRestart(100);
     ESP.restart();
   } else {
     println("unknown command; type help");
@@ -178,16 +180,7 @@ void handle(const std::string& line) {
 }  // namespace
 
 void poll() {
-  while (Serial.available() > 0) {
-    int ch = Serial.read();
-    if (ch < 0) break;
-    if (ch == '\r' || ch == '\n') {
-      if (!g_line.empty()) handle(g_line);
-      g_line.clear();
-    } else if (g_line.size() < 160) {
-      g_line += static_cast<char>(ch);
-    }
-  }
+  console_io::poll(handle);
 }
 
 }  // namespace console
