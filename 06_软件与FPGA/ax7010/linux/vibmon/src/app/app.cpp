@@ -803,7 +803,7 @@ void Application::onMeasureDone(const MeasureResult& r) {
     if (r.valid) {
       setMessage("停机基线已保存 (" + std::to_string(r.multipoint.baselineWindows) + " 个窗口)");
       if (panel_) panel_->flash(PanelService::Flash::kSuccess, now);
-      playVoice("measure_done");
+      playVoice("baseline_done");
     } else {
       setMessage("基线未保存: " + reasonText(r.reason));
     }

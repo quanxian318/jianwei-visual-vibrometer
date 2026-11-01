@@ -5,17 +5,17 @@
 - [主程序](vibmon_nano/vibmon_nano.ino) · [引脚定义](vibmon_nano/board_pins.h)。
 - [30针硬件对照](../../04_使用指南/Nano逐针定义.md) · [SEL和PN532拨码](../../04_使用指南/模块上电前设置_SEL与NFC拨码.md)。
 - [已完整编译的固件](bin/README_当前固件状态.md) · [构建验证](../../05_验证资料/Nano固件构建/构建验证.json)。
-- [SD卡文件](sd_card/) · [五条语音清单](../../04_使用指南/语音文件清单.csv)。
+- [SD卡文件](sd_card/) · [六条语音清单](../../04_使用指南/语音文件清单.csv)。
 
 ## 编译与烧录
 
-当前版本为0.2.1，增加J605 UART0控制台，与USB-C控制台共用命令和日志。构建结果及输入/产物哈希见[构建验证](../../05_验证资料/Nano固件构建/构建验证.json)。新版本尚未烧录或完成J605实物联调。
+当前版本为0.2.2，已于2026-11-01使用实际Nano板包编译通过，包含`baseline_done`语音资源ID、`nfc off/on`和`spi`诊断命令。保留J605/USB双控制台及原有保护。构建结果、输入和产物哈希见[构建验证](../../05_验证资料/Nano固件构建/构建验证.json)。本版尚未烧录；此前0.2.1完成过USB运行回复验证，不能代替0.2.2实测。
 
 1. 主载板断电，取下Nano，单独用USB-C数据线连接电脑。
 2. Arduino IDE中选 **Arduino Nano ESP32**，Pin Numbering选 **By Arduino pin (default)**，USB Mode选 **Normal mode (TinyUSB)**，分区保留 **With FAT partition（默认）**。验证板包版本为`2.0.18-20240930.arduino3`。
 3. 将本仓库`06_软件与FPGA/shared/vibproto`文件夹复制到Arduino Sketchbook的`libraries/vibproto`，确保`library.properties`与`src`直接位于其中。无需另装PN532、音频或ArduinoJson库。
 4. 打开`vibmon_nano/vibmon_nano.ino`，保留相邻全部.cpp/.h文件，选择Nano端口，验证并上传。没有运行端口时可双击RST进入启动加载模式后重新选择端口。该板使用DFU上传流程，不套用通用ESP32 Dev Module的擦除/引导文件教程。
-5. 上传后打开USB串口监视器，115200、换行，先发送`ping`应返回`pong`，再发送`status`查看版本0.2.1。单独USB供电时SD/NFC/AX链路未连接、PFAIL状态异常均需结合载板连接判断。
+5. 上传后打开USB串口监视器，115200、换行；自编USB串口客户端需同时置DTR/RTS有效，连接无回复时可保持DTR有效并将RTS关再开。先发送`ping`应返回`pong`，再发送`status`查看版本0.2.2。单独USB供电时SD/NFC/AX链路未连接、PFAIL状态异常均需结合载板连接判断。
 6. 断开USB，对准D13/VIN、D12/TX丝印插回J604/J606；核对主载板电源后再上电。载板12V仅接Nano VIN，不能插偏到VBUS/3V3。
 
 Windows已有Arduino IDE 1.8.19及板包时，在`06_软件与FPGA`执行：
@@ -28,9 +28,11 @@ powershell -NoProfile -ExecutionPolicy Bypass -File nano_esp32\build_nano.ps1 -A
 
 ## 语音卡与模块设置
 
-把`sd_card/voice`整个文件夹复制到J603所插FAT32卡根目录，形成`/voice/measure_done.wav`等五个路径。这是Nano辅助卡，与AX7010 Linux启动卡分开。
+`baseline_done`播放“停机基线已采集，请开始测量”。当前0.2.2预编译固件已包含该资源ID，WAV位于`sd_card/voice/baseline_done.wav`。声音从J603卡读取，未内嵌于应用BIN；需要把新文件复制到卡的`/voice/`并烧录0.2.2。PS本地源码已在基线保存成功处调用该ID，尚未重新构建或部署到AX7010；正式测量完成仍调用`measure_done`。
 
-五条文件为选定的“清甜灵动”女声：百度度清影，per=4196，16kHz、16bit、单声道PCM WAV。测量完成使用已选试听；预警、报警和异常用同一声线的中性语气。文案、时长、合成参数和SHA256见[合成记录](sd_card/语音合成记录.json)。播放无需联网，也无需百度API密钥。五条文件已完成SD卡写入后的读回哈希校验，板端播放未测试。
+把`sd_card/voice`整个文件夹复制到J603所插FAT32卡根目录，形成`/voice/measure_done.wav`等六个路径。这是Nano辅助卡，与AX7010 Linux启动卡分开。
+
+六条文件为选定的“清甜灵动”女声：百度度清影，per=4196，16kHz、16bit、单声道PCM WAV。测量完成使用已选试听；预警、报警和异常用同一声线的中性语气。文案、时长、合成参数和SHA256见[合成记录](sd_card/语音合成记录.json)。播放无需联网，也无需百度API密钥。原五条文件曾完成卡上读回校验；新增基线WAV已核对格式和SHA256，尚未写入实物语音卡。本版板端播放尚未实测。
 
 PN532 V3走SPI：拨码1 OFF、2 ON，按本块开关ON标记设置并重新上电。J602-8为NC，不接模块RSTO。J601接无源喇叭，SPK_P/SPK_N两脚均不是GND。MP34DT01不经Nano，由AX的PL/PS处理。
 
@@ -48,7 +50,11 @@ ping
 status
 events
 sd
+spi
 nfc
+nfc off
+play baseline_done 30
+nfc on
 play measure_done 20
 stop
 wifi <ssid> [password]
@@ -58,6 +64,8 @@ baud 115200
 flow on
 reboot
 ```
+
+`nfc off`停止本次运行的NFC初始化与轮询、保持PN_CS高，不切断模块电源；`nfc on`重新初始化，重启默认开启。关闭后等待约6秒再用`sd`检查挂载并播放语音。`spi`仅报告瞬时片选/MISO电平与服务状态。实板故障尚未定位，详细接线与判读见[共用SPI排查](../../04_使用指南/NFC与语音共用SPI排查.md)。
 
 ### J605接线与调试
 
@@ -73,7 +81,7 @@ J605没有供电脚，不接适配器VCC。Nano脱离主载板时可单独USB供
 
 两个入口独立组装命令，回复与日志同时输出到USB和J605；USB未打开也能独立使用J605。每路16KiB发送队列按可用FIFO容量分段发送，每轮最多发送128字节，不因USB终端停读而等待。队列满时丢弃新整条输出；超过160字节的输入整行拒绝，避免执行截断命令。控制台可影响设备运行，AX二进制协议不接到J605。
 
-已有0.2.0曾完成DFU上传和短USB命令响应验证；0.2.1的J605功能仍需在可正常启动的Nano上实测。此前RESET持续约0.6V的硬件异常不能由此固件修复。完整接口和验证边界见[APP说明](../../04_使用指南/APP使用与开发.md)及[三侧审查](../../05_验证资料/三侧对接/三侧对接审查.md)。
+0.2.1已在USB序列号E8F60ABE68C0的Nano上完成烧录和USB控制台验证，J605仍需单独接转串口实测。此前RESET约0.6V异常的Nano序列号为E4B063AE4034，本次运行结果不能证明旧板已修复。完整接口和验证边界见[APP说明](../../04_使用指南/APP使用与开发.md)及[三侧审查](../../05_验证资料/三侧对接/三侧对接审查.md)。
 
 ### 控制台主机回归
 

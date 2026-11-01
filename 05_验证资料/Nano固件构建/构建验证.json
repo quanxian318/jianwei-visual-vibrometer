@@ -1,47 +1,48 @@
 {
   "source_repo": "https://github.com/quanxian318/jianwei-visual-vibrometer",
-  "source_commit": "5cad5b8e2121a96ab0f65cc9045601560e1dfbbf",
-  "source_modified": true,
   "board": "Arduino Nano ESP32 ABX00083",
   "fqbn": "arduino:esp32:nano_nora:PartitionScheme=default,PinNumbers=default,USBMode=default",
   "core_version": "2.0.18-20240930.arduino3",
   "builder": "Arduino IDE 1.8.19 arduino-builder",
   "compiler": "xtensa-esp32s3-elf-gcc esp-2021r2-patch5-8.4.0",
+  "debug_uart": {
+    "connector": "J605",
+    "peripheral": "UART0 / Serial0",
+    "baud": 115200,
+    "format": "8N1",
+    "flow_control": false,
+    "rx_gpio": 44,
+    "tx_gpio": 43,
+    "pin1": "GND",
+    "pin2": "Nano TX -> adapter RX",
+    "pin3": "Nano RX <- adapter TX"
+  },
+  "firmware_version": "0.2.2",
+  "validation_date": "2026-11-01",
+  "source_commit": "b8720d239183871efbf1d8e9246ea10f27045d1b",
+  "source_modified": true,
+  "source_note": "Exact compiled inputs verified against repository and staged copies by SHA256.",
   "build_result": "passed",
   "build_summary": [
-    "Sketch uses 972037 bytes (30%) of program storage space. Maximum is 3145728 bytes.",
+    "Sketch uses 973429 bytes (30%) of program storage space. Maximum is 3145728 bytes.",
     "Global variables use 103276 bytes (31%) of dynamic memory, leaving 224404 bytes for local variables. Maximum is 327680 bytes."
   ],
+  "image_checksum_and_validation_hash": "valid",
   "hardware_flashed": false,
+  "hardware_usb_console_tested": false,
+  "hardware_j605_tested": false,
   "hardware_peripherals_tested": false,
-  "voice_wav_included": true,
-  "voice_files": [
-    {
-      "asset": "measure_done",
-      "seconds": 3.13
-    },
-    {
-      "asset": "vibration_warn",
-      "seconds": 4.577
-    },
-    {
-      "asset": "vibration_alarm",
-      "seconds": 3.164
-    },
-    {
-      "asset": "print_failed",
-      "seconds": 4.315
-    },
-    {
-      "asset": "storage_error",
-      "seconds": 3.665
-    }
-  ],
-  "voice_selected": "3 清甜灵动 / 度清影 per=4196",
+  "nfc_sd_fault_resolved": false,
+  "host_tests": {
+    "console_io": "passed: 10 scenarios, 400 concurrent log lines",
+    "wav_parser": "passed",
+    "app_gateway": "passed",
+    "nfc_control": "passed: disable before init, stop retry, abort pending command, resume, CS, baseline asset"
+  },
   "source_files": [
     {
       "path": "06_软件与FPGA/nano_esp32/vibmon_nano/app_config.h",
-      "sha256": "49e5e04d2e6c694a63eba44a543353da9cb4febfac7f15bc86f209470b336537"
+      "sha256": "66c63367e49be46dde3abbbb5539fb87c138de34d67c59ff518bf68e154b5c81"
     },
     {
       "path": "06_软件与FPGA/nano_esp32/vibmon_nano/app_gateway.cpp",
@@ -64,20 +65,20 @@
       "sha256": "13864abdeb1fb6b8f43ab742ab2b313ea909fd020256a74ed0e7909ed068dd60"
     },
     {
-      "path": "06_软件与FPGA/nano_esp32/vibmon_nano/console.cpp",
-      "sha256": "017f9499cf50989ec334ac568fcbeb17ce985b4691ae4a9cbf067f70f31f3460"
-    },
-    {
-      "path": "06_软件与FPGA/nano_esp32/vibmon_nano/console.h",
-      "sha256": "168dde03d59ec53d9a25649ff08583af9cd0df05f71720fd6efefaa595be4a1d"
-    },
-    {
       "path": "06_软件与FPGA/nano_esp32/vibmon_nano/console_io.cpp",
       "sha256": "eb129cf56c66576fc53d1b276ce2ec31d44291b973f664d83712c100119f41f6"
     },
     {
       "path": "06_软件与FPGA/nano_esp32/vibmon_nano/console_io.h",
       "sha256": "f82ea2519b23c63d0c6efc204fbead5ca792f2a6c830d445c7b780c8c6d99612"
+    },
+    {
+      "path": "06_软件与FPGA/nano_esp32/vibmon_nano/console.cpp",
+      "sha256": "d62aaf6f2e14251a3d83dd0580134bbed91e60fe6630184aa0b467ba2473bedd"
+    },
+    {
+      "path": "06_软件与FPGA/nano_esp32/vibmon_nano/console.h",
+      "sha256": "168dde03d59ec53d9a25649ff08583af9cd0df05f71720fd6efefaa595be4a1d"
     },
     {
       "path": "06_软件与FPGA/nano_esp32/vibmon_nano/event_store.cpp",
@@ -121,11 +122,11 @@
     },
     {
       "path": "06_软件与FPGA/nano_esp32/vibmon_nano/nfc_service.cpp",
-      "sha256": "d7a808ce4099145a8fc92498e0f09d0f3b7c3c33cf6245a6f530006d4998bf42"
+      "sha256": "148c38247e7167e98c18d852123adc3d80d0483a8076d2b7ddff7f32c35cd9eb"
     },
     {
       "path": "06_软件与FPGA/nano_esp32/vibmon_nano/nfc_service.h",
-      "sha256": "db2db9004b2277aec76420b39c8801f328c470d2449f18d154c2341b82b56479"
+      "sha256": "4bf2bb2e935eea53313dcebf69320f82e11bb9ddc6e2480110f2824cac693510"
     },
     {
       "path": "06_软件与FPGA/nano_esp32/vibmon_nano/power_service.cpp",
@@ -176,6 +177,14 @@
       "sha256": "e1801928b07d36ea65fcaa6939cb765b47f9c2199d3801d8304926ff6c213c37"
     },
     {
+      "path": "06_软件与FPGA/shared/vibproto/reference/protocol_reference.py",
+      "sha256": "62cb9e27e478a69724351b79585109bb0cb1c41f2007e6ea190eef3797d5d3a6"
+    },
+    {
+      "path": "06_软件与FPGA/shared/vibproto/reference/protocol_vectors.json",
+      "sha256": "268a695e0d92acb31d61aec71fd67a085834759f37492a057f66a5e61cdc26e5"
+    },
+    {
       "path": "06_软件与FPGA/shared/vibproto/src/vibproto.h",
       "sha256": "cd3cb7fdded671c18bd8be9f362357ab58594a1f2926c76ca249d591ff1a876a"
     },
@@ -194,6 +203,14 @@
     {
       "path": "06_软件与FPGA/shared/vibproto/src/vp_json.h",
       "sha256": "47ae6c367274ffcde351ea09beb5bcd255512531fec13525bdfebcc456a82a11"
+    },
+    {
+      "path": "06_软件与FPGA/shared/vibproto/test/gen_random_vectors.py",
+      "sha256": "330098f233458740037b0f572f7bd652f822eb1893a4bc0e1af69e0071b1ee3b"
+    },
+    {
+      "path": "06_软件与FPGA/shared/vibproto/test/test_vibproto.cpp",
+      "sha256": "07f487d2584d60b8edaa69558503c60dbf7623bc3556c0fcd360ac932211ce40"
     }
   ],
   "artifacts": [
@@ -204,8 +221,8 @@
     },
     {
       "path": "06_软件与FPGA/nano_esp32/bin/vibmon_nano.ino.bin",
-      "bytes": 972400,
-      "sha256": "8051b9a5e497f519ecf9aa6ea4c0c74ee8c49919e94c6f259e245148ded54f34"
+      "bytes": 973792,
+      "sha256": "f46055c7e7ca87284158ed36a96b814d402fde751595ac9e4186f2685b538906"
     },
     {
       "path": "06_软件与FPGA/nano_esp32/bin/vibmon_nano.ino.bootloader.bin",
@@ -219,33 +236,71 @@
     },
     {
       "path": "06_软件与FPGA/nano_esp32/bin/vibmon_nano.ino.elf",
-      "bytes": 19557872,
-      "sha256": "0d304493076ff91166c89c4b3b928802373a86555580480f7ccc839c89351057"
+      "bytes": 19568324,
+      "sha256": "9dd76cc7134d780a283dc6b98ead28440dca114537ac40cc9711d819ba1e8a8c"
     }
   ],
-  "validation_date": "2026-10-30",
-  "sd_card_file_readback_verified": true,
-  "sd_card_format": "MBR, FAT32, 32KB clusters; five selected voice files read back with matching SHA256",
+  "voice_wav_included": true,
+  "voice_files": [
+    {
+      "asset": "baseline_done",
+      "seconds": 3.557,
+      "sha256": "3e4875c22335f8ea83598d2137aff2a411fb471b6eb9a47eae9ab1fbbc97d1ca"
+    },
+    {
+      "asset": "measure_done",
+      "seconds": 3.13,
+      "sha256": "57c01bfe7233bd09c36647d736cf5cd4251b906bc4e939de5e1856ec137b2244"
+    },
+    {
+      "asset": "print_failed",
+      "seconds": 4.315,
+      "sha256": "4c99f52a14bd84140055fec4468329b27232e4f4d99cff247a1e2afc8d692094"
+    },
+    {
+      "asset": "storage_error",
+      "seconds": 3.665,
+      "sha256": "ea9720697e69f5ee2c45300eb4796d524d0864d928e9415b73415bfaa2ee1dd1"
+    },
+    {
+      "asset": "vibration_alarm",
+      "seconds": 3.164,
+      "sha256": "e9c60883e089ab9313f543d32ce61e04be3362aa47b0626dab8e96df1a408dd3"
+    },
+    {
+      "asset": "vibration_warn",
+      "seconds": 4.577,
+      "sha256": "d6b07a21b440c3a3315c7629365b1de4a2d205bf38e8e6604e43118c044c66c4"
+    }
+  ],
+  "voice_selected": "3 清甜灵动 / 度清影 per=4196",
   "voice_synthesis_record": "06_软件与FPGA/nano_esp32/sd_card/语音合成记录.json",
-  "firmware_version": "0.2.1",
-  "source_note": "Local changes on source_commit; exact target-build inputs are identified by source_files hashes.",
-  "hardware_j605_tested": false,
-  "host_tests": {
-    "console_io": "passed: 10 scenarios, including 400 concurrent log lines",
-    "wav_parser": "passed",
-    "app_gateway": "passed"
-  },
-  "debug_uart": {
-    "connector": "J605",
-    "peripheral": "UART0 / Serial0",
-    "baud": 115200,
-    "format": "8N1",
-    "flow_control": false,
-    "rx_gpio": 44,
-    "tx_gpio": 43,
-    "pin1": "GND",
-    "pin2": "Nano TX -> adapter RX",
-    "pin3": "Nano RX <- adapter TX"
+  "sd_card_file_readback_verified": false,
+  "sd_card_note": "Original five WAVs previously verified on card. New baseline_done.wav not yet copied to the J603 card.",
+  "ps_baseline_call": "Local source changed to baseline_done; not built or deployed to AX7010 in this round.",
+  "previous_firmware_flash_verification": {
+    "date": "2026-10-31",
+    "repository": "https://github.com/quanxian318/jianwei-visual-vibrometer",
+    "commit": "b8720d239183871efbf1d8e9246ea10f27045d1b",
+    "firmware": "0.2.1",
+    "device_serial": "E8F60ABE68C0",
+    "port": "COM14",
+    "firmware_sha256": "8051b9a5e497f519ecf9aa6ea4c0c74ee8c49919e94c6f259e245148ded54f34",
+    "bytes": 972400,
+    "source_and_artifact_hashes_verified": true,
+    "upload_exit_code": 0,
+    "upload_result": "Download done. Done!",
+    "runtime_verified": true,
+    "runtime_note": "USB CDC ping returned pong; status returned version 0.2.1, boot_id 8521659509dd91ac. DTR and RTS must both be asserted; toggling RTS false then true restored terminal connection.",
+    "peripherals_tested": false,
+    "observed_status": {
+      "sd_mounted": false,
+      "nfc_ready": false,
+      "power_fail": true,
+      "ax_rx_frames": 0,
+      "ap_ssid": "VIBMON-68C0"
+    },
+    "hardware_j605_tested": false
   },
   "test_sources": [
     {
@@ -261,12 +316,24 @@
       "sha256": "cb74cb15322cf3b9e7559fd94dc0d4f9b58e5688c5cfa75f975633f0c11942e6"
     },
     {
+      "path": "06_软件与FPGA/nano_esp32/test/nfc_stubs/Arduino.h",
+      "sha256": "fb7868d3319cf3d9b391abba0165ed744949b28272db2d3c36b0160be129baf6"
+    },
+    {
+      "path": "06_软件与FPGA/nano_esp32/test/nfc_stubs/SPI.h",
+      "sha256": "203dd845669b059871389409d9b299b18f56e7235cb1ca408fdf707fb8102df8"
+    },
+    {
       "path": "06_软件与FPGA/nano_esp32/test/test_app_gateway.cpp",
       "sha256": "e7dcafef71f319e5ccaad941e507b5a67cff28d387acfeb21829f52dcf0573b3"
     },
     {
       "path": "06_软件与FPGA/nano_esp32/test/test_console_io.cpp",
       "sha256": "af79e99a6e6ea2f55c35b14c172f57f64ce9851137ce1ee4f5e36bce95eb6c4a"
+    },
+    {
+      "path": "06_软件与FPGA/nano_esp32/test/test_nfc_control.cpp",
+      "sha256": "a2ac55177a4d6058e7cb568a348343916f89007713449400180abdce8e6adf1f"
     },
     {
       "path": "06_软件与FPGA/nano_esp32/test/test_wav_parser.cpp",

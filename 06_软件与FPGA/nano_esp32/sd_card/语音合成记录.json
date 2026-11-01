@@ -44,10 +44,19 @@
       "emotion": "neutral",
       "seconds": 3.665,
       "sha256": "ea9720697e69f5ee2c45300eb4796d524d0864d928e9415b73415bfaa2ee1dd1"
+    },
+    {
+      "asset_id": "baseline_done",
+      "spoken_text": "停机基线已采集，请开始测量。",
+      "emotion": "happy",
+      "seconds": 3.557,
+      "sha256": "3e4875c22335f8ea83598d2137aff2a411fb471b6eb9a47eae9ab1fbbc97d1ca",
+      "generated_at": "2026-11-01T16:53:37.007294+08:00",
+      "board_playback_tested": false
     }
   ],
   "measure_done_reused_from": "User-selected third preview; reused byte-for-byte",
-  "review": "Voice selected by user; all five WAVs validated; board playback not yet tested",
+  "review": "User-selected voice; WAV formats and non-silence checked; baseline_done added 2026-11-01, card copy and board playback pending.",
   "voice_catalog": "https://cloud.baidu.com/doc/SPEECH/s/Rluv3uq3d",
   "generated_at": "2026-10-28T13:37:31.060327+08:00"
 }

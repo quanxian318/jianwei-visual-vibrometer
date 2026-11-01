@@ -204,7 +204,31 @@ bool NfcService::init() {
   return setRf(false);
 }
 
+void NfcService::setEnabled(bool on) {
+  if (enabled_ == on) return;
+  if (!on) {
+    // Finish the PN532 command before stopping its polling. SPI transactions
+    // retain the core's shared-bus mutex, so the SD audio task stays serialized.
+    if (ready_) {
+      if (state_ == State::kWaitList) abortCommand();
+      setRf(false);
+    }
+    digitalWrite(board_pins::PN_CS, HIGH);
+    if (tagPresent_) {
+      misses_ = cfg::kNfcRemoveMisses;
+      tagMissed();
+    }
+  }
+  enabled_ = on;
+  ready_ = false;
+  state_ = State::kInit;
+  initFailures_ = cycleErrors_ = 0;
+  nextActionMs_ = millis() + 200;
+  LOGI(kTag, "polling %s", on ? "enabled" : "disabled (CS high)");
+}
+
 void NfcService::poll() {
+  if (!enabled_) return;
   const uint32_t now = millis();
   switch (state_) {
     case State::kInit:
@@ -370,6 +394,7 @@ void NfcService::tagMissed() {
 }
 
 void NfcService::describe(vp::JsonValue& obj) const {
+  obj.set("enabled", enabled_);
   obj.set("ready", ready_);
   obj.set("firmware", firmware_[0] ? vp::JsonValue(firmware_) : vp::JsonValue());
   obj.set("tag_present", tagPresent_);

@@ -9,6 +9,7 @@
 
 #include "app_config.h"
 #include "app_gateway.h"
+#include "board_pins.h"
 #include "console_io.h"
 #include "audio_service.h"
 #include "event_store.h"
@@ -95,7 +96,7 @@ void handle(const std::string& line) {
   if (a.empty()) return;
   const std::string& c = a[0];
   if (c == "help") {
-    println("help ping status events sd nfc | play <asset_id> [volume] | stop | wifi <ssid> [password] | wifi off");
+    println("help ping status events sd nfc [on|off] spi | play <asset_id> [volume] | stop | wifi <ssid> [password] | wifi off");
     println("ap on|off | ap pass <8..63 chars> (phone app access point)");
     println("baud <rate> | flow on|off | log error|warn|info|debug | reboot");
   } else if (c == "ping") {
@@ -109,8 +110,23 @@ void handle(const std::string& line) {
     g_sd.describe(d);
     printJson(d);
   } else if (c == "nfc") {
+    if (a.size() > 2 || (a.size() == 2 && a[1] != "on" && a[1] != "off")) {
+      println("usage: nfc [on|off]");
+      return;
+    }
+    if (a.size() == 2) g_nfc.setEnabled(a[1] == "on");
     vp::JsonValue d = vp::JsonValue::makeObject();
     g_nfc.describe(d);
+    printJson(d);
+  } else if (c == "spi") {
+    vp::JsonValue d = vp::JsonValue::makeObject();
+    d.set("sd_cs_high", digitalRead(board_pins::SD_CS) == HIGH);
+    d.set("nfc_cs_high", digitalRead(board_pins::PN_CS) == HIGH);
+    d.set("miso_high", digitalRead(board_pins::SPI_MISO) == HIGH);
+    d.set("nfc_irq_low", digitalRead(board_pins::PN_IRQ) == LOW);
+    d.set("nfc_enabled", g_nfc.enabled());
+    d.set("sd_mounted", g_sd.mounted());
+    d.set("audio_busy", g_audio.busy());
     printJson(d);
   } else if (c == "play" && a.size() >= 2) {
     const VoiceAsset* asset = findVoiceAsset(a[1].c_str());

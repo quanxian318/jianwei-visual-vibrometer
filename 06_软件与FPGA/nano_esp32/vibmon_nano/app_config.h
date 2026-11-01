@@ -2,7 +2,7 @@
 #include <stddef.h>
 #include <stdint.h>
 
-#define VIBMON_NANO_VERSION "0.2.1"
+#define VIBMON_NANO_VERSION "0.2.2"
 #define VIBMON_NANO_PROFILE "carrier-2026-10-20"
 
 namespace cfg {
@@ -78,6 +78,7 @@ struct VoiceAsset {
 };
 
 static const VoiceAsset kVoiceAssets[] = {
+    {"baseline_done", "/voice/baseline_done.wav"},
     {"measure_done", "/voice/measure_done.wav"},
     {"vibration_warn", "/voice/vibration_warn.wav"},
     {"vibration_alarm", "/voice/vibration_alarm.wav"},

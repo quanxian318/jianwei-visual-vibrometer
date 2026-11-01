@@ -14,6 +14,8 @@ class NfcService {
  public:
   void begin();
   void poll();
+  void setEnabled(bool on);  // runtime diagnostic; restart restores enabled
+  bool enabled() const { return enabled_; }
   bool ready() const { return ready_; }
   void describe(vp::JsonValue& obj) const;
 
@@ -37,6 +39,7 @@ class NfcService {
   void spiBegin();
   void spiEnd();
 
+  bool enabled_ = true;
   State state_ = State::kInit;
   bool ready_ = false;
   uint32_t nextActionMs_ = 0;

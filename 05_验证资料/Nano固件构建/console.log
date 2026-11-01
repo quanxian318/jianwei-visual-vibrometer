@@ -1,0 +1,8 @@
+pong
+{"version":"0.2.1","boot_id":"8521659509dd91ac","session":{"session_active":false,"session_id":null,"requests":0,"replays":0,"bad_session":0,"seq_conflicts":0},"link":{"baud":115200,"flow_control":true,"rx_frames":0,"crc_errors":0,"header_errors":0,"json_errors":0,"partial_timeouts":0,"uart_errors":0,"tx_drops":0},"wifi":{"state":"OFF","ssid":null,"attempts":0,"ap":{"enabled":true,"ssid":"VIBMON-68C0","ip":"192.168.4.1","clients":0}},"time_valid":false,"sd":{"present":true,"mounted":false},"nfc":{"ready":false,"firmware":null,"tag_present":false,"uid":null,"errors":0},"power":{"power_fail":true,"power_off_prepared":false},"events":{"last_event_id":5,"acked_through":0,"pending":5},"gateway":{"requests":0,"published":0,"forwarded":0,"timeouts":0,"topics":0,"clients":0}}
+pong
+[     68574] W sd: mount failed (12)
+[     68596] W nfc: PN532 init failed (12)
+{"version":"0.2.1","boot_id":"8521659509dd91ac","session":{"session_active":false,"session_id":null,"requests":0,"replays":0,"bad_session":0,"seq_conflicts":0},"link":{"baud":115200,"flow_control":true,"rx_frames":0,"crc_errors":0,"header_errors":0,"json_errors":0,"partial_timeouts":0,"uart_errors":0,"tx_drops":0},"wifi":{"state":"OFF","ssid":null,"attempts":0,"ap":{"enabled":true,"ssid":"VIBMON-68C0","ip":"192.168.4.1","clients":0}},"time_valid":false,"sd":{"present":true,"mounted":false},"nfc":{"ready":false,"firmware":null,"tag_present":false,"uid":null,"errors":0},"power":{"power_fail":true,"power_off_prepared":false},"events":{"last_event_id":5,"acked_through":0,"pending":5},"gateway":{"requests":0,"published":0,"forwarded":0,"timeouts":0,"topics":0,"clients":0}}
+[     74574] W sd: mount failed (13)
+[     74595] W nfc: PN532 init failed (13)
