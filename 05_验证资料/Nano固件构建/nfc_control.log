@@ -1,0 +1,6 @@
+[     63975] I nfc: polling disabled (CS high)
+{"enabled":false,"ready":false,"firmware":null,"tag_present":false,"uid":null,"errors":0}
+{"sd_cs_high":true,"nfc_cs_high":true,"miso_high":false,"nfc_irq_low":true,"nfc_enabled":false,"sd_mounted":false,"audio_busy":false}
+[     64395] I nfc: polling enabled
+{"enabled":true,"ready":false,"firmware":null,"tag_present":false,"uid":null,"errors":0}
+[     64609] W nfc: PN532 init failed (1)

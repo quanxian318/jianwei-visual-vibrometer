@@ -2,3 +2,4 @@ console_io: 10 scenarios passed (400 concurrent log lines)
 wav parser checks passed
 app_gateway: all checks passed
 nfc control: disable before init, stop retry, pending command, resume, CS and baseline asset passed
+2026-11-02: NFC control recompiled with 0.2.3 asset table and passed; unchanged console/WAV/gateway results reused.

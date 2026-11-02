@@ -18,37 +18,38 @@ Copying data from PC to DFU device
 
 Download	[                         ]   0%            0 bytes
 Download	[=                        ]   4%        40960 bytes
+Download	[=                        ]   7%        73728 bytes
 Download	[==                       ]   8%        81920 bytes
 Download	[===                      ]  12%       118784 bytes
-Download	[===                      ]  13%       131072 bytes
 Download	[====                     ]  16%       159744 bytes
+Download	[====                     ]  19%       192512 bytes
 Download	[=====                    ]  20%       196608 bytes
 Download	[======                   ]  24%       237568 bytes
-Download	[======                   ]  26%       258048 bytes
 Download	[=======                  ]  28%       274432 bytes
+Download	[=======                  ]  31%       307200 bytes
 Download	[========                 ]  32%       315392 bytes
 Download	[=========                ]  36%       352256 bytes
-Download	[=========                ]  39%       380928 bytes
 Download	[==========               ]  40%       393216 bytes
-Download	[===========              ]  44%       430080 bytes
+Download	[==========               ]  43%       421888 bytes
+Download	[===========              ]  44%       434176 bytes
 Download	[============             ]  48%       471040 bytes
-Download	[============             ]  51%       503808 bytes
-Download	[=============            ]  52%       507904 bytes
+Download	[=============            ]  52%       512000 bytes
+Download	[=============            ]  54%       536576 bytes
 Download	[==============           ]  56%       548864 bytes
 Download	[===============          ]  60%       589824 bytes
 Download	[================         ]  64%       626688 bytes
-Download	[================         ]  64%       630784 bytes
+Download	[================         ]  67%       659456 bytes
 Download	[=================        ]  68%       667648 bytes
 Download	[==================       ]  72%       704512 bytes
 Download	[===================      ]  76%       745472 bytes
-Download	[===================      ]  77%       757760 bytes
+Download	[===================      ]  78%       770048 bytes
 Download	[====================     ]  80%       782336 bytes
 Download	[=====================    ]  84%       823296 bytes
-Download	[======================   ]  88%       860160 bytes
-Download	[======================   ]  90%       880640 bytes
+Download	[======================   ]  88%       864256 bytes
+Download	[======================   ]  90%       884736 bytes
 Download	[=======================  ]  92%       901120 bytes
-Download	[======================== ]  96%       937984 bytes
-Download	[=========================] 100%       972400 bytes
+Download	[======================== ]  96%       942080 bytes
+Download	[=========================] 100%       973792 bytes
 Download done.
 DFU state(7) = dfuMANIFEST, status(0) = No error condition is present
 DFU state(2) = dfuIDLE, status(0) = No error condition is present

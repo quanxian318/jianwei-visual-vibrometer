@@ -53,10 +53,87 @@
       "sha256": "3e4875c22335f8ea83598d2137aff2a411fb471b6eb9a47eae9ab1fbbc97d1ca",
       "generated_at": "2026-11-01T16:53:37.007294+08:00",
       "board_playback_tested": false
+    },
+    {
+      "asset_id": "welcome",
+      "spoken_text": "欢迎使用见微测振仪。",
+      "purpose": "开机欢迎",
+      "emotion": "happy",
+      "seconds": 2.608,
+      "sha256": "a2cdbd3f9942a6e800d9bd8d486bf5db66a42f09248eeb7f1a72344a5e85e3ba",
+      "generated_at": "2026-11-02T21:15:27.658296+08:00",
+      "board_playback_tested": false,
+      "automatic_trigger_integrated": false
+    },
+    {
+      "asset_id": "baseline_start",
+      "spoken_text": "正在采集停机基线，请保持被测物静止。",
+      "purpose": "基线采集提示",
+      "emotion": "neutral",
+      "seconds": 5.171,
+      "sha256": "d9fe526f3b76522b8afe621ed7667c09b60daa54eae20428741c64c97240a5b5",
+      "generated_at": "2026-11-02T21:15:27.669406+08:00",
+      "board_playback_tested": false,
+      "automatic_trigger_integrated": false
+    },
+    {
+      "asset_id": "baseline_failed",
+      "spoken_text": "基线采集未完成，请检查画面后重试。",
+      "purpose": "基线采集失败",
+      "emotion": "neutral",
+      "seconds": 4.308,
+      "sha256": "eba61d1385e24f91d0fe507eaee8e393d70d0839cbc3ab550feb62448cf50935",
+      "generated_at": "2026-11-02T21:15:27.681405+08:00",
+      "board_playback_tested": false,
+      "automatic_trigger_integrated": false
+    },
+    {
+      "asset_id": "measure_start",
+      "spoken_text": "开始测量，请保持相机稳定。",
+      "purpose": "开始测量提示",
+      "emotion": "neutral",
+      "seconds": 3.573,
+      "sha256": "41a38286887aad29976640c41aa1c2783932016af9cb44e6a5eda1d712854692",
+      "generated_at": "2026-11-02T21:15:27.690415+08:00",
+      "board_playback_tested": false,
+      "automatic_trigger_integrated": false
+    },
+    {
+      "asset_id": "measure_failed",
+      "spoken_text": "这次测量未完成，请检查画面后重试。",
+      "purpose": "测量未完成",
+      "emotion": "neutral",
+      "seconds": 3.739,
+      "sha256": "88fb59103c14a5648f5fce03ba4e61e37e7204dabb7b36458d3e246b1f5b7040",
+      "generated_at": "2026-11-02T21:15:27.700406+08:00",
+      "board_playback_tested": false,
+      "automatic_trigger_integrated": false
+    },
+    {
+      "asset_id": "calibration_done",
+      "spoken_text": "标定已保存，可以开始测量。",
+      "purpose": "标定已保存",
+      "emotion": "happy",
+      "seconds": 3.335,
+      "sha256": "d24c02e0f2eb6b4d5f850d394aaad241a9718dfd3597da95102a8261ffae96e4",
+      "generated_at": "2026-11-02T21:15:28.837378+08:00",
+      "board_playback_tested": false,
+      "automatic_trigger_integrated": false
+    },
+    {
+      "asset_id": "print_sent",
+      "spoken_text": "打印指令已发送，请查看打印结果。",
+      "purpose": "打印指令已发送",
+      "emotion": "neutral",
+      "seconds": 4.068,
+      "sha256": "c0eb53eb4ae01c856ae4581baad57097df8a7c89ed5c9d662c36ed67da0a0132",
+      "generated_at": "2026-11-02T21:15:29.684133+08:00",
+      "board_playback_tested": false,
+      "automatic_trigger_integrated": false
     }
   ],
   "measure_done_reused_from": "User-selected third preview; reused byte-for-byte",
-  "review": "User-selected voice; WAV formats and non-silence checked; baseline_done added 2026-11-01, card copy and board playback pending.",
+  "review": "User-selected voice; WAV format and non-silence checked. Seven additional assets synthesized 2026-11-02; card copy, listening and automatic triggers pending.",
   "voice_catalog": "https://cloud.baidu.com/doc/SPEECH/s/Rluv3uq3d",
   "generated_at": "2026-10-28T13:37:31.060327+08:00"
 }
