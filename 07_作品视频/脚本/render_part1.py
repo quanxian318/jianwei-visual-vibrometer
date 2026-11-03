@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""渲染作品视频中"上电"之前的部分：钩子 → 标题 → 背景 → 原理 → 整机与外设 → 外壳内部 → 机盖 → 主载板 → 接口 → 前面板 → AX7010 → 系统架构 → PL 硬件设计。
+"""渲染作品视频中"上电"之前的部分：钩子 → 标题 → 工业实景 → 设计背景 → 原理 → 整机与外设 → 外壳内部 → 机盖 → 主载板 → 接口 → 前面板 → AX7010 → 系统架构 → PL 硬件设计。
 
 在 WSL 中运行（用到 ffmpeg、Pillow、numpy 和 Windows 字体）：
     python3 render_part1.py                          # 输出 ../输出/上电前_样片.mp4
@@ -50,6 +50,11 @@ HOOK_RESULT = (("振动频率", "10.84", "Hz"), ("振幅峰峰值", "0.142", "mm
 
 # 钩子静帧中散斑纸四角（1280×720 像素坐标）
 STICKER = ((392, 225), (1000, 258), (992, 475), (358, 400))
+
+# 工业设备实景：Pexels 视频 5080546（Pexels 许可，可免费商用、无需署名），带机器运转原声
+INDUSTRY_CLIP = PROJ / "素材" / "外部" / "工业设备_皮带轮运转.mp4"
+INDUSTRY_FRAMES = []
+INDUSTRY_DUR = 6.0
 
 
 # ---------- 缓动 ----------
@@ -586,28 +591,57 @@ def camera_icon(dst, cx, cy, p, alpha=1.0):
     fill_rect(dst, (x1 - 46, y0 + 16, x1 - 18, y0 + 28), YELLOW, alpha * prog(p, 0.7, 1.0))
 
 
+def s_industry(c, t):
+    """工业设备实景，缓慢推近皮带轮。"""
+    if not INDUSTRY_FRAMES:
+        text(c, "工业设备实景：素材待放入", MARGIN, 300, size=48, weight=700, anchor="lm")
+        return
+    frame = Image.open(INDUSTRY_FRAMES[min(int(t * FPS), len(INDUSTRY_FRAMES) - 1)]).convert("RGB")
+    z = 1 + 0.07 * ease_in_out(clamp(t / (INDUSTRY_DUR + 0.4)))
+    cw, ch = W / z, H / z
+    x0, y0 = (W - cw) * 0.4, (H - ch) * 0.45
+    c.paste(frame.resize((W, H), Image.BICUBIC, box=(x0, y0, x0 + cw, y0 + ch)), (0, 0))
+
+
+# 设计背景：先画逐点贴装、各拉一根线的接触式传感器，再换成一台相机同时测 12 个点
+CONTACT = (1, 6, 11)
+
+
 def s_background(c, t):
     card, pad = target_print()
     a = ease_out(prog(t, 0, 0.6))
     paste(c, card, TGT_POS[0] - pad - 30 * (1 - a), TGT_POS[1] - pad, a)
-    tip = tgt_xy(((STICKER[1][0] + STICKER[2][0]) / 2, (STICKER[1][1] + STICKER[2][1]) / 2))
-    annot(c, t - 0.8, tip, (tip[0] + 90, tip[1] - 120), "振动幅度肉眼难辨", None, alpha=1 - prog(t, 2.9, 3.3))
+    pts = [tgt_xy(p) for p in sticker_pts()]
+    ca = 1 - prog(t, 3.0, 3.4)
+    if ca > 0:
+        for k, idx in enumerate(CONTACT):
+            x, y = pts[idx]
+            cable = [(x, y + 14), (x, 700 + 10 * k), (530 + 30 * k, 772)]
+            polyline(c, partial(cable, ease_in_out(prog(t, 0.7 + 0.25 * k, 1.6 + 0.25 * k))), INK2 + (255,), 3,
+                     ca, aa=True)
+            p = ease_back(prog(t, 0.5 + 0.25 * k, 0.8 + 0.25 * k))
+            if p > 0:
+                s = 28 * p
+                fill_rect(c, (x - s / 2, y - s / 2, x + s / 2, y + s / 2), INK, ca)
+                circle(c, x, y, 4 * p, fill=WHITE + (255,), alpha=ca)
+        block(c, 500, 772, 120, 44, "采集器", None, 1, ca * ease_out(prog(t, 1.4, 1.8)), 22)
+        x, y = pts[CONTACT[0]]
+        annot(c, t - 1.5, (x + 14, y - 14), (x + 104, y - 110), "接触式传感器", None, alpha=ca)
     centre = tgt_xy((686, 345))
-    lp = ease_in_out(prog(t, 3.5, 4.4))
+    lp = ease_in_out(prog(t, 3.9, 4.8))
     if lp > 0:
         for ly in (CAM_C[1] - LENS_DY, CAM_C[1] + LENS_DY):
             dashed(c, partial([(CAM_C[0] - 144, ly), centre], lp), INK + (255,), 2, 12, 8, aa=True)
-    camera_icon(c, CAM_C[0], CAM_C[1], ease_in_out(prog(t, 3.0, 3.9)))
-    ca = ease_out(prog(t, 3.6, 4.1))
-    text(c, "AN5642 双目相机", CAM_C[0] + 40, CAM_C[1] + 150, size=30, weight=600, alpha=ca, anchor="ms")
-    for k, pt in enumerate(sticker_pts()):
-        p = ease_back(prog(t, 4.2 + 0.04 * k, 4.55 + 0.04 * k))
+    camera_icon(c, CAM_C[0], CAM_C[1], ease_in_out(prog(t, 3.3, 4.2)))
+    text(c, "AN5642 双目相机", CAM_C[0] + 40, CAM_C[1] + 150, size=30, weight=600,
+         alpha=ease_out(prog(t, 3.9, 4.4)), anchor="ms")
+    for k, (x, y) in enumerate(pts):
+        p = ease_back(prog(t, 4.5 + 0.04 * k, 4.85 + 0.04 * k))
         if p > 0:
-            x, y = tgt_xy(pt)
             square_mark(c, x, y, 26 * p, YELLOW, clamp(p))
     x = MARGIN
     for k, word in enumerate(("非接触", "多点同测", "现场报警")):
-        p = ease_out(prog(t, 4.6 + 0.35 * k, 5.0 + 0.35 * k))
+        p = ease_out(prog(t, 4.9 + 0.35 * k, 5.3 + 0.35 * k))
         w, _ = strip(c, word, x, 800, size=32, weight=600, pad=(20, 10), border=RULE, reveal=p)
         x += w + 16
 
@@ -767,12 +801,12 @@ OV_GROUPS = (
         ((1567, 483), (1590, 238), "散热风扇", "机内散热", "r", None),
     )),
 )
-OV_BEAT = 4.5
+OV_BEAT = 4.3
 
 
 def s_overview(c, t):
     im = photo("整机连线_俯拍.jpg")
-    p = ease_in_out(clamp(t / 14))
+    p = ease_in_out(clamp(t / (3 * OV_BEAT + 0.5)))
     frame, xf = view(im, 1000 - 14 * p, 787 - 6 * p, 2000 - 40 * p)
     c.paste(frame, (0, 0))
     s0 = W / 2000
@@ -941,7 +975,7 @@ def s_connect(c, t):
     lx = 1060
     p = ease_out(prog(t, 0.15, 0.6))
     rise(c, "外设连接", lx - 3, 252, 54, 800, p=p)
-    step = 0.85
+    step = 0.78
     t_all = 0.55 + step * len(CONN_GROUPS)
     for k, (name, members, items) in enumerate(CONN_GROUPS):
         tk = 0.55 + step * k
@@ -1028,9 +1062,38 @@ def s_ax7010(c, t):
 # 与 2026-11-03 代码包一致：双目匹配已移到 PS 软件后端，PL 保留视频、PDM、灯光与打印 UART
 ARCH_PL = ("双路相机采集", "HDMI 显示", "PDM 麦克风接收", "灯光与打印接口")
 ARCH_PS = ("多点亚像素跟踪", "频谱与基线判定", "双目辅助测距", "界面、记录与报警")
-ARCH_ESP = ("NFC 读卡", "SD 语音播报", "Wi-Fi 与手机 APP")
+ARCH_ESP = ("NFC 读卡", "SD 语音播报", "Wi-Fi 网关")
 ARCH_OUT = ("7 寸触摸屏", "声光报警灯", "热敏打印机")
 MOD_Y = (290, 400, 510, 620)
+# APP 的 Android、iOS、Windows 版共用一套界面，可局域网直连 AX7010，也可连 ESP32 热点。
+# 手机截图取自 iOS 构建验证；电脑截图是同一 web 界面演示模式在 1440×900 窗口下的渲染
+APP_PHONE = REPO / "05_验证资料/APP验证/构建验证/ios_home.png"
+APP_DESKTOP = PROJ / "素材" / "APP" / "电脑端_总览.png"
+
+
+@lru_cache(maxsize=None)
+def phone_card(w=92):
+    shot = Image.open(APP_PHONE).convert("RGB")
+    h = round(w * shot.height / shot.width)
+    card = box_img(w, h, fill=INK + (255,), r=14).copy()
+    scr = shot.resize((w - 6, h - 6), Image.LANCZOS).convert("RGBA")
+    scr.putalpha(rounded_mask(w - 6, h - 6, 11))
+    card.alpha_composite(scr, (3, 3))
+    return card
+
+
+@lru_cache(maxsize=None)
+def monitor_card(sw=256):
+    """显示器外框 + 底座；返回图像和屏幕部分的高度。"""
+    shot = Image.open(APP_DESKTOP).convert("RGB")
+    sh = round(sw * shot.height / shot.width)
+    w, h = sw + 12, sh + 12
+    out = Image.new("RGBA", (w, h + 20), (0, 0, 0, 0))
+    out.alpha_composite(box_img(w, h, fill=INK + (255,), r=6), (0, 0))
+    out.alpha_composite(shot.resize((sw, sh), Image.LANCZOS).convert("RGBA"), (6, 6))
+    out.alpha_composite(box_img(16, 14, fill=INK2 + (255,)), (w // 2 - 8, h))
+    out.alpha_composite(box_img(96, 6, fill=INK2 + (255,)), (w // 2 - 48, h + 14))
+    return out, h
 
 
 def block(c, x, y, w, h, title, sub, state, alpha=1.0, size=26):
@@ -1062,70 +1125,98 @@ def s_arch(c, t):
     def win(a, b):
         return prog(t, a, a + 0.25) * (1 - prog(t, b, b + 0.25))
 
-    final = prog(t, 10.5, 10.8)
-    on = {"pl": max(win(0.3, 3.7), final), "ps": max(win(3.8, 7.2), final), "esp": max(win(7.3, 10.6), final)}
+    final = prog(t, 11.5, 11.8)
+    on = {"pl": max(win(0.3, 3.7), final), "ps": max(win(3.8, 7.0), final),
+          "esp": max(win(7.1, 9.3), final), "app": max(win(9.4, 11.6), final)}
     early = 1 - prog(t, 0.2, 0.45)
 
     def state(group, t0):
-        if t >= 10.5:
+        if t >= 11.5:
             return 1
         lit = on[group] * prog(t, t0, t0 + 0.2)
         return 2 if lit > 0.5 else (1 if on[group] > 0.5 or early > 0.5 else 0)
 
-    paste(c, box_img(1040, 720, outline=INK + (255,), width=2), 330, 150, intro)
+    def dim(group):
+        return intro * (1.0 if on[group] > 0.5 or early > 0.5 or t >= 11.5 else 0.55)
+
+    paste(c, box_img(840, 720, outline=INK + (255,), width=2), 330, 150, intro)
     text(c, "XC7Z010  Zynq-7000 SoC", 352, 190, size=26, weight=600, kind="cond", alpha=intro)
-    for group, (x0, x1), label, sub in (("pl", (355, 825), "PL", "可编程逻辑"),
-                                        ("ps", (885, 1345), "PS", "双核 ARM 运行 Linux")):
-        ga = intro * (1.0 if on[group] > 0.5 or early > 0.5 or t >= 10.5 else 0.55)
+    for group, (x0, x1), label, sub in (("pl", (352, 730), "PL", "可编程逻辑"),
+                                        ("ps", (772, 1150), "PS", "双核 ARM 运行 Linux")):
+        ga = dim(group)
         dashed_box(c, (x0, 215, x1, 850), INK2 + (255,), 1, ga, 6, 5)
         w0 = text(c, label, x0 + 18, 257, size=28, weight=700, kind="cond", alpha=ga)
         text(c, sub, x0 + 30 + w0, 257, size=22, color=INK2, alpha=ga)
     for k, tt in enumerate(ARCH_PL):
-        block(c, 375, MOD_Y[k], 430, 96, tt, None, state("pl", 0.5 + 0.35 * k), intro, 30)
+        block(c, 370, MOD_Y[k], 340, 96, tt, None, state("pl", 0.5 + 0.35 * k), intro, 30)
     for k, tt in enumerate(ARCH_PS):
-        block(c, 905, MOD_Y[k], 420, 96, tt, None, state("ps", 4.0 + 0.35 * k), intro, 30)
-    polyline(c, [(845, 290), (845, 716)], INK + (255,), 2, intro)
-    polyline(c, [(865, 290), (865, 716)], INK + (255,), 2, intro)
-    rot_text(c, "AXI", 855, 752, 20, 600, "cond", INK2, intro)
+        block(c, 790, MOD_Y[k], 340, 96, tt, None, state("ps", 4.0 + 0.35 * k), intro, 30)
+    polyline(c, [(741, 290), (741, 716)], INK + (255,), 2, intro)
+    polyline(c, [(761, 290), (761, 716)], INK + (255,), 2, intro)
+    rot_text(c, "AXI", 751, 752, 20, 600, "cond", INK2, intro)
     for y in (338, 558):
-        arrow(c, (805, y), (843, y), alpha=intro, head=7)
+        arrow(c, (712, y), (739, y), alpha=intro, head=7)
     for y in (448, 668):
-        arrow(c, (843, y), (807, y), alpha=intro, head=7)
+        arrow(c, (739, y), (714, y), alpha=intro, head=7)
     for y in (338, 448, 558, 668):
-        arrow(c, (867, y), (903, y), alpha=intro, head=7, both=True)
+        arrow(c, (763, y), (788, y), alpha=intro, head=7, both=True)
     for name, y, box in (("双目相机", 290, (0, 520, 330, 850)), ("麦克风", 510, (1817, 1100, 1967, 1250))):
-        st = 2 if on["pl"] > 0.5 and 0.5 < t < 10.5 else (1 if on["pl"] > 0.5 or early > 0.5 or t >= 10.5 else 0)
+        st = 2 if on["pl"] > 0.5 and 0.5 < t < 11.5 else (1 if on["pl"] > 0.5 or early > 0.5 or t >= 11.5 else 0)
         paste(c, box_img(260, 96, fill=WHITE + (255,), outline=(INK if st else RULE) + (255,), width=2), 40, y, intro)
         paste(c, thumb("AX7010_双目相机.jpg", box, 64), 56, y + 16, intro * (1 if st else 0.5))
         text(c, name, 138, y + 48, size=27, weight=600, color=INK if st else INK3, alpha=intro, anchor="lm")
-        arrow(c, (300, y + 48), (373, y + 48), alpha=intro, head=8)
-    ea = intro * (1.0 if on["esp"] > 0.5 or early > 0.5 or t >= 10.5 else 0.55)
-    dashed_box(c, (1440, 150, 1870, 545), INK2 + (255,), 1, ea, 6, 5)
-    paste(c, thumb("主载板_正面.jpg", (320, 700, 540, 920), 52), 1460, 168, ea)
-    w0 = text(c, "ESP32", 1526, 206, size=30, weight=700, kind="cond", alpha=ea)
-    text(c, "协处理器", 1538 + w0, 206, size=24, color=INK2, alpha=ea)
+        arrow(c, (300, y + 48), (368, y + 48), alpha=intro, head=8)
+    # 右列自上而下：多端 APP、ESP32 协处理器、输出
+    aa = dim("app")
+    dashed_box(c, (1230, 150, 1870, 470), INK2 + (255,), 1, aa, 6, 5)
+    w0 = text(c, "APP", 1252, 200, size=30, weight=700, kind="cond", alpha=aa)
+    text(c, "手机与电脑多端", 1266 + w0, 200, size=24, color=INK2, alpha=aa)
+    sa = state("app", 9.6)
+    (mon, mon_h), ph = monitor_card(), phone_card()
+    for im, x, hh, label in ((ph, 1346, ph.height, "手机"), (mon, 1486, mon_h, "电脑")):
+        y = 420 - im.height
+        paste(c, im, x, y, intro * (1 if sa else 0.45))
+        if sa >= 1.5:
+            paste(c, box_img(im.width + 12, hh + 12, outline=YELLOW + (255,), width=3), x - 6, y - 6, intro)
+        text(c, label, x + im.width / 2, 456, size=24, weight=600, color=INK if sa else INK3, alpha=intro,
+             anchor="ms")
+    ea = dim("esp")
+    dashed_box(c, (1230, 500, 1870, 650), INK2 + (255,), 1, ea, 6, 5)
+    paste(c, thumb("主载板_正面.jpg", (320, 700, 540, 920), 44), 1250, 514, ea)
+    w0 = text(c, "ESP32", 1306, 548, size=30, weight=700, kind="cond", alpha=ea)
+    text(c, "协处理器", 1318 + w0, 548, size=24, color=INK2, alpha=ea)
     for k, name in enumerate(ARCH_ESP):
-        block(c, 1465, 255 + 88 * k, 380, 70, name, None, state("esp", 7.6 + 0.3 * k), intro)
-    oa = intro * (1.0 if on["ps"] > 0.5 or early > 0.5 or t >= 10.5 else 0.55)
-    dashed_box(c, (1440, 590, 1870, 870), INK2 + (255,), 1, oa, 6, 5)
-    text(c, "输出", 1462, 630, size=24, weight=600, color=INK2, alpha=oa)
+        block(c, 1250 + 205 * k, 572, 190, 56, name, None, state("esp", 7.3 + 0.3 * k), intro, 24)
+    oa = dim("ps")
+    dashed_box(c, (1230, 680, 1870, 810), INK2 + (255,), 1, oa, 6, 5)
+    text(c, "输出", 1252, 718, size=24, weight=600, color=INK2, alpha=oa)
     for k, name in enumerate(ARCH_OUT):
-        block(c, 1465, 648 + 70 * k, 380, 58, name, None, state("ps", 6.0 + 0.2 * k), intro)
-    arrow(c, (1327, 405), (1438, 405), alpha=intro, head=8, both=True)
-    text(c, "UART", 1382, 392, size=20, weight=600, kind="cond", color=INK2, alpha=intro, anchor="ms")
-    arrow(c, (1327, 668), (1438, 668), alpha=intro, head=8)
+        block(c, 1250 + 205 * k, 732, 190, 56, name, None, state("ps", 6.0 + 0.2 * k), intro, 24)
+    # 连线：PS 经局域网连 APP、经 UART 连 ESP32、驱动输出；ESP32 热点连 APP
+    arrow(c, (1154, 300), (1228, 300), alpha=intro, head=8, both=True)
+    text(c, "局域网", 1200, 288, size=18, weight=600, color=INK2, alpha=intro, anchor="ms")
+    arrow(c, (1154, 600), (1228, 600), alpha=intro, head=8, both=True)
+    text(c, "UART", 1200, 588, size=18, weight=600, kind="cond", color=INK2, alpha=intro, anchor="ms")
+    arrow(c, (1154, 760), (1228, 760), alpha=intro, head=8)
+    dashed(c, [(1755, 482), (1755, 560)], INK + (255,), 2, 7, 5, intro)
+    arrow(c, (1755, 488), (1755, 474), alpha=intro, head=8)
+    arrow(c, (1755, 554), (1755, 568), alpha=intro, head=8)
+    text(c, "Wi-Fi", 1768, 526, size=18, weight=600, kind="cond", color=INK2, alpha=intro, anchor="lm")
     if on["pl"] > 0.05:
-        token(c, [(300, 338), (375, 338)], t, on["pl"], 0.5, 160)
-        token(c, [(805, 338), (845, 338), (865, 338), (905, 338)], t - 0.2, on["pl"], 0.5, 200)
-        token(c, [(805, 558), (855, 558), (855, 448), (905, 448)], t, on["pl"], 0.7, 260)
-        token(c, [(300, 558), (375, 558)], t - 0.1, on["pl"], 0.5, 160)
+        token(c, [(300, 338), (370, 338)], t, on["pl"], 0.5, 160)
+        token(c, [(710, 338), (741, 338), (761, 338), (790, 338)], t - 0.2, on["pl"], 0.5, 200)
+        token(c, [(710, 558), (751, 558), (751, 448), (790, 448)], t, on["pl"], 0.7, 260)
+        token(c, [(300, 558), (370, 558)], t - 0.1, on["pl"], 0.5, 160)
     if on["ps"] > 0.05:
         for y0 in (386, 496, 606):
-            token(c, [(1115, y0), (1115, y0 + 14)], t, on["ps"], 0.3, 40)
-        token(c, [(1325, 668), (1440, 668)], t, on["ps"], 0.45, 220)
-        token(c, [(905, 668), (855, 668), (805, 668)], t - 0.2, on["ps"], 0.5, 200)
+            token(c, [(960, y0), (960, y0 + 14)], t, on["ps"], 0.3, 40)
+        token(c, [(1154, 760), (1228, 760)], t, on["ps"], 0.45, 220)
+        token(c, [(790, 668), (751, 668), (710, 668)], t - 0.2, on["ps"], 0.5, 200)
     if on["esp"] > 0.05:
-        token(c, [(1325, 405), (1440, 405)], t, on["esp"], 0.45, 220)
+        token(c, [(1154, 600), (1228, 600)], t, on["esp"], 0.45, 220)
+    if on["app"] > 0.05:
+        token(c, [(1154, 300), (1228, 300)], t, on["app"], 0.45, 220)
+        token(c, [(1755, 568), (1755, 474)], t - 0.2, on["app"], 0.45, 160)
 
 
 PL_VIDEO = ("双目相机输入", "采集与格式转换", "VDMA 读写 DDR", "PS 测振与界面", "视频时序", "HDMI 输出")
@@ -1160,14 +1251,14 @@ def s_pl(c, t):
         if own:
             strip(c, "自研 RTL", x + cw - 12, cy + 14 + (1 - p) * 12, size=21, weight=700, bg=INK, fg=YELLOW,
                   pad=(10, 5), anchor="rt", alpha=p)
-    text(c, "资源与时序", MARGIN, 640, size=26, weight=600, color=INK2, alpha=ease_out(prog(t, 4.9, 5.3)))
+    text(c, "资源与时序", MARGIN, 640, size=26, weight=600, color=INK2, alpha=ease_out(prog(t, 4.6, 5.0)))
     cols = [MARGIN + k * 404 for k in range(4)]
     for k in range(1, 4):
-        p = ease_in_out(prog(t, 5.0 + 0.08 * k, 5.5 + 0.08 * k))
+        p = ease_in_out(prog(t, 4.7 + 0.08 * k, 5.2 + 0.08 * k))
         polyline(c, [(cols[k] - 30, 672), (cols[k] - 30, 672 + 172 * p)], RULE + (255,), 1)
-    cnt = ease_out(prog(t, 5.2, 6.6))
+    cnt = ease_out(prog(t, 4.9, 6.2))
     for k, (label, val, unit, frac) in enumerate(PL_STATS):
-        p = ease_out(prog(t, 5.1 + 0.12 * k, 5.6 + 0.12 * k))
+        p = ease_out(prog(t, 4.8 + 0.12 * k, 5.3 + 0.12 * k))
         x = cols[k]
         text(c, label, x, 706, size=28, weight=500, color=INK2, alpha=p)
         s = f"{val * cnt:.3f}" if unit == "ns" else f"{val * cnt:.1f}"
@@ -1176,7 +1267,7 @@ def s_pl(c, t):
         if frac:
             fill_rect(c, (x, 818, x + 300, 825), RULE, p)
             fill_rect(c, (x, 818, x + 300 * frac * cnt, 825), INK, p)
-    fade = prog(t, 8.2, 9.0)
+    fade = prog(t, 7.5, 8.2)
     if fade > 0:
         fill_rect(c, (0, 0, W, H), (0, 0, 0), ease_in_out(fade))
 
@@ -1187,25 +1278,27 @@ def scenes():
     """(函数, 时长, 转场到下一镜, 章节, 字幕[(起, 止, 文本)，场景内时间])"""
     return [
         (s_hook, HOOK_DUR, 0.4, None, []),
-        (s_title, 3.5, 0.45, None, []),
-        (s_background, 6.5, 0.4, "应用背景",
-         [(0.2, 3.0, "设备故障，往往从微小振动开始。"), (3.1, 6.3, "见微用一台相机，非接触地同时测量多个点。")]),
+        (s_title, 3.0, 0.45, None, []),
+        (s_industry, INDUSTRY_DUR, 0.4, "应用背景",
+         [(0.2, 2.9, "设备故障，往往从异常振动开始；"), (3.0, 5.8, "早期振动十分微小，人眼难以察觉。")]),
+        (s_background, 7.3, 0.4, "应用背景",
+         [(0.2, 3.3, "接触式传感器需逐点安装布线，测点有限；"), (3.4, 7.1, "见微用一台相机，非接触地同时测量多个点。")]),
         (s_principle, 9.0, 0.4, "测量原理",
          [(0.2, 3.9, "原理是逐帧追踪表面散斑的亚像素位移，"), (4.0, 8.8, "扣除背景晃动后做频谱，并与停机基线比对。")]),
         (s_overview, 3 * OV_BEAT, 0.4, "硬件与外设",
-         [(0.2, 4.3, "相机拍摄振动，多种传感器辅助对照和记录；"), (4.6, 8.8, "触摸屏、NFC 和扬声器负责人机交互；"),
-          (9.1, 13.3, "报警灯和打印机输出结果，激光和补光辅助拍摄。")]),
-        (s_enclosure, 5.0, 0.6, "硬件与外设", [(0.3, 4.9, "全部模块装进 3D 打印外壳，")]),
-        (s_lid, 5.0, 0.4, "硬件与外设", [(0.2, 4.8, "机盖上集中了屏幕、报警灯、NFC 和四个按键。")]),
-        (s_carrier, 4.5, 0.4, "硬件与外设", [(0.2, 4.3, "主载板从原理图到 PCB 全部自主设计，")]),
-        (s_connect, 5.4, 0.4, "硬件与外设", [(0.1, 5.2, "为十余种外设提供供电、保护和接口；")]),
+         [(0.2, 4.1, "相机拍摄振动，多种传感器辅助对照和记录；"), (4.4, 8.4, "触摸屏、NFC 和扬声器负责人机交互；"),
+          (8.7, 12.7, "报警灯和打印机输出结果，激光和补光辅助拍摄。")]),
+        (s_enclosure, 4.7, 0.6, "硬件与外设", [(0.3, 4.6, "全部模块装进 3D 打印外壳，")]),
+        (s_lid, 4.7, 0.4, "硬件与外设", [(0.2, 4.5, "机盖上集中了屏幕、报警灯、NFC 和四个按键。")]),
+        (s_carrier, 4.2, 0.4, "硬件与外设", [(0.2, 4.0, "主载板从原理图到 PCB 全部自主设计，")]),
+        (s_connect, 5.0, 0.4, "硬件与外设", [(0.1, 4.8, "为十余种外设提供供电、保护和接口；")]),
         (s_panel, 3.5, 0.4, "硬件与外设", [(0.1, 3.3, "前面板集成状态灯、旋钮和按键。")]),
         (s_ax7010, 4.5, 0.6, "硬件与外设", [(0.1, 4.3, "核心是 AMD Zynq 芯片和双目相机。")]),
-        (s_arch, 11.0, 0.4, "系统架构",
-         [(0.3, 3.7, "PL 负责视频采集、显示和外设时序，"), (3.8, 7.2, "PS 运行测振算法、界面和报警，"),
-          (7.3, 10.8, "ESP32 负责 NFC、语音和联网。")]),
-        (s_pl, 9.0, 0.0, "PL 设计",
-         [(0.3, 3.9, "PL 搭建双路视频采集与 HDMI 显示通路，"), (4.0, 8.6, "自研麦克风接收和灯光保护逻辑，时序全部收敛。")]),
+        (s_arch, 12.0, 0.4, "系统架构",
+         [(0.3, 3.7, "PL 负责视频采集、显示和外设时序，"), (3.8, 7.0, "PS 运行测振算法、界面和报警，"),
+          (7.1, 9.3, "ESP32 负责 NFC、语音和 Wi-Fi 网关，"), (9.4, 11.8, "手机和电脑 APP 经局域网或热点连接设备。")]),
+        (s_pl, 8.2, 0.0, "PL 设计",
+         [(0.3, 3.9, "PL 搭建双路视频采集与 HDMI 显示通路，"), (4.0, 7.9, "自研麦克风接收和灯光保护逻辑，时序全部收敛。")]),
     ]
 
 
@@ -1286,10 +1379,12 @@ def worker(i):
     return render_frame(i).tobytes()
 
 
-def extract_hook(path, out_dir):
-    subprocess.run(["ffmpeg", "-y", "-v", "error", "-i", str(path), "-t", f"{HOOK_DUR:.3f}", "-vf",
-                    f"fps={FPS},scale={W}:{H}:flags=lanczos:force_original_aspect_ratio=increase,crop={W}:{H},"
-                    "unsharp=5:5:0.45", "-q:v", "2", str(Path(out_dir) / "%05d.jpg")], check=True)
+def extract_frames(path, out_dir, dur, sharpen):
+    Path(out_dir).mkdir(parents=True, exist_ok=True)
+    vf = f"fps={FPS},scale={W}:{H}:flags=lanczos:force_original_aspect_ratio=increase,crop={W}:{H}"
+    subprocess.run(["ffmpeg", "-y", "-v", "error", "-i", str(path), "-t", f"{dur:.3f}", "-vf",
+                    vf + (",unsharp=5:5:0.45" if sharpen else ""), "-q:v", "2", str(Path(out_dir) / "%05d.jpg")],
+                   check=True)
     return sorted(str(p) for p in Path(out_dir).glob("*.jpg"))
 
 
@@ -1301,13 +1396,15 @@ def main():
     ap.add_argument("--out", default=str(PROJ / "输出" / "上电前_样片.mp4"))
     ap.add_argument("--jobs", type=int, default=12)
     args = ap.parse_args()
-    global HOOK_FRAMES
+    global HOOK_FRAMES, INDUSTRY_FRAMES
     hook = Path(args.hook) if args.hook else None
     tmp = tempfile.mkdtemp(prefix="hook_")
     try:
         if hook and hook.exists():
-            HOOK_FRAMES = extract_hook(hook, tmp)
-        total = timeline()[3]
+            HOOK_FRAMES = extract_frames(hook, Path(tmp) / "hook", HOOK_DUR, True)
+        if INDUSTRY_CLIP.exists():
+            INDUSTRY_FRAMES = extract_frames(INDUSTRY_CLIP, Path(tmp) / "industry", INDUSTRY_DUR + 0.5, False)
+        starts, _, _, total = timeline()
         if args.stills is not None:
             out = Path(args.still_dir)
             out.mkdir(parents=True, exist_ok=True)
@@ -1319,11 +1416,26 @@ def main():
         vf = "[0:v]scale=out_color_matrix=bt709:out_range=tv,format=yuv420p[v]"
         cmd = ["ffmpeg", "-y", "-v", "error", "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", f"{W}x{H}",
                "-r", str(FPS), "-i", "-"]
+        # 音轨：钩子原声 + 工业实景的机器声（压低音量、按镜头起点延时），其余时间静音
+        fmt = "aformat=sample_rates=48000:channel_layouts=stereo"
+        chains, labels = [], []
         if HOOK_FRAMES:
-            cmd += ["-t", f"{HOOK_DUR:.3f}", "-i", str(hook), "-filter_complex",
-                    vf + f";[1:a]afade=t=in:d=0.15,afade=t=out:st={HOOK_DUR - 0.6:.3f}:d=0.6,"
-                    f"apad=whole_dur={n / FPS:.3f}[a]",
-                    "-map", "[v]", "-map", "[a]", "-c:a", "aac", "-b:a", "192k", "-ar", "48000"]
+            cmd += ["-t", f"{HOOK_DUR:.3f}", "-i", str(hook)]
+            chains.append(f"[1:a]{fmt},afade=t=in:d=0.15,afade=t=out:st={HOOK_DUR - 0.6:.3f}:d=0.6[h]")
+            labels.append("[h]")
+        if INDUSTRY_FRAMES:
+            cmd += ["-i", str(INDUSTRY_CLIP)]
+            ms = round(starts[[s[0] for s in scenes()].index(s_industry)] * 1000)
+            span = INDUSTRY_DUR + 0.4
+            chains.append(f"[{len(labels) + 1}:a]{fmt},atrim=0:{span:.3f},asetpts=PTS-STARTPTS,volume=0.15,"
+                          f"afade=t=in:d=0.4,afade=t=out:st={span - 0.6:.3f}:d=0.6,adelay={ms}|{ms}[i]")
+            labels.append("[i]")
+        if labels:
+            mix = (f"{''.join(labels)}amix=inputs={len(labels)}:duration=longest:normalize=0," if len(labels) > 1
+                   else f"{labels[0]}")
+            chains.append(f"{mix}apad=whole_dur={n / FPS:.3f}[a]")
+            cmd += ["-filter_complex", ";".join([vf] + chains), "-map", "[v]", "-map", "[a]",
+                    "-c:a", "aac", "-b:a", "192k", "-ar", "48000"]
         else:
             cmd += ["-filter_complex", vf, "-map", "[v]"]
         # 先写在 Linux 临时目录，完成后再复制到输出位置
