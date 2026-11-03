@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""渲染作品视频中"上电"之前的部分：钩子 → 标题 → 工业实景 → 设计背景 → 原理 → 整机与外设 → 外壳内部 → 机盖 → 主载板 → 接口 → 前面板 → AX7010 → 系统架构 → PL 硬件设计。
+"""渲染作品视频中"上电"之前的部分：钩子 → 标题 → 工业实景 → 设计背景 → 原理 → 整机与外设 → 外壳内部 → 机盖 → 整机成品 → 主载板 → 接口 → 前面板 → AX7010 → 系统架构 → PL 硬件设计。
 
 在 WSL 中运行（用到 ffmpeg、Pillow、numpy 和 Windows 字体）：
     python3 render_part1.py                          # 输出 ../输出/上电前_样片.mp4
@@ -542,7 +542,7 @@ def s_hook(c, t):
 
 @lru_cache(maxsize=None)
 def title_photo():
-    return photo("AX7010_双目相机.jpg").crop((0, 140, 900, 1270)).resize((860, 1080), Image.LANCZOS).convert("RGBA")
+    return photo("整机_低角度亮灯.webp").crop((300, 0, 1494, 1500)).resize((860, 1080), Image.LANCZOS).convert("RGBA")
 
 
 def s_title(c, t):
@@ -911,6 +911,37 @@ def s_lid(c, t):
         x, y = lid_xy(pt)
         p = ease_out(prog(t, 1.3 + 0.12 * k, 1.6 + 0.12 * k))
         strip(c, name, x, y + 30 + (1 - p) * 8, size=24, weight=600, pad=(10, 6), anchor="mt", alpha=p)
+
+
+# 整机正面亮灯照片裁掉右上角路人；坐标为整机_正面亮灯.jpg 原图像素，左侧标签右对齐 650，右侧左对齐 1712
+LIT_BOX = (0, 0, 1180, 960)
+LIT_POS, LIT_SCALE = (680, 120), 820 / 960
+LIT_ANNOTS = (
+    ((622, 335), (650, 420), "ToF 测距", "l"),
+    ((375, 405), (650, 540), "补光灯", "l"),
+    ((580, 838), (650, 860), "十字激光投影", "l"),
+    ((910, 130), (1712, 160), "声光报警灯", "r"),
+    ((675, 405), (1712, 330), "双目相机", "r"),
+    ((882, 437), (1712, 520), "补光灯", "r"),
+)
+
+
+@lru_cache(maxsize=None)
+def lit_print():
+    im = photo("整机_正面亮灯.jpg").crop(LIT_BOX)
+    return shadowed(im.resize((int(im.width * LIT_SCALE), int(im.height * LIT_SCALE)), Image.LANCZOS))
+
+
+def s_lit(c, t):
+    card, pad = lit_print()
+    a = ease_out(prog(t, 0, 0.5))
+    paste(c, card, LIT_POS[0] - pad, LIT_POS[1] - pad + (1 - a) * 16, a)
+    rise(c, "整机成品", MARGIN - 4, 300, 78, 800, p=ease_out(prog(t, 0.15, 0.65)))
+    text(c, "补光与十字激光辅助拍摄", MARGIN, 358, size=30, weight=500, color=INK2, alpha=ease_out(prog(t, 0.35, 0.8)))
+    for k, (anc, end, title, side) in enumerate(LIT_ANNOTS):
+        x = LIT_POS[0] + (anc[0] - LIT_BOX[0]) * LIT_SCALE
+        y = LIT_POS[1] + (anc[1] - LIT_BOX[1]) * LIT_SCALE
+        annot(c, t - 0.5 - 0.15 * k, (x, y), end, title, None, side, on_photo=True)
 
 
 CARRIER_RECT = (MARGIN, 160, MARGIN + 740, 900)
@@ -1292,6 +1323,7 @@ def scenes():
           (8.7, 12.7, "报警灯和打印机输出结果，激光和补光辅助拍摄。")]),
         (s_enclosure, 4.7, 0.6, "硬件与外设", [(0.3, 4.6, "全部模块装进 3D 打印外壳，")]),
         (s_lid, 4.7, 0.4, "硬件与外设", [(0.2, 4.5, "机盖上集中了屏幕、报警灯、NFC 和四个按键。")]),
+        (s_lit, 4.7, 0.4, "硬件与外设", [(0.2, 4.5, "补光灯照亮被测面；十字激光帮助对准，测量时自动关闭。")]),
         (s_carrier, 4.2, 0.4, "硬件与外设", [(0.2, 4.0, "主载板从原理图到 PCB 全部自主设计，")]),
         (s_connect, 5.0, 0.4, "硬件与外设", [(0.1, 4.8, "为十余种外设提供供电、保护和接口；")]),
         (s_panel, 3.5, 0.4, "硬件与外设", [(0.1, 3.3, "前面板集成状态灯、旋钮和按键。")]),
