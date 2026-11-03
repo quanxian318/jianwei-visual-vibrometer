@@ -51,8 +51,8 @@ HOOK_RESULT = (("振动频率", "10.84", "Hz"), ("振幅峰峰值", "0.142", "mm
 # 钩子静帧中散斑纸四角（1280×720 像素坐标）
 STICKER = ((392, 225), (1000, 258), (992, 475), (358, 400))
 
-# 工业设备实景：Pexels 视频 5080546（Pexels 许可，可免费商用、无需署名），带机器运转原声
-INDUSTRY_CLIP = PROJ / "素材" / "外部" / "工业设备_皮带轮运转.mp4"
+# 工业设备实景：机器上的压力表随设备轻微抖动，Pexels 视频 40481917（Pexels 许可，可免费商用、无需署名），无原声
+INDUSTRY_CLIP = PROJ / "素材" / "外部" / "工业设备_压力表振动.mp4"
 INDUSTRY_FRAMES = []
 INDUSTRY_DUR = 6.0
 
@@ -592,14 +592,14 @@ def camera_icon(dst, cx, cy, p, alpha=1.0):
 
 
 def s_industry(c, t):
-    """工业设备实景，缓慢推近皮带轮。"""
+    """工业设备实景，缓慢推近压力表。"""
     if not INDUSTRY_FRAMES:
         text(c, "工业设备实景：素材待放入", MARGIN, 300, size=48, weight=700, anchor="lm")
         return
     frame = Image.open(INDUSTRY_FRAMES[min(int(t * FPS), len(INDUSTRY_FRAMES) - 1)]).convert("RGB")
-    z = 1 + 0.07 * ease_in_out(clamp(t / (INDUSTRY_DUR + 0.4)))
+    z = 1 + 0.06 * ease_in_out(clamp(t / (INDUSTRY_DUR + 0.4)))
     cw, ch = W / z, H / z
-    x0, y0 = (W - cw) * 0.4, (H - ch) * 0.45
+    x0, y0 = (W - cw) * 0.45, (H - ch) * 0.55
     c.paste(frame.resize((W, H), Image.BICUBIC, box=(x0, y0, x0 + cw, y0 + ch)), (0, 0))
 
 
@@ -836,27 +836,28 @@ def s_overview(c, t):
         corner_label(c, name, ease_out(prog(t, t0 + 0.05, t0 + 0.4)) * fade)
 
 
-# 外壳照片裁掉顶部桌面；坐标为外壳内部装配.webp 原图像素，标签终点为画面坐标（左侧右对齐 850，右侧左对齐 1630）
-CASE_CROP_Y = 135
-CASE_POS, CASE_SCALE = (880, 90), 900 / (2000 - 135)
+# 外壳内部照片按机盖照片的画框比例裁切；坐标为外壳内部装配.jpg 原图像素，标签终点为画面坐标（左侧右对齐 850，右侧左对齐 1630）
+CASE_BOX = (0, 95, 1280, 1686)
+CASE_POS, CASE_SCALE = (880, 90), 900 / (CASE_BOX[3] - CASE_BOX[1])
 CASE_ANNOTS = (
-    ((662, 190), (850, 110), "十字投影", "l", None),
-    ((360, 450), (850, 200), "补光灯", "l", None),
-    ((490, 460), (850, 300), "加速度计", "l", None),
-    ((390, 715), (850, 400), "前面板", "l", YELLOW),
-    ((770, 1460), (850, 690), "主载板", "l", YELLOW),
-    ((300, 1550), (850, 820), "散热风扇", "l", None),
-    ((760, 440), (1630, 150), "双目相机", "r", None),
-    ((1160, 430), (1630, 255), "补光灯", "r", None),
-    ((1050, 425), (1630, 360), "IMU 姿态", "r", None),
-    ((760, 760), (1630, 470), "AX7010 开发板", "r", RED),
-    ((1320, 1450), (1630, 728), "热敏打印机", "r", None),
+    ((600, 340), (850, 100), "ToF 测距", "l", None),
+    ((287, 395), (850, 180), "补光灯", "l", None),
+    ((390, 403), (850, 330), "加速度计", "l", None),
+    ((155, 740), (850, 455), "扬声器", "l", None),
+    ((175, 1220), (850, 726), "散热风扇", "l", None),
+    ((520, 1240), (850, 830), "主载板", "l", YELLOW),
+    ((680, 277), (1630, 100), "十字激光", "r", None),
+    ((875, 381), (1630, 200), "IMU 姿态", "r", None),
+    ((970, 393), (1630, 320), "补光灯", "r", None),
+    ((700, 440), (1630, 390), "双目相机", "r", None),
+    ((615, 690), (1630, 470), "AX7010 开发板", "r", RED),
+    ((1060, 1200), (1630, 715), "热敏打印机", "r", None),
 )
 
 
 @lru_cache(maxsize=None)
 def case_print():
-    im = photo("外壳内部装配.webp").crop((0, CASE_CROP_Y, 1500, 2000))
+    im = photo("外壳内部装配.jpg").crop(CASE_BOX)
     return shadowed(im.resize((int(im.width * CASE_SCALE), int(im.height * CASE_SCALE)), Image.LANCZOS))
 
 
@@ -871,8 +872,8 @@ def s_enclosure(c, t):
     paste(c, card, CASE_POS[0] - pad, CASE_POS[1] - pad + (1 - a) * 16, a)
     case_title(c, t)
     for k, (anc, end, title, side, accent) in enumerate(CASE_ANNOTS):
-        ax = CASE_POS[0] + anc[0] * CASE_SCALE
-        ay = CASE_POS[1] + (anc[1] - CASE_CROP_Y) * CASE_SCALE
+        ax = CASE_POS[0] + (anc[0] - CASE_BOX[0]) * CASE_SCALE
+        ay = CASE_POS[1] + (anc[1] - CASE_BOX[1]) * CASE_SCALE
         annot(c, t - 0.5 - 0.15 * k, (ax, ay), end, title, None, side, accent, on_photo=True)
 
 
@@ -1404,7 +1405,7 @@ def main():
             HOOK_FRAMES = extract_frames(hook, Path(tmp) / "hook", HOOK_DUR, True)
         if INDUSTRY_CLIP.exists():
             INDUSTRY_FRAMES = extract_frames(INDUSTRY_CLIP, Path(tmp) / "industry", INDUSTRY_DUR + 0.5, False)
-        starts, _, _, total = timeline()
+        total = timeline()[3]
         if args.stills is not None:
             out = Path(args.still_dir)
             out.mkdir(parents=True, exist_ok=True)
@@ -1416,26 +1417,11 @@ def main():
         vf = "[0:v]scale=out_color_matrix=bt709:out_range=tv,format=yuv420p[v]"
         cmd = ["ffmpeg", "-y", "-v", "error", "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", f"{W}x{H}",
                "-r", str(FPS), "-i", "-"]
-        # 音轨：钩子原声 + 工业实景的机器声（压低音量、按镜头起点延时），其余时间静音
-        fmt = "aformat=sample_rates=48000:channel_layouts=stereo"
-        chains, labels = [], []
         if HOOK_FRAMES:
-            cmd += ["-t", f"{HOOK_DUR:.3f}", "-i", str(hook)]
-            chains.append(f"[1:a]{fmt},afade=t=in:d=0.15,afade=t=out:st={HOOK_DUR - 0.6:.3f}:d=0.6[h]")
-            labels.append("[h]")
-        if INDUSTRY_FRAMES:
-            cmd += ["-i", str(INDUSTRY_CLIP)]
-            ms = round(starts[[s[0] for s in scenes()].index(s_industry)] * 1000)
-            span = INDUSTRY_DUR + 0.4
-            chains.append(f"[{len(labels) + 1}:a]{fmt},atrim=0:{span:.3f},asetpts=PTS-STARTPTS,volume=0.15,"
-                          f"afade=t=in:d=0.4,afade=t=out:st={span - 0.6:.3f}:d=0.6,adelay={ms}|{ms}[i]")
-            labels.append("[i]")
-        if labels:
-            mix = (f"{''.join(labels)}amix=inputs={len(labels)}:duration=longest:normalize=0," if len(labels) > 1
-                   else f"{labels[0]}")
-            chains.append(f"{mix}apad=whole_dur={n / FPS:.3f}[a]")
-            cmd += ["-filter_complex", ";".join([vf] + chains), "-map", "[v]", "-map", "[a]",
-                    "-c:a", "aac", "-b:a", "192k", "-ar", "48000"]
+            cmd += ["-t", f"{HOOK_DUR:.3f}", "-i", str(hook), "-filter_complex",
+                    vf + f";[1:a]afade=t=in:d=0.15,afade=t=out:st={HOOK_DUR - 0.6:.3f}:d=0.6,"
+                    f"apad=whole_dur={n / FPS:.3f}[a]",
+                    "-map", "[v]", "-map", "[a]", "-c:a", "aac", "-b:a", "192k", "-ar", "48000"]
         else:
             cmd += ["-filter_complex", vf, "-map", "[v]"]
         # 先写在 Linux 临时目录，完成后再复制到输出位置
