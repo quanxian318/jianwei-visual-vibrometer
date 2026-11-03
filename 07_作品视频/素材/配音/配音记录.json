@@ -1,0 +1,192 @@
+{
+ "voice": "度怀安",
+ "params": {
+  "per": 4195,
+  "spd": 6,
+  "pit": 5,
+  "vol": 5,
+  "aue": 6
+ },
+ "clips": [
+  {
+   "text": "它在振动吗？",
+   "file": "ad466a4f344d.wav",
+   "duration": 1.373
+  },
+  {
+   "text": "见微，非接触视觉测振仪。",
+   "file": "d6fc6d1981fa.wav",
+   "duration": 2.909
+  },
+  {
+   "text": "设备在故障早期，往往只有肉眼难以察觉的微小振动；",
+   "file": "f75641b5394b.wav",
+   "duration": 4.071
+  },
+  {
+   "text": "若不及时处理，故障会进一步加剧，危及人身和财产安全。",
+   "file": "00a339739daf.wav",
+   "duration": 4.656
+  },
+  {
+   "text": "接触式传感器要逐点安装布线，测点有限，还会改变轻薄结构的振动；",
+   "file": "c1e807d41549.wav",
+   "duration": 5.75
+  },
+  {
+   "text": "激光测振仪精度高，但价格昂贵，一次只能测一个点。",
+   "file": "2c57647d0833.wav",
+   "duration": 5.151
+  },
+  {
+   "text": "见微用一台相机，非接触地同时测量 12 个点，",
+   "file": "ad4fb3f20dc5.wav",
+   "duration": 3.766
+  },
+  {
+   "text": "扣除相机晃动、对照停机基线，在故障萌芽时就发出预警。",
+   "file": "f593ee86b5c6.wav",
+   "duration": 4.726
+  },
+  {
+   "text": "原理是逐帧追踪表面散斑的亚像素位移，",
+   "file": "f34e0d778499.wav",
+   "duration": 3.502
+  },
+  {
+   "text": "扣除背景晃动后做频谱，并与停机基线比对。",
+   "file": "59f7ed6ff194.wav",
+   "duration": 3.88
+  },
+  {
+   "text": "相机拍摄振动，多种传感器辅助对照和记录；",
+   "file": "9b357dffaaae.wav",
+   "duration": 3.735
+  },
+  {
+   "text": "触摸屏、NFC 和扬声器负责人机交互；",
+   "file": "8b21420f3d67.wav",
+   "duration": 3.393
+  },
+  {
+   "text": "报警灯和打印机输出结果，激光和补光辅助拍摄。",
+   "file": "b5e1b4dd5bfd.wav",
+   "duration": 4.463
+  },
+  {
+   "text": "全部模块都装进了 3D 打印外壳，",
+   "file": "898f8041e238.wav",
+   "duration": 2.595
+  },
+  {
+   "text": "机盖上有屏幕、报警灯、NFC 和四个按键。",
+   "file": "4f0daf5cf803.wav",
+   "duration": 4.75
+  },
+  {
+   "text": "补光灯照亮被测面；十字激光帮助对准，测量时自动关闭。",
+   "file": "28aa25e316ca.wav",
+   "duration": 5.27
+  },
+  {
+   "text": "主载板从原理图到 PCB 全部自主设计，",
+   "file": "d78dbccf491c.wav",
+   "duration": 3.576
+  },
+  {
+   "text": "为十余种外设提供供电、保护和接口；",
+   "file": "80b509449c8c.wav",
+   "duration": 3.255
+  },
+  {
+   "text": "前面板集成状态灯、旋钮和按键。",
+   "file": "6cca2297eb71.wav",
+   "duration": 3.546
+  },
+  {
+   "text": "核心是 AMD Zynq 芯片和双目相机。",
+   "file": "dfeb57984006.wav",
+   "duration": 3.591
+  },
+  {
+   "text": "PL 负责视频与外设时序，",
+   "file": "bea352653829.wav",
+   "duration": 2.585
+  },
+  {
+   "text": "PS 运行测振算法、界面和报警，",
+   "file": "85b4a9998eee.wav",
+   "duration": 3.073
+  },
+  {
+   "text": "ESP32 负责 NFC、语音和联网，",
+   "file": "160a53da3061.wav",
+   "duration": 3.272
+  },
+  {
+   "text": "手机电脑 APP 经局域网或热点连接。",
+   "file": "ba6d6e37d4d4.wav",
+   "duration": 3.982
+  },
+  {
+   "text": "PL 搭建双路视频与 HDMI 显示通路，",
+   "file": "2dc87999646c.wav",
+   "duration": 4.13
+  },
+  {
+   "text": "自研麦克风接收和灯光保护逻辑，时序全部收敛。",
+   "file": "e1ae4b495bc8.wav",
+   "duration": 4.394
+  },
+  {
+   "text": "电机带动贴有散斑的铝片振动，见微在一旁拍摄。",
+   "file": "04690cd87571.wav",
+   "duration": 4.65
+  },
+  {
+   "text": "电机停转时，先采集 15 秒停机基线；",
+   "file": "99d772eb6c18.wav",
+   "duration": 3.409
+  },
+  {
+   "text": "随后开启电机，测量 10 秒，12 个测点同时跟踪；",
+   "file": "67f4efc8cbf1.wav",
+   "duration": 4.028
+  },
+  {
+   "text": "振动超过 0.02 毫米 阈值，声光报警和手机同时响应；",
+   "file": "3232050c2a04.wav",
+   "duration": 4.991
+  },
+  {
+   "text": "屏幕和手机给出主频 19.95 赫兹、峰峰值 0.209 毫米，",
+   "file": "b74b4d81ff05.wav",
+   "duration": 5.955
+  },
+  {
+   "text": "热敏打印机当场打印测量报告。",
+   "file": "406a45bd8f39.wav",
+   "duration": 2.936
+  },
+  {
+   "text": "麦克风测得的频率与视觉只差 0.02 赫兹；",
+   "file": "314f3e907f8c.wav",
+   "duration": 4.153
+  },
+  {
+   "text": "12 个测点全部超过停机基线，452 帧无丢帧。",
+   "file": "3179c7886f8e.wav",
+   "duration": 4.596
+  },
+  {
+   "text": "见微知著：在故障萌芽时就看见它，",
+   "file": "d5e4c758da6c.wav",
+   "duration": 2.93
+  },
+  {
+   "text": "让设备运行更安全，让维护更从容。",
+   "file": "62346ac464af.wav",
+   "duration": 3.433
+  }
+ ]
+}
