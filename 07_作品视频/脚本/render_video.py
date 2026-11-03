@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""渲染作品视频中"上电"之前的部分：钩子 → 标题 → 工业实景 → 设计背景 → 原理 → 整机与外设 → 外壳内部 → 机盖 → 整机成品 → 主载板 → 接口 → 前面板 → AX7010 → 系统架构 → PL 硬件设计。
+"""渲染完整作品视频：钩子 → 标题 → 工业实景 → 设计背景 → 原理 → 整机与外设 → 外壳内部 → 机盖 → 整机成品 → 主载板 → 接口 → 前面板 → AX7010 → 系统架构 → PL 硬件设计 → 上电实测 → 实测结果 → 结尾。
 
 在 WSL 中运行（用到 ffmpeg、Pillow、numpy 和 Windows 字体）：
-    python3 render_part1.py                          # 输出 ../输出/上电前_样片.mp4
-    python3 render_part1.py --stills 12 40 --still-dir 目录   # 只导出静帧检查版式
+    python3 render_video.py                          # 输出 ../输出/见微_作品视频.mp4
+    python3 render_video.py --stills 12 40 --still-dir 目录   # 只导出静帧检查版式
 默认使用 ../素材/实拍/钩子_电机铝片散斑.mp4 作开场，--hook 可换成别的片段。
 """
 import argparse
@@ -45,8 +45,12 @@ MARGIN = 160
 
 HOOK_FRAMES = []
 HOOK_DUR = 5.0
-# 钩子结尾弹出的结果：取自 05_验证资料/板端报警/板端验证.json（2026-10-31 板端记录）
-HOOK_RESULT = (("振动频率", "10.84", "Hz"), ("振幅峰峰值", "0.142", "mm"))
+# 测量结果取自 05_验证资料/板端实测/record.json（2026-11-04 02:05 板端测量记录）
+HOOK_RESULT = (("振动频率", "19.95", "Hz"), ("振幅峰峰值", "0.209", "mm"))
+LIVE_DATA = (("视觉主频", "19.95", "Hz", "相机 45 fps 采集"), ("麦克风核对", "19.93", "Hz", "与视觉相差 0.02 Hz"),
+             ("位移峰峰值", "0.209", "mm", "按试验标定换算"), ("采集", "452", "帧", "丢帧 0，跟踪失败 0"))
+# 12 个测点的信号与停机基线之比（gate_ratio），门限为 3 倍
+LIVE_GATES = (81.1, 95.0, 67.3, 59.7, 75.6, 62.3, 60.7, 36.3, 65.0, 67.9, 54.1, 37.3)
 
 # 钩子静帧中散斑纸四角（1280×720 像素坐标）
 STICKER = ((392, 225), (1000, 258), (992, 475), (358, 400))
@@ -55,6 +59,16 @@ STICKER = ((392, 225), (1000, 258), (992, 475), (358, 400))
 INDUSTRY_CLIP = PROJ / "素材" / "外部" / "工业设备_压力表振动.mp4"
 INDUSTRY_FRAMES = []
 INDUSTRY_DUR = 6.0
+
+# 上电实测：同一次测量的三段录像，统一按全景原片时间 F 取帧（素材内时间 = F − 偏移）。
+# 全景从原片 0.5 s 起；屏幕原片比全景早 1.0 s（报警灯 37.2 / 38.2 s），截自 20.5 s；
+# APP 原片比全景晚 3.4 s（开始测量 31.8 / 28.4 s），截自 9.5 s。
+LIVE = PROJ / "素材" / "实测"
+LIVE_CLIPS = {"full": (LIVE / "全景_测量过程.mp4", 0.5), "screen": (LIVE / "屏幕_测量过程.mp4", 21.5),
+              "app": (LIVE / "APP_测量过程.mp4", 6.1)}
+LIVE_FRAMES = {}
+# 全景原片里的事件：22.8 s 起基线完成语音，25.7 s 电机启动，37.0 s 起报警（38.2 s 灯亮，41.2 s 报警语音）
+LIVE_AUDIO = (("s_live_voice", 22.8, 4.5, 0.5), ("s_live_alarm", 37.0, 8.6, 1.2))
 
 
 # ---------- 缓动 ----------
@@ -1305,6 +1319,181 @@ def s_pl(c, t):
         fill_rect(c, (0, 0, W, H), (0, 0, 0), ease_in_out(fade))
 
 
+# ---------- 上电实测 ----------
+
+def live(name, F):
+    """取全景原片时间 F 时刻的素材帧。"""
+    frames = LIVE_FRAMES.get(name)
+    if not frames:
+        return Image.new("RGB", (1280, 720), PANEL)
+    i = int(round((F - LIVE_CLIPS[name][1]) * FPS))
+    return Image.open(frames[max(0, min(i, len(frames) - 1))]).convert("RGB")
+
+
+def lerp_box(a, b, p):
+    return tuple(lerp(u, v, p) for u, v in zip(a, b))
+
+
+def full_shot(c, F, crop):
+    c.paste(live("full", F).resize((W, H), Image.BICUBIC, box=crop), (0, 0))
+    s = W / (crop[2] - crop[0])
+    return lambda pt: ((pt[0] - crop[0]) * s, (pt[1] - crop[1]) * s)
+
+
+@lru_cache(maxsize=16)
+def panel_shadow(w, h):
+    return shadowed(Image.new("RGBA", (w, h), (0, 0, 0, 0)), blur=22, offset=14, alpha=0.28, pad=60)
+
+
+def framed(c, im, crop, box, alpha=1.0, radius=0):
+    """把素材帧的 crop 区域放进 box 画框，带阴影。"""
+    x0, y0, x1, y1 = box
+    w, h = int(round(x1 - x0)), int(round(y1 - y0))
+    sh, pad = panel_shadow(w, h)
+    paste(c, sh, x0 - pad, y0 - pad, alpha)
+    img = im.resize((w, h), Image.LANCZOS, box=crop).convert("RGBA")
+    if radius:
+        img.putalpha(rounded_mask(w, h, radius))
+    paste(c, img, x0, y0, alpha)
+
+
+def panel_label(c, s, x, y, alpha=1.0):
+    paste(c, box_img(13, 13, fill=YELLOW + (255,)), x, y - 32, alpha)
+    text(c, s, x + 24, y - 25, size=26, weight=600, alpha=alpha, anchor="lm")
+
+
+def speed_badge(c, s, box, alpha=1.0):
+    strip(c, s, box[2] - 16, box[1] + 16, size=24, weight=700, bg=YELLOW, pad=(12, 6), anchor="rt", alpha=alpha)
+
+
+# 画框（画面像素）与素材裁切（素材像素）
+L_MAIN, R_PHONE = (80, 170, 1260, 834), (1340, 170, 1832, 834)
+L_HALF, R_HALF = (70, 230, 930, 714), (990, 230, 1850, 714)
+FULL_CROP, SCREEN_CROP, APP_CROP = (600, 20, 1920, 762), (560, 90, 1280, 495), (0, 110, 852, 1260)
+LIVE_TARGET, LIVE_UNIT, LIVE_LAMP = (1015, 655), (1334, 360), (1525, 250)
+
+
+def s_live_intro(c, t):
+    scr = full_shot(c, 1.0 + t, lerp_box((0, 0, 1920, 1080), (300, 0, 1920, 911), ease_in_out(clamp(t / 4.5))))
+    annot(c, t - 0.6, scr(LIVE_TARGET), (620, 880), "振动目标", "电机带动散斑铝片", "l")
+    annot(c, t - 0.9, scr(LIVE_UNIT), (1700, 140), "见微", None, "r")
+
+
+def s_live_baseline(c, t):
+    F = 7.0 + 3.0 * t
+    a = ease_out(prog(t, 0, 0.4))
+    framed(c, live("full", F), FULL_CROP, L_MAIN, a)
+    framed(c, live("app", F), APP_CROP, R_PHONE, a, radius=28)
+    panel_label(c, "现场", L_MAIN[0], L_MAIN[1], a)
+    panel_label(c, "手机 APP", R_PHONE[0], R_PHONE[1], a)
+    speed_badge(c, "3× 快放", L_MAIN, a)
+
+
+def s_live_voice(c, t):
+    F = 22.8 + t
+    framed(c, live("full", F), FULL_CROP, L_HALF)
+    framed(c, live("screen", F), SCREEN_CROP, R_HALF)
+    panel_label(c, "现场", L_HALF[0], L_HALF[1])
+    panel_label(c, "7 寸屏", R_HALF[0], R_HALF[1])
+    strip(c, "语音播报", R_HALF[2] - 16, R_HALF[1] + 16, size=24, weight=700, bg=YELLOW, pad=(12, 6), anchor="rt",
+          alpha=prog(t, 0.6, 0.9) * (1 - prog(t, 3.9, 4.2)))
+    strip(c, "电机启动", L_HALF[2] - 16, L_HALF[1] + 16, size=24, weight=700, bg=YELLOW, pad=(12, 6), anchor="rt",
+          alpha=prog(t, 2.9, 3.2))
+
+
+def s_live_measure(c, t):
+    F = 28.4 + 2.0 * t
+    framed(c, live("screen", F), SCREEN_CROP, L_MAIN)
+    framed(c, live("app", F), APP_CROP, R_PHONE, radius=28)
+    panel_label(c, "7 寸屏", L_MAIN[0], L_MAIN[1])
+    panel_label(c, "手机 APP", R_PHONE[0], R_PHONE[1])
+    speed_badge(c, "2× 快放", L_MAIN)
+
+
+def s_live_alarm(c, t):
+    F = 37.0 + t
+    scr = full_shot(c, F, lerp_box((0, 0, 1920, 1080), (240, 0, 1920, 945), ease_in_out(prog(t, 0, 3.2))))
+    annot(c, t - 1.4, scr(LIVE_LAMP), (1180, 150), "声光报警", None, "l")
+    p = ease_out(prog(t, 2.9, 3.5))
+    if p > 0:
+        dx = (p - 1) * 60
+        box = (60 + dx, 470, 420 + dx, 956)
+        framed(c, live("app", F), APP_CROP, box, p, radius=22)
+        panel_label(c, "手机 APP", box[0], box[1], p)
+
+
+RES_CROP, APP_DETAIL = (590, 95, 1060, 395), (0, 230, 852, 1450)
+L_RES, R_RES = (80, 190, 1150, 873), (1250, 190, 1727, 873)
+
+
+def s_live_result(c, t):
+    framed(c, live("screen", 46.0 + t), RES_CROP, L_RES)
+    framed(c, live("app", 48.6 + t), APP_DETAIL, R_RES, radius=28)
+    panel_label(c, "7 寸屏", L_RES[0], L_RES[1])
+    panel_label(c, "手机 APP", R_RES[0], R_RES[1])
+
+
+# 收据清晰的片段只有约 1.7 s，播完后定格；帧转回竖屏后裁切
+RCPT_CROP, RCPT_BOX = (0, 40, 720, 900), (230, 130, 917, 950)
+
+
+def s_live_print(c, t):
+    im = live("screen", min(67.4 + t, 69.1)).transpose(Image.ROTATE_90)
+    framed(c, im, RCPT_CROP, RCPT_BOX, ease_out(prog(t, 0, 0.3)))
+    side_text(c, t, 1060, "现场打印", "测量报告",
+              (("主频", "19.95 Hz"), ("测点", "12/12 超过停机基线"), ("采集", "45.0 fps，丢帧 0")))
+
+
+def s_live_data(c, t):
+    cnt = ease_out(prog(t, 0.4, 1.4))
+    for k, (label, val, unit, note) in enumerate(LIVE_DATA):
+        x, y = MARGIN + (k % 2) * 460, 400 + (k // 2) * 300
+        a = ease_out(prog(t, 0.2 + 0.12 * k, 0.6 + 0.12 * k))
+        text(c, label, x, y - 118, size=30, weight=500, color=INK2, alpha=a)
+        digits = len(val.split(".")[1]) if "." in val else 0
+        vw = text(c, f"{float(val) * cnt:.{digits}f}", x - 4, y, size=112, weight=700, kind="num", alpha=a)
+        text(c, unit, x + vw + 12, y, size=44, weight=600, kind="num", color=INK2, alpha=a)
+        text(c, note, x, y + 50, size=26, color=INK2, alpha=a)
+    text(c, "数据来自见微 2026-11-04 02:05 测量记录", MARGIN, 900, size=24, color=INK2,
+         alpha=ease_out(prog(t, 1.2, 1.6)))
+    # 12 个测点的信号与停机基线之比
+    x0, x1, y0, y1, vmax = 1150, 1780, 330, 800, 100.0
+    a = ease_out(prog(t, 0.5, 0.9))
+    text(c, "各测点信号与停机基线之比", x0, 282, size=30, weight=600, alpha=a)
+    polyline(c, [(x0, y1), (x1, y1)], INK + (255,), 2, a)
+    for v in (50, 100):
+        yy = y1 - (y1 - y0) * v / vmax
+        polyline(c, [(x0, yy), (x1, yy)], RULE + (255,), 1, a)
+        text(c, str(v), x0 - 14, yy, size=22, color=INK2, alpha=a, anchor="rm")
+    pitch = (x1 - x0) / len(LIVE_GATES)
+    for k, v in enumerate(LIVE_GATES):
+        p = ease_out(prog(t, 0.8 + 0.07 * k, 1.5 + 0.07 * k))
+        bx = x0 + k * pitch + pitch * 0.18
+        top = y1 - (y1 - y0) * v / vmax * p
+        if y1 - top > 1:
+            fill_rect(c, (bx, top, bx + pitch * 0.64, y1), YELLOW, a)
+        text(c, str(k + 1), bx + pitch * 0.32, y1 + 28, size=20, color=INK2, alpha=a, anchor="mm")
+    g = ease_in_out(prog(t, 2.0, 2.6))
+    gy = y1 - (y1 - y0) * 3 / vmax
+    if g > 0.01:
+        dashed(c, [(x0, gy), (x0 + (x1 - x0) * g, gy)], RED + (255,), 2)
+    text(c, "3 倍门限", x0 - 14, gy - 2, size=22, weight=600, color=RED, alpha=g, anchor="rm")
+
+
+def s_end(c, t):
+    p = ease_out(prog(t, 0.0, 0.8))
+    w = int(860 * p)
+    if w > 1:
+        paste(c, title_photo().crop((860 - w, 0, 860, 1080)), W - w, 0)
+    rise(c, "见微", MARGIN - 8, 520, 250, 900, p=ease_out(prog(t, 0.25, 0.9)), tracking=14)
+    fill_rect(c, (MARGIN, 588, MARGIN + 92 * ease_in_out(prog(t, 0.8, 1.15)), 601), YELLOW)
+    rise(c, "非接触  多点同测  现场报警", MARGIN, 686, 44, 500, p=ease_out(prog(t, 0.9, 1.4)))
+    text(c, "基于 AMD Zynq-7010", MARGIN, 752, size=32, color=INK2, alpha=ease_out(prog(t, 1.2, 1.7)))
+    fade = prog(t, 5.0, 6.0)
+    if fade > 0:
+        fill_rect(c, (0, 0, W, H), (0, 0, 0), ease_in_out(fade))
+
+
 # ---------- 时间线 ----------
 
 def scenes():
@@ -1331,8 +1520,20 @@ def scenes():
         (s_arch, 12.0, 0.4, "系统架构",
          [(0.3, 3.7, "PL 负责视频采集、显示和外设时序，"), (3.8, 7.0, "PS 运行测振算法、界面和报警，"),
           (7.1, 9.3, "ESP32 负责 NFC、语音和 Wi-Fi 网关，"), (9.4, 11.8, "手机和电脑 APP 经局域网或热点连接设备。")]),
-        (s_pl, 8.2, 0.0, "PL 设计",
+        (s_pl, 8.2, 0.5, "PL 设计",
          [(0.3, 3.9, "PL 搭建双路视频采集与 HDMI 显示通路，"), (4.0, 7.9, "自研麦克风接收和灯光保护逻辑，时序全部收敛。")]),
+        (s_live_intro, 4.5, 0.4, "上电实测", [(0.3, 4.3, "实测现场：电机带动贴有散斑的铝片振动，见微在一旁拍摄。")]),
+        (s_live_baseline, 5.0, 0.4, "上电实测", [(0.2, 4.8, "电机停转时，先采集 15 秒停机基线；")]),
+        (s_live_voice, 4.5, 0.4, "上电实测",
+         [(0.1, 2.8, "设备语音：“停机基线已采集，请开始测量。”"), (2.9, 4.4, "随后开启电机。")]),
+        (s_live_measure, 4.3, 0.4, "上电实测", [(0.2, 4.2, "测量 10 秒，12 个测点同时跟踪；")]),
+        (s_live_alarm, 7.6, 0.4, "上电实测",
+         [(1.1, 4.1, "峰峰值超过 0.02 mm 阈值，报警灯和蜂鸣器立即响应，"), (4.2, 7.4, "设备语音：“振动异常，请及时检查设备。”")]),
+        (s_live_result, 5.5, 0.4, "上电实测", [(0.2, 5.3, "屏幕和手机同时给出主频 19.95 Hz、峰峰值 0.209 mm，")]),
+        (s_live_print, 4.0, 0.4, "上电实测", [(0.1, 3.8, "热敏打印机当场打印测量报告。")]),
+        (s_live_data, 8.5, 0.5, "实测结果",
+         [(0.3, 4.2, "麦克风独立测得 19.93 Hz，与视觉结果只差 0.02 Hz；"), (4.4, 8.3, "12 个测点全部超过停机基线，452 帧没有丢帧。")]),
+        (s_end, 6.0, 0.0, None, []),
     ]
 
 
@@ -1422,23 +1623,51 @@ def extract_frames(path, out_dir, dur, sharpen):
     return sorted(str(p) for p in Path(out_dir).glob("*.jpg"))
 
 
+def extract_live(path, out_dir):
+    Path(out_dir).mkdir(parents=True, exist_ok=True)
+    subprocess.run(["ffmpeg", "-y", "-v", "error", "-i", str(path), "-vf", f"fps={FPS}", "-q:v", "2",
+                    str(Path(out_dir) / "%05d.jpg")], check=True)
+    return sorted(str(p) for p in Path(out_dir).glob("*.jpg"))
+
+
+def audio_graph(total, starts, hook_in, live_in):
+    """钩子原声与实测原声（基线语音、报警声）按时间线混音。"""
+    names = [s[0].__name__ for s in scenes()]
+    parts, labels = [], []
+    fmt = "asetpts=PTS-STARTPTS,aformat=sample_rates=48000:channel_layouts=stereo"
+    if hook_in:
+        parts.append(f"[{hook_in}:a]atrim=0:{HOOK_DUR:.3f},{fmt},volume=8dB,afade=t=in:d=0.15,"
+                     f"afade=t=out:st={HOOK_DUR - 0.6:.3f}:d=0.6[h]")
+        labels.append("[h]")
+    for k, (scene, f0, dur, fade) in enumerate(LIVE_AUDIO):
+        t0 = starts[names.index(scene)]
+        parts.append(f"[{live_in}:a]atrim=start={f0 - LIVE_CLIPS['full'][1]:.3f}:duration={dur:.3f},{fmt},volume=16dB,"
+                     f"afade=t=in:d=0.08,afade=t=out:st={dur - fade:.3f}:d={fade:.3f},adelay={int(t0 * 1000)}:all=1[l{k}]")
+        labels.append(f"[l{k}]")
+    parts.append("".join(labels) + f"amix=inputs={len(labels)}:normalize=0:dropout_transition=0,"
+                 f"alimiter=limit=0.95,apad=whole_dur={total:.3f}[a]")
+    return ";".join(parts)
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--hook", default=str(HOOK_CLIP), help="开场实拍片段，取前 5 秒")
     ap.add_argument("--stills", nargs="*", type=float, help="只导出这些秒数的静帧")
     ap.add_argument("--still-dir", default=str(PROJ / "输出" / "静帧"))
-    ap.add_argument("--out", default=str(PROJ / "输出" / "上电前_样片.mp4"))
+    ap.add_argument("--out", default=str(PROJ / "输出" / "见微_作品视频.mp4"))
     ap.add_argument("--jobs", type=int, default=12)
     args = ap.parse_args()
     global HOOK_FRAMES, INDUSTRY_FRAMES
     hook = Path(args.hook) if args.hook else None
-    tmp = tempfile.mkdtemp(prefix="hook_")
+    tmp = tempfile.mkdtemp(prefix="jianwei_")
     try:
         if hook and hook.exists():
             HOOK_FRAMES = extract_frames(hook, Path(tmp) / "hook", HOOK_DUR, True)
         if INDUSTRY_CLIP.exists():
             INDUSTRY_FRAMES = extract_frames(INDUSTRY_CLIP, Path(tmp) / "industry", INDUSTRY_DUR + 0.5, False)
-        total = timeline()[3]
+        for name, (path, _) in LIVE_CLIPS.items():
+            LIVE_FRAMES[name] = extract_live(path, Path(tmp) / name)
+        starts, _, _, total = timeline()
         if args.stills is not None:
             out = Path(args.still_dir)
             out.mkdir(parents=True, exist_ok=True)
@@ -1447,21 +1676,20 @@ def main():
             print(f"stills -> {out}")
             return
         n = int(round(total * FPS))
-        vf = "[0:v]scale=out_color_matrix=bt709:out_range=tv,format=yuv420p[v]"
         cmd = ["ffmpeg", "-y", "-v", "error", "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", f"{W}x{H}",
                "-r", str(FPS), "-i", "-"]
-        if HOOK_FRAMES:
-            cmd += ["-t", f"{HOOK_DUR:.3f}", "-i", str(hook), "-filter_complex",
-                    vf + f";[1:a]afade=t=in:d=0.15,afade=t=out:st={HOOK_DUR - 0.6:.3f}:d=0.6,"
-                    f"apad=whole_dur={n / FPS:.3f}[a]",
-                    "-map", "[v]", "-map", "[a]", "-c:a", "aac", "-b:a", "192k", "-ar", "48000"]
-        else:
-            cmd += ["-filter_complex", vf, "-map", "[v]"]
-        # 先写在 Linux 临时目录，完成后再复制到输出位置
+        hook_in = 1 if HOOK_FRAMES else 0
+        if hook_in:
+            cmd += ["-i", str(hook)]
+        cmd += ["-i", str(LIVE_CLIPS["full"][0])]
+        graph = ("[0:v]scale=out_color_matrix=bt709:out_range=tv,format=yuv420p[v];"
+                 + audio_graph(n / FPS, starts, hook_in, hook_in + 1))
+        cmd += ["-filter_complex", graph, "-map", "[v]", "-map", "[a]", "-c:a", "aac", "-b:a", "192k", "-ar", "48000"]
+        # 先写在 Linux 临时目录，完成后再复制到输出位置；码率上限让成片保持在 100 MB 以内，比赛上限为 300 MB
         out_tmp = str(Path(tmp) / "render.mp4")
-        cmd += ["-c:v", "libx264", "-preset", "slow", "-crf", "16", "-profile:v", "high", "-level", "4.1",
-                "-colorspace", "bt709", "-color_primaries", "bt709", "-color_trc", "bt709", "-movflags", "+faststart",
-                out_tmp]
+        cmd += ["-c:v", "libx264", "-preset", "slow", "-crf", "18", "-maxrate", "9M", "-bufsize", "18M",
+                "-profile:v", "high", "-level", "4.1", "-colorspace", "bt709", "-color_primaries", "bt709",
+                "-color_trc", "bt709", "-movflags", "+faststart", out_tmp]
         proc = subprocess.Popen(cmd, stdin=subprocess.PIPE)
         with Pool(args.jobs) as pool:
             for i, buf in enumerate(pool.imap(worker, range(n), chunksize=2)):
