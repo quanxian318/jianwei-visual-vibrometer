@@ -29,7 +29,7 @@ PCB_MAIN = REPO / "01_硬件工程/主载板PCB_工程预览.webp"
 PCB_PANEL = REPO / "01_硬件工程/前面板PCB_工程预览.webp"
 FONT_DIRS = [Path("/mnt/c/Windows/Fonts"), Path("C:/Windows/Fonts")]
 
-# 版式：左对齐 160 px 页边；图解放在实验台浅灰底上，实物照片满幅；黄色只标"当前/自研/测点"
+# 版式：左对齐 160 px 页边；图解放在实验台浅灰底上，实物照片满幅；黄色只标"当前/自研/测点"，红色只标 AX7010
 PAPER = (235, 237, 240)
 INK = (25, 27, 30)
 INK2 = (82, 87, 95)
@@ -40,12 +40,13 @@ PANEL = (20, 21, 23)
 GRID = (62, 64, 69)
 HUD = (170, 175, 182)
 YELLOW = (242, 183, 5)
+RED = (216, 38, 30)
 MARGIN = 160
 
 HOOK_FRAMES = []
 HOOK_DUR = 5.0
 # 钩子结尾弹出的结果：取自 05_验证资料/板端报警/板端验证.json（2026-10-31 板端记录）
-HOOK_RESULT = (("振动频率", "10.84", "Hz"), ("振幅（峰峰值）", "0.142", "mm"))
+HOOK_RESULT = (("振动频率", "10.84", "Hz"), ("振幅峰峰值", "0.142", "mm"))
 
 # 钩子静帧中散斑纸四角（1280×720 像素坐标）
 STICKER = ((392, 225), (1000, 258), (992, 475), (358, 400))
@@ -384,21 +385,23 @@ def strip(dst, s, x, y, size=24, weight=500, kind="sans", bg=WHITE, fg=INK, pad=
 
 
 @lru_cache(maxsize=128)
-def tag_img(title, sub, yellow):
-    bg = YELLOW if yellow else WHITE
-    tw = text_w(title, 27, 600)
-    sw = text_w(sub, 21, 500, "cond") if sub else 0
-    w = int(max(tw, sw) + 34)
-    h = 78 if sub else 48
+def tag_img(title, sub, accent):
+    """accent：None 白底，YELLOW 自研电路板，RED AX7010。"""
+    bg = accent or WHITE
+    tw = text_w(title, 28, 600)
+    sw = text_w(sub, 22, 500, "cond") if sub else 0
+    w = int(max(tw, sw) + 36)
+    h = 82 if sub else 50
     card = box_img(w, h, fill=bg + (255,)).copy()
-    text(card, title, 17, 35 if sub else 33, size=27, weight=600)
+    text(card, title, 18, 37 if sub else 35, size=28, weight=600, color=WHITE if accent == RED else INK)
     if sub:
-        text(card, sub, 17, 64, size=21, weight=500, kind="cond", color=INK if yellow else INK2)
+        text(card, sub, 18, 68, size=22, weight=500, kind="cond",
+             color=(255, 226, 222) if accent == RED else INK if accent else INK2)
     out, pad = shadowed(card, blur=8, offset=4, alpha=0.24, pad=14)
     return out, pad
 
 
-def annot(dst, tl, anchor, end, title, sub, side="r", yellow=False, alpha=1.0, on_photo=True):
+def annot(dst, tl, anchor, end, title, sub, side="r", accent=None, alpha=1.0, on_photo=True):
     """引线标注：锚点 → 折线 → 标签，tl 为该标注出现后的时间。"""
     if tl <= 0 or alpha <= 0.004:
         return
@@ -410,9 +413,9 @@ def annot(dst, tl, anchor, end, title, sub, side="r", yellow=False, alpha=1.0, o
         polyline(dst, pl, WHITE + (235,), 5, alpha)
     polyline(dst, pl, INK + (255,), 2, alpha)
     circle(dst, ax, ay, 8 * pd, fill=WHITE + (255,), alpha=alpha)
-    circle(dst, ax, ay, 5 * pd, fill=(YELLOW if yellow else INK) + (255,), alpha=alpha)
+    circle(dst, ax, ay, 5 * pd, fill=(accent or INK) + (255,), alpha=alpha)
     pc = ease_out(prog(tl, 0.35, 0.7))
-    card, pad = tag_img(title, sub, yellow)
+    card, pad = tag_img(title, sub, accent)
     cw, ch = card.width - 2 * pad, card.height - 2 * pad
     x = end[0] if side == "r" else end[0] - cw
     paste(dst, card, x - pad + (1 - pc) * (10 if side == "r" else -10), end[1] - ch / 2 - pad, alpha * pc)
@@ -483,13 +486,20 @@ def board_shadow(dst, x, y, w, h, alpha):
     paste(dst, sp, x - pad, y - pad, alpha)
 
 
-def side_text(c, t, x, label, title, size_line, rows, t0=0.25):
+def side_text(c, t, x, label, title, rows, t0=0.25):
     p = ease_out(prog(t, t0, t0 + 0.4))
-    paste(c, box_img(14, 14, fill=YELLOW + (255,)), x, 276, p)
-    text(c, label, x + 26, 291, size=24, weight=500, color=INK2, alpha=p)
-    rise(c, title, x - 4, 382, 78, 800, p=ease_out(prog(t, t0 + 0.1, t0 + 0.6)))
-    text(c, size_line, x, 440, size=28, weight=500, color=INK2, alpha=ease_out(prog(t, t0 + 0.25, t0 + 0.7)))
-    spec_rows(c, t, x, 556, rows, t0 + 0.5)
+    paste(c, box_img(14, 14, fill=YELLOW + (255,)), x, 316, p)
+    text(c, label, x + 26, 331, size=24, weight=500, color=INK2, alpha=p)
+    rise(c, title, x - 4, 422, 78, 800, p=ease_out(prog(t, t0 + 0.1, t0 + 0.6)))
+    spec_rows(c, t, x, 548, rows, t0 + 0.4)
+
+
+def corner_label(c, name, alpha, mark=YELLOW):
+    """右上角的分组名：色块 + 白底标签。"""
+    sw, sh = strip_img(name, 30, 700, "sans", WHITE, INK, 18, 9, None).size
+    x = W - 72 - sw
+    paste(c, box_img(16, 16, fill=mark + (255,)), x - 28, 52 + sh / 2 - 8, alpha)
+    strip(c, name, x, 52, size=30, weight=700, pad=(18, 9), alpha=alpha)
 
 
 # ---------- 场景 ----------
@@ -513,7 +523,7 @@ def s_hook(c, t):
     r = ease_out(prog(t, 2.7, 3.05))
     if r <= 0:
         return
-    strip(c, "见微 · 实测结果", MARGIN, 300, size=32, weight=700, bg=YELLOW, pad=(18, 9), reveal=r)
+    strip(c, "实测结果", MARGIN, 300, size=32, weight=700, bg=YELLOW, pad=(18, 9), reveal=r)
     cnt = ease_out(prog(t, 2.85, 3.55))
     for i, (label, val, unit) in enumerate(HOOK_RESULT):
         x = MARGIN + i * 820
@@ -537,9 +547,7 @@ def s_title(c, t):
         paste(c, title_photo().crop((860 - w, 0, 860, 1080)), W - w, 0)
     rise(c, "见微", MARGIN - 8, 520, 250, 900, p=ease_out(prog(t, 0.25, 0.9)), tracking=14)
     fill_rect(c, (MARGIN, 588, MARGIN + 92 * ease_in_out(prog(t, 0.8, 1.15)), 601), YELLOW)
-    rise(c, "基于 AMD Zynq-7010 的非接触视觉测振仪", MARGIN, 686, 48, 500, p=ease_out(prog(t, 0.9, 1.4)))
-    text(c, "JIANWEI  VISION VIBROMETER", MARGIN, 744, size=24, weight=600, kind="cond", color=INK2,
-         alpha=ease_out(prog(t, 1.15, 1.6)), tracking=3)
+    rise(c, "基于 AMD Zynq-7010 的非接触视觉测振仪", MARGIN, 686, 44, 500, p=ease_out(prog(t, 0.9, 1.4)))
 
 
 TGT_BOX = (60, 40, 1060, 640)
@@ -582,9 +590,6 @@ def s_background(c, t):
     card, pad = target_print()
     a = ease_out(prog(t, 0, 0.6))
     paste(c, card, TGT_POS[0] - pad - 30 * (1 - a), TGT_POS[1] - pad, a)
-    th = card.height - 2 * pad
-    text(c, "被测对象：电机带动的铝片，表面贴散斑", TGT_POS[0], TGT_POS[1] + th + 44, size=24, color=INK2,
-         alpha=ease_out(prog(t, 0.4, 0.9)))
     tip = tgt_xy(((STICKER[1][0] + STICKER[2][0]) / 2, (STICKER[1][1] + STICKER[2][1]) / 2))
     annot(c, t - 0.8, tip, (tip[0] + 90, tip[1] - 120), "振动幅度肉眼难辨", None, alpha=1 - prog(t, 2.9, 3.3))
     centre = tgt_xy((686, 345))
@@ -594,9 +599,7 @@ def s_background(c, t):
             dashed(c, partial([(CAM_C[0] - 144, ly), centre], lp), INK + (255,), 2, 12, 8, aa=True)
     camera_icon(c, CAM_C[0], CAM_C[1], ease_in_out(prog(t, 3.0, 3.9)))
     ca = ease_out(prog(t, 3.6, 4.1))
-    text(c, "AN5642 双目相机", CAM_C[0] + 40, CAM_C[1] + 144, size=29, weight=600, alpha=ca, anchor="ms")
-    text(c, "OV5640 × 2 · 名义基线 40 mm", CAM_C[0] + 40, CAM_C[1] + 182, size=23, weight=500, color=INK2,
-         alpha=ca, anchor="ms")
+    text(c, "AN5642 双目相机", CAM_C[0] + 40, CAM_C[1] + 150, size=30, weight=600, alpha=ca, anchor="ms")
     for k, pt in enumerate(sticker_pts()):
         p = ease_back(prog(t, 4.2 + 0.04 * k, 4.55 + 0.04 * k))
         if p > 0:
@@ -652,8 +655,6 @@ def s_principle(c, t):
     text(c, "相机画面", PR_L[0], 178, size=26, weight=600, alpha=a)
     panel_frame(c, PR_L, a)
     paste(c, cam_view(), PR_L[0] + 8, PR_L[1] + 8, a)
-    text(c, "CAM 1   1280 × 720   45 fps", PR_L[0] + 24, PR_L[3] - 24, size=21, weight=500, kind="cond",
-         color=WHITE, alpha=a * 0.9)
     pts = sticker_pts()
     for k, pt in enumerate(pts):
         p = ease_back(prog(t, 0.4 + 0.04 * k, 0.75 + 0.04 * k))
@@ -668,14 +669,13 @@ def s_principle(c, t):
             x, y = cam_xy(pt)
             square_mark(c, x, y, 34 * p * (1 + 0.18 * math.sin(math.pi * pulse)), WHITE, clamp(p), width=2)
     p = ease_out(prog(t, 0.9, 1.3))
-    square_mark(c, PR_L[0] + 10, PR_L[3] + 42, 20, YELLOW, p, width=3)
-    text(c, "测点：贴散斑的铝片", PR_L[0] + 32, PR_L[3] + 42, size=23, color=INK2, alpha=p, anchor="lm")
-    square_mark(c, PR_L[0] + 300, PR_L[3] + 42, 20, INK, p, width=2)
-    text(c, "参考点：静止的光学平台，用来扣除相机晃动", PR_L[0] + 322, PR_L[3] + 42, size=23, color=INK2,
-         alpha=p, anchor="lm")
+    square_mark(c, PR_L[0] + 12, PR_L[3] + 44, 22, YELLOW, p, width=3)
+    text(c, "测点", PR_L[0] + 36, PR_L[3] + 44, size=26, weight=500, color=INK2, alpha=p, anchor="lm")
+    square_mark(c, PR_L[0] + 132, PR_L[3] + 44, 22, INK, p, width=2)
+    text(c, "参考点", PR_L[0] + 156, PR_L[3] + 44, size=26, weight=500, color=INK2, alpha=p, anchor="lm")
     ra = ease_out(prog(t, 0.2, 0.7))
     panel_frame(c, PR_R, ra)
-    heads = (("亚像素跟踪", 0.0, 4.0), ("测点位移 − 参考点位移", 4.0, 6.1), ("幅值谱与停机基线", 6.1, 99))
+    heads = (("亚像素跟踪", 0.0, 4.0), ("扣除晃动后的位移", 4.0, 6.1), ("频谱与停机基线", 6.1, 99))
     for label, h0, h1 in heads:
         hp = prog(t, h0 + 0.1, h0 + 0.4) * (1 - prog(t, h1 - 0.15, h1 + 0.05))
         text(c, label, PR_R[0], 178, size=26, weight=600, alpha=hp * ra)
@@ -701,15 +701,12 @@ def s_principle(c, t):
         off = 0.3 * 36 * math.sin(2 * math.pi * 1.4 * t)
         polyline(c, [(cx - 144 + off, cy - 144), (cx + 144 + off, cy - 144), (cx + 144 + off, cy + 144),
                      (cx - 144 + off, cy + 144), (cx - 144 + off, cy - 144)], YELLOW + (255,), 3, ma)
-        text(c, "虚线：25×25 模板位置    黄框：当前帧位置", PR_R[0] + 22, PR_R[1] + 36, size=21, color=HUD, alpha=ma)
-        text(c, "位移不足 1 个像素也能分辨", cx, PR_R[3] - 22, size=23, color=WHITE, alpha=ma, anchor="ms")
+        text(c, "位移不足 1 个像素也能分辨", cx, PR_R[3] - 22, size=26, color=WHITE, alpha=ma, anchor="ms")
     gbox = (PR_R[0] + 24, PR_R[1] + 30, PR_R[2] - 24, PR_R[3] - 34)
     wa = prog(t, 4.3, 4.7) * (1 - prog(t, 6.0, 6.4))
     if wa > 0:
         graticule(c, gbox, wa)
-        text(c, "位移", gbox[0] + 8, gbox[1] + 26, size=20, color=HUD, alpha=wa)
-        text(c, "时间", gbox[2], gbox[3] + 26, size=20, color=HUD, alpha=wa, anchor="rs")
-        rev = ease_in_out(prog(t, 4.5, 5.9))
+        rev =ease_in_out(prog(t, 4.5, 5.9))
         n = 330
         noise = np.random.default_rng(7).normal(0, 0.05, n)
         u = np.linspace(0, 1, n)
@@ -730,7 +727,7 @@ def s_principle(c, t):
         if ba > 0:
             yb = gbox[3] - 1.7 * div
             dashed(c, [(gbox[0], yb), (gbox[0] + (gbox[2] - gbox[0]) * ba, yb)], (225, 228, 233, 255), 2, 10, 6)
-            text(c, "停机基线 × 3", gbox[2] - 6, yb - 12, size=21, weight=500, color=WHITE, alpha=ba, anchor="rs")
+            text(c, "报警门限", gbox[2] - 6, yb - 12, size=24, weight=500, color=WHITE, alpha=ba, anchor="rs")
         for i, hv in enumerate(hts):
             p = ease_out(prog(t, 6.1 + i * 0.008, 6.6 + i * 0.008))
             hh = hv * div * p
@@ -741,32 +738,33 @@ def s_principle(c, t):
         px = gbox[0] + 12.5 * bw
         strip(c, "主频", px, gbox[3] - 6.2 * div - 12, size=24, weight=700, bg=YELLOW, fg=INK, pad=(10, 5),
               anchor="mb", alpha=pk)
-        text(c, "频率", gbox[2], gbox[3] + 26, size=20, color=HUD, alpha=sa, anchor="rs")
 
 
 # 整机图标注：分三组讲外设用途；坐标为整机连线_俯拍.jpg 像素，标签终点为初始画面坐标
-OV_KEEP = ((875, 655), (1000, 300), "主载板", "自研 · 外设接口与供电", "r", True)
+OV_CORE = ((710, 1111), (900, 720), "AX7010 开发板", "AMD Zynq-7010", "r", RED)
+OV_CORE_EDGE = ((468, 1014), (839, 927), (884, 1190), (500, 1283))
+OV_KEEP = ((875, 655), (1000, 300), "自研主载板", "外设接口与供电", "r", YELLOW)
 OV_GROUPS = (
     ("测量感知", (
-        ((450, 1110), (520, 640), "双目相机", "拍摄振动画面", "r", False),
-        ((528, 470), (560, 150), "ToF 测距", "测量工作距离", "r", False),
-        ((942, 366), (990, 215), "IMU 姿态", "监测相机晃动", "r", False),
-        ((1258, 338), (1330, 190), "加速度计", "接触式参考对照", "r", False),
-        ((32, 1068), (90, 690), "温湿度 SHT40", "记录环境条件", "r", False),
-        ((933, 1183), (980, 820), "PDM 麦克风", "声音频率对照", "r", False),
+        ((450, 1110), (540, 650), "双目相机", "拍摄振动画面", "r", None),
+        ((528, 470), (560, 150), "ToF 测距", "测量工作距离", "r", None),
+        ((942, 366), (990, 215), "IMU 姿态", "监测相机晃动", "r", None),
+        ((1258, 338), (1330, 190), "加速度计", "接触式参考对照", "r", None),
+        ((252, 928), (300, 560), "温湿度 SHT40", "记录环境条件", "r", None),
+        ((933, 1183), (980, 820), "PDM 麦克风", "声音频率对照", "r", None),
     )),
     ("操作交互", (
-        ((1645, 1100), (1540, 700), "7 寸触摸屏", "显示画面与结果，触控操作", "l", False),
-        ((188, 755), (240, 400), "前面板", "自研 · 状态灯 / 旋钮 / 按键", "r", True),
-        ((117, 1150), (200, 790), "NFC 读卡", "刷卡识别测点", "r", False),
-        ((283, 600), (350, 230), "扬声器", "语音播报提示", "r", False),
+        ((1645, 1100), (1540, 700), "7 寸触摸屏", "显示画面与结果", "l", None),
+        ((188, 755), (240, 400), "自研前面板", "状态灯与旋钮按键", "r", YELLOW),
+        ((117, 1150), (200, 790), "NFC 读卡", "刷卡识别测点", "r", None),
+        ((283, 600), (350, 230), "扬声器", "语音播报提示", "r", None),
     )),
     ("输出与辅助", (
-        ((1712, 740), (1700, 380), "声光报警灯", "超限亮灯鸣响", "r", False),
-        ((1330, 920), (1180, 560), "热敏打印机", "现场打印报告", "l", False),
-        ((1112, 362), (980, 210), "十字激光", "投射十字线辅助对准", "l", False),
-        ((1265, 445), (1290, 110), "补光灯", "暗处补充照明", "r", False),
-        ((1567, 483), (1590, 238), "散热风扇", "机内散热", "r", False),
+        ((1712, 740), (1680, 380), "声光报警灯", "超限亮灯鸣响", "r", None),
+        ((1330, 920), (1180, 560), "热敏打印机", "现场打印报告", "l", None),
+        ((1112, 362), (980, 210), "十字激光", "投射十字线辅助对准", "l", None),
+        ((1265, 445), (1290, 110), "补光灯", "暗处补充照明", "r", None),
+        ((1567, 483), (1590, 238), "散热风扇", "机内散热", "r", None),
     )),
 )
 OV_BEAT = 4.5
@@ -780,12 +778,19 @@ def s_overview(c, t):
     s0 = W / 2000
 
     def place(spec, tl, alpha):
-        anc, end, title, sub, side, own = spec
+        anc, end, title, sub, side, accent = spec
         ax, ay = to_screen(anc, xf)
         bx, by = to_screen(anc, (0, 225, s0))
-        annot(c, tl, (ax, ay), (end[0] + ax - bx, end[1] + ay - by), title, sub, side, own, alpha=alpha)
+        annot(c, tl, (ax, ay), (end[0] + ax - bx, end[1] + ay - by), title, sub, side, accent, alpha=alpha)
 
-    place(OV_KEEP, t - 0.3, 1.0)
+    # AX7010 全程用红框圈出
+    ep = ease_in_out(prog(t, 0.1, 0.8))
+    if ep > 0:
+        edge = partial([to_screen(pt, xf) for pt in OV_CORE_EDGE + OV_CORE_EDGE[:1]], ep)
+        polyline(c, edge, WHITE + (190,), 9, aa=True)
+        polyline(c, edge, RED + (255,), 5, aa=True)
+    place(OV_CORE, t - 0.25, 1.0)
+    place(OV_KEEP, t - 0.45, 1.0)
     for g, (name, specs) in enumerate(OV_GROUPS):
         t0 = g * OV_BEAT
         last = g == len(OV_GROUPS) - 1
@@ -793,31 +798,25 @@ def s_overview(c, t):
         if t < t0 or fade <= 0:
             continue
         for k, spec in enumerate(specs):
-            place(spec, t - t0 - 0.25 - 0.16 * k, fade)
-        ha = ease_out(prog(t, t0 + 0.05, t0 + 0.4)) * fade
-        sw, sh = strip_img(name, 30, 700, "sans", WHITE, INK, 18, 9, None).size
-        x = W - 72 - sw
-        paste(c, box_img(16, 16, fill=YELLOW + (255,)), x - 28, 52 + sh / 2 - 8, ha)
-        strip(c, name, x, 52, size=30, weight=700, pad=(18, 9), alpha=ha)
-    la = ease_out(prog(t, 0.4, 0.8))
-    strip(c, "黄色标签：自研电路板", W - 72, 120, size=21, weight=500, fg=INK2, pad=(12, 6), anchor="rt", alpha=la)
+            place(spec, t - t0 - 0.45 - 0.16 * k, fade)
+        corner_label(c, name, ease_out(prog(t, t0 + 0.05, t0 + 0.4)) * fade)
 
 
-# 外壳照片裁掉顶部桌面；坐标为外壳内部装配.webp 原图像素，标签终点为画面坐标（左侧右对齐 910，右侧左对齐 1700）
+# 外壳照片裁掉顶部桌面；坐标为外壳内部装配.webp 原图像素，标签终点为画面坐标（左侧右对齐 850，右侧左对齐 1630）
 CASE_CROP_Y = 135
-CASE_POS, CASE_SCALE = (950, 90), 900 / (2000 - 135)
+CASE_POS, CASE_SCALE = (880, 90), 900 / (2000 - 135)
 CASE_ANNOTS = (
-    ((662, 190), (910, 110), "十字投影", "650 nm 十字线", "l", False),
-    ((360, 450), (910, 200), "补光灯", "照亮被测面", "l", False),
-    ((490, 460), (910, 300), "加速度计", "接触式参考对照", "l", False),
-    ((390, 715), (910, 400), "前面板", "自研", "l", True),
-    ((770, 1460), (910, 690), "主载板", "自研", "l", True),
-    ((300, 1550), (910, 820), "散热风扇", "12V", "l", False),
-    ((760, 440), (1700, 150), "双目相机", "AN5642", "r", False),
-    ((1160, 430), (1700, 255), "补光灯", "照亮被测面", "r", False),
-    ((1050, 425), (1700, 360), "IMU 姿态", "监测相机晃动", "r", False),
-    ((760, 760), (1700, 470), "AX7010 开发板", "XC7Z010", "r", False),
-    ((1320, 1450), (1700, 728), "热敏打印机", "EM5820H", "r", False),
+    ((662, 190), (850, 110), "十字投影", "l", None),
+    ((360, 450), (850, 200), "补光灯", "l", None),
+    ((490, 460), (850, 300), "加速度计", "l", None),
+    ((390, 715), (850, 400), "前面板", "l", YELLOW),
+    ((770, 1460), (850, 690), "主载板", "l", YELLOW),
+    ((300, 1550), (850, 820), "散热风扇", "l", None),
+    ((760, 440), (1630, 150), "双目相机", "r", None),
+    ((1160, 430), (1630, 255), "补光灯", "r", None),
+    ((1050, 425), (1630, 360), "IMU 姿态", "r", None),
+    ((760, 760), (1630, 470), "AX7010 开发板", "r", RED),
+    ((1320, 1450), (1630, 728), "热敏打印机", "r", None),
 )
 
 
@@ -832,12 +831,11 @@ def s_enclosure(c, t):
     a = ease_out(prog(t, 0, 0.5))
     paste(c, card, CASE_POS[0] - pad, CASE_POS[1] - pad + (1 - a) * 16, a)
     rise(c, "整机装配", MARGIN - 4, 300, 78, 800, p=ease_out(prog(t, 0.15, 0.65)))
-    text(c, "3D 打印外壳 · 内部布局", MARGIN, 358, size=28, weight=500, color=INK2,
-         alpha=ease_out(prog(t, 0.35, 0.8)))
-    for k, (anc, end, title, sub, side, own) in enumerate(CASE_ANNOTS):
+    text(c, "3D 打印外壳", MARGIN, 358, size=30, weight=500, color=INK2, alpha=ease_out(prog(t, 0.35, 0.8)))
+    for k, (anc, end, title, side, accent) in enumerate(CASE_ANNOTS):
         ax = CASE_POS[0] + anc[0] * CASE_SCALE
         ay = CASE_POS[1] + (anc[1] - CASE_CROP_Y) * CASE_SCALE
-        annot(c, t - 0.5 - 0.15 * k, (ax, ay), end, title, sub, side, own, on_photo=True)
+        annot(c, t - 0.5 - 0.15 * k, (ax, ay), end, title, None, side, accent, on_photo=True)
 
 
 CARRIER_RECT = (MARGIN, 160, MARGIN + 740, 900)
@@ -865,9 +863,8 @@ def s_carrier(c, t):
     da = ease_out(prog(t, 0.3, 0.8))
     dimension(c, (x0, y0 - 36), (x1, y0 - 36), "100 mm", da)
     dimension(c, (x1 + 36, y0), (x1 + 36, y1), "100 mm", da, vertical=True)
-    side_text(c, t, 1060, "自研电路板", "主载板", "100 × 100 mm · 嘉立创 EDA",
-              (("供电", "12V 输入 · 保护 · 多路 DC-DC"), ("监测", "INA226 功率 · DS3231 时钟"),
-               ("协处理", "Arduino Nano ESP32")))
+    side_text(c, t, 1060, "自研电路板", "主载板",
+              (("供电", "12V 输入与多路 DC-DC"), ("监测", "功率监测与实时时钟"), ("协处理", "Arduino Nano ESP32")))
 
 
 PH9_BOX = (130, 400, 1400, 1650)
@@ -875,17 +872,17 @@ PH9_POS = (MARGIN - 40, 140)
 PH9_SCALE = 820 / (PH9_BOX[3] - PH9_BOX[1])
 # 位号只标在照片上；右侧文字写外设名称与作用
 CONN_GROUPS = (
-    ("主控互连", "40P 排线连接 AX7010 · Nano ESP32 协处理器",
-     (("J801", (330, 1000), "l"), ("J604/606", (567, 1242), "b"))),
-    ("测量传感器", "测距 · 姿态 IMU · 参考加速度计 · 温湿度 · 麦克风",
+    ("主控互连", "排线连接 AX7010 和 ESP32 协处理器",
+     (("J801", (330, 1000), "l"), ("J604 J606", (567, 1242), "b"))),
+    ("测量传感器", "测距、姿态、加速度计、温湿度和麦克风",
      (("J701", (750, 565), "t"), ("J702", (1162, 1088), "r"), ("J703", (1162, 1217), "r"),
       ("J704", (279, 671), "l"), ("J706", (258, 1375), "l"))),
-    ("执行与报警", "补光灯 · 十字激光 · 声光报警灯 · 风扇",
+    ("执行与报警", "补光灯、十字激光、报警灯和风扇",
      (("J301", (837, 1458), "b"), ("J304", (950, 1458), "b"), ("J302", (608, 1458), "b"))),
-    ("交互与存储", "前面板 · 扬声器 · NFC 读卡 · 打印机 · 语音 SD 卡",
+    ("交互与存储", "前面板、扬声器、NFC、打印机和语音卡",
      (("J502", (608, 560), "t"), ("J601", (358, 565), "t"), ("J602", (462, 560), "t"),
       ("J401", (375, 1478), "l"), ("J603", (1088, 750), "r"))),
-    ("电源", "12V 输入 · 总开关 · 两路 5V 输出",
+    ("电源", "12V 输入、总开关和两路 5V 输出",
      (("J101", (1130, 1360), "r"), ("J102", (1067, 1458), "b"), ("J501", (875, 620), "t"),
       ("J201", (1033, 620), "t"))),
 )
@@ -904,8 +901,7 @@ def s_connect(c, t):
     paste(c, card, PH9_POS[0] - pad, PH9_POS[1] - pad + (1 - a) * 14, a)
     lx = 1060
     p = ease_out(prog(t, 0.15, 0.6))
-    rise(c, "外设连接", lx - 3, 232, 54, 800, p=p)
-    text(c, "照片上的接口位号取自两板网表与线束表", lx, 280, size=23, color=INK2, alpha=p)
+    rise(c, "外设连接", lx - 3, 252, 54, 800, p=p)
     step = 0.85
     t_all = 0.55 + step * len(CONN_GROUPS)
     for k, (name, members, items) in enumerate(CONN_GROUPS):
@@ -919,7 +915,7 @@ def s_connect(c, t):
         if active > 0.01:
             fill_rect(c, (lx - 6, y - 32, lx + nw + 6, y + 7), YELLOW, active * rev)
         text(c, name, lx, y, size=30, weight=700, color=INK if active > 0.5 or t > t_all else INK2, alpha=rev)
-        text(c, members, lx, y + 40, size=23, color=INK2, alpha=rev)
+        text(c, members, lx, y + 42, size=26, color=INK2, alpha=rev)
         for j, (des, pt, side) in enumerate(items):
             tl = t - tk - 0.05 * j
             if tl <= 0:
@@ -958,17 +954,16 @@ def s_panel(c, t):
     wipe_board(c, render, real, x0, y0, ease_in_out(prog(t, 0.55, 1.45)), a)
     dimension(c, (x0, y0 - 36), (x1, y0 - 36), "60 mm", ease_out(prog(t, 0.25, 0.7)))
     dimension(c, (x1 + 36, y0), (x1 + 36, y1), "40 mm", ease_out(prog(t, 0.25, 0.7)), vertical=True)
-    side_text(c, t, MARGIN, "自研电路板", "前面板", "60 × 40 mm · 嘉立创 EDA",
-              (("指示", "5 颗 WS2812 RGB 状态灯"), ("输入", "EC11 旋转编码器 · 独立按键"), ("连接", "10P 排线接主载板")),
-              t0=0.2)
+    side_text(c, t, MARGIN, "自研电路板", "前面板",
+              (("指示", "5 颗 RGB 状态灯"), ("输入", "旋转编码器与按键"), ("连接", "排线连接主载板")), t0=0.2)
 
 
 AX_ANNOTS = (
-    ((1170, 842), (1290, 470), "XC7Z010 SoC", "双核 Cortex-A9 + FPGA", "r"),
-    ((380, 830), (470, 470), "AN5642 双目相机", "OV5640 × 2", "r"),
-    ((1725, 800), (1600, 330), "40P 扩展口", "排线连接主载板", "l"),
-    ((1370, 1192), (1480, 860), "HDMI 输出", "接 7 寸触摸屏", "r"),
-    ((1890, 1160), (1760, 760), "PDM 麦克风", "MP34DT01", "l"),
+    ((1170, 842), (1290, 470), "Zynq-7010 芯片", "r"),
+    ((380, 830), (470, 470), "AN5642 双目相机", "r"),
+    ((1725, 800), (1600, 330), "扩展口连主载板", "l"),
+    ((1370, 1192), (1480, 860), "HDMI 接触摸屏", "r"),
+    ((1890, 1160), (1760, 760), "PDM 麦克风", "l"),
 )
 
 
@@ -983,33 +978,33 @@ def s_ax7010(c, t):
     c.paste(frame, (0, 0))
     fade = 1 - prog(t, 2.9, 3.3)
     s0 = W / 2000
-    for k, (anc, end, title, sub, side) in enumerate(AX_ANNOTS):
+    for k, (anc, end, title, side) in enumerate(AX_ANNOTS):
         ax, ay = to_screen(anc, xf)
         bx, by = to_screen(anc, (0, 752 - 562.5, s0))
-        annot(c, t - (0.3 + 0.24 * k), (ax, ay), (end[0] + ax - bx, end[1] + ay - by), title, sub, side, alpha=fade)
+        annot(c, t - (0.3 + 0.24 * k), (ax, ay), (end[0] + ax - bx, end[1] + ay - by), title, None, side, alpha=fade)
+    strip(c, "AX7010 开发板", W - 72, 52, size=32, weight=700, bg=RED, fg=WHITE, pad=(20, 10), anchor="rt",
+          reveal=ease_out(prog(t, 0.1, 0.5)))
 
 
 # 与 2026-11-03 代码包一致：双目匹配已移到 PS 软件后端，PL 保留视频、PDM、灯光与打印 UART
-ARCH_PL = (("双路相机采集", "OV5640 × 2 → VDMA → DDR"), ("HDMI 显示", "视频时序 · rgb2dvi"),
-           ("PDM 接收", "自研 RTL · 麦克风码流"), ("灯光 · 打印接口", "自研 PWM · AXI UART16550"))
-ARCH_PS = (("多点亚像素跟踪", "最多 12 测点 + 4 参考点"), ("频谱与基线判定", "Hann FFT · 停机基线 3 倍门限"),
-           ("双目辅助深度", "Census + SGM 软件实现"), ("界面 · 记录 · 报警", "触屏 UI · APP 接口 · 打印排版"))
-ARCH_ESP = ("NFC 读卡", "SD 语音播报", "Wi-Fi · 手机 APP")
+ARCH_PL = ("双路相机采集", "HDMI 显示", "PDM 麦克风接收", "灯光与打印接口")
+ARCH_PS = ("多点亚像素跟踪", "频谱与基线判定", "双目辅助测距", "界面、记录与报警")
+ARCH_ESP = ("NFC 读卡", "SD 语音播报", "Wi-Fi 与手机 APP")
 ARCH_OUT = ("7 寸触摸屏", "声光报警灯", "热敏打印机")
 MOD_Y = (290, 400, 510, 620)
 
 
-def block(c, x, y, w, h, title, sub, state, alpha=1.0):
+def block(c, x, y, w, h, title, sub, state, alpha=1.0, size=26):
     """state：0 弱化，1 正常，2 当前高亮。"""
     fill = YELLOW if state >= 1.5 else WHITE
     edge = INK if state >= 0.5 else RULE
     paste(c, box_img(w, h, fill=fill + (255,), outline=edge + (255,), width=2), x, y, alpha)
     col = INK if state >= 0.5 else INK3
     if sub:
-        text(c, title, x + 20, y + 41, size=27, weight=600, color=col, alpha=alpha)
-        text(c, sub, x + 20, y + 74, size=20, color=INK2 if state >= 0.5 else INK3, alpha=alpha)
+        text(c, title, x + 20, y + 40, size=27, weight=600, color=col, alpha=alpha)
+        text(c, sub, x + 20, y + 73, size=22, color=INK2 if state >= 0.5 else INK3, alpha=alpha)
     else:
-        text(c, title, x + 20, y + h / 2, size=26, weight=600, color=col, alpha=alpha, anchor="lm")
+        text(c, title, x + 20, y + h / 2, size=size, weight=600, color=col, alpha=alpha, anchor="lm")
 
 
 def token(c, pts, t, alpha, period=0.8, speed=300):
@@ -1041,15 +1036,15 @@ def s_arch(c, t):
     paste(c, box_img(1040, 720, outline=INK + (255,), width=2), 330, 150, intro)
     text(c, "XC7Z010  Zynq-7000 SoC", 352, 190, size=26, weight=600, kind="cond", alpha=intro)
     for group, (x0, x1), label, sub in (("pl", (355, 825), "PL", "可编程逻辑"),
-                                        ("ps", (885, 1345), "PS", "双核 ARM Cortex-A9 · Linux")):
+                                        ("ps", (885, 1345), "PS", "双核 ARM 运行 Linux")):
         ga = intro * (1.0 if on[group] > 0.5 or early > 0.5 or t >= 10.5 else 0.55)
         dashed_box(c, (x0, 215, x1, 850), INK2 + (255,), 1, ga, 6, 5)
         w0 = text(c, label, x0 + 18, 257, size=28, weight=700, kind="cond", alpha=ga)
         text(c, sub, x0 + 30 + w0, 257, size=22, color=INK2, alpha=ga)
-    for k, (tt, ss) in enumerate(ARCH_PL):
-        block(c, 375, MOD_Y[k], 430, 96, tt, ss, state("pl", 0.5 + 0.35 * k), intro)
-    for k, (tt, ss) in enumerate(ARCH_PS):
-        block(c, 905, MOD_Y[k], 420, 96, tt, ss, state("ps", 4.0 + 0.35 * k), intro)
+    for k, tt in enumerate(ARCH_PL):
+        block(c, 375, MOD_Y[k], 430, 96, tt, None, state("pl", 0.5 + 0.35 * k), intro, 30)
+    for k, tt in enumerate(ARCH_PS):
+        block(c, 905, MOD_Y[k], 420, 96, tt, None, state("ps", 4.0 + 0.35 * k), intro, 30)
     polyline(c, [(845, 290), (845, 716)], INK + (255,), 2, intro)
     polyline(c, [(865, 290), (865, 716)], INK + (255,), 2, intro)
     rot_text(c, "AXI", 855, 752, 20, 600, "cond", INK2, intro)
@@ -1059,19 +1054,17 @@ def s_arch(c, t):
         arrow(c, (843, y), (807, y), alpha=intro, head=7)
     for y in (338, 448, 558, 668):
         arrow(c, (867, y), (903, y), alpha=intro, head=7, both=True)
-    for name, sub, y, box in (("AN5642", "双目相机", 290, (0, 520, 330, 850)),
-                              ("MP34DT01", "PDM 麦克风", 510, (1817, 1100, 1967, 1250))):
+    for name, y, box in (("双目相机", 290, (0, 520, 330, 850)), ("麦克风", 510, (1817, 1100, 1967, 1250))):
         st = 2 if on["pl"] > 0.5 and 0.5 < t < 10.5 else (1 if on["pl"] > 0.5 or early > 0.5 or t >= 10.5 else 0)
         paste(c, box_img(260, 96, fill=WHITE + (255,), outline=(INK if st else RULE) + (255,), width=2), 40, y, intro)
         paste(c, thumb("AX7010_双目相机.jpg", box, 64), 56, y + 16, intro * (1 if st else 0.5))
-        text(c, name, 136, y + 42, size=24, weight=600, kind="num", color=INK if st else INK3, alpha=intro)
-        text(c, sub, 136, y + 74, size=20, color=INK2 if st else INK3, alpha=intro)
+        text(c, name, 138, y + 48, size=27, weight=600, color=INK if st else INK3, alpha=intro, anchor="lm")
         arrow(c, (300, y + 48), (373, y + 48), alpha=intro, head=8)
     ea = intro * (1.0 if on["esp"] > 0.5 or early > 0.5 or t >= 10.5 else 0.55)
     dashed_box(c, (1440, 150, 1870, 545), INK2 + (255,), 1, ea, 6, 5)
     paste(c, thumb("主载板_正面.jpg", (320, 700, 540, 920), 52), 1460, 168, ea)
-    text(c, "ESP32", 1526, 196, size=28, weight=700, kind="cond", alpha=ea)
-    text(c, "Arduino Nano ESP32 协处理器", 1526, 224, size=20, color=INK2, alpha=ea)
+    w0 = text(c, "ESP32", 1526, 206, size=30, weight=700, kind="cond", alpha=ea)
+    text(c, "协处理器", 1538 + w0, 206, size=24, color=INK2, alpha=ea)
     for k, name in enumerate(ARCH_ESP):
         block(c, 1465, 255 + 88 * k, 380, 70, name, None, state("esp", 7.6 + 0.3 * k), intro)
     oa = intro * (1.0 if on["ps"] > 0.5 or early > 0.5 or t >= 10.5 else 0.55)
@@ -1096,31 +1089,29 @@ def s_arch(c, t):
         token(c, [(1325, 405), (1440, 405)], t, on["esp"], 0.45, 220)
 
 
-PL_VIDEO = (("双路 OV5640", "AN5642 双目相机"), ("采集 · 格式转换", "ALINX 采集 IP"), ("VDMA × 3", "AXI4-Stream ↔ DDR"),
-            ("DDR · PS 算法", "测振 · 界面合成"), ("视频时序", "v_tc · 视频输出"), ("HDMI 输出", "rgb2dvi → 7 寸屏"))
-PL_CUSTOM = (("PDM 麦克风接收", "2 MHz 时钟 · FIFO · 时间戳", True),
-             ("灯光控制", "20 kHz PWM · 心跳看门狗 · 掉电关断", True),
-             ("打印 UART", "AXI UART16550 · CTS 流控", False))
-# 当前上板位流 printer_uart 的 Vivado 2025.2 实现报告（2026-11-03 代码包 ax7010/vivado/current/reports_original_build）
-PL_STATS = (("LUT", 50.8, "%", "8,945 / 17,600", 0.508), ("触发器", 41.0, "%", "14,420 / 35,200", 0.410),
-            ("BRAM", 30.5, "/ 60", "块 RAM（36 Kb）", 0.508), ("时序 WNS", 0.756, "ns", "全部时序约束满足", None))
+PL_VIDEO = ("双目相机输入", "采集与格式转换", "VDMA 读写 DDR", "PS 测振与界面", "视频时序", "HDMI 输出")
+PL_CUSTOM = (("PDM 麦克风接收", "2 MHz 采样，带时间戳", True),
+             ("灯光控制", "PWM 调光，失联或掉电自动关断", True),
+             ("打印串口", "AXI UART16550 硬件流控", False))
+# 当前上板位流 printer_uart 的 Vivado 2025.2 实现报告（2026-11-03 代码包 ax7010/vivado/current/reports_original_build）：
+# LUT 8,945/17,600，FF 14,420/35,200，BRAM 30.5/60，WNS +0.756 ns
+PL_STATS = (("LUT", 50.8, "%", 0.508), ("触发器", 41.0, "%", 0.410), ("BRAM", 50.8, "%", 0.508),
+            ("时序裕量", 0.756, "ns", None))
 
 
 def s_pl(c, t):
-    rise(c, "PL 硬件设计", MARGIN - 3, 196, 58, 800, p=ease_out(prog(t, 0.05, 0.55)))
-    text(c, "XC7Z010 · Vivado 2025.2 · 当前上板位流", MARGIN, 244, size=24, weight=500, color=INK2,
-         alpha=ease_out(prog(t, 0.3, 0.7)))
-    text(c, "视频通路", MARGIN, 300, size=22, weight=600, color=INK2, alpha=ease_out(prog(t, 0.2, 0.6)))
+    rise(c, "PL 硬件设计", MARGIN - 3, 206, 58, 800, p=ease_out(prog(t, 0.05, 0.55)))
+    text(c, "视频通路", MARGIN, 290, size=26, weight=600, color=INK2, alpha=ease_out(prog(t, 0.2, 0.6)))
     nw, gap, ny, nh = 238, 34, 314, 90
     xs = [MARGIN + k * (nw + gap) for k in range(len(PL_VIDEO))]
     head = ease_in_out(prog(t, 0.6, 3.6)) * (len(PL_VIDEO) - 0.001)
-    for k, (tt, ss) in enumerate(PL_VIDEO):
+    for k, tt in enumerate(PL_VIDEO):
         na = ease_out(prog(t, 0.1 + 0.06 * k, 0.5 + 0.06 * k))
         lit = 2 if 0 < head and int(head) == k and t < 3.65 else 1
-        block(c, xs[k], ny, nw, nh, tt, ss, lit, na)
+        block(c, xs[k], ny, nw, nh, tt, None, lit, na)
         if k < len(PL_VIDEO) - 1:
             arrow(c, (xs[k] + nw + 2, ny + nh / 2), (xs[k + 1] - 2, ny + nh / 2), alpha=na, head=7)
-    text(c, "外设与自研逻辑", MARGIN, 466, size=22, weight=600, color=INK2, alpha=ease_out(prog(t, 3.7, 4.1)))
+    text(c, "外设与自研逻辑", MARGIN, 458, size=26, weight=600, color=INK2, alpha=ease_out(prog(t, 3.7, 4.1)))
     cw, cg, cy, ch = 520, 20, 480, 90
     for k, (tt, ss, own) in enumerate(PL_CUSTOM):
         p = ease_out(prog(t, 3.8 + 0.18 * k, 4.3 + 0.18 * k))
@@ -1128,26 +1119,24 @@ def s_pl(c, t):
         lit = 2 if own and 4.2 < t < 5.6 else 1
         block(c, x, cy + (1 - p) * 12, cw, ch, tt, ss, lit, p)
         if own:
-            strip(c, "自研 RTL", x + cw - 12, cy + 14 + (1 - p) * 12, size=19, weight=700, bg=INK, fg=YELLOW,
-                  pad=(9, 4), anchor="rt", alpha=p)
+            strip(c, "自研 RTL", x + cw - 12, cy + 14 + (1 - p) * 12, size=21, weight=700, bg=INK, fg=YELLOW,
+                  pad=(10, 5), anchor="rt", alpha=p)
+    text(c, "资源与时序", MARGIN, 640, size=26, weight=600, color=INK2, alpha=ease_out(prog(t, 4.9, 5.3)))
     cols = [MARGIN + k * 404 for k in range(4)]
     for k in range(1, 4):
         p = ease_in_out(prog(t, 5.0 + 0.08 * k, 5.5 + 0.08 * k))
-        polyline(c, [(cols[k] - 30, 628), (cols[k] - 30, 628 + 200 * p)], RULE + (255,), 1)
+        polyline(c, [(cols[k] - 30, 672), (cols[k] - 30, 672 + 172 * p)], RULE + (255,), 1)
     cnt = ease_out(prog(t, 5.2, 6.6))
-    for k, (label, val, unit, detail, frac) in enumerate(PL_STATS):
+    for k, (label, val, unit, frac) in enumerate(PL_STATS):
         p = ease_out(prog(t, 5.1 + 0.12 * k, 5.6 + 0.12 * k))
         x = cols[k]
-        text(c, label, x, 662, size=26, weight=500, color=INK2, alpha=p)
-        s = f"+{val * cnt:.3f}" if unit == "ns" else f"{val * cnt:.1f}"
-        vw = text(c, s, x - 2, 752, size=82, weight=600, kind="num", alpha=p)
-        text(c, unit, x + vw + 8, 752, size=30, weight=500, kind="num", color=INK2, alpha=p)
+        text(c, label, x, 706, size=28, weight=500, color=INK2, alpha=p)
+        s = f"{val * cnt:.3f}" if unit == "ns" else f"{val * cnt:.1f}"
+        vw = text(c, s, x - 2, 796, size=82, weight=600, kind="num", alpha=p)
+        text(c, unit, x + vw + 8, 796, size=30, weight=500, kind="num", color=INK2, alpha=p)
         if frac:
-            fill_rect(c, (x, 772, x + 300, 779), RULE, p)
-            fill_rect(c, (x, 772, x + 300 * frac * cnt, 779), INK, p)
-        text(c, detail, x, 820, size=23, weight=500, kind="cond", color=INK2, alpha=p)
-    text(c, "数据：Vivado 2025.2 实现报告（printer_uart 工程 utilization.rpt、timing.rpt）",
-         MARGIN, 876, size=20, color=INK3, alpha=ease_out(prog(t, 6.4, 6.9)))
+            fill_rect(c, (x, 818, x + 300, 825), RULE, p)
+            fill_rect(c, (x, 818, x + 300 * frac * cnt, 825), INK, p)
     fade = prog(t, 8.2, 9.0)
     if fade > 0:
         fill_rect(c, (0, 0, W, H), (0, 0, 0), ease_in_out(fade))

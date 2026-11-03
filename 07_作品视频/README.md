@@ -21,7 +21,7 @@ cd 07_作品视频/脚本 && python3 render_part1.py
 ## 画面依据
 
 - 算法与分工按 2026-11-03 代码包 `docs/current/算法与状态.md`：测点最多 12 个（默认 4 列 3 行）、4 个背景参考点，25×25 模板亚像素跟踪，128 帧窗、Hann FFT，停机基线 3 倍门限；双目深度为 PS 软件后端，PL 负责双路视频、HDMI、PDM 接收、灯光 PWM 和打印 UART。
-- PL 资源与时序：同一代码包中 printer_uart 工程的 Vivado 2025.2 实现报告（`ax7010/vivado/current/reports_original_build/`）。
+- PL 资源与时序：同一代码包中 printer_uart 工程的 Vivado 2025.2 实现报告（`ax7010/vivado/current/reports_original_build/`），画面只显示百分比，BRAM 30.5/60 块折算为 50.8%。
 - 钩子结尾的 10.84 Hz、0.142 mm 取自 `05_验证资料/板端报警/板端验证.json`（2026-10-31 板端记录），改为本片实测值时修改脚本里的 `HOOK_RESULT`。
 - 接口位号与外设对应：`04_使用指南/整机装配_逐引脚接线与模块互连.md`。
 - 外设标注按设计用途描述；温湿度、测距目前界面为固定显示，不代表传感器实测。
