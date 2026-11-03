@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""渲染作品视频中"上电"之前的部分：钩子 → 标题 → 背景 → 原理 → 整机与外设 → 外壳 → 主载板 → 接口 → 前面板 → AX7010 → 系统架构 → PL 硬件设计。
+"""渲染作品视频中"上电"之前的部分：钩子 → 标题 → 背景 → 原理 → 整机与外设 → 外壳内部 → 机盖 → 主载板 → 接口 → 前面板 → AX7010 → 系统架构 → PL 硬件设计。
 
 在 WSL 中运行（用到 ffmpeg、Pillow、numpy 和 Windows 字体）：
     python3 render_part1.py                          # 输出 ../输出/上电前_样片.mp4
@@ -826,16 +826,55 @@ def case_print():
     return shadowed(im.resize((int(im.width * CASE_SCALE), int(im.height * CASE_SCALE)), Image.LANCZOS))
 
 
+def case_title(c, t):
+    rise(c, "整机装配", MARGIN - 4, 300, 78, 800, p=ease_out(prog(t, 0.15, 0.65)))
+    text(c, "3D 打印外壳", MARGIN, 358, size=30, weight=500, color=INK2, alpha=ease_out(prog(t, 0.35, 0.8)))
+
+
 def s_enclosure(c, t):
     card, pad = case_print()
     a = ease_out(prog(t, 0, 0.5))
     paste(c, card, CASE_POS[0] - pad, CASE_POS[1] - pad + (1 - a) * 16, a)
-    rise(c, "整机装配", MARGIN - 4, 300, 78, 800, p=ease_out(prog(t, 0.15, 0.65)))
-    text(c, "3D 打印外壳", MARGIN, 358, size=30, weight=500, color=INK2, alpha=ease_out(prog(t, 0.35, 0.8)))
+    case_title(c, t)
     for k, (anc, end, title, side, accent) in enumerate(CASE_ANNOTS):
         ax = CASE_POS[0] + anc[0] * CASE_SCALE
         ay = CASE_POS[1] + (anc[1] - CASE_CROP_Y) * CASE_SCALE
         annot(c, t - 0.5 - 0.15 * k, (ax, ay), end, title, None, side, accent, on_photo=True)
+
+
+# 机盖照片与外壳内部照片用同一画框，交叉淡化时像盖上机盖；坐标为外壳机盖.webp 原图像素
+LID_BOX = (90, 240, 1355, 1813)
+LID_SCALE = 900 / (LID_BOX[3] - LID_BOX[1])
+LID_ANNOTS = (
+    ((315, 440), (850, 204), "三色声光报警灯", "l", None),
+    ((342, 822), (850, 423), "NFC 读卡", "l", None),
+    ((330, 1080), (850, 545), "前面板", "l", YELLOW),
+    ((466, 1185), (850, 655), "麦克风口", "l", None),
+    ((840, 1010), (1630, 531), "7 寸触摸屏", "r", None),
+)
+LID_BUTTONS = (((418, 1478), "风扇"), ((608, 1484), "警报灯"), ((801, 1488), "照明"), ((993, 1492), "电源"))
+
+
+@lru_cache(maxsize=None)
+def lid_print():
+    im = photo("外壳机盖.webp").crop(LID_BOX)
+    return shadowed(im.resize((int(im.width * LID_SCALE), int(im.height * LID_SCALE)), Image.LANCZOS))
+
+
+def lid_xy(pt):
+    return CASE_POS[0] + (pt[0] - LID_BOX[0]) * LID_SCALE, CASE_POS[1] + (pt[1] - LID_BOX[1]) * LID_SCALE
+
+
+def s_lid(c, t):
+    card, pad = lid_print()
+    paste(c, card, CASE_POS[0] - pad, CASE_POS[1] - pad)
+    case_title(c, 9.0)
+    for k, (anc, end, title, side, accent) in enumerate(LID_ANNOTS):
+        annot(c, t - 0.4 - 0.15 * k, lid_xy(anc), end, title, None, side, accent, on_photo=True)
+    for k, (pt, name) in enumerate(LID_BUTTONS):
+        x, y = lid_xy(pt)
+        p = ease_out(prog(t, 1.3 + 0.12 * k, 1.6 + 0.12 * k))
+        strip(c, name, x, y + 30 + (1 - p) * 8, size=24, weight=600, pad=(10, 6), anchor="mt", alpha=p)
 
 
 CARRIER_RECT = (MARGIN, 160, MARGIN + 740, 900)
@@ -1149,14 +1188,15 @@ def scenes():
     return [
         (s_hook, HOOK_DUR, 0.4, None, []),
         (s_title, 3.5, 0.45, None, []),
-        (s_background, 7.0, 0.4, "应用背景",
-         [(0.2, 3.0, "设备故障，往往从微小振动开始。"), (3.1, 6.8, "见微用一台相机，非接触地同时测量多个点。")]),
+        (s_background, 6.5, 0.4, "应用背景",
+         [(0.2, 3.0, "设备故障，往往从微小振动开始。"), (3.1, 6.3, "见微用一台相机，非接触地同时测量多个点。")]),
         (s_principle, 9.0, 0.4, "测量原理",
          [(0.2, 3.9, "原理是逐帧追踪表面散斑的亚像素位移，"), (4.0, 8.8, "扣除背景晃动后做频谱，并与停机基线比对。")]),
         (s_overview, 3 * OV_BEAT, 0.4, "硬件与外设",
          [(0.2, 4.3, "相机拍摄振动，多种传感器辅助对照和记录；"), (4.6, 8.8, "触摸屏、NFC 和扬声器负责人机交互；"),
           (9.1, 13.3, "报警灯和打印机输出结果，激光和补光辅助拍摄。")]),
-        (s_enclosure, 6.0, 0.4, "硬件与外设", [(0.3, 5.8, "全部模块装进 3D 打印外壳，成为一台完整仪器。")]),
+        (s_enclosure, 5.0, 0.6, "硬件与外设", [(0.3, 4.9, "全部模块装进 3D 打印外壳，")]),
+        (s_lid, 5.0, 0.4, "硬件与外设", [(0.2, 4.8, "机盖上集中了屏幕、报警灯、NFC 和四个按键。")]),
         (s_carrier, 4.5, 0.4, "硬件与外设", [(0.2, 4.3, "主载板从原理图到 PCB 全部自主设计，")]),
         (s_connect, 5.4, 0.4, "硬件与外设", [(0.1, 5.2, "为十余种外设提供供电、保护和接口；")]),
         (s_panel, 3.5, 0.4, "硬件与外设", [(0.1, 3.3, "前面板集成状态灯、旋钮和按键。")]),
